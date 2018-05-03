@@ -25,12 +25,13 @@
                     <legend>Meta Data</legend>
                         <div class="user_defined_table">
                             <table>
+                                <tr><td>Descripion:</td><td style="font-weight:bold"><%= test_detail["description"]%></td></tr>
                                 <tr><td>Result :</td>
-                                <% if (test_detail["Result"]){ %>
-                                            <td><span class="badge badge-success">Success</span></td>
-                                <% }else{ %>
-                                            <td><span class="badge badge-danger">Failure</span></td>
-                                <% } %>
+                                    <% if (test_detail["Result"]){ %>
+                                                <td><span class="badge badge-success">Success</span></td>
+                                    <% }else{ %>
+                                                <td><span class="badge badge-danger">Failure</span></td>
+                                    <% } %>
                                 </tr>
                                 <tr><td>Test Directory :</td><td style="font-weight:bold"><%= test_detail["Test Directory"]%></td></tr>
                                 <tr><td>Test Type :</td><td style="font-weight:bold"><%= test_detail["Test Type"]%></td></tr>
@@ -39,6 +40,7 @@
                                 <tr><td>Top Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Top Job"] + "/" + test_detail["top_test_job_build_number"]%>><%= test_detail["Top Job"]%></td></tr>
                                 <tr><td>Capabilities :</td><td style="font-weight:bold"><%= test_detail["Capabilities"]%></td></tr>
                                 <tr><td>Runtime :</td><td style="font-weight:bold"><%= test_detail["Runtime"]%></td></tr>
+
                             </table>
                         </div>
             </fieldset>	
@@ -169,12 +171,28 @@
             <fieldset >    	
                     <legend>Logs</legend>
                         <div class="list-group">
-                            <% Object.keys(logs_test_record).forEach(function(key) {%>
-                            <a class="list-group-item list-group-item-action" href=<%= "/log?log_name=" +  key + "&module_name=" + test_detail['Module'] + "&job_name=" + test_detail['Test Job'] + "&build_number=" +  test_detail['test_job_build_number'] %>> <i class="fas fa-file-alt"></i>  <%= key +" "%><span class="badge badge-secondary"><%=Buffer.byteLength(logs_test_record[key], 'utf8') + " bytes"%></span></a>
+                            <% Object.keys(test_detail["logs"]).forEach(function(key) {%>
+                            <a class="list-group-item list-group-item-action" href="<%= "/log?id=" + test_detail['logs'][key]['id'] %>">
+                                <i class="fas fa-file-alt"></i>
+                                <%= key +" "%>
+                                <span class="badge badge-secondary"><%= Math.ceil(test_detail['logs'][key]["size"] / 1024) %> kb</span>
+                            </a>
                             <% }); %>
                         </div>
 
-            </fieldset>	
+            </fieldset>
+            <fieldset >
+                <legend>Screenshots on test failure</legend>
+                <div class="list-group">
+                    <% Object.keys(test_detail["screenshots"]).forEach(function(key) {%>
+                    <a class="list-group-item list-group-item-action" href="<%= "/screenshot?id=" +  test_detail["screenshots"][key] %>">
+                        <i class="fas fa-file-alt"></i>
+                        <%= key +" "%>
+                    </a>
+                    <% }); %>
+                </div>
+
+            </fieldset>
             <br>		
     </div>
             

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import logging
@@ -20,7 +20,7 @@ def tradefed_run(test_path: str):
     xml_path = os.path.join(test_path, "AndroidTest.xml")
     logging.info("Running tradefed test from xml %s" % xml_path)
     tradefed_run_xml(xml_path)
-    return ResultData(True, "", None, None, dict(), dict())   #TODO: ...
+    return ResultData(True, "", None, None, dict(), dict(), [])   #TODO: ...
 
 def tradefed_run_xml(xml_path: str):
     if not config_got_xml_reporter(xml_path):

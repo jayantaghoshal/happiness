@@ -85,13 +85,15 @@ class ResultData:
                  json_result,
                  json_change_time,
                  test_kpis: Mapping[str, Any],
-                 logs: Mapping[str, str]) -> None:
+                 logs: Mapping[str, str],
+                 screenshot_paths : typing.List[str]) -> None:
         self.passed = passed
         self.console = console
         self.json_result = json_result
         self.json_change_time = json_change_time
         self.test_kpis = test_kpis
         self.logs = logs
+        self.screenshot_paths = screenshot_paths
 
     def __str__(self):
         if self.passed:

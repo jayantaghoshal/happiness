@@ -64,8 +64,8 @@ def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]],
                                            "vts-staging-default",
                                            "--skip-all-system-status-check",
                                            "--skip-preconditions",
-                                           "--abi",
-                                           "x86_64",
+                                           "--primary-abi-only",
+                                           "--screenshot-on-failure",
                                            "--module",
                                            module_name] +
                                           tests_to_run_args,
@@ -77,28 +77,29 @@ def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]],
         raise VtsTestFailedException(
             "Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
 
+    fails = []  # type: List[str]
+
     fail_pattern1 = "fail:|PASSED: 0"
     if re.search(fail_pattern1, test_result):
-        exception_string = ("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
-        raise VtsTestFailedException(exception_string, get_json_object(module_name), get_json_change_time(module_name))
+        fails.append("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
 
     pass_pattern = "I\/ResultReporter:\s*Invocation finished in.*PASSED:\s*(\d*),\s*FAILED:\s*(\d*)"
     pass_match = re.search(pass_pattern, test_result)
     if pass_match is None:
-        raise VtsTestFailedException("Test failed, did not find nr of PASSED/FAILED in resultreporter output",
-                                     get_json_object(module_name), get_json_change_time(module_name))
+        fails.append("Test failed, did not find nr of PASSED/FAILED in resultreporter output")
     nr_of_pass = int(pass_match.group(1))
     nr_of_fail = int(pass_match.group(2))
 
     if nr_of_fail != 0:
-        raise VtsTestFailedException("Test failed, Number of FAILED: %d != 0:" % nr_of_fail,
-                                     get_json_object(module_name), get_json_change_time(module_name))
+        fails.append("Test failed, Number of FAILED != 0")
+
+    if nr_of_pass == 0:
+        fails.append("Test failed, Number of PASSED == 0")
 
     if tests_to_run is not None and nr_of_pass != len(tests_to_run):
-        raise VtsTestFailedException("Test failed, Number of PASSED not equal to number of requested test cases. " +
-                                     "(Maybe you misspelled one of the requested test cases?)" +
-                                     "Nr of pass: %d, Requested test-cases: [%s]" % (nr_of_pass, ", ".join(tests_to_run)),
-                                     get_json_object(module_name), get_json_change_time(module_name))
+        fails.append("Test failed, Number of PASSED not equal to number of requested test cases. " +
+                     "Nr of pass: %d, Requested test-cases: [%s]" % (nr_of_pass, ", ".join(tests_to_run)) +
+                     "(Maybe you misspelled one of the requested test cases?)")
 
 
     log_dir_match = re.search(r"I\/ResultReporter:\s+Test Logs:\s+(\S+)", test_result)
@@ -120,12 +121,16 @@ def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]],
         read("host_log", os.path.join(log_dir, "**", "*host_log*.txt.gz"))
 
 
-    return ResultData(True,
-                      test_result,
+    # example: "05-03 05:44:29 D/ResultReporter: Saved logs for VtsFlexraySignalingCT_OneSendOneReceive#testFlexray2-screenshot in /home/eelmeke/android/vcc/out/host/linux-x86/vts/android-vts/logs/2018.05.03_05.43.32/inv_16988131975858974672/VtsFlexraySignalingCT_OneSendOneReceive#testFlexray2-screenshot_2646366068102957666.png"
+    screenshots = [m[1] for m in re.findall(r"./ResultReporter:\s+Saved logs for\s+(.*-screenshot)\s+in\s+(\S+)", test_result)]
+
+    return ResultData(len(fails) == 0,
+                      test_result + os.linesep + os.linesep.join(fails),
                       get_json_object(module_name),
                       get_json_change_time(module_name),
                       get_json_kpi_results(),
-                      logdict)
+                      logdict,
+                      screenshots)
 
 def get_json_kpi_results():
     try:
@@ -177,6 +182,7 @@ def read_module_name(android_test_xml_file: str):
         return test_module_name_option.attrib["value"]
 
     raise Exception("Did not find module-name with value in %s" % android_test_xml_file)
+
 
 
 def main():

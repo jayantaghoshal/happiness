@@ -27,6 +27,7 @@ function compare(a, b) {
 
 var db;
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 var mongo_ip = process.env.ICUP_ANDROID_MONGO_PORT_27017_TCP_ADDR
 MongoClient.connect('mongodb://jenkins-icup_android:' + process.env.MONGODB_PASSWORD + '@' + mongo_ip + ':27017', (err, client) => {
     if (err) return errorlog.error(err);
@@ -168,6 +169,9 @@ app.get('/detailed_view', cors(), (req, res) => {
             meta_test_record["Host"] = test_record["hostname"];
             meta_test_record["Runtime"] = test_record["runtime"];
             meta_test_record["KPI"] = test_record["kpis"];
+            meta_test_record["screenshots"] = test_record["screenshots"];
+            meta_test_record["description"] = test_record["description"];
+            meta_test_record["logs"] = test_record["logs"];
 
             if (typeof test_record["testcases"] !== 'undefined' && test_record["testcases"]) {
                 testcases_test_record = test_record["testcases"];
@@ -175,17 +179,8 @@ app.get('/detailed_view', cors(), (req, res) => {
                 testcases_test_record = [];
             }
 
-
-
-            var logs_test_record = {};
-            for (var i = 0; i < Object.keys(test_record).length; i++) {
-                if (Object.keys(test_record)[i].startsWith("file-")) {
-                    logs_test_record[Object.keys(test_record)[i]] = test_record[Object.keys(test_record)[i]]
-                }
-            }
             return {
                 test_detail: meta_test_record,
-                logs_test_record: logs_test_record,
                 testcases_test_record: testcases_test_record
             };
         });
@@ -220,20 +215,18 @@ app.get('/detailed_view', cors(), (req, res) => {
 });
 
 app.get('/log', cors(), (req, res) => {
+    db.collection('logs').findOne({"_id": ObjectId(req.query.id)}, {"contents":1})
+        .then(function(log) {
+            res.set('Content-Type', 'text/plain');
+            res.send(new Buffer(log["contents"]));
+        });
+});
 
-    var query = {};
-    query["module_name"] = req.query.module_name;
-    query["job_name"] = req.query.job_name;
-    query["test_job_build_number"] = parseInt(req.query.build_number);
 
-    var project = {};
-    project[(req.query.log_name).toString()] = 1;
-    project["_id"] = 0;
-
-    var cursor = db.collection('records').find(query)
-        .project(project).toArray(function(err, log) {
-            res.set('Content-Type', 'text/html');
-            res.render('log.ejs', { log_data: log[0][(req.query.log_name).toString()], back_page_detail: req.query });
-
+app.get('/screenshot', cors(), (req, res) => {
+    db.collection('screenshots').findOne({"_id": ObjectId(req.query.id)}, {"data":1})
+        .then(function(screenshot) {
+            res.set('Content-Type', 'image/png');
+            res.send(screenshot["data"].buffer);
         });
 });

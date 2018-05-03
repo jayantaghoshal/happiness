@@ -13,6 +13,9 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Di
 from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 from . import mongodb_wrapper
+from pymongo import MongoClient
+import pymongo
+from typing import Dict, List, Any
 
 import sys
 
@@ -102,6 +105,9 @@ def parse_tradefed_result_xml(tradefed_result_xml: str, test_detail: dict):
 
     return test_detail
 
+def read_module_details(android_test_xml_file: str):
+    et = ET.parse(android_test_xml_file)
+    return et.getroot().attrib["description"]
 
 def load_zip_logs(txt_zip_file: str):
     zip = zipfile.ZipFile(txt_zip_file)
@@ -111,19 +117,62 @@ def load_zip_logs(txt_zip_file: str):
         log_content = str(f.read().decode('utf-8', 'backslashreplace'))
         return log_content
 
+def clean_mongo_key(key: str):
+    return key.replace(".", "_").replace("$", "_")
+
 def truncate_to_fit_mongo(log_content: str):
-    # Mongodb supports to store max size of 16793598 bytes so we restrict each log shouldn't be more than 4 Mb
-    if(sys.getsizeof(log_content) >= 4000000):
+    # https://docs.mongodb.com/manual/reference/limits/#BSON-Document-Size
+    # Mongodb supports to store max size of 16793598 bytes so we restrict each log shouldn't be more than that
+    limit = 16000000
+    if(sys.getsizeof(log_content) >= limit):
         print("Log file exceeds the limit")
-        return "Log file exceeds the limit so trimmed " + str(sys.getsizeof(log_content) - 4000000) + " chars in the beginning of the file !!!!!!!!!! \n" + log_content[-4000000:]
+        return "Log file exceeds the limit so trimmed " + str(sys.getsizeof(log_content) - limit) + " chars in the beginning of the file !!!!!!!!!! \n" + log_content[-limit:]
     else:
         return log_content
 
 
-def load_test_results(test, test_result: ResultData, started_at: datetime.datetime, finished_at: datetime.datetime):
+def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: datetime.datetime, finished_at: datetime.datetime):
+    client = MongoClient(
+        "mongodb://jenkins-icup_android:" + os.environ[
+            "MONGODB_PASSWORD"] + "@gotsvl1416.got.volvocars.net:27017/admin?authMechanism=SCRAM-SHA-1")
+    db = client['test_results']
+    records_collection = db['records']
+    screenshots_collection = db['screenshots']
+    logs_collection = db['logs']
+
+
+    common_identifiers = {}  # type: Dict[str, Any]
+    if isinstance(test, VTSTest):
+        common_identifiers["test_dir_name"] = test.test_root_dir
+    elif isinstance(test, TradefedTest):
+        common_identifiers["test_dir_name"] = test.test_root_dir
+    common_identifiers["job_name"] = os.environ["JOB_NAME"]
+    if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
+        common_identifiers["top_test_job_build_number"] = int(os.environ["TOP_JOB_NUMBER"])
+        common_identifiers["top_test_job_name"] = os.environ["TOP_JOB_JOBNAME"]
+    else:
+        common_identifiers["top_test_job_name"] = ""
+        common_identifiers["top_test_job_build_number"] = 0
 
     test_detail = {}
-    test_detail["test_dir_name"] = test.test_root_dir
+    test_detail.update(common_identifiers)
+
+
+    def load_sreenshots():
+        for screenshot_path in test_result.screenshot_paths:
+            screnshot = {}
+            screnshot.update(common_identifiers)
+            screnshot["name"] = os.path.split(screenshot_path)[-1]
+            with open(screenshot_path, "rb") as f:
+                screnshot["data"] = f.read()
+            yield screnshot
+    screenshot_insertion_results = screenshots_collection.insert_many(load_sreenshots())
+
+    screenshot_dict = {}
+    for path, inserted_id in zip(test_result.screenshot_paths, screenshot_insertion_results.inserted_ids):
+        screenshot_dict[clean_mongo_key(os.path.split(path)[-1])] = inserted_id
+    test_detail["screenshots"] = screenshot_dict
+
     test_detail["job_name"] = os.environ["JOB_NAME"]
     test_detail["capabilities"] = str(test.require_capabilities)
     test_detail["test_job_build_number"] = int(os.environ["BUILD_NUMBER"])
@@ -132,35 +181,41 @@ def load_test_results(test, test_result: ResultData, started_at: datetime.dateti
     test_detail["finished_at"] = finished_at
     test_detail["result_stored_at"] = datetime.datetime.utcnow()
 
+    logs = {}
+
+    def store_log(name, contents):
+        log_entry = {}
+        log_entry.update(common_identifiers)
+        log_entry["name"] = name
+        log_entry["contents"] = truncate_to_fit_mongo(contents)
+        log_insertion_result = logs_collection.insert_one(log_entry)
+        logs[clean_mongo_key(name)] = {
+            "id": log_insertion_result.inserted_id,
+            "size": len(contents)
+        }
+
     try:
-        test_detail["console_log"] = test_result.console
+        store_log("console_log", test_result.console)
         test_detail["result"] = test_result.passed
     except Exception: # sometimes on test failures, "test_result" is not generated by the runner
-        test_detail["console_log"] = ""
         test_detail["result"] = False
 
-    if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
-        test_detail["top_test_job_build_number"] = int(os.environ["TOP_JOB_NUMBER"])
-        test_detail["top_test_job_name"] = os.environ["TOP_JOB_JOBNAME"]
-    else:
-        test_detail["top_test_job_name"] = ""
-        test_detail["top_test_job_build_number"] = 0
-
+    # TODO: This parsing should be handled inside vts_test_runner and abstracted through TestResult
     if isinstance(test, VTSTest):
         test_detail["test_type"] = "vts"
         test_detail["module_name"] = vts_test_run.read_module_name(os.path.join(aosp_root,
                                                                                 test.test_root_dir, "AndroidTest.xml"))
+        test_detail["description"] = read_module_details(os.path.join(aosp_root, test.test_root_dir, "AndroidTest.xml"))
 
-        result_dir = os.path.join(
-            os.environ["ANDROID_HOST_OUT"], "vts/android-vts/results/")
-        log_dir = os.path.join(
-            os.environ["ANDROID_HOST_OUT"], "vts/android-vts/logs/")
+        result_dir = os.path.join(os.environ["ANDROID_HOST_OUT"], "vts/android-vts/results/")
+        log_dir = os.path.join(os.environ["ANDROID_HOST_OUT"], "vts/android-vts/logs/")
 
         for filename in glob.iglob(log_dir + '**/*.gz', recursive=True):
-            test_detail['file-' + str(os.path.splitext(os.path.splitext(
-                os.path.basename(filename))[0])[0])] = truncate_to_fit_mongo(load_gz_logs(filename))
+            name = str(os.path.splitext(os.path.splitext(os.path.basename(filename))[0])[0])
+            store_log(name, load_gz_logs(filename))
 
         for filename in glob.iglob(result_dir + '**/test_result.xml', recursive=True):
+            # TODO: overwriting in every loop?
             test_detail = parse_vts_result_xml(filename, test_detail)
 
         try:
@@ -168,29 +223,36 @@ def load_test_results(test, test_result: ResultData, started_at: datetime.dateti
         except Exception:
             test_detail["kpis"] = ""
 
+        store_log("result_xml", test_detail['file-result_xml'])
+        del test_detail['file-result_xml']
+
     elif isinstance(test, TradefedTest):
 
         test_detail["test_type"] = "tradefed"
         test_detail["module_name"] = os.path.basename(test.test_root_dir)
-        result_dir = "/tmp/0/stub/"
+        test_detail["description"] = read_module_details(os.path.join(aosp_root,
+                                                                      test.test_root_dir, "AndroidTest.xml"))
 
+        result_dir = "/tmp/0/stub/"
         for filename in glob.iglob(result_dir + '**/test_result*', recursive=True):
-            parse_tradefed_result_xml(truncate_to_fit_mongo(load_zip_logs(filename)), test_detail)
+            # TODO: overwriting in every loop?
+            parse_tradefed_result_xml(load_zip_logs(filename), test_detail)
 
         for filename in glob.iglob(result_dir + '**/*.zip', recursive=True):
-            test_detail['file-' + str(os.path.splitext(os.path.splitext(
-                os.path.basename(filename))[0])[0])] = truncate_to_fit_mongo(load_zip_logs(filename))
+            name = str(os.path.splitext(os.path.splitext(os.path.basename(filename))[0])[0])
+            store_log(name, load_zip_logs(filename))
 
-    mongodb_wrapper.insert_data(test_detail)
+        store_log("result_xml", test_detail['file-result_xml'])
+        del test_detail['file-result_xml']
+
+    test_detail["logs"] = logs
+
+    records_collection.insert_one(test_detail)
 
 def get_module_name(test):
-
     if isinstance(test, VTSTest):
-
         return vts_test_run.read_module_name(os.path.join(aosp_root, test.test_root_dir, "AndroidTest.xml"))
-
     elif isinstance(test, TradefedTest):
-
         return os.path.basename(test.test_root_dir)
 
 
