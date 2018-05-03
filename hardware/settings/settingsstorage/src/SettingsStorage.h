@@ -1,10 +1,11 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #pragma once
 
+#include <IDispatcher.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <sqlite3.h>
@@ -60,7 +61,7 @@ struct SettingsListener {
 
 class SettingsStorage : public ISettingsStorage, public andrHw::hidl_death_recipient {
   public:
-    SettingsStorage();
+    SettingsStorage(const std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher);
     ~SettingsStorage();
 
     Return<void> set(SettingsIdHidl key,
@@ -72,7 +73,6 @@ class SettingsStorage : public ISettingsStorage, public andrHw::hidl_death_recip
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
   private:
-    std::recursive_mutex mLock;
     // Returned pointer is valid until next time getData is called, or until this is destroyed
     const unsigned char* getData(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId);
     void onProfileChange(profileHidl::ProfileIdentifier profileId);

@@ -88,7 +88,7 @@ struct SqliteException : public std::logic_error {
         : std::logic_error(build_sqllite_error_string(msg, result_code, db, err_msg)) {}
 };
 
-SettingsStorage::SettingsStorage() {
+SettingsStorage::SettingsStorage(const std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher) {
     {
         // NOTE: Since we run WAL mode, you also have to copy the xxx-shm and xxx-wal file
         //      in case you want to debug the contents on host side.
@@ -168,12 +168,16 @@ SettingsStorage::SettingsStorage() {
     }
 
     android::wp<SettingsStorage> weakThis{this};
-    profile_listener_ =
-            android::sp<ProfileListener>(new ProfileListener([weakThis](profileHidl::ProfileIdentifier newProfileId) {
-                android::sp<SettingsStorage> s = weakThis.promote();
-                if (s != nullptr) {
-                    s->onProfileChange(newProfileId);
-                }
+    profile_listener_ = android::sp<ProfileListener>(
+            new ProfileListener([dispatcher, weakThis](profileHidl::ProfileIdentifier newProfileId) {
+                // Important to not run the profile change synchronously because it will block the hidl-call
+                // creating a potential deadlock as inside here further hidl-calls are being made.
+                dispatcher->Enqueue([weakThis, newProfileId]() {
+                    android::sp<SettingsStorage> strongThis = weakThis.promote();
+                    if (strongThis != nullptr) {
+                        strongThis->onProfileChange(newProfileId);
+                    }
+                });
             }));
 }
 SettingsStorage::~SettingsStorage() {
@@ -183,31 +187,20 @@ SettingsStorage::~SettingsStorage() {
 }
 
 void SettingsStorage::onProfileChange(profileHidl::ProfileIdentifier profileId) {
-    // Copy the listeners to notify and notify them outside the lock-scope,
-    // Otherwise you can get a deadlock between client and server if the client
-    // is in the process of calling subscribe. It will get blocked by mLock
-    // and can not process the settingsForCurrentUserChanged being sent from here, thus
-    // never releasing the mLock.
-    std::list<SettingsListener> listeners_to_notify;
-    SettingsChangeReason reason = SettingsChangeReason::ProfileChange;
-
-    {
-        std::lock_guard<std::recursive_mutex> lock(mLock);
-        activeProfileId = profileId;
-        for (auto& sl : settings_listeners_) {
-            if (sl.user_scope_ == UserScope::NOT_USER_RELATED) {
-                continue;
-            }
-            const unsigned char* data = getData(sl.key_, activeProfileId);
-
-            if (data == nullptr) {
-                reason = SettingsChangeReason::Reset;
-            }
-            listeners_to_notify.push_back(sl);
+    activeProfileId = profileId;
+    for (auto& sl : settings_listeners_) {
+        if (sl.user_scope_ == UserScope::NOT_USER_RELATED) {
+            continue;
         }
-    }
-    for (auto& l : listeners_to_notify) {
-        auto status = l.listener_->settingsForCurrentUserChanged(l.key_, reason, profileId);
+        const unsigned char* data = getData(sl.key_, activeProfileId);
+
+        SettingsChangeReason reason = SettingsChangeReason::ProfileChange;
+        if (data == nullptr) {
+            // If there is no data for this setting in the new profile it means the new profile has never
+            // written this setting before, applications should treat it as reset.
+            reason = SettingsChangeReason::Reset;
+        }
+        sl.listener_->settingsForCurrentUserChanged(sl.key_, reason, activeProfileId);
     }
 }
 
@@ -215,24 +208,22 @@ Return<void> SettingsStorage::set(const SettingsIdHidl key,
                                   profileHidl::ProfileIdentifier profileId,
                                   const hidl_string& data) {
     ALOGD("set %d = %s", key, data.c_str());
-    std::lock_guard<std::recursive_mutex> lock(mLock);
-    {
-        (void)sqlite3_reset(insert_stmt_);
-        sqlite3_bind_int(insert_stmt_, 1, key);
-        sqlite3_bind_int(insert_stmt_, 2, static_cast<int32_t>(profileId));
-        sqlite3_bind_text(insert_stmt_, 3, data.c_str(), data.size(), SQLITE_STATIC);
-        int status = sqlite3_step(insert_stmt_);
-        if (status != SQLITE_DONE) {
-            ALOGE("SQL error insert. Step: %d, %s", status, sqlite3_errmsg(db_));
-            return Return<void>(andrHw::Status::fromExceptionCode(andrHw::Status::Exception::EX_ILLEGAL_STATE));
-        }
-        ALOGD("Settings inserted successfully, key=%d", key);
+
+    (void)sqlite3_reset(insert_stmt_);
+    sqlite3_bind_int(insert_stmt_, 1, key);
+    sqlite3_bind_int(insert_stmt_, 2, static_cast<int32_t>(profileId));
+    sqlite3_bind_text(insert_stmt_, 3, data.c_str(), data.size(), SQLITE_STATIC);
+    int status = sqlite3_step(insert_stmt_);
+    if (status != SQLITE_DONE) {
+        ALOGE("SQL error insert. Step: %d, %s", status, sqlite3_errmsg(db_));
+        return Return<void>(andrHw::Status::fromExceptionCode(andrHw::Status::Exception::EX_ILLEGAL_STATE));
     }
+    ALOGD("Settings inserted successfully, key=%d", key);
+
     return andrHw::Return<void>();
 }
 
 const unsigned char* SettingsStorage::getData(const SettingsIdHidl key, profileHidl::ProfileIdentifier profileId) {
-    std::lock_guard<std::recursive_mutex> lock(mLock);
     (void)sqlite3_reset(select_setting_stmt_);
     sqlite3_bind_int(select_setting_stmt_, 1, key);
     sqlite3_bind_int(select_setting_stmt_, 2, static_cast<int32_t>(profileId));
@@ -274,7 +265,6 @@ Return<void> SettingsStorage::subscribe(const SettingsIdHidl key,
                                         UserScope userScope,
                                         const sp<ISettingsListener>& listener) {
     ALOGD("subscribe key=%d, userScope=%hu", key, userScope);
-    std::lock_guard<std::recursive_mutex> lock(mLock);
     settings_listeners_.emplace_back(key, userScope, listener);
     listener->linkToDeath(this, ISETTINGSLISTENER_DEATH_COOKIE);
 
@@ -298,13 +288,11 @@ Return<void> SettingsStorage::subscribe(const SettingsIdHidl key,
 
 Return<void> SettingsStorage::unsubscribe(const SettingsIdHidl key, const sp<ISettingsListener>& listener) {
     ALOGD("unsubscribe %d", key);
-    std::lock_guard<std::recursive_mutex> lock(mLock);
     settings_listeners_.remove_if([&](const auto& x) { return x.key_ == key && ((x.listener_) == (listener)); });
     return andrHw::Return<void>();
 }
 
 void SettingsStorage::serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) {
-    std::lock_guard<std::recursive_mutex> lock(mLock);
     if (cookie != ISETTINGSLISTENER_DEATH_COOKIE) {
         return;
     }
