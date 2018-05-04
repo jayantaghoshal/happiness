@@ -1,0 +1,29 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+// Copyright 2017-2018 Volvo Car Corporation
+// This file is covered by LICENSE file in the root of this project
+
+cc_binary {
+
+    name: "mqttd",
+    init_rc: ["mqttd.rc"],
+    defaults: ["volvocars_cc_defaults"],
+    cpp_std: "c++14",
+
+    local_include_dirs: ["src"],
+
+    srcs: ["src/main.cpp"],
+
+    shared_libs: [
+        "liblog",
+        "libtarmac",
+        "libhidltransport",
+        "libhidlbase",
+        "libhwbinder",
+        "libpaho-mqttpp3",
+    ],
+
+}

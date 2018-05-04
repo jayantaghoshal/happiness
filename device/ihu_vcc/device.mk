@@ -15,6 +15,7 @@ PRODUCT_PACKAGES += \
     netboyd \
     netmand \
     cloudd \
+    mqttd \
     vehicle-signals-daemon \
     dataelements-hidl-server \
     ipcbd \

@@ -1,0 +1,17 @@
+# mqtt service
+type mqttd, domain;
+type mqttd_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(mqttd)
+
+allow mqttd system_file:dir r_dir_perms;
+allow mqttd system_file:file r_file_perms;
+allow mqttd self:udp_socket { read write create setopt bind };
+allow mqttd self:tcp_socket { read write create connect setopt };
+#allow mqttd self:capability { dac_override net_raw };
+allow mqttd port:tcp_socket name_connect;
+
+#binder_call(mqttd, dataelements-hidl-server)
+
+hwbinder_use(mqttd)
+
