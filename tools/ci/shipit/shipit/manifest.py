@@ -34,7 +34,11 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
     tree = ET.parse(template_path, parser)
     root = tree.getroot()
 
-    repos_with_zuul_changes_set = get_all_zuul_repos()
+    repos_with_zuul_changes_set = set() # type: typing.Set[str]
+
+    if using_zuul:
+        repos_with_zuul_changes_set = get_all_zuul_repos()
+
     project_to_remove = []
     for project in root.iter('project'):
 
@@ -43,15 +47,19 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
         revision = project.get('revision')
         if (revision == "ZUUL_COMMIT_OR_HEAD"):
             logger.info("ZUUL_COMMIT_OR_HEAD stated in revision field in the manifest")
+            # Excecuted in the manifest bump stage, after merge to master
             if not using_zuul:
                 revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
                 logger.info("setting revision to: " + revision)
                 project.set('revision', revision)
             # Check if the repo should be updated with latest revision in manifest
+            # this case if for Zuul repos that is not tested in the gate
             elif current_repo not in repos_with_zuul_changes_set:
                 revision = use_zuul_commit_or_head(repository, current_repo, using_zuul)
                 logger.info("setting revision to: " + revision)
                 project.set('revision', revision)
+            # If the zuul repo is tested in the gate, remove it from manifest
+            # and use zuul-cloner to get the repository
             else:
                 logger.info("Removing " + current_repo + " from manifest")
                 project_to_remove.append(project)
