@@ -55,6 +55,7 @@ def extract_channel(audio_file,  # type: str
     else:
         raise AudioUtilException("No channel extracted to file, sox output %s" % proc_res)
 
+
 # Converts a stereo wav file to a mono wav file
 # It can be used to convert the expected audio (which is mostly stereo) to mono so it can be better compared to
 # the reference channel that is mono.

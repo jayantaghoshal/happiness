@@ -28,17 +28,20 @@ def _create_combinations(input_list):
 
     return all_lists
 
+def _add_to_log_buffer(buffer, text, indent=0):
+    if buffer is None:
+        return None
+    else:
+        buffer.append('.'*4*indent + text)
 
-def match_sound(sound, match, verbose=False):
-    if verbose:
-        print("Does %s match %s" % (sound, match))
+def _match_sound(sound, match, log_buffer, indent=0):
+    _add_to_log_buffer(log_buffer, "Does %s match %s?\n" % (sound, match), indent=indent)
     res = True
     if not (match.sound_duration - match.sound_delta) < sound.duration_sound < (match.sound_duration + match.sound_delta):
         res = False
     if not (match.silence_duration - match.silence_delta) < sound.duration_silence < (match.silence_duration + match.silence_delta):
         res = False
-    if verbose:
-        print("Matching was", res)
+    _add_to_log_buffer(log_buffer, "Matching was %s" % res, indent=indent+1)
     return res
 
 
@@ -48,27 +51,22 @@ def match_sound(sound, match, verbose=False):
 # pling-plong-pling-plong and plong-pling-plong-pling-plong matches pling-plong, but pling-plong-pling-pling does not.
 # Note that the order is preserved so for a three part sound part1-part2-part3, part2-part1-part3 would not match.
 
-def match_sound_silence(sounds, match_list, reorder=True, verbose=False):
+def match_sound_silence(sounds, match_list, reorder=True, log_buffer_list=None):
     if len(sounds) < len(match_list):
         raise NoMatch("Sounds detected (%d) MUST be more than sounds to match (%d)" % (len(sounds), len(match_list)))
     all_match_lists = _create_combinations(match_list) if reorder else [match_list,]
 
     found_match = False
     for m in all_match_lists:
-        if verbose:
-            print("For match list ", str(m), ':\n')
+        _add_to_log_buffer(log_buffer_list, ''.join(("For match list ", str(m))))
         for i, s in enumerate(sounds):
-            if verbose:
-                print("Matching sound", i)
-            if not match_sound(s, m[i % len(m)], verbose=verbose):
+            _add_to_log_buffer(log_buffer_list, "Matching sound %d:" % i)
+            if not _match_sound(s, m[i % len(m)], log_buffer=log_buffer_list, indent=1):
                 break
         else:
             found_match = True
 
-    if not found_match and not verbose:  # Run again to provide actual errors
-        match_sound_silence(sounds, match_list, verbose=True)
     return found_match
-
 
 if __name__ == "__main__":
     cl = _create_combinations(('abc', 'def', 'ghi'))

@@ -37,6 +37,14 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
         self.flexray = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
         self.host_folder = '/tmp'
+        self.log_list = list()  #type: list
+
+    def setUp(self):
+        #clear the log used for sound matching
+        self.log_list = list()
+
+    def _log_list_as_str(self):
+        return '\n'.join(self.log_list)
 
     def getNormalizedSoundlist(self, filename, normalize_level):
         # Extract ref-channel to separate filecdhost_folder
@@ -53,6 +61,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test Park Brake sound.
     # ----------------------------------------------------------------------------------------------------------
     def testParkBrake(self):
+        # This is (?) Park Brake warning sound, SPA-UI-S018.wav
         self.logger.info("=== Test testParkBrake Start ===")
         ar = audio.alsarecorder.AlsaRecorder()
         # start recording for 10 seconds.
@@ -83,8 +92,12 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             self.logger.warning("Exception during testParkBrake sounds retrieval", e)
         try:
             # Match that list of sounds towards a list of Match objects
+            # S018.wav is currently 1.493s, so we expect sound to repeated every 1.5s
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.23, 0.04, 0.25, 0.06)], reorder=False)
+                1.23, 0.04, 0.25, 0.06)], reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
@@ -98,6 +111,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test Left Turn Indicator Functionality.
     # ----------------------------------------------------------------------------------------------------------
     def testLeftIndicator(self):
+        # This is (?) Left indicator sound, SPA-UI-S026.wav
         self.logger.info("=== Test testLeftIndicator Start ===")
         _s = 0.5
         ar = audio.alsarecorder.AlsaRecorder()
@@ -121,7 +135,10 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         try:
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)], reorder=False)
+                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)],
+                                                  reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
@@ -134,6 +151,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test Right Turn Indicator Functionality.
     # ----------------------------------------------------------------------------------------------------------
     def testRightIndicator(self):
+        # This is (?) Right indicator sound, SPA-UI-S026.wav
         self.logger.info("=== Test testRightIndicator Start ===")
         _s = 0.5
         ar = audio.alsarecorder.AlsaRecorder()
@@ -157,7 +175,10 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         try:
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)], reorder=False)
+                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)],
+                                                  reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
@@ -169,6 +190,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test TurnIndicator Left on and Right on
     # ----------------------------------------------------------------------------------------------------------
     def testBothIndicator(self):
+        # This is (?) Hazard indicator sound, SPA-UI-S028.wav
         self.logger.info("=== Test testBothIndicator Start ===")
         _s = 1
         ar = audio.alsarecorder.AlsaRecorder()
@@ -194,7 +216,10 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         try:
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                0.218, 0.02, 0.0693, 0.05), audio.match.Match(0.0587, 0.02, 0.6773, 0.05)], reorder=False)
+                0.218, 0.02, 0.0693, 0.05), audio.match.Match(0.0587, 0.02, 0.6773, 0.05)],
+                                                  reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
@@ -207,8 +232,10 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test Belt Reminder Sound1 On
     # ----------------------------------------------------------------------------------------------------------
     def testBeltReminderSound1(self):
+        # This is (?) the US Belt sound, SPA-UI-S055.wav
+
         self.logger.info("=== Test testBeltReminderSound1 Start ===")
-        _s = 0.8
+        _s = 1
         ar = audio.alsarecorder.AlsaRecorder()
         # start recording for 10 seconds.
         with ar.alsa_recorder(10, host_folder=self.host_folder):
@@ -226,8 +253,12 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             self.logger.warning("Exception during testBeltReminderSound1 sounds retrieval", e)
         try:
             # Match that list of sounds towards a list of Match objects
+            # S055.wav is 1.400s, so we expect sound + silence to be 2.0s
+            # The level is low the last 0.2s of file, but probably enough for detection, so expect 1.4 + 0.6
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.386, 0.02, 0.6133, 0.05)],reorder=False)
+                1.386, 0.02, 0.6133, 0.05)], log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
@@ -239,8 +270,9 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test Belt Reminder Sound2 On
     # ----------------------------------------------------------------------------------------------------------
     def testBeltReminderSound2(self):
+        # This is (?) the ROW initial Belt sound, SPA-UI-S023.wav
         self.logger.info("=== Test testBeltReminderSound2 Start ===")
-        _s = 0.8
+        _s = 1
         ar = audio.alsarecorder.AlsaRecorder()
 
         #ar._adb_shell_cmd('log -t BRS2_Test "START_TEST"')
@@ -277,10 +309,15 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             sounds = self.getNormalizedSoundlist(fn, -0.9)
         except Exception as e:
             self.logger.warning("Exception during testBeltReminderSound2 sounds retrieval", e)
+            raise e
         try:
             # Match that list of sounds towards a list of Match objects
+            # S023.wav is 1.997s, so we expect sound + silence to be 2.0s
+            # This sound is a bit 'iffy' so may be difficult to match with current logic?
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.386, 0.02, 0.6133, 0.05)],reorder=False)
+                1.997, 0.02, 0.05, 0.04)], log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
@@ -292,6 +329,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test Belt Reminder Sound3 On
     # ----------------------------------------------------------------------------------------------------------
     def testBeltReminderSound3(self):
+        # This is (?) the ROW final Belt sound, SPA-UI-S024.wav
         self.logger.info("=== Test testBeltReminderSound3 Start ===")
         _s = 1
         ar = audio.alsarecorder.AlsaRecorder()
@@ -309,10 +347,14 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             sounds = self.getNormalizedSoundlist(fn, -0.9)
         except Exception as e:
             self.logger.warning("Exception during testBeltReminderSound3 sounds retrieval", e)
+            raise e
         try:
             # Match that list of sounds towards a list of Match objects
+            # S024.wav is 1.400s long and goes all the way, so we expect 1.4 + 0.6
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.386, 0.02, 0.6133, 0.05)],reorder=False)
+                1.386, 0.02, 0.6133, 0.05)], reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
@@ -325,6 +367,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # Test Belt Reminder Sound4 On
     # ----------------------------------------------------------------------------------------------------------
     def testBeltReminderSound4(self):
+        # This is (?) the Rear Belt sound, SPA-UI-S054.wav
         self.logger.info("=== Test testBeltReminderSound4 Start ===")
         _s = 1
         ar = audio.alsarecorder.AlsaRecorder()
@@ -342,10 +385,14 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             sounds = self.getNormalizedSoundlist(fn, -0.9)
         except Exception as e:
             self.logger.warning("Exception during testBeltReminderSound4 sounds retrieval", e)
+            raise e
         try:
             # Match that list of sounds towards a list of Match objects
+            # S054.wav is 2.000s, with 1.997s sound, so we expect silence to be short!
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.986, 0.02, 0.0426, 0.005)],reorder=False)
+                1.986, 0.02, 0.0426, 0.08)], reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
             self.logger.warning("Too few sound recorded to match!")
             res = False
