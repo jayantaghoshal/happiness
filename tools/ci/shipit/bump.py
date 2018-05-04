@@ -31,9 +31,6 @@ def main(args):
             sync = True
         repository = args[3]
         autobumper.on_commit(aosp_root_dir, sync, repository)
-    elif mode == "sync_zuul_repos":
-        repository = args[2]
-        autobumper.sync_zuul_repos(aosp_root_dir, repository)
     elif mode == "sync_repo_based_on_manifest":
         repository = args[2]
         autobumper.sync_repo(aosp_root_dir, repository)

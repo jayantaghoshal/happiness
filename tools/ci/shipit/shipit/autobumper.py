@@ -73,33 +73,6 @@ def repo_init(aosp_root_dir: str, branch: str):
          "-b", branch],
         cwd=os.path.abspath(aosp_root_dir))
 
-
-def sync_zuul_repos(aosp_root_dir: str, repository: str):
-    logger.info("Syncing Zuul repos")
-    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
-    logger.debug("volvocars_repo_path = " + volvocars_repo_path)
-    volvocars_repo = git.Repo(volvocars_repo_path)
-    vcc_manifest_file = os.path.join(volvocars_repo.path, "manifests/manifest-volvocars.xml")
-    path_to_repository_with_commit = manifest.get_repo_path_from_git_name(vcc_manifest_file, repository)
-
-    #repos_with_zuul_changes = manifest.get_all_zuul_repos()
-    repos_with_zuul_changes = manifest.get_all_repos_with_zuul_commit_or_head(vcc_manifest_file)
-
-    for repo in repos_with_zuul_changes:
-        logger.info("current Zuul-repo = " + repo)
-        repo_path = manifest.get_repo_path_from_git_name(vcc_manifest_file, repo)
-        logger.info("The current repo have the repo_path = " + repo_path)
-        full_path = os.path.join(aosp_root_dir, repo_path)
-        logger.info("The full_path = " + full_path)
-        git.Repo.repo_sync_repo(repo, aosp_root_dir)
-        git.Repo.repo_reset(full_path)
-        git.Repo.repo_clean(full_path)
-        clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo)
-
-    # check that the commit has the zuul commit hash
-    if not repo_have_zuul_change(path_to_repository_with_commit, aosp_root_dir):
-        raise SystemExit('zuul-cloner failed to checkout commit the Zuul commit in " + repo')
-
 def on_commit(aosp_root_dir: str, sync: bool, repository: str):
     # Zuul will have already cloned vendor/volvocars
 
@@ -156,7 +129,6 @@ def clone_zuul_repo_to_manifest_path(aosp_root_dir: str, repo_path: str, repo_na
             print("The folder " + destination_repo_path + " does not exist.")
         print("Moving folder: " + git_path + " to " + destination_repo_path)
         os.replace(git_path, destination_repo_path)
-
 
 
 def repo_have_zuul_change(repo_path: str, aosp_root_dir: str):

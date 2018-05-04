@@ -63,7 +63,6 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
             else:
                 logger.info("Removing " + current_repo + " from manifest")
                 project_to_remove.append(project)
-                #root.remove(project)
 
     for project in project_to_remove:
         root.remove(project)
@@ -85,7 +84,6 @@ def get_repo_path_from_git_name(template_path: str, git_repo: str):
             return str(path)
 
     return None
-    #raise Exception("Could not find the repo path in manifest for " + git_repo)
 
 def get_revision_from_git_name(template_path: str, git_repo: str):
     parser = ET.XMLParser(target=CommentedTreeBuilder())
@@ -103,7 +101,6 @@ def get_revision_from_git_name(template_path: str, git_repo: str):
             return str(revision)
 
     return None
-    #raise Exception("Could not find the repo path in manifest for " + git_repo)
 
 
 def get_all_zuul_repos():
