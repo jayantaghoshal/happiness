@@ -18,12 +18,29 @@ from shipit.serial_mapping import open_serials, swap_serials, PortMapping, VipSe
 from shipit import serial_mapping
 from shipit.process_tools import check_output_logged
 from distutils.version import LooseVersion
+from typing import Any
 
 logger = logging.getLogger("ihu_update")
 
 
 def run(cmd, **kwargs) -> str:
     return check_output_logged(cmd, **kwargs).decode().strip(" \t\n\r")
+
+
+def check_with_retries(expression: Any, retries: int = 1, intermission: float = 0.1) -> bool:
+    """
+    Return True if <expression> is true (can be either an expression, a lambda or a function) within <retries>
+    retries separated with pauses of <intermission> seconds between retries. Otherwise returns False.
+    """
+    while retries > 0:
+        if callable(expression) and expression():
+            return True
+        if not callable(expression) and expression:
+            return True
+        retries -= 1
+        if retries > 0:
+            time.sleep(intermission)
+    return False
 
 
 # region Bootmodes handling
@@ -91,13 +108,22 @@ def expect_mp_abl_on_serial(mp: MpSerial) -> None:
     logger.info("ABL command line confirmed")
 
 
-def ensure_mp_is_in_abl_cmdline(vip: VipSerial, mp: MpSerial) -> None:
+def boot_mp_to_abl_cmdline_with_bootmodes_and_expect_abl_on_serial(vip: VipSerial, mp: MpSerial) -> bool:
+    boot_mp_to_abl_cmdline_with_bootmodes(vip)
     try:
-        # reboot method with low risk of damaging Apollo lake chip
-        boot_mp_to_abl_cmdline_with_bootmodes(vip)
         expect_mp_abl_on_serial(mp)
     except serial_mapping.ExpectedResponseNotPresentError:
         logger.warning("Failed to boot to boot mode", exc_info=True)
+        return False
+    return True
+
+
+def ensure_mp_is_in_abl_cmdline(vip: VipSerial, mp: MpSerial) -> None:
+    # Boot to abl should be fairly quick. Give it at least 3 tries using bootmodes.
+    if not check_with_retries(boot_mp_to_abl_cmdline_with_bootmodes_and_expect_abl_on_serial(vip, mp),
+                             retries=3,
+                             intermission=0.1):
+        logger.warning("Failed to boot to boot mode")
         vip.writeline("version")  # print to know if this version was actually old or sth else happened
 
         # reboot with high success rate on old VIPs
@@ -230,7 +256,8 @@ Troubleshooting:
 
             try:
                 logger.info("Waiting for confirmation that previous ABL uses abl_update_1...")
-                mp.expect_line("Searching for ABL update partition abl_update_1.*", timeout_sec=60)
+                if not mp.try_expect_line("Searching for ABL update partition abl_update_1.*", timeout_sec=60):
+                    reboot_mp_into_android_default_mode_and_verify_abl_bootmode_confirmation(vip, mp)
 
                 logger.info("Waiting for ABL update confirmation")
                 mp.expect_line("Update time:.*", timeout_sec=120)
