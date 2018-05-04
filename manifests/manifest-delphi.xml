@@ -74,7 +74,7 @@
   <project name="vendor/delphi/android_vendor_interfaces" path="vendor/aptiv/interfaces" revision="e204af52a0dcb278866657488f24cf10ac105c43" />
 
   <!-- Common Delphi building blocks -->
-  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="886dc44f6c0a6214318bfde1dd270597e83ada3c" />
+  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="768726dd6aad05e9fb922e6ae50870e678dbd16b" />
   <project name="vendor/delphi/Delphi_Android_Platform_Support" path="vendor/aptiv/components/libdelphi_platform" revision="542c68086bf9a1a02c1d66bceee0d1a5a3af9f43" />
   <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="334794067ceaad5ce02d3ed63ba77674407ef697" />
   <project name="vendor/delphi/AShmemService" path="vendor/aptiv/components/AShmemService" revision="492ee9fbb56ca1cfd9a71708554cfd7ddcb2c498" />
