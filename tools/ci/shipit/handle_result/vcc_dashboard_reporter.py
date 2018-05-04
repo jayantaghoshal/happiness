@@ -8,7 +8,7 @@ from typing import List
 from .abstract_reporter import abstract_reporter
 from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
-
+from utilities.ihuhandler import FlashResult
 from handle_result import store_result, test_visualisation
 
 logger = logging.getLogger(__name__)
@@ -17,6 +17,12 @@ class vcc_dashboard_reporter(abstract_reporter):
 
     def __init__(self):
         self.continue_report = True
+
+    def flash_started(self) -> None:
+        pass
+
+    def flash_finished(self, result: FlashResult) -> None:
+        pass
 
     def plan_started(self) -> None:
         logger.info("Initialise visualizing Testcases in VCC CI")

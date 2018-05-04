@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import List
 from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
+from utilities.ihuhandler import FlashResult
 
 class abstract_reporter(ABC):
 
@@ -25,4 +26,12 @@ class abstract_reporter(ABC):
 
     @abstractmethod
     def module_finished(self, test: IhuBaseTest, test_result: ResultData) -> None:
+        pass
+
+    @abstractmethod
+    def flash_started(self) -> None:
+        pass
+
+    @abstractmethod
+    def flash_finished(self, result: FlashResult) -> None:
         pass

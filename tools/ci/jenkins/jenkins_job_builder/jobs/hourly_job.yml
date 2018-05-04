@@ -42,6 +42,11 @@
                                 <usernameVariable>MONGODB_USER</usernameVariable>
                                 <passwordVariable>MONGODB_PASSWORD</passwordVariable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>7cdd6d34-ee50-422a-9f18-8df67778b065</credentialsId>
+                                <usernameVariable>INFLUXDB_USER</usernameVariable>
+                                <passwordVariable>INFLUXDB_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
     builders:

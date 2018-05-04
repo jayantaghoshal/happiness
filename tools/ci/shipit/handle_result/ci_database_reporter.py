@@ -4,11 +4,14 @@
 import logging
 import traceback
 import datetime
+import os
 from typing import List
 from .abstract_reporter import abstract_reporter
 from handle_result import store_result, test_visualisation
 from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
+from utilities.ihuhandler import FlashResult
+from .influxdb_wrapper import insert_influx_data
 
 logger = logging.getLogger(__name__)
 
@@ -44,3 +47,28 @@ class ci_database_reporter(abstract_reporter):
             logger.error(str(traceback.format_exc()))
             logger.error(str(e))
             logger.error("Storing results to mongodb failed")
+
+    def flash_started(self):
+        pass
+
+    def flash_finished(self, result: FlashResult):
+        data = {
+            'build_number' : os.environ["BUILD_NUMBER"],
+            'gerrit_id' : os.environ["ZUUL_CHANGE"],
+            'build_host' : os.environ["HOST_HOSTNAME"],
+            'job_name' : os.environ["JOB_NAME"],
+            'flash_attempt' : result.attempts,
+            'flash_time' : result.flashtime,
+            'total_time' : result.totaltime,
+            'info' : result.info,
+            'flash_result' : result.success,
+        }
+        tags = {
+            "jobType": "ihu_flash",
+        }
+
+        try:
+            insert_influx_data("flash_result", data, tags)
+        except Exception as e:
+            logger.info(str(e))
+

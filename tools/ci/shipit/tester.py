@@ -45,6 +45,16 @@ class tester:
         for r in self.reporter_list:
             r.module_finished(test, test_result)
 
+    def _flash_started(self):
+        logger.info("Flashing started")
+        for r in self.reporter_list:
+            r.flash_started()
+
+    def _flash_finished(self, result):
+        logger.info("Flashing finished")
+        for r in self.reporter_list:
+            r.flash_finished(result)
+
     def run_testcases(self, tests_to_run: List, abort_on_first_failure: bool):
         test_results = []  # type: List[NamedTestResult]
         self._plan_started()
@@ -57,6 +67,12 @@ class tester:
                 break
         self._plan_finished(test_results)
         return test_results
+
+    def flash_ihu(self):
+        self._flash_started()
+        result = ihuhandler.flash_ihu()
+        self._flash_finished(result)
+        return result
 
     def _check_result(self, test_result) -> bool:
         passed_all_tests = True
@@ -150,16 +166,20 @@ class tester:
                 self.reporter_list.add(ci_database_reporter())
 
             if args.update_ihu:
-                ihuhandler.flash_ihu()
+                result = self.flash_ihu()
+                if not result.success:
+                    logger.error('IHU update failed')
+                    sys.exit(1)
 
             results = self.run_testcases(selected_tests, args.abort_on_first_failure)
             failing_testcases = [x for x in results if not x.result.passed]
             if len(failing_testcases) > 0:
+                logger.error('Test case failed')
                 sys.exit(1)
 
         else:
             #root_parser.print_usage() # This wont work...
-            print("Unknown parameter: {}".format(args.program))
+            logger.error("Unknown parameter: {}".format(args.program))
             sys.exit(1)
 
 

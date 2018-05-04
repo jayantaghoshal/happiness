@@ -5,6 +5,7 @@ from typing import List
 from .abstract_reporter import abstract_reporter
 from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
+from utilities.ihuhandler import FlashResult
 
 def _print_indented(self, s: str, indent="    ") -> None:
     lines = s.split("\n")
@@ -18,6 +19,12 @@ class console_reporter(abstract_reporter):
         pass
 
     def plan_started(self) -> None:
+        pass
+
+    def flash_started(self) -> None:
+        pass
+
+    def flash_finished(self, result: FlashResult) -> None:
         pass
 
     def plan_finished(self, test_results: List[NamedTestResult]) -> None:
