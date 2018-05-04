@@ -83,15 +83,25 @@ function docker_killall() {
 # otherwise repo get confused (repo assumes .git-data is in .repo/project-objects/).
 # Reset the manifest-repo in case it was modified in a strange way from last commit
 # shellcheck disable=SC2015
-if [[ -d .repo ]]; then
-    # Abort rebase if manifest repo has merge conflicts and is still in rebase state
-    if [[ -d .repo/manifests/.git/rebase-apply ]]; then
-        (cd .repo/manifests && git rebase --abort || true)
+function get_repos {
+    if [[ -d .repo ]]; then
+        # Abort rebase if manifest repo has merge conflicts and is still in rebase state
+        if [[ -d .repo/manifests/.git/rebase-apply ]]; then
+            (cd .repo/manifests && git rebase --abort || true)
+        fi
+        # Hard reset manifest repo (current branch)
+        (cd .repo/manifests && git reset --hard HEAD || true)
     fi
-    # Hard reset manifest repo (current branch)
-    (cd .repo/manifests && git reset --hard HEAD || true)
-fi
-bootstrap_docker_run "repo init --reference=/cm/repo-mirror -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}"
+    bootstrap_docker_run "repo init --reference=/cm/repo-mirror -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b ${ZUUL_BRANCH}" || return $?
+    rm -rf ./* || sleep 30 && rm -rf ./*  # Try again if needed, due to dangling processes.
+    #bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j8 vendor/volvocars" || return $?
+}
+
+function clean_all {
+    find . -type f -delete && find . -type d -empty -delete
+}
+
+get_repos || (clean_all && get_repos)
 
 ################################################################################################
 # repo sync would leave uncommited changes, but zuul cloner below would fail

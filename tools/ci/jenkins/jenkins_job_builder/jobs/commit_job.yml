@@ -149,7 +149,7 @@
     builders:
         - shell:
             !include-raw:
-                - bootstrap_ihu_gate_build_stage.sh
+                - bootstrap_common_commit_triggered.sh
                 - bootstrap_ihu_gate_build.sh
     publishers:
         - raw:
