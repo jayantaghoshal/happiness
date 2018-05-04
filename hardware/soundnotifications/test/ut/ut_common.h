@@ -46,6 +46,7 @@ class ut_common : public ::testing::Test {
 
         if (!error) {
             _hidl_cb(AMStatus::OK, connectionID);
+            swrapper->onConnected(connectionID);
             swrapper->onRampedIn(connectionID);
         } else {
             _hidl_cb(AMStatus::VALUE_OUT_OF_RANGE, 0);
@@ -55,7 +56,13 @@ class ut_common : public ::testing::Test {
 
     ::android::hardware::Return<AMStatus> mockStopSound(uint32_t connectionId) {
         ALOG(LOG_INFO, "SoundNotificationsUT", "AudioManagerMock::mockStopSound. connection ID: %d", connectionId);
-        swrapper->onDisconnected(connectionID);
+        // This can be set to true/false from the test case.
+        if (callOnDisconnect == true) {
+            swrapper->onWavFileFinished(connectionID);
+            swrapper->onDisconnected(connectionID);
+        } else {
+            // we skip the callbacks to simulate one of the AM use cases.
+        }
         return AMStatus::OK;
     }
 
@@ -76,5 +83,6 @@ class ut_common : public ::testing::Test {
 
     static SoundWrapper* swrapper;
     static ::android::sp<AudioManagerMock> am_service;
+    std::atomic_bool callOnDisconnect{true};
     uint32_t connectionID{0};
 };

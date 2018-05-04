@@ -6,10 +6,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <log/log.h>
+#include <soundwrapper.h>
 #include <cinttypes>
 #include <iostream>
-
-#include <soundwrapper.h>
 #include "audiomanagermock.h"
 
 #include "ut_common.h"
@@ -65,7 +64,6 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
     EXPECT_FALSE(SoundWrapper::isPlaying(soundToPlay));
 
     EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
-    EXPECT_EQ(static_cast<int64_t>(-1), SoundWrapper::getConnectionID(soundToPlay));
     ALOGI("Finishing %s", test_info_->name());
 }
 
@@ -114,14 +112,6 @@ TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting) {
     EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 
     // Play again and we shall come to Playing
-    EXPECT_CALL(*am_service,
-                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
-                          static_cast<int32_t>(SoundComponent::LeftRightBroken),
-                          testing::_))
-            .Times(1);
-    SoundWrapper::play(soundToPlay);
-    EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
-
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
                           static_cast<int32_t>(SoundComponent::LeftRightBroken),
@@ -225,7 +215,42 @@ TEST_F(SoundWrapperUT, stopSoundFailsInPlaying_toIdle) {
     EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
 
     // Expecting to call stopSound() twice
-    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(2);
+    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(1);
     SoundWrapper::stop(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
+}
+
+TEST_F(SoundWrapperUT, playSound_stopSound_withoutOnDisconnected_playAgain) {
+    // Idle->Starting->Playing->Idle
+
+    EXPECT_CALL(*am_service,
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
+                          static_cast<int32_t>(SoundComponent::Warn1),
+                          testing::_))
+            .Times(1);
+    auto soundToPlay = SoundWrapper::SoundID(SoundType::BeltReminder, SoundComponent::Warn1);
+    SoundWrapper::play(soundToPlay);
+
+    // Advance state with onPlayStarted to take us to Playing
+    EXPECT_EQ(static_cast<int>(Sound::State::Playing), SoundWrapper::getSoundState(soundToPlay));
+
+    // Expecting to call stopSound() twice
+    EXPECT_CALL(*am_service, stopSound(testing::_)).Times(1);
+    callOnDisconnect = false;
+    SoundWrapper::stop(soundToPlay);
+    EXPECT_EQ(static_cast<int>(Sound::State::Stopping), SoundWrapper::getSoundState(soundToPlay));
+
+    EXPECT_CALL(*am_service,
+                playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
+                          static_cast<int32_t>(SoundComponent::Warn1),
+                          testing::_))
+            .Times(0);
+    SoundWrapper::play(soundToPlay);
+
+    // Expecting the state to be Stopping because onDisconnected has not called yet.
+    EXPECT_EQ(static_cast<int>(Sound::State::Stopping), SoundWrapper::getSoundState(soundToPlay));
+
+    swrapper->onDisconnected(SoundWrapper::getConnectionID(soundToPlay));
+    // Expecting the state to be playing because onDisconnected has not called yet.
     EXPECT_EQ(static_cast<int>(Sound::State::Idle), SoundWrapper::getSoundState(soundToPlay));
 }
