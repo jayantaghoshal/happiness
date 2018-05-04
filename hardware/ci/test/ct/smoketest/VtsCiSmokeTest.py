@@ -74,9 +74,10 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
         self.write_kpi("bootchart_boot_time", boot_time, "s")
 
+        self.saveFiles('/data/bootchart/', 'bootchart')
+
         asserts.assertLess(boot_time, max_boot_time, "Bootchart boot time longer than the maximum allowed {} s".format(max_boot_time / 100))
-        self.executeInShell("rm /data/bootchart/enabled")
-        self.executeInShell("rm /data/bootchart/proc_stat.log")
+        self.executeInShell("rm /data/bootchart/*")
 
     def testCpuLoadShort(self):
         requirement = 90
@@ -216,7 +217,6 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             utilisation.append(100.0 * (1.0 - idle_delta / total_delta))
 
         return utilisation
-
 
 
 if __name__ ==  "__main__":

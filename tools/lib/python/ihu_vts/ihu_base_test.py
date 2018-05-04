@@ -7,7 +7,8 @@ import os
 import json
 import sys
 from vts.runners.host import test_runner, base_test, const
-
+import subprocess
+import shutil
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from typing import Union, List, Dict#, Optional
 
@@ -63,6 +64,18 @@ class IhuBaseTestClass(base_test.BaseTestClass):
     def write_kpi(self, name, value, unit=None):
         # type: (str, _kpi_value_type, str) -> None
         self.vcc_kpis[name] = value
+
+    def saveFiles(self, from_ihu_path, name):
+
+        save_file_path = '/tmp/saved_files_from_tests/files'
+        to_path = os.path.join(save_file_path, name)
+
+        if not os.path.isdir(save_file_path):
+            os.makedirs(save_file_path)
+        if not os.path.isdir(to_path):
+            os.makedirs(to_path)
+
+        subprocess.check_call(['adb', 'pull', from_ihu_path, to_path])
 
     def deviceReboot(self):
         self.executeInShell("reboot")

@@ -16,6 +16,8 @@ import bson
 from typing import Dict, Any
 import sys
 import logging
+sys.path.append(vcc_root)
+from tools.ci.artifactory.artifactory.artifactory import Artifactory as Artifactory # NOQA
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +28,7 @@ def clean_old_results():
     result_dirs.append(os.path.join(
         os.environ["ANDROID_HOST_OUT"], "vts/android-vts/logs/"))
     result_dirs.append("/tmp/0/stub/")
+    result_dirs.append("/tmp/saved_files_from_tests/")
 
     for dir in result_dirs:
         if os.path.isdir(dir):
@@ -120,6 +123,15 @@ def load_zip_logs(txt_zip_file: str):
 def clean_mongo_key(key: str):
     return key.replace(".", "_").replace("$", "_")
 
+def zip_dir(basedir, archivename):
+    with zipfile.ZipFile(archivename, 'w') as zip:
+        if os.path.isfile(basedir):
+            zip.write(basedir, os.path.split(basedir)[1], compress_type=zipfile.ZIP_DEFLATED)
+        if os.path.isdir(basedir):
+            for folder, subfolders, files in os.walk(basedir):
+                for file in files:
+                    zip.write(os.path.join(folder, file), os.path.relpath(os.path.join(folder, file), basedir), compress_type=zipfile.ZIP_DEFLATED)
+
 def truncate_to_fit_mongo(log_content: str):
     # https://docs.mongodb.com/manual/reference/limits/#BSON-Document-Size
     # Mongodb supports to store max size of 16793598 bytes so we restrict each log shouldn't be more than that
@@ -164,8 +176,6 @@ def load_test_results(test: IhuBaseTest,
     test_detail.update(common_identifiers)
     del test_detail["testrun_id"]
     test_detail["_id"] = bson.ObjectId(testrun_uuid)
-
-
     screenshot_dict = {}
     if len(test_result.screenshot_paths) > 0:
         def load_sreenshots():
@@ -216,6 +226,20 @@ def load_test_results(test: IhuBaseTest,
 
         result_dir = os.path.join(os.environ["ANDROID_HOST_OUT"], "vts/android-vts/results/")
         log_dir = os.path.join(os.environ["ANDROID_HOST_OUT"], "vts/android-vts/logs/")
+
+        test_detail["files"] = {}
+        zip_folder = '/tmp/saved_files_from_tests/zip_files'
+        save_file_folder = '/tmp/saved_files_from_tests/files'
+
+        if not os.path.isdir(zip_folder):
+            os.makedirs(zip_folder)
+        for name in os.listdir(save_file_folder):
+            zip_path = name + '.zip'
+            zip_dir(os.path.join(save_file_folder, name), os.path.join(zip_folder, zip_path))
+            uri = "ICUP_ANDROID_CI/%s/%s/%s/%s" % (os.environ["JOB_NAME"], os.environ["BUILD_NUMBER"], test_detail["module_name"], zip_path)
+            Artifactory().deploy_artifact(uri, os.path.join(zip_folder, zip_path))
+            test_detail["files"][name] = {'location': 'artifactory', 'uri': uri}
+
 
         for filename in glob.iglob(log_dir + '**/*.gz', recursive=True):
             name = str(os.path.splitext(os.path.splitext(os.path.basename(filename))[0])[0])
