@@ -4,7 +4,10 @@
     <dimen name="notification_shadow_radius">12dp</dimen>
 
     <!-- The height of the divider between the individual notifications. -->
-    <dimen name="notification_divider_height">2dp</dimen>
+    <dimen name="notification_divider_height">16dp</dimen>
+
+    <!-- The margin from the notification panel to the top of the screen. -->
+    <dimen name="notification_panel_margin_top">16dp</dimen>
 
     <!-- The font size for the clock in the status bar. -->
     <dimen name="status_bar_clock_size">28sp</dimen>
