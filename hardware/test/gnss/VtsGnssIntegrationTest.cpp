@@ -260,6 +260,7 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
     msg->gnssPositionData->position->altitude = 21;
     msg->gnssPositionData->movement->speed = 9000;
     msg->gnssPositionData->heading = 234;
+    msg->gnssPositionData->positioningStatus->fixType = e_Icb_GnssFixType_fix3D;
 
     ALOGD("Encode message!");
     InfotainmentIpBus::Utils::encodeMessage(

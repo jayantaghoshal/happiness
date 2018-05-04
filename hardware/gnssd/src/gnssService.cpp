@@ -19,6 +19,7 @@ using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
 using namespace Connectivity;
+using namespace InfotainmentIpBus::Utils;
 
 GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} {
     //// Init for IpService base class.
@@ -30,6 +31,7 @@ GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} 
 
     expect_location_accuracy_ = false;  // set this according to which VCM ver you are currently using
     location_.timestamp = 0;
+    message_sync_time_ = 0;
     location_.gnssLocationFlags = 0;
 
     m_session_msgd = ASN_Session_Create(m_session_buffer_msgd, sizeof(m_session_buffer_msgd));
@@ -234,16 +236,18 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
                                                 p,
                                                 Icb_OpGNSSPositionData_Response_Create,
                                                 Icb_OpGNSSPositionData_Response_Decode)) {
-        // All ok.
-        const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionData->utcTime);
-        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
+        // Decode ok.
+        const int64_t mssince1970 = ToMsSince1970(p->gnssPositionData->utcTime);
+        const Icb_GnssFixType_t fixtype = Icb_GnssFixType_t(p->gnssPositionData->positioningStatus->fixType);
+        ALOGD("   PosData UTC: %d-%d-%d %d:%d:%d:%ld , fix:%s",
               p->gnssPositionData->utcTime->year,
               p->gnssPositionData->utcTime->month,
               p->gnssPositionData->utcTime->day,
               p->gnssPositionData->utcTime->hour,
               p->gnssPositionData->utcTime->minute,
               p->gnssPositionData->utcTime->second,
-              mssince1970);
+              mssince1970,
+              FixTypeToString(fixtype).c_str());
 
 #ifdef OpGNSSPositionData_PRINT_ENABLED
         Icb_OpGNSSPositionData_Response_Print(p);
@@ -251,39 +255,49 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
 
         bool sendnow = false;
         if (!expect_location_accuracy_) {
-            // we don't expect any accuracy signal to arrive so lets send this right now
-            // We set some dummy values  for horizontal accuracy
+            // Since we don't expect any accuracy signal to arrive we send this right now
+            // We set some dummy values for horizontal accuracy (when we have a fix)
             // otherwise Android completely filters out the location samples.
-            location_.gnssLocationFlags |= (uint16_t)GnssLocationFlags::HAS_HORIZONTAL_ACCURACY;
-            location_.horizontalAccuracyMeters = 10.0;
+            if (fixtype == e_Icb_GnssFixType_fix2D || fixtype == e_Icb_GnssFixType_fix3D) {
+                location_.gnssLocationFlags |= (uint16_t)GnssLocationFlags::HAS_HORIZONTAL_ACCURACY;
+                location_.horizontalAccuracyMeters = 10.0;
+            }
             sendnow = true;
-        } else if (mssince1970 == location_.timestamp) {
+        } else if (mssince1970 == message_sync_time_) {
             // We seem to have already received the accuracy signal so lets send now
             sendnow = true;
-        } else if (expect_location_accuracy_ && location_.timestamp != 0) {
-            // This is just to detect misconfigurations; that we expect accuracy but we dont seem to get them
+        } else if (expect_location_accuracy_ && message_sync_time_ != 0) {
+            // What we detect here is that we have received two consecutive PositionData messages but without any
+            // accuracy message inbetween -> strange!!
             ALOGV("Received cbGNSSPositionDataNotification but no accuracy in sight");
         }
-        location_.timestamp = mssince1970;
+        message_sync_time_ = mssince1970;
 
-        location_.gnssLocationFlags |=
-                (uint16_t)GnssLocationFlags::HAS_LAT_LONG | (uint16_t)GnssLocationFlags::HAS_ALTITUDE |
-                (uint16_t)GnssLocationFlags::HAS_SPEED | (uint16_t)GnssLocationFlags::HAS_BEARING;
-
-        location_.latitudeDegrees =
-                InfotainmentIpBus::Utils::FixedPoint32ToDegreesD(p->gnssPositionData->position->longLat->latitude);
-        location_.longitudeDegrees =
-                InfotainmentIpBus::Utils::FixedPoint32ToDegreesD(p->gnssPositionData->position->longLat->longitude);
-        location_.altitudeMeters = p->gnssPositionData->position->altitude / 10.0;    // dm -> meters
-        location_.speedMetersPerSec = p->gnssPositionData->movement->speed / 1000.0;  // mm/s -> m/s
-        location_.bearingDegrees = p->gnssPositionData->heading / 100.0;              // 1/100 degrees -> degrees
-        ALOGD("lat=%.4lf , long=%.4lf", location_.latitudeDegrees, location_.longitudeDegrees);
+        if (fixtype == e_Icb_GnssFixType_fix2D || fixtype == e_Icb_GnssFixType_fix3D) {
+            location_.timestamp = mssince1970;  // Since we have a xD-fix then indicate a valid timestamp
+            // 2D fix only gives lat, long, speed, bearing so set validity flags and values
+            location_.gnssLocationFlags |= (uint16_t)GnssLocationFlags::HAS_LAT_LONG |
+                                           (uint16_t)GnssLocationFlags::HAS_SPEED |
+                                           (uint16_t)GnssLocationFlags::HAS_BEARING;
+            location_.latitudeDegrees = FixedPoint32ToDegreesD(p->gnssPositionData->position->longLat->latitude);
+            location_.longitudeDegrees = FixedPoint32ToDegreesD(p->gnssPositionData->position->longLat->longitude);
+            location_.speedMetersPerSec = p->gnssPositionData->movement->speed / 1000.0;  // mm/s -> m/s
+            location_.bearingDegrees = p->gnssPositionData->heading / 100.0;              // 1/100 degrees -> degrees
+            if (fixtype == e_Icb_GnssFixType_fix3D) {
+                // 3D fix also gives altitude -> set validity flag and value
+                location_.gnssLocationFlags |= (uint16_t)GnssLocationFlags::HAS_ALTITUDE;
+                location_.altitudeMeters = p->gnssPositionData->position->altitude / 10.0;  // dm -> meters
+            }
+            ALOGD("lat=%.4lf , long=%.4lf", location_.latitudeDegrees, location_.longitudeDegrees);
+        } else {
+            location_.timestamp = 0;  // Indicate invalid timestamp due to no-fix
+        }
 
         if (sendnow) {
             ALOGD("location send to gnss, triggered by location");
             gnss_.updateLocation(location_);
-            location_.timestamp = 0;
             location_.gnssLocationFlags = 0;
+            message_sync_time_ = 0;
         }
     }
 }
@@ -304,8 +318,8 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg& msg) {
                                                 Icb_OpGNSSPositionDataAccuracy_Response_Create,
                                                 Icb_OpGNSSPositionDataAccuracy_Response_Decode)) {
         // All ok.
-        const int64_t mssince1970 = InfotainmentIpBus::Utils::ToMsSince1970(p->gnssPositionDataAccuracy->utcTime);
-        ALOGD("   UTC: %d-%d-%d %d:%d:%d:%ld",
+        const int64_t mssince1970 = ToMsSince1970(p->gnssPositionDataAccuracy->utcTime);
+        ALOGD("   PosAccuracy UTC: %d-%d-%d %d:%d:%d:%ld",
               p->gnssPositionDataAccuracy->utcTime->year,
               p->gnssPositionDataAccuracy->utcTime->month,
               p->gnssPositionDataAccuracy->utcTime->day,
@@ -317,12 +331,9 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg& msg) {
 #ifdef OpGNSSPositionDataAccuracy_PRINT_ENABLED
         Icb_OpGNSSPositionDataAccuracy_Response_Print(p);
 #endif
-        bool sendnow = false;
-        if (mssince1970 == location_.timestamp) {
-            // We seem to have already received the location signal so lets send now
-            sendnow = true;
-        }
-        location_.timestamp = mssince1970;
+        // Send now if we have already received the location signal with the same timestamp
+        bool sendnow = (mssince1970 == message_sync_time_);
+        message_sync_time_ = mssince1970;
 
         if (!expect_location_accuracy_) {
             ALOGW("Strange, we dont expect accuracy but still receives it!!");
@@ -343,8 +354,8 @@ void GnssService::GNSSPositionDataAccuracyNotificationHandler(const Msg& msg) {
         if (sendnow) {
             ALOGD("location send to gnss, triggered by accuracy");
             gnss_.updateLocation(location_);
-            location_.timestamp = 0;
             location_.gnssLocationFlags = 0;
+            message_sync_time_ = 0;
         }
     }
 }

@@ -66,6 +66,7 @@ class GnssService : public virtual RefBase, private IMessageCallback, private hi
 
     Gnss gnss_;
     GnssLocation location_;
+    int64_t message_sync_time_;
     bool expect_location_accuracy_;
 
     // Subscription Id's
