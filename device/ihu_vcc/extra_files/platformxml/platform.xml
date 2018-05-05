@@ -25,6 +25,7 @@
     <hidden-api-whitelisted-app package="com.volvocars.launcher" />
     <hidden-api-whitelisted-app package="com.volvocars.mediacenter" />
     <hidden-api-whitelisted-app package="com.volvocars.vehiclefunctions" />
+    <hidden-api-whitelisted-app package="com.volvocars.settings" />
 
     <!-- This is a component that must be possible to call (broadcast to) at any time. -->
     <allow-in-power-save package="com.volvocars.systemdialog" />
