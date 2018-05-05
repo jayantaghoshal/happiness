@@ -7,8 +7,10 @@
        <!-- Notifications -->
        <eat-comment/>
        <!-- Size of notification text titles (see TextAppearance.StatusBar.EventContent.Title). -->
-       <dimen name="notification_title_text_size">24sp</dimen>
+       <dimen name="notification_title_text_size">30sp</dimen>
        <!-- Size of notification text (see TextAppearance.StatusBar.EventContent). -->
-       <dimen name="notification_text_size">20sp</dimen>
+       <dimen name="notification_text_size">24sp</dimen>
+       <!-- The width of the panel holding the notifications. -->
+       <dimen name="notification_panel_width">736dp</dimen>
 
 </resources>
