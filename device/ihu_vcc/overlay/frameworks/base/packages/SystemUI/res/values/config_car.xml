@@ -18,5 +18,5 @@
 -->
 
 <resources>
-    <bool name="config_enableBottomNavigationBar">false</bool>
+    <bool name="config_enableBottomNavigationBar">true</bool>
 </resources>
