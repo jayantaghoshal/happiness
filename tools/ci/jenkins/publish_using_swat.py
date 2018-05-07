@@ -60,7 +60,7 @@ def add_file_to_ip(TAG, sw_tags_to_filename, file_path):
 def publish_ip():
     try:
         subprocess.check_call(
-            ['swat', 'publish_ip', '--username='+USER, '--ecu='+ECU, '--ip='+IP, '--publish_level=1', '--api_key_swf1='+API_KEY], stderr=subprocess.STDOUT)
+            ['swat', 'publish_ip', '--username='+USER, '--ecu='+ECU, '--ip='+IP, '--api_key_swf1='+API_KEY], stderr=subprocess.STDOUT)
 
     except subprocess.CalledProcessError as e:
         logging.error(e)
