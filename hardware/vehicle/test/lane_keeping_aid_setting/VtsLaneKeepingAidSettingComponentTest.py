@@ -46,6 +46,7 @@ lka_button_mode_steering = VehicleHalCommon.app_context_vehiclefunctions + "lane
 lka_button_mode_sound    = VehicleHalCommon.app_context_vehiclefunctions + "lane_keeping_aid_button_mode_sound"
 
 buttonWaitTimeSeconds = 1.5
+populateWaitTimeSeconds = 5
 
 class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
 
@@ -171,7 +172,7 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         # LaneKeepAidSts On (not SrvRqrd)
         fr.send_LaneKeepAidSts(DE.FctSts2.On)
         fr.send_VehModMngtGlbSafe1(vehmod)
-        time.sleep(buttonWaitTimeSeconds)
+        time.sleep(populateWaitTimeSeconds)
 
         # Get buttons. They shall be gone if CC is disabled
         buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_off)
@@ -302,6 +303,9 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         # LaneKeepAidSts On (not SrvRqrd)
         fr.send_LaneKeepAidSts(DE.FctSts2.On)
         fr.send_VehModMngtGlbSafe1(vehmod)
+
+        # Extra wait for population views depending on car config.
+        vc.sleep(populateWaitTimeSeconds)
 
         # Get buttons. They shall be enabled if CC is enabled
         # Search mode buttons for mode tests.
