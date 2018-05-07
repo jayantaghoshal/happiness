@@ -39,27 +39,12 @@ set -e
 # Get properties
 adb shell getprop
 
-plan=""
-if [ "${JOB_NAME}" = "ihu_daily_vts1-generic" ]
-then
-    plan="vts-volvo1.xml"
-elif [ "${JOB_NAME}" = "ihu_daily_vts2-generic" ]
-then
-    plan="vts-volvo2.xml"
-elif [ "${JOB_NAME}" = "ihu_daily_vts3-generic" ]
-then
-    plan="vts-volvo3.xml"
-elif [ "${JOB_NAME}" = "ihu_daily_vts4-generic" ]
-then
-    plan="vts-volvo4.xml"
-fi
-export plan
-
 set +e
 
 # Run vts tests
 #TODO Copy this to the above if statement as the command for cts differ a bit?
-time vts-tradefed run commandAndExit "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/test/"${plan}" --skip-all-system-status-check --skip-preconditions #--abi x86_64
+time vts-tradefed run commandAndExit "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/test/vts-volvo.xml --skip-all-system-status-check --skip-preconditions #--abi x86_64
+teststatus=$? #This will be 0 even if tests fail. Only nonzero on crashes
 
 # Upload results to MongoDB
 python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/handle_result/store_vts_result.py ./out/host/linux-x86/vts/android-vts/results/
@@ -68,7 +53,6 @@ python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/handle_result/store_vt
 mkdir old
 (cd old; artifactory pull-latest "${JOB_NAME}" || echo "artifactory pull failed")
 python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/compare_results.py ./out/host/linux-x86/vts/android-vts/results/ ./old
-changestatus=$?
 
 set -e
 
@@ -80,6 +64,6 @@ echo "Results can be found at https://swf1.artifactory.cm.volvocars.biz/artifact
 #check results and email relavant po's here?
 
 # Check status
-if [ $changestatus -ne 0 ]; then
-    die "Test failed"
+if [ $teststatus -ne 0 ]; then
+    die "Testrun failed"
 fi
