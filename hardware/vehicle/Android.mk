@@ -32,7 +32,6 @@ LOCAL_SRC_FILES := \
      src/illuminationmodule.cpp \
      src/cartimemodule.cpp \
      src/sensormodule.cpp \
-     src/connectedsafety.cpp \
      src/activesafetymodule.cpp \
      src/daisettingimpl.cpp \
      src/interface_mapping.cpp \
@@ -42,7 +41,8 @@ LOCAL_SRC_FILES := \
      vhal_modules/e_lane_keeping_aid_module.cpp \
      vhal_modules/driver_support_function_module.cpp \
      vhal_modules/traffic_sign_information_module.cpp \
-     vhal_modules/lane_departure_warning_module.cpp
+     vhal_modules/lane_departure_warning_module.cpp \
+     vhal_modules/connected_safety_module.cpp
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/src \

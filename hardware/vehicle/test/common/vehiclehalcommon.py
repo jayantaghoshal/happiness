@@ -43,11 +43,11 @@ PydataElementsSenderType = typing.Union[BaseEnumSender, BaseBoolSender, BaseFloa
 T = typing.TypeVar('T')
 
 property_list = [
-    ('CONNECTED_SAFETY_ON', 557842436),
     ('DAI_SETTING', 557842437),
     ('CURVE_SPEED_ADAPTION_ON', 555745286),
     ('LANE_KEEPING_AID_ON', 555745289),
     ('LANE_KEEPING_AID_MODE', 557842443),
+    ('CONNECTED_SAFETY_ON', 555745284),
 ]
 
 

@@ -50,7 +50,7 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
     CONNECTED_SAFETY_ON = (
       0x0004
       | VehiclePropertyGroup:VENDOR
-      | VehiclePropertyType:INT32
+      | VehiclePropertyType:BOOLEAN
       | VehicleArea:GLOBAL),
 
      /**
@@ -310,6 +310,18 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
      */
     DRIVER_SUPPORT_FUNCTION_STATUS = (
       0x001C
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for Connected Safety
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    CONNECTED_SAFETY_ON_STATUS = (
+      0x001D
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),

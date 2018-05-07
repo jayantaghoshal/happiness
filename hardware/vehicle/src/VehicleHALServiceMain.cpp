@@ -13,13 +13,13 @@
 #include "activesafetymodule.h"
 #include "activeuserprofilemodule.h"
 #include "cartimemodule.h"
-#include "connectedsafety.h"
 #include "hvacmodule.h"
 #include "illuminationmodule.h"
 #include "keymanagermodule.h"
 #include "libsettings/setting.h"
 #include "libsettings/settingsmanagerhidl.h"
 #include "sensormodule.h"
+#include "vhal_modules/connected_safety_module.h"
 #include "vhal_modules/curve_speed_adaption_module.h"
 #include "vhal_modules/driver_support_function_module.h"
 #include "vhal_modules/e_lane_keeping_aid_module.h"
@@ -87,7 +87,6 @@ int main(int /* argc */, char* /* argv */ []) {
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
     auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
-    auto connectedSafetyModule = std::make_unique<vccvhal_10::impl::ConnectedSafety>(hal.get(), settings_manager);
     auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
     auto speed_limit_adaptation_module = std::make_unique<SpeedLimitAdaptationModule>();
     auto lane_keeping_aid_module = std::make_unique<LaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
@@ -98,6 +97,7 @@ int main(int /* argc */, char* /* argv */ []) {
     CurveSpeedAdaptionModule curveSpeedAdaption{&ctx};
     DriverSupportFunctionModule driver_support_function_module{&ctx};
     LaneDepartureWarningModule lane_departure_warning{&ctx};
+    ConnectedSafetyModule connectedSafety{&ctx};
 
     // Register modules
     powerModule->registerToVehicleHal();
@@ -108,7 +108,6 @@ int main(int /* argc */, char* /* argv */ []) {
     illuminationModule->registerToVehicleHal();
     carTimeModule->registerToVehicleHal();
     sensorModule->registerToVehicleHal();
-    connectedSafetyModule->registerToVehicleHal();
     activeSafetyModule->registerToVehicleHal();
 
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};

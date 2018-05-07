@@ -74,6 +74,7 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/flexray_burst_test", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
     VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray}), #dfloodh
+    VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",       standard_caps | {cp.flexray}), #Martin Stigels
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -95,7 +96,6 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/test/gnss",                                  standard_caps), #Andreas Bengtsson
     VTSTest("vendor/volvocars/hardware/test/iplm",                                  standard_caps), #Andreas Bengtsson
     VTSTest("vendor/volvocars/hardware/test/keypanel",                              standard_caps | {cp.flexray}), #Tobias Ohrstrom
-    VTSTest("vendor/volvocars/hardware/vehicle/test/connectedsafety_setting",       standard_caps | {cp.flexray}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
