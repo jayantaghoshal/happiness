@@ -4,6 +4,10 @@
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
+
+# Parameter for invoking incremental builds - controls cleanup of workspace prior to the build. Default is non-incremental.
+build_type=$1
+
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
@@ -29,7 +33,11 @@ citime python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local sync "${ZUUL_P
 
 # Unable to remove out folder when the server is in process of
 # copying files at the same time.
-rm -rf out || sleep 30 && rm -rf out  # Remove previous OUT_DIR for clean build.
+if [ "$build_type" == "incremental" ]; then
+   make installclean
+else
+   rm -rf out || sleep 30 && rm -rf out  # Remove previous OUT_DIR for clean build.
+fi
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
