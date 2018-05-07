@@ -88,8 +88,10 @@ void RemoteCtrlClientBase::OnAvailabilityChanged(vsomeip::service_t /*service*/,
                                                  vsomeip::instance_t /*instance*/,
                                                  bool is_available) {
     is_available_.store(is_available);
-    if (is_available) {
-        enqueued_request_();
+    if (is_available_.load()) {
+        if (enqueued_request_ != nullptr) {
+            enqueued_request_();
+        }
     }
 }
 
@@ -118,6 +120,7 @@ void RemoteCtrlClientBase::SendRequest(const uint16_t& method_id, const std::vec
     request->set_service(client_info_.service_id_);
     request->set_instance(client_info_.instance_id_);
     request->set_method(method_id);
+    request->set_reliable(true);
 
     std::shared_ptr<vsomeip::payload> pl = runtime_->create_payload();
     pl->set_data(payload_data);

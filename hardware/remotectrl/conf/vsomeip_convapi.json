@@ -31,7 +31,7 @@
         {
             "service" : "0x1100",
             "instance" : "0x1101",
-            "unreliable" : "50022",
+            "reliable" : { "port" : "50022", "enable-magic-cookies" : "false" },
             "eventgroups" : {
                 "eventgroup" : "0x1150",
                 "events" : ["0x1122"]
@@ -40,7 +40,7 @@
         {
             "service" : "0x1200",
             "instance" : "0x1201",
-            "unreliable" : "50023",
+            "reliable" : { "port" : "50023", "enable-magic-cookies" : "false" },
             "eventgroups" : {
                 "eventgroup" : "0x1202",
                 "events" : ["0x1222", "0x1225", "0x1228", "0x1210", "0x1231"]
