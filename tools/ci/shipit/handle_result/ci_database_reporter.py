@@ -24,7 +24,27 @@ class ci_database_reporter(abstract_reporter):
         pass
 
     def plan_finished(self, test_results: List[NamedTestResult]) -> None:
-        pass
+        failing_testcases = [x for x in test_results if not x.result.passed]
+        passing_testcases = len(test_results) - len(failing_testcases)
+        data = {
+            'build_number' : os.environ["BUILD_NUMBER"],
+            'gerrit_id' : os.environ["ZUUL_CHANGE"],
+            'build_host' : os.environ["HOST_HOSTNAME"],
+            'job_name' : os.environ["JOB_NAME"],
+            'passing_testcases' : passing_testcases,
+            'failing_testcases' : len(failing_testcases),
+            'total_testcases' : len(test_results),
+        }
+        tags = {
+            "jobType": "ihu_test",
+        }
+
+        logger.info("Storing: {}".format(data))
+        try:
+            insert_influx_data(str(os.environ["JOB_NAME"]), data, tags)
+        except Exception as e:
+            logger.info(str(e))
+
 
     def module_started(self, test: IhuBaseTest) -> None:
         if not self.continue_report:
