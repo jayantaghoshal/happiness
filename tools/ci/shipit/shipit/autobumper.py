@@ -166,9 +166,13 @@ def sync_repo(aosp_root_dir: str, repository: str):
         else:
             logger.info("The revision is set to: " + revision)
             break
+    # In the bumping stage we need to check Gerrit server for the sha on master
+    if revision == "ZUUL_COMMIT_OR_HEAD":
+        revision = git.Repo.ls_remote(repository)
 
     if not revision:
         raise Exception("Could not find the revision in manifest for " + repository)
+
 
     for manifest_file in vcc_manifest_files:
         logger.info("Manfiest = " + manifest_file)
