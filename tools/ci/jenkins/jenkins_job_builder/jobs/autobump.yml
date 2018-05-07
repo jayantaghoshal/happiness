@@ -62,6 +62,11 @@
                 git reset --hard origin/"${GERRIT_BRANCH}"
                 cd "${WORKSPACE_ROOT}"
 
+                # Download repo if it repo is not vendor/volvocars
+                if [ ! "$GERRIT_PROJECT" == "vendor/volvocars" ]; then
+                    python3 ./vendor/volvocars/tools/ci/shipit/bump.py . sync_repo_based_on_manifest "${GERRIT_PROJECT}"
+                fi
+
                 ## Update the manifests based on the templates and push it
                 python3 ./vendor/volvocars/tools/ci/shipit/bump.py . autobump "${GERRIT_BRANCH}" "${BUILD_URL}" "${GERRIT_PROJECT}"
     publishers:
