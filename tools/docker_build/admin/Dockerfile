@@ -244,6 +244,13 @@ RUN apt-get install -y spatialite-bin
 RUN pip install pyserial
 
 ##################################################
+# Used for GPS location mocking communication in vts test
+# asn1tools required for ASN encoding/decoding
+# pytz required for fetching timezone
+RUN pip install asn1tools \
+                pytz
+
+##################################################
 # Preload with python packages required for VTS
 # This is because VTS does pip intall and by having them locally it's faster and
 # doesn't require Internet access
@@ -257,7 +264,7 @@ RUN mkdir -p /usr/local/pip /usr/local/cached_pip_packages \
     httplib2 oauth2client pyasn1 pyasn1-modules \
     rsa six uritemplate protobuf certifi chardet \
     idna requests urllib3 \
-    parse ply oauth2client pyserial
+    parse ply oauth2client pyserial asn1tools pytz
 
 ##################################################
 # Install python package from SWF1 Artifactory PyPi

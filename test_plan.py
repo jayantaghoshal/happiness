@@ -53,6 +53,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests",         standard_caps), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray}),# Torbjörn Sandsgård
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Martin Stigels
+    VTSTest("vendor/volvocars/packages/TimeUpdateService/test/ct",                  standard_caps), #Renjith Rajagopal
 ]
 
 test_plan_nightly = test_plan_hourly + [

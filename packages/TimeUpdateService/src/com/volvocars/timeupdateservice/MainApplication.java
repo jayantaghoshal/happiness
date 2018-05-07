@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -55,6 +55,9 @@ public class MainApplication extends Application implements LocationListener, Hw
     private BroadcastReceiver receiver;
     private SettingsObserver mSettingsObserver;
     private Handler mHandler;
+    private static final String AUTO_TIME_LOG = "Time & Date MODE : [AUTO]";
+    private static final String MANUAL_TIME_LOG = "Time & Date MODE : [MANUAL]";
+
     private static final int EVENT_AUTO_TIME_CHANGED = 1;
     /*Make this common to all classes*/
     private static final Boolean MANUAL_MODE = false;
@@ -116,11 +119,9 @@ public class MainApplication extends Application implements LocationListener, Hw
 
     @Override
     public void onLocationChanged(Location location) {
-
         gpsTimeMilis = location.getTime();
         long ihuTime = getIHUTime();
         long storedOffset = getUserTimeOffset();
-
         if (storedOffset == Long.MAX_VALUE) {
             setUserTimeOffset(ihuTime - gpsTimeMilis);
             locationCounter = 0;
@@ -130,7 +131,11 @@ public class MainApplication extends Application implements LocationListener, Hw
                     locationCounter++;
                     if(locationCounter == 2){
                         setIHUTime(gpsTimeMilis + storedOffset);
-                        setCemTime(gpsTimeMilis + storedOffset);
+                        if(setCemTime(gpsTimeMilis + storedOffset)) {
+                            Log.i(TimeUpdateLog.SERVICE_TAG, "CEM time successfully set on GPS update");
+                        } else {
+                            Log.e(TimeUpdateLog.SERVICE_TAG, "Failed to set CEM time on GPS location update");
+                        }
                     }
                 }else{
                     locationCounter = 0;
@@ -237,7 +242,7 @@ public class MainApplication extends Application implements LocationListener, Hw
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(TimeUpdateLog.SERVICE_TAG, String.format("Intent Received: Time Changed Manually"));
+                Log.d(TimeUpdateLog.SERVICE_TAG, String.format("Intent Received: Time or Date Changed") );
                 updateTimeOnSettingsChange(isAutomaticTimeRequested());
             }
         };
@@ -257,17 +262,16 @@ public class MainApplication extends Application implements LocationListener, Hw
      * @return None
      */
     public void updateTimeOnSettingsChange(boolean mode) {
+        /* Logs Time and Date Mode */
+        Log.d(TimeUpdateLog.SERVICE_TAG, mode ? AUTO_TIME_LOG:MANUAL_TIME_LOG);
         if (mode == MANUAL_MODE) {
-
             long userTime = getIHUTime();
-            Log.e(TimeUpdateLog.SERVICE_TAG, "user set time: " + String.valueOf(userTime));
-
             setUserTimeOffset(Long.MAX_VALUE);
 
             if (setCemTime(userTime))
                 Log.i(TimeUpdateLog.SERVICE_TAG, "CEM time successfully set");
             else
-                Log.i(TimeUpdateLog.SERVICE_TAG, "Failed to set CEM time on user change");
+                Log.e(TimeUpdateLog.SERVICE_TAG, "Failed to set CEM time on user change");
 
         } else {
             setUserTimeOffset(0L);
@@ -282,7 +286,7 @@ public class MainApplication extends Application implements LocationListener, Hw
             VehiclePropValue unixTimeProp = new VehiclePropValue();
             unixTimeProp.prop = VehicleProperty.UNIX_TIME;
             long userTimeSecs = (userTime + 500L) / 1000L;
-            Log.i(TimeUpdateLog.SERVICE_TAG, "user time in secs: " + userTimeSecs);
+            Log.i(TimeUpdateLog.SERVICE_TAG, "CET Time update :user time in secs: " + userTimeSecs);
             unixTimeProp.value.int64Values.add(0, userTimeSecs);
             if (mVehicle.set(unixTimeProp) == StatusCode.OK) {
                 return true;
