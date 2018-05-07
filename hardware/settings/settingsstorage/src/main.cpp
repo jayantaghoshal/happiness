@@ -9,6 +9,7 @@
 #include <hidl/HidlTransportSupport.h>
 
 #include <IDispatcher.h>
+#include <dispatcher_watchdog.h>
 #include <gsl/span>
 #include "SettingsStorage.h"
 
@@ -21,6 +22,8 @@ int main(int argc, char* argv[]) {
     (void)argc;
     (void)argv;
     const auto dispatcher = tarmac::eventloop::IDispatcher::CreateDispatcher(false);
+    const auto watchdog = tarmac::eventloop::WatchDog::Create();
+    watchdog->Watch(dispatcher, std::chrono::seconds(30));
 
     // Setup hidl transport into file descriptor notification mode and connect the
     // file descriptor to dispatcher so that all server calls and client callbacks from hidl

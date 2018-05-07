@@ -10,7 +10,7 @@ This tests verifies the functionality in eventloop.
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="VtsEventLoopCTTestCases" />
-        <option name="runtime-hint" value="800ms" />
-        <option name="native-test-timeout" value="2000"/>
+        <option name="runtime-hint" value="15s" />
+        <option name="native-test-timeout" value="60000" />
     </test>
 </configuration>

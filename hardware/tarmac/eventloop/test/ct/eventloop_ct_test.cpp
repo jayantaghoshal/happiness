@@ -203,7 +203,7 @@ TEST(EventLoopTest, TestDelayedEventFunctionCalled_cyclic_timer) {
 
     // Wait for 50ms and check that task wasn't dispatched immediatelly
     usleep(50000);
-    EXPECT_TRUE(timer_fired.size() == 0);
+    EXPECT_TRUE(timer_fired.empty());
 
     ALOGI("Wait for task to be executed");
     std::future_status status = f.wait_for(std::chrono::seconds(5));

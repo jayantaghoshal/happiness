@@ -1,9 +1,10 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #include <cutils/log.h>
+#include <dispatcher_watchdog.h>
 #include <hidl/HidlTransportSupport.h>
 #include <memory>
 #include "CarProfileManager.h"
@@ -25,6 +26,9 @@ int main(int argc, char* argv[]) {
     (void)argv;
 
     std::shared_ptr<IDispatcher> dispatcher = IDispatcher::CreateDispatcher();
+    const auto watchdog = tarmac::eventloop::WatchDog::Create();
+    watchdog->Watch(dispatcher, std::chrono::seconds(30));
+
     auto time_provider = std::make_shared<TimeProvider>(dispatcher);
 
     android::sp<SettingsManagerHidl> manager = new SettingsManagerHidl(*(dispatcher.get()));

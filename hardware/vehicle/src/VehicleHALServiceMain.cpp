@@ -29,7 +29,9 @@
 #include "vhal_modules/traffic_sign_information_module.h"
 #include "vmsmodule.h"
 
+#include <IDispatcher.h>
 #include <android/hardware/automotive/vehicle/2.0/IVehicle.h>
+#include <dispatcher_watchdog.h>
 #include <future>
 #include "Application_dataelement_synchronous.h"
 #include "carconfigmodule.h"
@@ -51,6 +53,8 @@ int main(int /* argc */, char* /* argv */ []) {
     //      on main thread while all callbacks come from the dispatcher thread.
     std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher =
             tarmac::eventloop::IDispatcher::CreateDispatcher(false);
+    std::unique_ptr<tarmac::eventloop::WatchDog> watchdog = tarmac::eventloop::WatchDog::Create();
+    watchdog->Watch(dispatcher, std::chrono::seconds(30));
     android::sp<SettingsFramework::SettingsManagerHidl> settings_manager =
             new SettingsFramework::SettingsManagerHidl(*dispatcher);
     DEDispatcher dataelements{dispatcher};
