@@ -467,7 +467,7 @@
             fi
         - copyartifact:
             project: $UPSTREAM_JOB_JOBNAME
-            filter: vendor/volvocars/*
+            filter: aosp/vendor/volvocars/**
             do-not-fingerprint: true
         - sonar:
             sonar-name: Sonar
@@ -475,7 +475,7 @@
                 sonar.projectKey=ihua:androidcomplete
                 sonar.projectName=IHUA_IHU Android - complete source code
                 sonar.projectVersion=1.0
-                sonar.sources=./vendor/volvocars/
+                sonar.sources=./aosp/vendor/volvocars/
     wrappers:
         - timestamps
         - workspace-cleanup
