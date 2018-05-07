@@ -64,7 +64,7 @@ class tester:
             test_result = run_test(t, max_testtime_sec)
             test_results.append(NamedTestResult(str(t), test_result))
             self._module_finished(t, test_result)
-            if not self._check_result(test_result) and abort_on_first_failure:
+            if not test_result.passed and abort_on_first_failure:
                 break
         self._plan_finished(test_results)
         return test_results
@@ -74,15 +74,6 @@ class tester:
         result = ihuhandler.flash_ihu()
         self._flash_finished(result)
         return result
-
-    def _check_result(self, test_result) -> bool:
-        passed_all_tests = True
-        results = test_result.json_result
-        if results is not None:
-            for result in results["Results"]:
-                if result["Result"] != "PASS":
-                    passed_all_tests = False
-        return passed_all_tests
 
     def _set_log_config(self):
         with open(pathjoin(os.path.dirname(__file__), "logging.json"), "rt") as f:

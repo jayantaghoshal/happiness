@@ -27,10 +27,8 @@ class TestFailedException(Exception):
 
 
 class VtsTestFailedException(TestFailedException):
-    def __init__(self, message, json_result=None, json_change_time=None):
+    def __init__(self, message):
         self.message = message
-        self.json_result = json_result
-        self.json_change_time = json_change_time
 
 
 class IhuBaseTest:
@@ -82,15 +80,11 @@ class ResultData:
     def __init__(self,
                  passed: bool,
                  console: str,
-                 json_result,
-                 json_change_time,
                  test_kpis: Mapping[str, Any],
                  logs: Mapping[str, str],
                  screenshot_paths : typing.List[str]) -> None:
         self.passed = passed
         self.console = console
-        self.json_result = json_result
-        self.json_change_time = json_change_time
         self.test_kpis = test_kpis
         self.logs = logs
         self.screenshot_paths = screenshot_paths

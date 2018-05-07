@@ -29,22 +29,6 @@ class console_reporter(abstract_reporter):
 
     def plan_finished(self, test_results: List[NamedTestResult]) -> None:
         print("*** VTS Python Test summary ***")
-        for test_result in test_results:
-            results = test_result.result.json_result
-            if results is not None:
-                print("****************************************************")
-                print("Test name: " +test_result.name)
-                print("Test class: " + results["Results"][0]["Test Class"])
-
-                print("\tError: " + str(results["Summary"]["Error"]))
-                print("\tExecuted: " + str(results["Summary"]["Executed"]))
-                print("\tFailed: " + str(results["Summary"]["Failed"]))
-                print("\tPassed: " + str(results["Summary"]["Passed"]))
-                print("\tRequested: " + str(results["Summary"]["Requested"]))
-                print("\tSkipped: " + str(results["Summary"]["Skipped"]))
-                print("\tJson creation time: " + str(test_result.result.json_change_time))
-                print("****************************************************")
-                print("")
         print("All tests completed")
         failing_testcases = [x for x in test_results if not x.result.passed]
         if len(failing_testcases) > 0:
@@ -61,19 +45,4 @@ class console_reporter(abstract_reporter):
         pass
 
     def module_finished(self, test: IhuBaseTest, test_result: ResultData) -> None:
-        results = test_result.json_result
-        if results is not None:
-            print("Test name: " + str(test))
-            print("Test class: " + results["Results"][0]["Test Class"])
-            for result in results["Results"]:
-                print("\tTest name: " + result["Test Name"])
-                print("\tResult: " + result["Result"])
-
-            for result in results["Results"]:
-                if result["Result"] != "PASS":
-                    print("Details: " + result["Details"])
-                    print("Test failed! The result from " + result["Test Class"] + ", " + result["Test Name"] + " is " + result["Result"])
-
-            print("Number of executed tests in JSON file: " + str(results["Summary"]["Executed"]))
-        else:
-            print("The current test case %s does not generate a JSON file" % str(test))
+        pass

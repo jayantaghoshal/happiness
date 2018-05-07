@@ -130,8 +130,6 @@ def vts_tradefed_run_module(module_name: str,
 
     return ResultData(len(fails) == 0,
                       test_result + os.linesep + os.linesep.join(fails),
-                      get_json_object(module_name),
-                      get_json_change_time(module_name),
                       get_json_kpi_results(),
                       logdict,
                       screenshots)
