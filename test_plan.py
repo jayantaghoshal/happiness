@@ -72,6 +72,8 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/flexray_burst_test", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
     VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray}), #dfloodh
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",        standard_caps), #Torbjörn Sandsgård
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",    standard_caps | {cp.flexray}), #Torbjörn Sandsgård
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -83,8 +85,6 @@ test_plan_staging_daily = [
              deadline="2018-04-28"
     ),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",           standard_caps), #Joel Gustafsson
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",           standard_caps | {cp.flexray}), #Krzysztof Wesolowski
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                              standard_caps), #Andreas Bengtsson
     TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",  standard_caps), #lveeraku
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
