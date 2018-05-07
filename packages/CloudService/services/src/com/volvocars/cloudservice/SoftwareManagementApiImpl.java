@@ -517,9 +517,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query);
         Log.d(LOG_TAG, "GetSoftwareAssignment: list size: " + swrsp.swlist.size());
 
-        for (SoftwareAssignment software : swrsp.swlist) {
-            Log.e(LOG_TAG, "" + software.toString());
-        }
         callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
     }
 

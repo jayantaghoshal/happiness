@@ -62,7 +62,6 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     public void UpdateSoftwareList(ArrayList<SoftwareInformation> software_list) {
         Log.v(LOG_TAG, "Update SoftwareList with a list of size " + software_list.size());
         Log.v(LOG_TAG, "Calling UpdateSoftwareList on " + swUpdClients.size() + " clients");
-
         ArrayList<ISoftwareUpdateManagerCallback> deadSwUpdClients = new ArrayList();
 
         for (ISoftwareUpdateManagerCallback c : swUpdClients) {

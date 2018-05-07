@@ -111,18 +111,6 @@ public class AvailableAssignmentsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case android.R.id.home:
-            // todo: goto back activity from here
-
-            Log.w(LOG_TAG, "Home button clicked");
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.v(LOG_TAG, "onDestroy");

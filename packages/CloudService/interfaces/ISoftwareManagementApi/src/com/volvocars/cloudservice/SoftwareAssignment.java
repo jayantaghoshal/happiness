@@ -9,9 +9,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SoftwareAssignment implements Parcelable {
-
     public enum Status {
-        UNKNOWN, COMMISSIONABLE, NON_COMMISSIONABLE, COMMISSIONED
+        UNKNOWN, COMMISSIONABLE, NON_COMMISSIONABLE, COMMISSIONED;
     }
 
     public enum Type {
@@ -70,35 +69,38 @@ public class SoftwareAssignment implements Parcelable {
         }
     }
 
-    //Unique id of the software
+    // Unique id of the software
     public String id = "";
-    //The name of the software
+    // The name of the software
     public String name = "";
-    //Graphical symbol representing the actual software.
+    // Graphical symbol representing the actual software.
     public byte[] icon = {};
-    //A short description of the software
+    // A short description of the software
     public String shortDescription = "";
-    //An extended description of the software. Made up of combination of textblock, listelement and linefeed.
+    // An extended description of the software. Made up of combination of textblock,
+    // listelement and linefeed.
     public LongDescription longDescription = new LongDescription();
-    //The download size of this software in MB
+    // The download size of this software in MB
     public double size = 0.0;
-    //Software product id.
+    // Software product id.
     public String softwareProductId = "";
-    //Software product version.
+    // Software product version.
     public String softwareProductVersion = "";
-    //Software sub status can be either: COMMISSIONABLE, NON-COMMISSIONABLE, COMMISSIONED
+    // Software sub status can be either: COMMISSIONABLE, NON-COMMISSIONABLE,
+    // COMMISSIONED
     public Status status = Status.UNKNOWN;
-    //Software type can be either: SYSTEM, ACCESSORY
+    // Software type can be either: SYSTEM, ACCESSORY
     public Type type = Type.UNKNOWN;
-    //Deliverable type can be either: UPDATE
+    // Deliverable type can be either: UPDATE
     public DeliverableType deliverableType = DeliverableType.UNKNOWN;
-    //Installation type can be either: BOOT, NORMAL
+    // Installation type can be either: BOOT, NORMAL
     public InstallationType installationType = InstallationType.UNKNOWN;
-    //Estimated installation time for the software. Mandatory for BOOT.
+    // Estimated installation time for the software. Mandatory for BOOT.
     public int estimatedInstallationTime = -1;
-    //URI for commissioning the software. Only shown if software/status is COMMISSIONABLE or COMMISSIONED.
+    // URI for commissioning the software. Only shown if software/status is
+    // COMMISSIONABLE or COMMISSIONED.
     public String commissionUri = "";
-    //Installation order element with commissioned software.
+    // Installation order element with commissioned software.
     public InstallationOrder installationOrder = new InstallationOrder();
 
     public static final Creator<SoftwareAssignment> CREATOR = new Creator<SoftwareAssignment>() {
@@ -178,6 +180,8 @@ public class SoftwareAssignment implements Parcelable {
                 return Status.UNKNOWN;
             case "COMMISSIONABLE":
                 return Status.COMMISSIONABLE;
+            case "NON-COMMISSIONABLE":
+                return Status.NON_COMMISSIONABLE;
             case "NON_COMMISSIONABLE":
                 return Status.NON_COMMISSIONABLE;
             case "COMMISSIONED":

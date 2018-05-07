@@ -49,7 +49,6 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
         Log.v(LOG_TAG,
                 "Got result of getting software assingment list [size of list: " + software_list.size() + "]: " + code);
-
         if (code == 200) {
             service.onNewSoftwareAssignmentList(software_list);
         } else {
