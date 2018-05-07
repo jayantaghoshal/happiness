@@ -156,7 +156,7 @@ def reboot_mp_to_android_default_with_bootmodes(vip: VipSerial) -> None:
 
 def expect_mp_android_default_session(mp: MpSerial) -> None:
     mp.expect_line("abl-APL:.*", timeout_sec=2 * 60)
-    mp.expect_line(".+androidboot.swdl.session=default")
+    mp.expect_line(".+androidboot.swdl.session=default", timeout_sec=90)
 
 
 # endregion
@@ -223,6 +223,9 @@ Troubleshooting:
 5. Make sure no gremlins are chewing on the serial cable.
 """)
 
+    # Allow MP to boot completely before proceeding
+    try_wait_for_device_adb(timeout_sec=2 * 60)
+
     try:
         reboot_vip_into_pbl(vip)
 
@@ -231,6 +234,7 @@ Troubleshooting:
 
         if update_mp:
             logger.info("Updating MP software (via Fastboot)")
+            try_wait_for_device_adb(timeout_sec=2 * 60) # Wait for things to settle before entering ABL
             logger.info("Starting ABL command line")
             ensure_mp_is_in_abl_cmdline(vip, mp)
             start_fastboot_from_mp_abl_cmdline(mp)
@@ -308,8 +312,8 @@ Troubleshooting:
             else:
                 try:
                     reboot_mp_to_android_default_with_bootmodes(vip) # VIP command to reboot MP to normal mode
-                    logger.info("Waiting for 30 seconds for sth looking like MP bootup")
-                    mp.expect_line("Loader: Launch VMM", timeout_sec=30)
+                    logger.info("Waiting for 90 seconds for sth looking like MP bootup")
+                    mp.expect_line("Loader: Launch VMM", timeout_sec=90)
                 except serial_mapping.ExpectedResponseNotPresentError:
                     logger.error("Failed to boot after initial startup, "
                                  "sth around fastboot reboot command is broken\r\n"
@@ -650,6 +654,14 @@ def wait_for_device_adb(timeout_sec=60 * 7) -> None:
         logger.info("Unit entered ADB mode")
     except Exception:
         raise RuntimeError("Waiting {} seconds for ADB failed".format(timeout_sec))
+
+
+def try_wait_for_device_adb(timeout_sec=60 * 7) -> bool:
+    try:
+        wait_for_device_adb(timeout_sec=timeout_sec)
+    except Exception:
+        return False
+    return True
 
 
 def dump_props(timeout_sec=15) -> None:
