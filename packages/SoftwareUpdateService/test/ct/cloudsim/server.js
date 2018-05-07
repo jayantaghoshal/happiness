@@ -56,7 +56,7 @@ server.post('/commission', function (req, res, next) {
       counter++;
 
       var installation_order_data = {};
-      installation_order_data['id'] = counter;
+      installation_order_data['id'] = counter.toString();
       installation_order_data['status'] = "READY";
       installation_order_data['created_by'] = "1FTKR1EDXBPB10452";
       installation_order_data['created'] = "2002-05-30T09:00:00";
@@ -73,7 +73,7 @@ server.post('/commission', function (req, res, next) {
         if (d.value()[j]['id'] == req.body.id) {
           var tmpObj = Object.assign({}, d.value()[j]);
           tmpObj['id'] = req.body.id;
-          tmpObj['installation_order_id'] = counter;
+          tmpObj['installation_order_id'] = counter.toString();
           db.get('downloads').push(tmpObj).write();
           break;
         }
