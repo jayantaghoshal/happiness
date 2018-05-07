@@ -158,21 +158,23 @@ def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: da
     test_detail.update(common_identifiers)
 
 
-    def load_sreenshots():
-        for screenshot_path in test_result.screenshot_paths:
-            screnshot = {}
-            screnshot.update(common_identifiers)
-            screnshot["name"] = os.path.split(screenshot_path)[-1]
-            with open(screenshot_path, "rb") as f:
-                screnshot["data"] = f.read()
-            yield screnshot
-    screenshot_insertion_results = screenshots_collection.insert_many(load_sreenshots())
+
 
     screenshot_dict = {}
-    for path, inserted_id in zip(test_result.screenshot_paths, screenshot_insertion_results.inserted_ids):
-        screenshot_dict[clean_mongo_key(os.path.split(path)[-1])] = inserted_id
-    test_detail["screenshots"] = screenshot_dict
+    if len(test_result.screenshot_paths) > 0:
+        def load_sreenshots():
+            for screenshot_path in test_result.screenshot_paths:
+                screnshot = {}
+                screnshot.update(common_identifiers)
+                screnshot["name"] = os.path.split(screenshot_path)[-1]
+                with open(screenshot_path, "rb") as f:
+                    screnshot["data"] = f.read()
+                yield screnshot
+        screenshot_insertion_results = screenshots_collection.insert_many(load_sreenshots())
+        for path, inserted_id in zip(test_result.screenshot_paths, screenshot_insertion_results.inserted_ids):
+            screenshot_dict[clean_mongo_key(os.path.split(path)[-1])] = inserted_id
 
+    test_detail["screenshots"] = screenshot_dict
     test_detail["job_name"] = os.environ["JOB_NAME"]
     test_detail["capabilities"] = str(test.require_capabilities)
     test_detail["test_job_build_number"] = int(os.environ["BUILD_NUMBER"])
