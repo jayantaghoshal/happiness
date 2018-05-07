@@ -50,7 +50,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",                      standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications/test/ut",                 standard_caps), #Johan Olsson
-    VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests",         standard_caps), #Abhijeet Shirolikar
+    VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests",         standard_caps | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray}),# Torbjörn Sandsgård
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Martin Stigels
     VTSTest("vendor/volvocars/packages/TimeUpdateService/test/ct",                  standard_caps), #Renjith Rajagopal
@@ -100,7 +100,7 @@ test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge", standard_caps), #Samuel Idowu
-    VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray}), #Abhijeet Shirolikar
+    VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray} | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/temperature_adjustment", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray}), #Kirti Goel
 
