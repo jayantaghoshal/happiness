@@ -109,6 +109,13 @@
             event: all
             timeout: 10000
             log: 0
+    wrappers:
+        - timestamps
+        - credentials-binding:
+            - username-password-separated:
+                credential-id: 30ab25b0-6dda-4a6e-8bae-777a1b516af9
+                username: JENKINS_USER
+                password: JENKINS_API_PASSWORD
     builders:
       - shell:
             !include-raw:
@@ -149,12 +156,6 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-      - conditional-step:
-          condition-kind: current-status
-          condition-worst: SUCCESS
-          condition-best: SUCCESS
-          steps:
-              - shell: touch "${JOB_NAME}".success
     publishers:
         - raw:
             xml: |
