@@ -55,6 +55,10 @@ cc_library_static {
         "vcc_pac_manager_defaults",
     ],
 
+    whole_static_libs: [
+        "libgtest_prod",
+    ],
+
     srcs: [
         "src/evs_enumerator.cpp",
         "src/evs_video_provider.cpp",

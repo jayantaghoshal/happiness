@@ -8,7 +8,9 @@
 #include <list>
 
 #include <android/hardware/automotive/evs/1.0/IEvsCamera.h>
+#include <gtest/gtest_prod.h>
 #include "i_evs_video_provider.h"
+#include "stream_state.h"
 #include "virtual_camera.h"
 
 namespace android {
@@ -35,12 +37,22 @@ class EvsVideoProvider : public IEvsVideoProvider {
     sp<IEvsCamera> GetHwCamera() override { return hw_camera_; };
     std::list<wp<IVirtualCamera>>::size_type GetClientCount() override { return clients_.size(); };
 
+    // Stream handling methods
+    Return<EvsResult> RequestVideoStream() override;
+    void ReleaseVideoStream() override;
+
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCameraStream follow.
     Return<void> deliverFrame(const BufferDesc& buffer) override;
 
   private:
     sp<IEvsCamera> hw_camera_;
     std::list<wp<IVirtualCamera>> clients_;  // Weak pointers -> object destructs if client dies
+
+    StreamState output_stream_state_ = StreamState::STOPPED;
+
+    FRIEND_TEST(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamStopped);
+    FRIEND_TEST(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamRunning);
+    FRIEND_TEST(EvsVideoProviderTest, ReleaseVideoStreamNotLastClient);
 };
 
 }  // namespace vcc_implementation

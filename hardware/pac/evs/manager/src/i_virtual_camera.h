@@ -26,6 +26,7 @@ class IVirtualCamera : public IEvsCamera {
 
     // Inline implementations
     virtual sp<IEvsVideoProvider> GetEvsVideoProvider() = 0;
+    virtual bool IsStreaming() = 0;
 };
 
 }  // namespace vcc_implementation

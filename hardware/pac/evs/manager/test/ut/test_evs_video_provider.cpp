@@ -19,18 +19,28 @@ namespace vcc_implementation {
 using size_type_clients = std::list<wp<IVirtualCamera>>::size_type;
 
 using android::hardware::automotive::evs::V1_0::vcc_implementation::EvsVideoProvider;
+using testing::StrictMock;
+using testing::_;  // Matches any type
+
+class MockIEvsCameraStream : public IEvsCameraStream {
+  public:
+    MOCK_METHOD1(deliverFrame, Return<void>(const BufferDesc& buffer));
+};
 
 class EvsVideoProviderTest : public ::testing::Test {
   protected:
     sp<MockHwCamera> mock_hw_camera;
+    sp<StrictMock<MockHwCamera>> strict_mock_hw_camera;
     sp<EvsVideoProvider> evs_video_provider;
     void SetUp() override {
         mock_hw_camera = new MockHwCamera();
+        strict_mock_hw_camera = new StrictMock<MockHwCamera>();
         evs_video_provider = new EvsVideoProvider(mock_hw_camera);
     }
 
     void TearDown() override {
         mock_hw_camera.clear();
+        strict_mock_hw_camera.clear();
         evs_video_provider.clear();
     }
 };
@@ -66,6 +76,64 @@ TEST_F(EvsVideoProviderTest, MakeAndDisownMultipleClients) {
     evs_video_provider->DisownVirtualCamera(client_2);
     size_type_clients client_count_after_disown = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_disown, static_cast<size_type_clients>(0));
+}
+
+TEST_F(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamStopped) {
+    // Test that hw camera is called on to start streaming if initial stream state is STOPPED.
+    // SetUp
+    ASSERT_EQ(evs_video_provider->output_stream_state_, StreamState::STOPPED);
+    EXPECT_CALL(*mock_hw_camera, startVideoStream(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+
+    // Test
+    Return<EvsResult> result = evs_video_provider->RequestVideoStream();
+
+    // Verify
+    EXPECT_EQ(result, EvsResult::OK);
+    EXPECT_EQ(evs_video_provider->output_stream_state_, StreamState::RUNNING);
+}
+
+TEST_F(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamRunning) {
+    // Test that method returns ok if output stream state is not STOPPED.
+    // SetUp
+    evs_video_provider->output_stream_state_ = StreamState::RUNNING;
+
+    // Test
+    Return<EvsResult> result = evs_video_provider->RequestVideoStream();
+
+    // Verify
+    EXPECT_EQ(result, EvsResult::OK);
+}
+
+TEST_F(EvsVideoProviderTest, ReleaseVideoStreamLastClient) {
+    // Test that hw camera is called on to stop video stream if no clients are still running.
+    // SetUp
+    sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
+    client_1->stopVideoStream();
+    ASSERT_FALSE(client_1->IsStreaming());
+    EXPECT_CALL(*mock_hw_camera, stopVideoStream());
+
+    // Test
+    evs_video_provider->ReleaseVideoStream();
+
+    // Verify
+    // Implictly done by EXPECT_CALL
+}
+
+TEST_F(EvsVideoProviderTest, ReleaseVideoStreamNotLastClient) {
+    // Test that nothing happens if there are still clients alive when method is called
+    // SetUp
+    evs_video_provider = new EvsVideoProvider(strict_mock_hw_camera);
+    evs_video_provider->output_stream_state_ = StreamState::RUNNING;
+    sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
+    client_1->startVideoStream(new MockIEvsCameraStream());
+    // We must have at least one running client for the test call to ReleaseVideoStream
+    ASSERT_TRUE(client_1->IsStreaming());
+
+    // Test
+    evs_video_provider->ReleaseVideoStream();
+
+    // Verify
+    // Implictly done by strict_mock_hw_camera, it would fail on "uninteresting call" if called upon.
 }
 
 }  // namespace vcc_implementation

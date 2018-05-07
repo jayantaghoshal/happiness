@@ -8,7 +8,6 @@
 #include <cinttypes>
 
 #include <libdbg.h>
-#include "virtual_camera.h"
 
 namespace android {
 namespace hardware {
@@ -58,8 +57,47 @@ void EvsVideoProvider::DisownVirtualCamera(const sp<IVirtualCamera>& virtual_cam
     // TODO(ihu) Recalculate the number of buffers required with the client removed from the list.
 }
 
+Return<EvsResult> EvsVideoProvider::RequestVideoStream() {
+    dbgD("called");
+    // A client is requesting video, ensure that the hardware camera stream is running.
+    // If the hardware camera stream is already running, return OK.
+    // TODO(ihu) Revisit this and consider how to handle "STOPPING" state.
+    if (output_stream_state_ != StreamState::STOPPED) {
+        return EvsResult::OK;
+    }
+
+    // Otherwise try to start the hardware camera stream.
+    Return<EvsResult> result = hw_camera_->startVideoStream(this);
+    if (result.isOk() && result == EvsResult::OK) {
+        output_stream_state_ = StreamState::RUNNING;
+    }
+
+    return result;
+}
+
+void EvsVideoProvider::ReleaseVideoStream() {
+    dbgD("called");
+    // A client no longer needs video, it may be time to stop the hardware camera stream
+    // Check for streaming clients
+    bool is_any_client_streaming = false;
+    sp<IVirtualCamera> vcam;
+    for (auto&& client : clients_) {
+        vcam = client.promote();
+        if (vcam != nullptr && vcam->IsStreaming()) {
+            is_any_client_streaming = true;
+            break;
+        }
+    }
+
+    // If no client is streaming, stop video stream from hardware camera
+    if (!is_any_client_streaming) {
+        hw_camera_->stopVideoStream();
+    }
+}
+
 Return<void> EvsVideoProvider::deliverFrame(const BufferDesc& buffer) {
-    dbgD("called with bufferId %" PRIu32, buffer.bufferId);
+    dbgD("called with bufferId %" PRIu32,
+         buffer.memHandle != nullptr ? buffer.bufferId : 0);  // Use 0 if buffer is empty
     // TODO(ihu) Implement EvsVideoProvider::deliverFrame method
     return Void();
 }

@@ -6,8 +6,10 @@
 #pragma once
 
 #include <android/hardware/automotive/evs/1.0/IEvsCamera.h>
+#include <gtest/gtest_prod.h>
 #include "i_evs_video_provider.h"
 #include "i_virtual_camera.h"
+#include "stream_state.h"
 
 namespace android {
 namespace hardware {
@@ -17,8 +19,8 @@ namespace V1_0 {
 namespace vcc_implementation {
 
 // The VirtualCamera acts as a middle-man between the consumer of the camera stream and the
-// wrapper of the hardware camera (EvsCameraStream). Many VirtualCamera:s can share the same
-// EvsCameraStream.
+// wrapper of the hardware camera (EvsVideoProvider). Many VirtualCamera:s can share the same
+// EvsVideoProvider.
 class VirtualCamera final : public IVirtualCamera {
   public:
     explicit VirtualCamera(sp<IEvsVideoProvider> input_stream);
@@ -29,6 +31,7 @@ class VirtualCamera final : public IVirtualCamera {
 
     // Inline implementations
     sp<IEvsVideoProvider> GetEvsVideoProvider() override { return input_stream_; };
+    bool IsStreaming() override { return output_stream_state_ == StreamState::RUNNING; };
 
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCamera follow.
     Return<void> getCameraInfo(getCameraInfo_cb hidl_cb) override;
@@ -40,7 +43,13 @@ class VirtualCamera final : public IVirtualCamera {
     Return<EvsResult> setExtendedInfo(uint32_t opaque_identifier, int32_t opaque_value) override;
 
   private:
-    sp<IEvsVideoProvider> input_stream_;  // The low level camera interface
+    sp<IEvsVideoProvider> input_stream_;  // The low level camera interface to the hardware camera
+    sp<IEvsCameraStream> output_stream_;  // The output stream to the consumer
+
+    StreamState output_stream_state_ = StreamState::STOPPED;
+
+    FRIEND_TEST(VirtualCameraTest, startVideoStreamWhenStreamAlreadyRunning);
+    FRIEND_TEST(VirtualCameraTest, stopVideoStream);
 };
 
 }  // namespace vcc_implementation

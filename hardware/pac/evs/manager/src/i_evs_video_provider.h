@@ -29,6 +29,10 @@ class IEvsVideoProvider : public IEvsCameraStream {
     // Inline implementations
     virtual sp<IEvsCamera> GetHwCamera() = 0;
     virtual std::list<wp<IVirtualCamera>>::size_type GetClientCount() = 0;
+
+    // Stream handling methods
+    virtual Return<EvsResult> RequestVideoStream() = 0;
+    virtual void ReleaseVideoStream() = 0;
 };
 
 }  // namespace vcc_implementation
