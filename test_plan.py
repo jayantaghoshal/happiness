@@ -106,6 +106,8 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray} | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/temperature_adjustment", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray}), #Kirti Goel
+    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray}), #Raju Yadav
+
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set
     # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger

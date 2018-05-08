@@ -95,9 +95,8 @@ void LaneDepartureWarningModule::Update() {
         PA_prop_lane_departure_warning.PushProp(false, vccvhal10::PAStatus::SystemError);  // Set Vhal
     } else {
         if (!is_active_) {
-            SetFlexray(lane_departure_warning_on_, current_profile_);
-            PA_prop_lane_departure_warning.PushProp(lane_departure_warning_on_,
-                                                    vccvhal10::PAStatus::Disabled);  // Set Vhal
+            SetFlexray(false, current_profile_);
+            PA_prop_lane_departure_warning.PushProp(false, vccvhal10::PAStatus::Disabled);  // Set Vhal
         } else {
             SetFlexray(lane_departure_warning_on_, current_profile_);
             PA_prop_lane_departure_warning.PushProp(lane_departure_warning_on_,
