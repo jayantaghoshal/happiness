@@ -58,15 +58,15 @@ class ci_database_reporter(abstract_reporter):
             'build_host' : os.environ["HOST_HOSTNAME"],
             'job_name' : os.environ["JOB_NAME"],
             'flash_attempt' : result.attempts,
-            'flash_time' : result.flashtime,
-            'total_time' : result.totaltime,
-            'info' : result.info,
-            'flash_result' : result.success,
+            'flash_time' : float(result.flashtime),
+            'total_time' : float(result.totaltime),
+            'info' : str(result.info),
+            'flash_result' : bool(result.success),
         }
         tags = {
             "jobType": "ihu_flash",
         }
-
+        logger.info("Storing: {}".format(data))
         try:
             insert_influx_data("flash_result", data, tags)
         except Exception as e:
