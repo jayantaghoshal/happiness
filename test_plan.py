@@ -77,6 +77,7 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray_or_carsim}), #Uguudei
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/toggleTest", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/flexray_burst_test", standard_caps | {cp.flexray}), #Erik Elmeke
+    VTSTest("vendor/volvocars/tools/test/gdb",                          standard_caps), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
     VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray_or_carsim}), #dfloodh
     VTSTest("vendor/volvocars/hardware/vehicle/test/driversupportfunction_setting",	standard_caps | {cp.flexray_or_carsim}), #Vi Dat

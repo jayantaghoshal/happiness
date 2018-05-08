@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration description="GDB Smoketest
+    Verifies that gdb can be launched on target with gdbserver64 and attached to from host using gdbclient.py and
+    that symbols are working.
+    This fails quite frequenly when doing BSP upgrades from Intel and hence the need to automatically test it">
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="gdb_smoketest"/>
+        <option name="test-case-path" value="gdb_smoketest"/>
+        <option name="test-timeout" value="1m"/>
+    </test>
+</configuration>
