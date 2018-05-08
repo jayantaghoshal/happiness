@@ -75,6 +75,7 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
     VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray}), #dfloodh
     VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",       standard_caps | {cp.flexray}), #Martin Stigels
+    VTSTest("vendor/volvocars/hardware/vehicle/test/driversupportfunction_setting",	standard_caps | {cp.flexray}), #Vi Dat
 ]
 
 #This is for unstable tests that does not need to be run often
