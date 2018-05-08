@@ -338,7 +338,7 @@
                 - bootstrap_report_status.sh
       - trigger-parameterized-builds:
         - project:
-            - ihu_staging
+            - ihu_daily_staging
           condition: ALWAYS
           predefined-parameters: |
             GIT_COMMIT=${GIT_COMMIT}
