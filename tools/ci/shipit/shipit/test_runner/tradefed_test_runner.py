@@ -16,19 +16,18 @@ import os
 import subprocess
 import typing
 
-def tradefed_run(test_path: str):
+def tradefed_run(test_path: str, max_test_time_sec: int):
     xml_path = os.path.join(test_path, "AndroidTest.xml")
     logging.info("Running tradefed test from xml %s" % xml_path)
-    tradefed_run_xml(xml_path)
+    tradefed_run_xml(xml_path, max_test_time_sec)
     return ResultData(True, "", None, None, dict(), dict(), [])   #TODO: ...
 
-def tradefed_run_xml(xml_path: str):
+def tradefed_run_xml(xml_path: str, max_test_time_sec: int):
     if not config_got_xml_reporter(xml_path):
         raise TestFailedException("Can't run test case, XmlResultReporter is missing from the test xml configuration %s" % xml_path)
 
     # TODO: I don't know how to handle adb not connected errors. Tradefed will reschedule them and try to rerun
     #       in the background.
-    max_test_time_sec = 60 * 60
     try:
         test_result = check_output_logged(["tradefed.sh", "run", "commandAndExit", xml_path],
                                           timeout_sec=max_test_time_sec).decode().strip(" \n\r\t")
@@ -82,6 +81,3 @@ def assert_no_failures_in_test_result(tradefed_console_output: str):
             raise TestFailedException("Found failed tests, result xml is: %s" % result_xml_contents)
         if nr_of_errors > 0:
             raise TestFailedException("Found tests in error, result xml is: %s" % result_xml_contents)
-
-if __name__ == "__main__":
-    tradefed_run(sys.argv[1])

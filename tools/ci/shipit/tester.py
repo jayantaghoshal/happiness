@@ -13,7 +13,8 @@ from handle_result.abstract_reporter import abstract_reporter
 from handle_result.ci_database_reporter import ci_database_reporter
 from handle_result.vcc_dashboard_reporter import vcc_dashboard_reporter
 from handle_result.console_reporter import console_reporter
-from shipit.testscripts import get_test_set, assemble_plan, get_component, build_testcases, run_test, detect_loose_test_cases, NamedTestResult
+from shipit.testscripts import get_test_set, assemble_plan, get_component, build_testcases, run_test, \
+    detect_loose_test_cases, NamedTestResult, enforce_timeout_in_gate_tests
 from utilities import ihuhandler
 
 
@@ -55,12 +56,12 @@ class tester:
         for r in self.reporter_list:
             r.flash_finished(result)
 
-    def run_testcases(self, tests_to_run: List, abort_on_first_failure: bool):
+    def run_testcases(self, tests_to_run: List, abort_on_first_failure: bool, max_testtime_sec: int):
         test_results = []  # type: List[NamedTestResult]
         self._plan_started()
         for t in tests_to_run:
             self._module_started(t)
-            test_result = run_test(t)
+            test_result = run_test(t, max_testtime_sec)
             test_results.append(NamedTestResult(str(t), test_result))
             self._module_finished(t, test_result)
             if not self._check_result(test_result) and abort_on_first_failure:
@@ -141,6 +142,7 @@ class tester:
 
         if args.program == "analyze":
             detect_loose_test_cases()
+            enforce_timeout_in_gate_tests()
 
         elif args.program == "build":
             plan = self._get_plan(args)
@@ -171,7 +173,11 @@ class tester:
                     logger.error('IHU update failed')
                     sys.exit(1)
 
-            results = self.run_testcases(selected_tests, args.abort_on_first_failure)
+            max_testtime_sec = 60 * 60
+            if args.plan == "gate":
+                max_testtime_sec = 10 * 60
+
+            results = self.run_testcases(selected_tests, args.abort_on_first_failure, max_testtime_sec)
             failing_testcases = [x for x in results if not x.result.passed]
             if len(failing_testcases) > 0:
                 logger.error('Test case failed')

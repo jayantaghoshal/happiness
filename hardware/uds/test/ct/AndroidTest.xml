@@ -8,5 +8,6 @@
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="udsdatacollector_ct" />
         <option name="runtime-hint" value="305ms" />
+        <option name="native-test-timeout" value="10000"/>
     </test>
 </configuration>

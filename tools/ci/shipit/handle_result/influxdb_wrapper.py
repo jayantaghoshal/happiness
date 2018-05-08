@@ -14,7 +14,6 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 INFLUXDBNAME = 'citestoverview'
-
 host='gotsvl1416.got.volvocars.net'
 port=8086
 

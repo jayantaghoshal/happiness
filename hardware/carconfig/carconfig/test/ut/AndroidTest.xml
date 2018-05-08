@@ -9,5 +9,6 @@
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="libcarconfig_ut" />
+        <option name="native-test-timeout" value="10000"/>
     </test>
 </configuration>

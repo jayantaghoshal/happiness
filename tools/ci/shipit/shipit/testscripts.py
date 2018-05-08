@@ -18,6 +18,7 @@ from shipit.test_runner import test_types
 from shipit.test_runner.test_types import TestFailedException
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 import subprocess
+import re
 sys.path.append(vcc_root)
 import test_plan    # NOQA
 
@@ -61,17 +62,17 @@ def build_testcases(tests_to_run: List[test_types.IhuBaseTest]):
             sys.exit(-1)
 
 
-def run_test(test: test_types.IhuBaseTest) -> test_types.ResultData:
+def run_test(test: test_types.IhuBaseTest, max_testtime_sec: int) -> test_types.ResultData:
     try:
         if isinstance(test, test_types.AndroidVTS):
             print(test)
-            return vts_test_run.vts_tradefed_run_module(test.module_name, None)
+            return vts_test_run.vts_tradefed_run_module(test.module_name, None, max_test_time_sec=max_testtime_sec)
         elif isinstance(test, test_types.VTSTest):
             print(test)
-            return vts_test_run.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir), test.tests_to_run)
+            return vts_test_run.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir), test.tests_to_run, max_testtime_sec)
         elif isinstance(test, test_types.TradefedTest):
             print(test)
-            return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir))
+            return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir), max_testtime_sec)
         elif isinstance(test, test_types.Disabled):
             if datetime.datetime.now() > test.deadline:
                 raise test_types.TestFailedException("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
@@ -165,5 +166,50 @@ def detect_loose_test_cases():
         for a in tests_in_plan_but_not_on_disk:
             logger.error("vendor/volvocars/test_plan.py contains test not found in repo. Path: %s" % a)
         raise Exception("vendor/volvocars/test_plan.py contains test not found in repo")
+
+
+def enforce_timeout_in_gate_tests():
+    def parse_timeout_seconds(t: str) -> int:
+        time, unit = re.match(r"(\d+)\s*(\S+)", t).groups()
+        seconds_per_unit = {
+            "s": 1,
+            "m": 60,
+            "h": 3600
+        }
+        return int(time) * seconds_per_unit[unit]
+
+    LIMIT_SEC = 7 * 60
+
+    errors = []
+    all_testdirs_in_plans = {d.test_root_dir for d in test_plan.test_plan_gate if
+                             not (isinstance(d, test_types.Disabled) or isinstance(d, test_types.AndroidVTS))}
+    for testdir in all_testdirs_in_plans:
+        android_xml_path = pathjoin(testdir, "AndroidTest.xml")
+        root = ET.parse(pathjoin(aosp_root, android_xml_path)).getroot()
+        test_element = root.find("./test")
+        test_type = test_element.attrib["class"].split(".")[-1]
+        if test_type == "VtsMultiDeviceTest":
+            timeout_element = root.find("./test/option/[@name='test-timeout']")
+            if timeout_element is None:
+                errors.append("%s is missing option test-timeout" % android_xml_path)
+                continue
+            timeout_sec = parse_timeout_seconds(timeout_element.attrib["value"])
+        elif test_type == "GTest":
+            timeout_element = root.find("./test/option/[@name='native-test-timeout']")
+            if timeout_element is None:
+                errors.append("%s is missing option native-test-timeout" % android_xml_path)
+                continue
+            timeout_sec = int(float(timeout_element.attrib["value"]) / 1000.0)
+        else:
+            raise Exception("Unknown test type in gate test, can not parse timeout.")
+
+        if timeout_sec > LIMIT_SEC:
+            errors.append("%s has a timeout of %d sec, maximum allowed test time in commit gate is %ds" %
+                          (android_xml_path, timeout_sec, LIMIT_SEC))
+
+    if len(errors) > 0:
+        raise Exception("Test cases in commit gate test plan must adhere to timeout constraints." + os.linesep + "* " +
+                        (os.linesep + "* ").join(errors))
+
 
 

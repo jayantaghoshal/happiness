@@ -34,13 +34,18 @@ def _create_env(test_module: str) -> Dict[str, str]:
     return env
 
 
-def vts_tradefed_run_file(test_module_dir: str, tests_to_run: Optional[List[str]]) -> ResultData:
+def vts_tradefed_run_file(test_module_dir: str,
+                          tests_to_run: Optional[List[str]],
+                          max_test_time_sec) -> ResultData:
     xml_path = os.path.join(test_module_dir, "AndroidTest.xml")
     module_name = read_module_name(xml_path)
-    return vts_tradefed_run_module(module_name, tests_to_run, _create_env(test_module_dir))
+    return vts_tradefed_run_module(module_name, tests_to_run, _create_env(test_module_dir), max_test_time_sec)
 
 
-def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]], env: Dict[str, str] = os.environ.copy()) -> ResultData:
+def vts_tradefed_run_module(module_name: str,
+                            tests_to_run: Optional[List[str]],
+                            env: Dict[str, str] = os.environ.copy(),
+                            max_test_time_sec=60 * 60) -> ResultData:
     logging.info("Running test module %s with environment %r" % (module_name, env))
     try:
         os.unlink("/tmp/test_run_kpis.json")
@@ -56,7 +61,6 @@ def vts_tradefed_run_module(module_name: str, tests_to_run: Optional[List[str]],
         assert len(tests_to_run) != 0
         tests_to_run_args = ["--test", ",".join(tests_to_run)]
 
-    max_test_time_sec = 60 * 60
     try:
         test_result = check_output_logged(["vts-tradefed",
                                            "run",
@@ -182,24 +186,3 @@ def read_module_name(android_test_xml_file: str):
         return test_module_name_option.attrib["value"]
 
     raise Exception("Did not find module-name with value in %s" % android_test_xml_file)
-
-
-
-def main():
-    parser = argparse.ArgumentParser(description="Run a VTS tradefed module")
-    parser.add_argument("test-module-dir",
-                        help="Directory where the AndroidTest.xml resides for the module to test")
-
-    parsed_args = parser.parse_args()
-
-    with open(os.path.dirname(__file__)+ "/logging.json", "rt") as f:
-        log_config = json.load(f)
-    logging.config.dictConfig(log_config)
-
-    vts_tradefed_run_file(getattr(parsed_args, "test-module-dir"), None)
-
-    logging.info("Test completed")
-
-
-if __name__ == "__main__":
-    main()

@@ -45,7 +45,7 @@ def parse_vts_result_xml(vts_result_xml: str, test_detail: dict):
 
     for module in root.iter('Module'):
         test_detail['done'] = module.get('done')
-        test_detail['runtime'] = int(module.get('runtime'))
+        test_detail['runtime'] = int(module.get('runtime')) # milliseconds
         test_detail['abi'] = module.get('abi')
 
     test_detail['testcases'] = []

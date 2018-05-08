@@ -9,5 +9,6 @@
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="VtsDEUnitTest" />
         <option name="runtime-hint" value="1s" />
+        <option name="native-test-timeout" value="20000"/>
     </test>
 </configuration>

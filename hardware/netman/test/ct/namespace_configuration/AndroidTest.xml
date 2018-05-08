@@ -7,5 +7,6 @@
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
         <option name="test-module-name" value="VtsNetmandNamespaceComponentTest"/>
         <option name="test-case-path" value="volvocars/hardware/netman/test/ct/namespace_configuration/VtsNetmandNamespaceComponentTest"/>
+        <option name="test-timeout" value="10s"/>
     </test>
 </configuration>

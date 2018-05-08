@@ -22,5 +22,6 @@
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="liblocalconfig_ut" />
         <option name="runtime-hint" value="500ms" />
+        <option name="native-test-timeout" value="10000"/>
     </test>
 </configuration>
