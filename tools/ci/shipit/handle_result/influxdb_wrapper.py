@@ -13,8 +13,6 @@ import logging.config
 from datetime import datetime
 logger = logging.getLogger(__name__)
 
-INFLUXUSER = os.environ["INFLUXDB_USER"]
-INFLUXPASSWORD = os.environ["INFLUXDB_PASSWORD"]
 INFLUXDBNAME = 'citestoverview'
 
 host='gotsvl1416.got.volvocars.net'
@@ -22,7 +20,7 @@ port=8086
 
 def influx_client():
     try:
-        client = InfluxDBClient(host, port, INFLUXUSER, INFLUXPASSWORD, INFLUXDBNAME)
+        client = InfluxDBClient(host, port, os.environ["INFLUXDB_USER"], os.environ["INFLUXDB_PASSWORD"], INFLUXDBNAME)
     except Exception:
         logger.error("Connection to InfluxDB server failed")
         raise
