@@ -11,7 +11,7 @@ docker run  -p 3001:3001 \
 --volume=/cm/services/log/:/cm/services/log/ \
 --link=icup_android-mongo \
 -e MONGODB_PASSWORD \
--e MONGODB_USER \
+-e MONGODB_USER=jenkins-icup_android \
 -e ICUP_ANDROID_MONGO_PORT_27017_TCP_ADDR \
 -e NODE_ENV=dev \
 -e DEBUG="*" \

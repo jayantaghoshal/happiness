@@ -147,6 +147,7 @@ def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: da
     elif isinstance(test, TradefedTest):
         common_identifiers["test_dir_name"] = test.test_root_dir
     common_identifiers["job_name"] = os.environ["JOB_NAME"]
+    common_identifiers["test_job_build_number"] = int(os.environ["BUILD_NUMBER"])
     if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
         common_identifiers["top_test_job_build_number"] = int(os.environ["TOP_JOB_NUMBER"])
         common_identifiers["top_test_job_name"] = os.environ["TOP_JOB_JOBNAME"]
@@ -177,7 +178,6 @@ def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: da
     test_detail["screenshots"] = screenshot_dict
     test_detail["job_name"] = os.environ["JOB_NAME"]
     test_detail["capabilities"] = str(test.require_capabilities)
-    test_detail["test_job_build_number"] = int(os.environ["BUILD_NUMBER"])
     test_detail["hostname"] = os.environ["HOST_HOSTNAME"]
     test_detail["started_at"] = started_at
     test_detail["finished_at"] = finished_at

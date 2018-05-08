@@ -11,5 +11,6 @@ docker run -p 3001:3001 \
 --volume=/cm/services/log/:/app/logs/ \
 --link=icup_android-mongo \
 -e MONGODB_PASSWORD \
+-e MONGODB_USER=jenkins-icup_android \
 -e NODE_ENV=prod \
 test_report_web

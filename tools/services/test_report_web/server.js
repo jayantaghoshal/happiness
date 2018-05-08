@@ -49,7 +49,7 @@ app.get('/latest', cors(), (req, res) => {
     .limit(1)
     .toArray().then(function(test_detail) {
         build_number = test_detail[0]["test_job_build_number"]
-        res.redirect('/tests?test_job_name=' + req.query.test_job_name +  "?build_number=" + build_number);
+        res.redirect('/tests?top_job_name=' + req.query.top_job_name +  "&build_number=" + build_number);
     });
 });
 
@@ -109,7 +109,6 @@ app.get('/tests/', cors(), (req, res) => {
             var cursor = db.collection('records').find({ "job_name": "ihu_gate_test", "test_job_build_number": parseInt(build_number) })
                 .project({ "top_test_job_build_number": 1, "result": 1, "test_type": 1, "job_name": 1, "test_job_build_number": 1, "module_name": 1, "_id": 0 }).toArray(function(err, basic_test_detail) {
                     res.render('test_modules.ejs', { view: "list_tests_page", basic_test_detail: basic_test_detail, build_numbers: [build_number], top_job_name: top_job_name });
-
                 });
 
         } else {
@@ -124,19 +123,7 @@ app.get('/tests/', cors(), (req, res) => {
                 });
         }
     } else {
-        var cursor = db.collection('records').find({ "top_test_job_name": "ihu_hourly" }).project({ "top_test_job_build_number": 1, "_id": 0 }).toArray(function(err, build_numbers) {
-            var extracted_build_number = [];
-            for (var list_index in build_numbers) {
-                for (var key in build_numbers[list_index]) {
-                    extracted_build_number.push(Number(build_numbers[list_index][key]));
-                }
-            }
-            var unique_build_numbers = new Set(extracted_build_number);
-            var array_unique_build_numbers = Array.from(unique_build_numbers);
-
-            res.redirect('/tests/?top_job_name=ihu_hourly&build_number=' + Math.max(...array_unique_build_numbers));
-
-        });
+        res.redirect('/');
     }
 });
 
