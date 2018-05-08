@@ -105,7 +105,7 @@
   <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="4a318bead592a828e50acf45fec5553327398cbc" />
   <project name="vendor/delphi/binaries_android_traffic" path="vendor/aptiv/components/traffic" revision="d584696435c7a68c12d7bf94f93f8d97594dfa0b" />
   <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="c770619d37cff1e41ce3d070ce47b2b34e25178e" />
-  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="14b455e04ae55c4c5731f4352e19d3e35a9aed33" />
+  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="a97766fdc712eae977305cb522c2434ca081dc0d" />
 
   <!-- External dependencies -->
   <project name="vendor/delphi/AP_libsoci" path="external/libsoci" revision="71b35446828103012d4f3f6fa12e84011fe83148" />
