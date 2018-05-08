@@ -46,6 +46,7 @@ import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.SoftwareManagementApi;
 import com.volvocars.cloudservice.SoftwareManagementApiConnectionCallback;
 import com.volvocars.cloudservice.Status;
+import com.volvocars.cloudservice.CommissionElement.Reason;
 import com.volvocars.cloudservice.Query;
 
 /**
@@ -307,17 +308,8 @@ public class SoftwareUpdateService extends Service {
         Log.w(LOG_TAG,
                 "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
         InstallationReport installationReport = new InstallationReport();
-        DownloadSummary downloadSummary = new DownloadSummary();
-        DataFile file = new DataFile();
-        file.identifier = "hello world";
-        List<DataFile> dataFiles = new ArrayList();
-        dataFiles.add(file);
-
-        downloadSummary.dataFiles = dataFiles;
-
-        installationReport.installationOrderId = installationOrder;
-        installationReport.downloadSummary = downloadSummary;
-        installationReport.installationSummary = installationSummary;
+        installationReport.reportReason = InstallationReport.ReportReason.OK;
+        installationReport.timestamp = "2018-05-08T10:00:00";
 
         Log.d(LOG_TAG, "created report");
         try {
