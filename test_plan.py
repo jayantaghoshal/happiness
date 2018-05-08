@@ -51,6 +51,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications/test/ut",                 standard_caps), #Johan Olsson
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests",         standard_caps), #Abhijeet Shirolikar
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray}),# Torbjörn Sandsgård
 ]
 
 test_plan_nightly = test_plan_hourly + [
@@ -72,8 +73,6 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/flexray_burst_test", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
     VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray}), #dfloodh
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",        standard_caps), #Torbjörn Sandsgård
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level",    standard_caps | {cp.flexray}), #Torbjörn Sandsgård
 ]
 
 #This is for unstable tests that does not need to be run often
