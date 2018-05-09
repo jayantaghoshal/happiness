@@ -56,8 +56,8 @@ constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED = 0x1
 // TODO (Abhi) Populate this file with all helpers and struct definitions needed for readable code until autogeneated
 // header files from SDB extract are in place
 
+enum class MessageType { GET, SET, NOTIFICATION };
 struct BaseProp {
-    enum class MessageType { GET, SET, NOTIFICATION };
     virtual ~BaseProp() = default;
     virtual std::pair<MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue> RemoteCtrlHalPropertyReq(
             const std::shared_ptr<vsomeip::payload>& /*msg_payload*/) {
@@ -186,10 +186,10 @@ struct NotifyTemperature {
 
 // MaxDefrostState messaging
 inline void ValidateRequestedMaxDefrost(const char* method_name, const uint8_t& max_defrost_state) {
-    if (max_defrost_state > static_cast<uint8_t>(hidl_remotectrl::MaxDefrostState::OFF)) {
+    if (max_defrost_state > static_cast<uint8_t>(hidl_remotectrl::MaxDefrostState::ON)) {
         throw RemoteCtrlParamRangeError(method_name,
                                         "MaxDefrostState",
-                                        static_cast<uint8_t>(hidl_remotectrl::MaxDefrostState::OFF),
+                                        static_cast<uint8_t>(hidl_remotectrl::MaxDefrostState::ON),
                                         max_defrost_state);
     }
 }
@@ -215,10 +215,10 @@ struct NotifyMaxDefrostState {
 };
 
 // AirConditionState messaging
-enum class ACState : uint8_t { On, Off };
 inline void ValidateRequestedACState(const char* method_name, const uint8_t& ac_defrost_state) {
-    if (ac_defrost_state > static_cast<uint8_t>(ACState::Off)) {
-        throw RemoteCtrlParamRangeError(method_name, "ACState", static_cast<uint8_t>(ACState::Off), ac_defrost_state);
+    if (ac_defrost_state > static_cast<uint8_t>(hidl_remotectrl::ACState::ON)) {
+        throw RemoteCtrlParamRangeError(
+                method_name, "ACState", static_cast<uint8_t>(hidl_remotectrl::ACState::ON), ac_defrost_state);
     }
 }
 struct GetACState : RemoteCtrlSignal {

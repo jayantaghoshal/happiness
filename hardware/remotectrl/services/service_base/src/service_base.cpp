@@ -100,19 +100,19 @@ void ServiceBase::SendNotification(vsomeip::event_t event_id, const std::vector<
     vsomeip_appl_->notify(service_info_.service_id_, service_info_.instance_id_, event_id, pl);
 }
 
-void ServiceBase::SendResponse(vsomeip::session_t session_id,
+void ServiceBase::SendResponse(vsomeip::request_t request_id,
                                const vsomeip::return_code_e& status,
                                const std::vector<vsomeip::byte_t>&& payload_data) {
-    ALOGD("SendResponse: service[%s] ServiceId[0x%04X], InstanceId[0x%04X] SessionId[0x%04X]",
+    ALOGD("SendResponse: service[%s] ServiceId[0x%04X], InstanceId[0x%04X] requestId[0x%08X]",
           service_info_.service_name_,
           service_info_.service_id_,
           service_info_.instance_id_,
-          session_id);
+          request_id);
 
-    const auto& message = GetTransactionForSessionId(session_id);
+    const auto& message = GetTransactionForRequestId(request_id);
 
     if (message == message_tracker_.cend()) {
-        ALOGE("Message with SessionId[0x%04X] not found. Response not sent", session_id);
+        ALOGE("Message with request_id[0x%08X] not found. Response not sent", request_id);
         return;
     }
 
@@ -128,7 +128,7 @@ void ServiceBase::SendResponse(vsomeip::session_t session_id,
     {
         std::lock_guard<std::mutex> lock{message_tracker_mutex_};
         // If service do not call SendResponse should message be removed after WFR?
-        ALOGD("Removing tracking message with SessionId[0x%04X]", session_id);
+        ALOGV("Removing tracking message with requestId[0x%08X]", request_id);
         message_tracker_.erase(message);
     }
 }
@@ -145,15 +145,14 @@ void ServiceBase::MessageReceivedHook(const std::shared_ptr<vsomeip::message>& m
         return;
     }
 
-    auto session_id = message->get_session();
-    {
-        std::lock_guard<std::mutex> lock{message_tracker_mutex_};
-        ALOGD("Tracking message with SessionId[0x%04X]", session_id);
-        message_tracker_.emplace_back(session_id, message);
-    }
-
     ALOGD("%s: %s", __FUNCTION__, service_info_.service_name_);
-    OnMessageReceive(message);
+    // Track messages if service implementation has confirmed validity of message
+    if (OnMessageReceive(message)) {
+        auto request_id = message->get_request();
+        std::lock_guard<std::mutex> lock{message_tracker_mutex_};
+        ALOGV("Tracking message with requestId[0x%08X]", request_id);
+        message_tracker_.emplace_back(request_id, message);
+    }
 }
 
 bool ServiceBase::ValidateMessageHeader(const std::shared_ptr<vsomeip::message>& message) {

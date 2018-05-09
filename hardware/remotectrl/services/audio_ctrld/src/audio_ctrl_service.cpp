@@ -129,12 +129,12 @@ void AudioCtrlService::OnStateChange(vsomeip::state_type_e state) {
     }
 }
 
-void AudioCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>& message) {
+bool AudioCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>& message) {
     {
         std::lock_guard<std::mutex> lock(guard_);
         if (nullptr == system_service_handler_.get()) {
             ALOGE("VSOMEIP messages received from remote when java service is not yet registered");
-            return;
+            return false;
         }
     }
 
@@ -155,6 +155,8 @@ void AudioCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>&
                                            {static_cast<hidl_remotectrl::AudioContext>(msg_payload->get_data()[0]),
                                             static_cast<hidl_remotectrl::VolumeLevel>(msg_payload->get_data()[1])});
     }
+
+    return true;
 }
 
 }  // namespace remoteaudioctrl

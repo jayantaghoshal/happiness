@@ -17,8 +17,7 @@ using namespace vcc::remotectrl;
 template <>
 std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>>
 RemoteCtrlHalProp<static_cast<int32_t>(hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_TEMPERATURE)>::
-        CreateSomeIpResponse(const BaseProp::MessageType& type,
-                             const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
+        CreateSomeIpResponse(const MessageType& type, const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
     if (MessageType::GET == type) {
         return {REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE, GetTemperature().PackResponse(propValue)};
     } else if (MessageType::SET == type) {
@@ -28,7 +27,7 @@ RemoteCtrlHalProp<static_cast<int32_t>(hidl_remotectrl::RemoteCtrlHalProperty::R
 }
 
 template <>
-std::pair<BaseProp::MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
+std::pair<MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
 RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE>::RemoteCtrlHalPropertyReq(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
     const auto prop_value = GetTemperature().UnpackRequest(msg_payload);
@@ -38,11 +37,11 @@ RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE>::RemoteCtrlHalProper
           msg_payload->get_data()[1],
           prop_value.areaId);
 
-    return {BaseProp::MessageType::GET, prop_value};
+    return {MessageType::GET, prop_value};
 }
 
 template <>
-std::pair<BaseProp::MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
+std::pair<MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
 RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE>::RemoteCtrlHalPropertyReq(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
     const auto prop_value = SetTemperature().UnpackRequest(msg_payload);
@@ -53,5 +52,5 @@ RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE>::RemoteCtrlHalProper
           msg_payload->get_data()[1],
           prop_value.areaId);
 
-    return {BaseProp::MessageType::SET, prop_value};
+    return {MessageType::SET, prop_value};
 }

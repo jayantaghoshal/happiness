@@ -77,9 +77,9 @@ class ClimateCtrlService final : public hidl_remotectrl::IRemoteCtrlPropertyResp
   private:
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;
 
-    void OnStateChange(vsomeip::state_type_e state);
+    void OnStateChange(vsomeip::state_type_e state) override;
 
-    void OnMessageReceive(const std::shared_ptr<vsomeip::message>& message);
+    bool OnMessageReceive(const std::shared_ptr<vsomeip::message>& message) override;
 
     std::mutex guard_;
     ::android::sp<hidl_remotectrl::IRemoteCtrlProperty> system_service_handler_;

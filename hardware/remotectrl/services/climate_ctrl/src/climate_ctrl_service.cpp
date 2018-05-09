@@ -97,7 +97,7 @@ Return<void> ClimateCtrlService::sendGetPropertyResp(uint32_t requestIdentifier,
         const auto prop = createObject<0>(propValue.prop);
         if (prop) {
             std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
-                    prop->CreateSomeIpResponse(BaseProp::MessageType::GET, propValue);
+                    prop->CreateSomeIpResponse(MessageType::GET, propValue);
             SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data.second));
         } else {
             ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
@@ -117,7 +117,7 @@ Return<void> ClimateCtrlService::sendSetPropertyResp(uint32_t requestIdentifier,
         const auto prop = createObject<0>(propValue.prop);
         if (prop) {
             std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
-                    prop->CreateSomeIpResponse(BaseProp::MessageType::SET, propValue);
+                    prop->CreateSomeIpResponse(MessageType::SET, propValue);
             SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data.second));
         } else {
             ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
@@ -136,7 +136,7 @@ Return<void> ClimateCtrlService::notifyPropertyChanged(const hidl_remotectrl::Re
         const auto prop = createObject<0>(propValue.prop);
         if (prop) {
             std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
-                    prop->CreateSomeIpResponse(BaseProp::MessageType::NOTIFICATION, propValue);
+                    prop->CreateSomeIpResponse(MessageType::NOTIFICATION, propValue);
             SendNotification(payload_data.first, std::move(payload_data.second));
         } else {
             ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
@@ -178,12 +178,12 @@ void ClimateCtrlService::OnStateChange(vsomeip::state_type_e state) {
     }
 }
 
-void ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>& message) {
+bool ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>& message) {
     {
         std::lock_guard<std::mutex> lock(guard_);
         if (nullptr == system_service_handler_.get()) {
             ALOGE("VSOMEIP messages received from remote when java service is not yet registered");
-            return;
+            return false;
         }
     }
 
@@ -192,15 +192,15 @@ void ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message
         if (prop_obj) {
             const auto prop_value = prop_obj->RemoteCtrlHalPropertyReq(message->get_payload());
 
-            if (prop_value.first == BaseProp::MessageType::GET) {
+            if (prop_value.first == MessageType::GET) {
                 std::lock_guard<std::mutex> lock(guard_);
                 if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->getProperty(message->get_session(), prop_value.second);
+                    system_service_handler_->getProperty(message->get_request(), prop_value.second);
                 }
-            } else if (prop_value.first == BaseProp::MessageType::SET) {
+            } else if (prop_value.first == MessageType::SET) {
                 std::lock_guard<std::mutex> lock(guard_);
                 if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->setProperty(message->get_session(), prop_value.second);
+                    system_service_handler_->setProperty(message->get_request(), prop_value.second);
                 }
             }
         } else {
@@ -208,5 +208,8 @@ void ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message
         }
     } catch (const RemoteCtrlError& e) {
         ALOGW("%s. Request ignored", e.what());
+        return false;
     }
+
+    return true;
 }

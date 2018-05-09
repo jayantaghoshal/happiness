@@ -17,8 +17,7 @@ using namespace vcc::remotectrl;
 template <>
 std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>>
 RemoteCtrlHalProp<static_cast<int32_t>(hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_AC_ON)>::
-        CreateSomeIpResponse(const BaseProp::MessageType& type,
-                             const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
+        CreateSomeIpResponse(const MessageType& type, const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
     if (MessageType::GET == type) {
         return {REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE, GetACState().PackResponse(propValue)};
     } else if (MessageType::SET == type) {
@@ -28,23 +27,23 @@ RemoteCtrlHalProp<static_cast<int32_t>(hidl_remotectrl::RemoteCtrlHalProperty::R
 }
 
 template <>
-std::pair<BaseProp::MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
+std::pair<MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
 RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE>::RemoteCtrlHalPropertyReq(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
     const auto prop_value = GetACState().UnpackRequest(msg_payload);
 
     ALOGD("Get AC State received");
 
-    return {BaseProp::MessageType::GET, prop_value};
+    return {MessageType::GET, prop_value};
 }
 
 template <>
-std::pair<BaseProp::MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
+std::pair<MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
 RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>::RemoteCtrlHalPropertyReq(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
     const auto prop_value = SetACState().UnpackRequest(msg_payload);
 
     ALOGD("Set AC State to %u. Request received", msg_payload->get_data()[0]);
 
-    return {BaseProp::MessageType::SET, prop_value};
+    return {MessageType::SET, prop_value};
 }

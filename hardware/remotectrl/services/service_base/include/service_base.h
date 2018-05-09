@@ -5,13 +5,12 @@
 
 #pragma once
 
-#include <initializer_list>
 #include <memory>
 #include <mutex>
 #include <thread>
-#include <utility>
 #include <vector>
 #include <vsomeip/vsomeip.hpp>
+
 #include "service_info.h"
 
 namespace vcc {
@@ -30,12 +29,12 @@ class ServiceBase {
     void StopOffer();
 
     void SendNotification(vsomeip::event_t event_id, const std::vector<vsomeip::byte_t>&& payload_data);
-    void SendResponse(vsomeip::session_t session_id,
+    void SendResponse(vsomeip::request_t request_id,
                       const vsomeip::return_code_e& status,
                       const std::vector<vsomeip::byte_t>&& payload_data = {});
 
   protected:
-    virtual void OnMessageReceive(const std::shared_ptr<vsomeip::message>& message) = 0;
+    virtual bool OnMessageReceive(const std::shared_ptr<vsomeip::message>& message) = 0;
 
     virtual void OnStateChange(vsomeip::state_type_e state) = 0;
 
@@ -43,17 +42,17 @@ class ServiceBase {
 
   private:
     struct Transactions final {
-        Transactions(vsomeip::session_t sessionId, const std::shared_ptr<vsomeip::message>& message)
-            : session_id_(sessionId), message_(message) {}
+        Transactions(vsomeip::request_t requestId, const std::shared_ptr<vsomeip::message>& message)
+            : request_id_(requestId), message_(message) {}
 
-        vsomeip::session_t session_id_{0x0000U};
+        vsomeip::request_t request_id_{0U};
         std::shared_ptr<vsomeip::message> message_;
     };
 
-    std::vector<Transactions>::const_iterator GetTransactionForSessionId(vsomeip::session_t session_id) const {
+    std::vector<Transactions>::const_iterator GetTransactionForRequestId(vsomeip::request_t request_id) const {
         std::lock_guard<std::mutex> lock{message_tracker_mutex_};
-        return std::find_if(message_tracker_.cbegin(), message_tracker_.cend(), [session_id](const Transactions& tr) {
-            return tr.session_id_ == session_id;
+        return std::find_if(message_tracker_.cbegin(), message_tracker_.cend(), [request_id](const Transactions& tr) {
+            return tr.request_id_ == request_id;
         });
     }
 

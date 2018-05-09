@@ -164,7 +164,7 @@ hidl_remotectrl::RemoteCtrlHalPropertyValue SetMaxDefrostState::UnpackRequest(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
     auto prop_value = RemoteCtrlSignal::UnpackRequest(msg_payload);
     const auto defrost_state = msg_payload->get_data()[0];
-    ValidateRequstedFanLevel(method_name_, defrost_state);
+    ValidateRequestedMaxDefrost(method_name_, defrost_state);
     prop_value.value.int32Values = android::hardware::hidl_vec<int32_t>{defrost_state};
     return prop_value;
 }
@@ -191,7 +191,7 @@ hidl_remotectrl::RemoteCtrlHalPropertyValue SetACState::UnpackRequest(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
     auto prop_value = RemoteCtrlSignal::UnpackRequest(msg_payload);
     const auto ac_state = msg_payload->get_data()[0];
-    ValidateRequstedFanLevel(method_name_, ac_state);
+    ValidateRequestedACState(method_name_, ac_state);
     prop_value.value.int32Values = android::hardware::hidl_vec<int32_t>{ac_state};
     return prop_value;
 }
