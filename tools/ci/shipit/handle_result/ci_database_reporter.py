@@ -12,6 +12,7 @@ from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
 from utilities.ihuhandler import FlashResult
 from .influxdb_wrapper import insert_influx_data
+from . import mongodb_wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -87,8 +88,41 @@ class ci_database_reporter(abstract_reporter):
             "jobType": "ihu_flash",
         }
         logger.info("Storing: {}".format(data))
+
         try:
             insert_influx_data("flash_result", data, tags)
+            mongodb_wrapper.insert_data(self.store_swdl_to_mongodb(FlashResult))
+
         except Exception as e:
             logger.info(str(e))
 
+        try:
+            mongodb_wrapper.insert_data(self.store_swdl_to_mongodb(result))
+
+        except Exception as e:
+            logger.info(str(e))
+
+    def store_swdl_to_mongodb(self, result: FlashResult):
+        mongo_data = {
+                    'description' : "IHU fastboot flashing",
+                    'module_name' : "Software_Download_fastboot",
+                    'job_name' : os.environ["JOB_NAME"],
+                    'test_job_build_number' : os.environ["BUILD_NUMBER"],
+                    'test_dir_name' : os.environ["PWD"],
+                    'result' : bool(result.success),
+                    'test_type' : 'SWDL',
+                    'hostname' : os.environ["HOST_HOSTNAME"],
+                    'runtime' : float(result.totaltime),
+                    'flash_attempt' : result.attempts,
+                    'result_stored_at' : datetime.datetime.utcnow()
+
+                }
+        if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
+            mongo_data["top_test_job_build_number"] = int(os.environ["TOP_JOB_NUMBER"])
+            mongo_data["top_test_job_name"] = os.environ["TOP_JOB_JOBNAME"]
+        else:
+            mongo_data["top_test_job_name"] = ""
+            mongo_data["top_test_job_build_number"] = 0
+        print(mongo_data)
+
+        return mongo_data
