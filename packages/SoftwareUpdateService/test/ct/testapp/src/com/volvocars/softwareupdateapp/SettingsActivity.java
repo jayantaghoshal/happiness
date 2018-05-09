@@ -28,7 +28,6 @@ public class SettingsActivity extends AppCompatActivity {
     private LinearLayout settingsLayout;
     private Switch enableOtaSwitch;
     private Switch autoDownloadSwitch;
-    private Switch autoInstallSwitch;
 
     private Intent intent;
 
@@ -82,7 +81,6 @@ public class SettingsActivity extends AppCompatActivity {
         enableOtaSwitch = (Switch) findViewById(R.id.enableOta);
 
         autoDownloadSwitch = (Switch) findViewById(R.id.autoDownload);
-        autoInstallSwitch = (Switch) findViewById(R.id.autoInstall);
 
         enableOtaSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -101,12 +99,6 @@ public class SettingsActivity extends AppCompatActivity {
                 } catch (RemoteException e) {
                     Log.w(LOG_TAG, "RemoteException " + e.getMessage());
                 }
-            }
-        });
-
-        autoInstallSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
             }
         });
     }

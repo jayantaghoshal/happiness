@@ -104,7 +104,7 @@ public class AvailableAssignmentsActivity extends AppCompatActivity {
                     softwareUpdateManager.GetSoftwareAssignment(query);
                     Snackbar.make(findViewById(R.id.availableAssignmentsRootLayout), "Calling GetSoftwareAssignment" , Snackbar.LENGTH_SHORT).show();
                 } catch (Exception e) {
-                    //TODO: handle exception
+                    Log.v(LOG_TAG, "Exception trying to send GetSoftwareAssignment: " + e.getMessage());
                 }
             }
         });

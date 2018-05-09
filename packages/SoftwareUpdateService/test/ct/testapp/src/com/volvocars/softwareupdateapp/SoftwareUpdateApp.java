@@ -160,7 +160,6 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             switch (menuItem.getItemId()) {
             case R.id.getAvailableItem:
                 try {
-                    Log.v(LOG_TAG, "Sending GetSoftwareAssignments");
                     Intent intent = new Intent(context, AvailableAssignmentsActivity.class);
                     startActivity(intent);
                     return true;
