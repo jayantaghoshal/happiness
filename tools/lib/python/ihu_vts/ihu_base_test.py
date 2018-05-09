@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 import os
@@ -15,7 +15,7 @@ import typing
 from typing import Union, List, Optional, Dict
 
 _number = Union[int, float]
-_kpi_value_type = Union[_number, List[Union[List[_number], _number]]]
+_kpi_value_type = Union[_number, List[Union[List[_number], _number]], str, List[str]]
 
 """The _writeResultsJsonString fix is needed to be able to see the number
 of test cases that have been run without error. A virtual python

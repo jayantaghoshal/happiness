@@ -23,6 +23,12 @@ import sys
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 import typing
 
+# Any services listed here will not cause the test testCrashes to fail.
+# All services, listed here or not will however be reported as kpi.
+services_allowed_to_crash = [
+    # None
+]
+
 class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     """
        Smoke tests to run first to check the sanity of the device.
@@ -162,13 +168,15 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
     def testCrashes(self):
         def crash_allowed(process_name):
+            if process_name in services_allowed_to_crash:
+                return True
             return False
 
         shell_response = self.dut.shell.one.Execute(["ls /data/tombstones"])
         shell_response_stdout = shell_response[const.STDOUT][0].strip()
         tombstones_files = [x.strip() for x in shell_response_stdout.split("\n") if len(x) > 0]
         if len(tombstones_files) > 0:
-            logging.info("Found tombstones:")
+            logging.info("Found tombstones")
         crashing_processes = []
         for t in tombstones_files:
             tombstone_output = self.dut.shell.one.Execute(["cat /data/tombstones/%s" %t ])[const.STDOUT][0]
@@ -178,6 +186,8 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             else:
                 crashing_processes.append("???")
             logging.info("Tombstone: %s : %s" % (t, tombstone_output))
+
+        self.write_kpi("crashing_services", crashing_processes)
 
         disallowed_crashes = [p for p in crashing_processes if not crash_allowed(p)]
         asserts.assertEqual(0, len(disallowed_crashes),
