@@ -137,7 +137,7 @@ public class AssistanceViewModel extends ViewModel {
             CarConfigEnums.CC_1_VehicleType carConfig_1 = CarConfigApi.getValue(
                     CarConfigEnums.CC_1_VehicleType.class);
 
-            // Get the TSI Speet Alert Offset based on Car Config
+            // Get the TSI Speed Alert Offset based on Car Config
             if (carConfig_1.value < CarConfigEnums.CC_1_VehicleType.V316.value) {
                 tsi_offset_max = 20;
             } else {

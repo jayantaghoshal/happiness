@@ -27,6 +27,9 @@ public abstract class VHalDelegate<T> {
 
     protected abstract void onUserChangedValue(T value);
 
+    /**
+     * Defualt initial state for the buttons
+     */
     protected void onSetInitialState() {
         setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
         CompletableFuture.runAsync(() -> {
@@ -34,14 +37,17 @@ public abstract class VHalDelegate<T> {
             if (mVendorExtensionClient.isSupportedFeature(mVehicleProperty)) {
                 Log.d(TAG_COMMON, "Vehicle property " + String.valueOf(mVehicleProperty) + " is available!");
 
-                // Register Property callback
+                // Register Property and Status callback
                 registerPropCallback();
-
-                // Since the feature is available, enable it and register PA status handling
-                setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
                 registerStatusCallback();
 
+                // Handle default values
                 try {
+                    if (vehiclePropertyStatus == NO_STATUS) { // no status handling
+                        setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
+                    } else {
+                        setUiFunctionState(convertPAStatusToHMIStatus((Integer) mVendorExtensionClient.get(vehiclePropertyStatus)));
+                    }
                     setUiValue((T) mVendorExtensionClient.get(mVehicleProperty));
                 } catch (VendorExtensionClient.NotSupportedException e) {
                     Log.e(TAG_COMMON, "NotSupported propID: " + mVehicleProperty);
@@ -74,10 +80,13 @@ public abstract class VHalDelegate<T> {
 
         void buttonStateChanged(FunctionViewHolder.FunctionState buttonState);
 
-        default void disabledModeChanged(int disabledMode){
+        default void disabledModeChanged(int disabledMode) {
         }
     }
 
+    /**
+     * Register property value callback
+     */
     protected void registerPropCallback() {
         mVendorExtensionClient.registerCallback(new VendorExtensionCallBack(mVehicleProperty, 0) {
             @Override
@@ -93,28 +102,16 @@ public abstract class VHalDelegate<T> {
         });
     }
 
+    /**
+     * Register status of the property value
+     */
     protected void registerStatusCallback() {
         // Register for PA status
         mVendorExtensionClient.registerCallback(new VendorExtensionCallBack(vehiclePropertyStatus, 0) {
             @Override
             public void onChangeEvent(CarPropertyValue value) {
                 Log.d(TAG_COMMON, "onChangeEvent: vehiclePropertyStatus: " + value);
-                switch ((Integer) value.getValue()) {
-                    case PAStatus.Active:
-                        setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
-                        break;
-                    case PAStatus.Disabled:
-                        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
-                        break;
-                    case PAStatus.NotAvailable:
-                        setUiFunctionState(FunctionViewHolder.FunctionState.INVISIBLE);
-                        break;
-                    case PAStatus.SystemError:
-                        setUiFunctionState(FunctionViewHolder.FunctionState.DISABLED);
-                        break;
-                    default:
-                        break;
-                }
+                setUiFunctionState(convertPAStatusToHMIStatus((Integer) value.getValue()));
             }
 
             @Override
@@ -122,5 +119,26 @@ public abstract class VHalDelegate<T> {
                 Log.d(TAG_COMMON, "onErrorEvent: propertyId = " + propertyId + ", zone = " + zone);
             }
         });
+    }
+
+    /**
+     * Logic translation between PAStatus to HMI state
+     *
+     * @param paStatus
+     * @return HMI state
+     */
+    protected FunctionViewHolder.FunctionState convertPAStatusToHMIStatus(int paStatus) {
+        switch (paStatus) {
+            case PAStatus.Active:
+                return FunctionViewHolder.FunctionState.ENABLED;
+            case PAStatus.Disabled:
+                return FunctionViewHolder.FunctionState.DISABLED;
+            case PAStatus.NotAvailable:
+                return FunctionViewHolder.FunctionState.INVISIBLE;
+            case PAStatus.SystemError:
+                return FunctionViewHolder.FunctionState.DISABLED;
+            default:
+                return FunctionViewHolder.FunctionState.DISABLED;
+        }
     }
 }

@@ -97,7 +97,7 @@ public class VhalThreeStateDelegate extends VHalDelegate<Integer> {
                 // Register Property value callback
                 registerPropCallback();
 
-                // Chech if mode is supported
+                // Check if mode is supported
                 if (mUseDisabledMode) {
                     setDisabledMode();
                 }
