@@ -9,8 +9,8 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES := $(call all-Iaidl-files-under, src)
 LOCAL_SRC_FILES += $(call all-java-files-under, src)
 LOCAL_JAVA_LIBRARIES += \
-    android.car
-LOCAL_STATIC_JAVA_LIBRARIES += \
-    vehicle-hal-support-lib
+    android.car \
+    vehicle-hal-support-lib \
+    vendor.volvocars.hardware.remotectrl-V1.0-java \
 
 include $(BUILD_STATIC_JAVA_LIBRARY)

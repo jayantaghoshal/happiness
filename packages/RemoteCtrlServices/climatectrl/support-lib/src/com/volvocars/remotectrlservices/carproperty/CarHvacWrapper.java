@@ -68,26 +68,25 @@ public class CarHvacWrapper {
 
         int propertyId = requestedCarPropValue.getPropertyId();
         int areaId = requestedCarPropValue.getAreaId();
-        long timestamp = requestedCarPropValue.getTimestamp();
+        Object o = requestedCarPropValue.getValue();
 
-        Class<?> clazz = CarPropertyUtils.getJavaClassByManagerPropertyId(propertyId);
-        if (Integer.class == clazz) {
+        if (o instanceof Integer) {
             Integer value = mCarHvacManager.getIntProperty(propertyId, areaId);
 
             return CarPropertyUtils.createCarPropertyValueWithStatus(
                     requestedCarPropValue, VehiclePropertyStatus.AVAILABLE, value);
-        } else if (Float.class == clazz) {
+        } else if (o instanceof Float) {
             Float value = mCarHvacManager.getFloatProperty(propertyId, areaId);
 
             return CarPropertyUtils.createCarPropertyValueWithStatus(
                     requestedCarPropValue, VehiclePropertyStatus.AVAILABLE, value);
-        } else if (Boolean.class == clazz) {
+        } else if (o instanceof Boolean) {
             Boolean value = mCarHvacManager.getBooleanProperty(propertyId, areaId);
 
             return CarPropertyUtils.createCarPropertyValueWithStatus(
                     requestedCarPropValue, VehiclePropertyStatus.AVAILABLE, value);
         }
 
-        throw new IllegalArgumentException("Unsupported value class: " + clazz.toString());
+        throw new IllegalArgumentException("Unsupported value class: " + o.getClass().toString());
     }
 }

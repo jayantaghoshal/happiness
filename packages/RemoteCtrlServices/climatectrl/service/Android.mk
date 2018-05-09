@@ -6,12 +6,17 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_PACKAGE_NAME := RemoteClimateService
+LOCAL_SRC_FILES := $(call all-java-files-under,app/src/main)
+
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
-LOCAL_SRC_FILES := $(call all-java-files-under,src)
 LOCAL_AAPT_FLAGS += --extra-packages com.android.car --auto-add-overlay
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 LOCAL_PROGUARD_ENABLED := disabled
+
+LOCAL_MANIFEST_FILE := app/src/main/AndroidManifest.xml
+LOCAL_RESOURCE_DIR += \
+    $(LOCAL_PATH)/app/src/main/res
 
 LOCAL_STATIC_JAVA_LIBRARIES += \
 	vehicle-hal-support-lib \

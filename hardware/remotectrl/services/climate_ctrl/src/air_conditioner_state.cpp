@@ -5,96 +5,46 @@
 
 #include "climate_ctrl_service.h"
 #include "convapi_signals_def.h"
-#include "vhal_conv_mappings.h"
 
-#include <string>
-#include <unordered_map>
 #include <utility>
 
 #undef LOG_TAG
 #define LOG_TAG "RemoteCtrl_ClimateCtrl"
 #include <cutils/log.h>
 
-using namespace vcc::remotectrl::remoteclimatectrl;
 using namespace vcc::remotectrl;
-using namespace vhal_2_0;
 
 template <>
-std::vector<vsomeip::byte_t> ClimateCtrlService::CreateSomeIpResponse(
-        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE>&& /*dummy*/,
-        const vhal_2_0::VehiclePropValue& requestedPropValue) {
-    // Include FunctionAvailability Status
-    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(toConvApiStatus(requestedPropValue.status))};
-
-    for (const auto& val : requestedPropValue.value.int32Values) {
-        payload_data.push_back(static_cast<vsomeip::byte_t>(val));
+std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>>
+RemoteCtrlHalProp<static_cast<int32_t>(hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_AC_ON)>::
+        CreateSomeIpResponse(const BaseProp::MessageType& type,
+                             const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
+    if (MessageType::GET == type) {
+        return {REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE, GetACState().PackResponse(propValue)};
+    } else if (MessageType::SET == type) {
+        return {REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE, SetACState().PackResponse(propValue)};
     }
-
-    return payload_data;
+    return {REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED, NotifyACState().PackNotification(propValue)};
 }
 
 template <>
-std::vector<vsomeip::byte_t> ClimateCtrlService::CreateSomeIpSetResponse(
-        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>&& /*dummy*/,
-        const vhal_2_0::VehiclePropValue& requestedPropValue) {
-    // Include FunctionAvailability Status
-    return {static_cast<vsomeip::byte_t>(toConvApiStatus(requestedPropValue.status))};
-}
-
-template <>
-std::vector<vsomeip::byte_t> ClimateCtrlService::CreateSomeIpNotification(
-        SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED>&& /*dummy*/,
-        const vhal_2_0::VehiclePropValue& requestedPropValue) {
-    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(toConvApiStatus(requestedPropValue.status))};
-
-    for (const auto& val : requestedPropValue.value.int32Values) {
-        payload_data.push_back(static_cast<vsomeip::byte_t>(val));
-    }
-
-    return payload_data;
-}
-
-template <>
-vhal_2_0::VehiclePropValue ClimateCtrlService::VhalGetPropertyReq(
-        const SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE>& /*dummy*/,
+std::pair<BaseProp::MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
+RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE>::RemoteCtrlHalPropertyReq(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
-    const char* method_name = "GET_AC_STATE";
-
-    if (msg_payload->get_length() != 0) {
-        throw RemoteCtrlMsgLengthError(method_name, 0, msg_payload->get_length());
-    }
-
-    vhal_2_0::VehiclePropValue prop_value{static_cast<int32_t>(vhal_2_0::VehicleProperty::HVAC_AC_ON),
-                                          std::chrono::high_resolution_clock::now().time_since_epoch().count(),
-                                          static_cast<int32_t>(vhal_2_0::VehicleAreaZone::ROW_1_CENTER),
-                                          vhal_2_0::VehiclePropertyStatus::AVAILABLE,
-                                          {}};
+    const auto prop_value = GetACState().UnpackRequest(msg_payload);
 
     ALOGD("Get AC State received");
 
-    return prop_value;
+    return {BaseProp::MessageType::GET, prop_value};
 }
 
 template <>
-vhal_2_0::VehiclePropValue ClimateCtrlService::VhalSetPropertyReq(
-        const SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>& /*dummy*/,
+std::pair<BaseProp::MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue>
+RemoteProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>::RemoteCtrlHalPropertyReq(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
-    const char* method_name = "SET_AC_STATE";
+    const auto prop_value = SetACState().UnpackRequest(msg_payload);
 
-    if (msg_payload->get_length() != 1) {
-        throw RemoteCtrlMsgLengthError(method_name, 1, msg_payload->get_length());
-    }
+    ALOGD("Set AC State to %u. Request received", msg_payload->get_data()[0]);
 
-    vhal_2_0::VehiclePropValue prop_value{static_cast<int32_t>(vhal_2_0::VehicleProperty::HVAC_AC_ON),
-                                          std::chrono::high_resolution_clock::now().time_since_epoch().count(),
-                                          static_cast<int32_t>(vhal_2_0::VehicleAreaZone::ROW_1_CENTER),
-                                          vhal_2_0::VehiclePropertyStatus::AVAILABLE,
-                                          {}};
-
-    const auto ac_state = msg_payload->get_data()[0];
-    prop_value.value.int32Values = android::hardware::hidl_vec<int32_t>{ac_state};
-
-    ALOGD("Set AC State to %u. Request received", ac_state);
-
-    return prop_value;
+    return {BaseProp::MessageType::SET, prop_value};
 }

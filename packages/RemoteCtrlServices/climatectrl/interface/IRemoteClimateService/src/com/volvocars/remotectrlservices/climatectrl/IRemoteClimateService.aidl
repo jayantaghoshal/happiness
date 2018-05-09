@@ -1,6 +1,6 @@
 package com.volvocars.remotectrlservices.climatectrl;
 
-import android.car.hardware.CarPropertyValue;
+import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
 
 /**
 * An interface to access RemoteClimateCtrl features
@@ -12,7 +12,7 @@ interface IRemoteClimateService {
   * @param requestIdentifier identifier used to map response to this request
   * @param propValue value of set request
   */
-  void setProperty(int requestIdentifier, in CarPropertyValue propValue);
+  void setProperty(int requestIdentifier, in RemoteCtrlPropertyValue propValue);
 
   /**
   * Request a get on the hvac property
@@ -20,6 +20,5 @@ interface IRemoteClimateService {
   * @param requestIdentifier identifier used to map response to this request
   * @param requestedPropValue value of set request
   */
-  void getProperty(int requestIdentifier, in CarPropertyValue requestedPropValue);
+  void getProperty(int requestIdentifier, in RemoteCtrlPropertyValue requestedPropValue);
 }
-

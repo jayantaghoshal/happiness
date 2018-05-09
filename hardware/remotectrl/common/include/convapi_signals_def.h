@@ -8,8 +8,13 @@
 #include <cstdint>
 #include "exceptions.h"
 
+#include <vendor/volvocars/hardware/remotectrl/1.0/types.h>
+#include <vsomeip/vsomeip.hpp>
+
 namespace vcc {
 namespace remotectrl {
+
+namespace hidl_remotectrl = ::vendor::volvocars::hardware::remotectrl::V1_0;
 
 constexpr uint8_t VCC_SOMEIP_PROTOCOL_VERSION = 0x01U;
 constexpr uint8_t VCC_SOMEIP_INTERFACE_VERSION = 0x01U;
@@ -50,47 +55,75 @@ constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION = 0x123
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED = 0x1231U;
 // TODO (Abhi) Populate this file with all helpers and struct definitions needed for readable code until autogeneated
 // header files from SDB extract are in place
-//
-enum class FcnAvailabilityStatus : uint8_t {
-    SystemError = 0x00,
-    NotPresent = 0x01,
-    UserInputDisabled = 0x02,
-    Available = 0x03
+
+struct BaseProp {
+    enum class MessageType { GET, SET, NOTIFICATION };
+    virtual ~BaseProp() = default;
+    virtual std::pair<MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue> RemoteCtrlHalPropertyReq(
+            const std::shared_ptr<vsomeip::payload>& /*msg_payload*/) {
+        return {};
+    };
+
+    virtual std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> CreateSomeIpResponse(
+            const MessageType& /*type*/,
+            const hidl_remotectrl::RemoteCtrlHalPropertyValue& /*propValue*/) {
+        return {};
+    };
+};
+
+template <int I>
+struct RemoteProp : BaseProp {
+    enum { PROP = I };
+    std::pair<MessageType, hidl_remotectrl::RemoteCtrlHalPropertyValue> RemoteCtrlHalPropertyReq(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+};
+
+template <int I>
+struct RemoteCtrlHalProp : BaseProp {
+    enum { PROP = I };
+    std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> CreateSomeIpResponse(
+            const MessageType& type,
+            const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) override;
+};
+
+struct RemoteCtrlSignal {
+    RemoteCtrlSignal(const char* method_name,
+                     uint32_t expected_length,
+                     const hidl_remotectrl::RemoteCtrlHalProperty& prop)
+        : method_name_(method_name), expected_length_(expected_length), prop_(prop) {}
+    virtual ~RemoteCtrlSignal() = default;
+    virtual hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload);
+    virtual std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+
+    const char* method_name_;
+    const uint32_t expected_length_;
+    const hidl_remotectrl::RemoteCtrlHalProperty prop_;
+};
+
+struct RemoteCtrlZonalSignal {
+    RemoteCtrlZonalSignal(const char* method_name,
+                          uint32_t expected_len,
+                          const hidl_remotectrl::RemoteCtrlHalProperty& prop)
+        : method_name_(method_name), expected_length_(expected_len), prop_(prop) {}
+    virtual ~RemoteCtrlZonalSignal() = default;
+    virtual hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload);
+    virtual std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+
+    const char* method_name_;
+    const uint32_t expected_length_;
+    const hidl_remotectrl::RemoteCtrlHalProperty prop_;
 };
 
 enum class Rows : uint8_t { Row_1 = 0x00, Row_2 = 0x01, Row_3 = 0x02, Row_Max = 0x03 };
-
-enum class Seats : uint8_t { Left = 0x00, Center = 0x01, Right = 0x02, Max = 0x03 };
-
-enum class FanLevel : uint8_t {
-    FanLevel_0 = 0x00,
-    FanLevel_1 = 0x01,
-    FanLevel_2 = 0x02,
-    FanLevel_3 = 0x03,
-    FanLevel_4 = 0x04,
-    FanLevel_5 = 0x05,
-    FanLevel_Max = 0x06
-};
-
-enum class AirFlow : uint8_t {
-    Automatic = 0x00,
-    Floor = 0x01,
-    Vent = 0x02,
-    Floor_Vent = 0x03,
-    Defrost = 0x04,
-    Floor_Defrost = 0x05,
-    Vent_Defrost = 0x06,
-    Floor_Vent_Defrost = 0x07
-};
-
-constexpr uint8_t TEMPERATURE_MAX_VALUE = 22U;
-
 inline void ValidateRow(const char* method_name, const uint8_t& row) {
     if (row >= static_cast<uint8_t>(Rows::Row_Max)) {
         throw RemoteCtrlParamRangeError(method_name, "Row", static_cast<uint8_t>(Rows::Row_Max), row);
     }
 }
 
+enum class Seats : uint8_t { Left = 0x00, Center = 0x01, Right = 0x02, Max = 0x03 };
 inline void ValidateSeat(const char* method_name, const uint8_t& seat) {
     if (seat >= static_cast<uint8_t>(Seats::Max)) {
         throw RemoteCtrlParamRangeError(method_name, "Seat", static_cast<uint8_t>(Seats::Max), seat);
@@ -98,23 +131,140 @@ inline void ValidateSeat(const char* method_name, const uint8_t& seat) {
 }
 
 inline void ValidateRequstedFanLevel(const char* method_name, const uint8_t& fan_level) {
-    if (fan_level > static_cast<uint8_t>(FanLevel::FanLevel_Max)) {
-        throw RemoteCtrlParamRangeError(method_name, "FanLevel", 6, fan_level);
+    if (fan_level > static_cast<uint8_t>(hidl_remotectrl::FanLevel::FANLEVEL_6)) {
+        throw RemoteCtrlParamRangeError(
+                method_name, "FanLevel", static_cast<uint8_t>(hidl_remotectrl::FanLevel::FANLEVEL_6), fan_level);
     }
 }
+struct GetFanLevel : RemoteCtrlZonalSignal {
+    GetFanLevel()
+        : RemoteCtrlZonalSignal("GET_FANLEVEL",
+                                0x02U,
+                                hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_FAN_SPEED) {}
+    std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+    // NOTE: inherits default implementation for UnpackRequest
+};
+struct SetFanLevel : RemoteCtrlZonalSignal {
+    SetFanLevel()
+        : RemoteCtrlZonalSignal("SET_FANLEVEL",
+                                0x03U,
+                                hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_FAN_SPEED) {}
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+struct NotifyFanLevel {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
 
+constexpr uint8_t TEMPERATURE_MAX_VALUE = 22U;
 inline void ValidateRequstedTemperature(const char* method_name, const uint8_t& temperature) {
     if (temperature > static_cast<uint8_t>(TEMPERATURE_MAX_VALUE)) {
         throw RemoteCtrlParamRangeError(method_name, "Temperature", TEMPERATURE_MAX_VALUE, temperature);
     }
 }
+struct GetTemperature : RemoteCtrlZonalSignal {
+    GetTemperature()
+        : RemoteCtrlZonalSignal("GET_TEMPERATURE",
+                                0x02U,
+                                hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_TEMPERATURE) {}
+    std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+    // NOTE: inherits default implementation for UnpackRequest
+};
+struct SetTemperature : RemoteCtrlZonalSignal {
+    SetTemperature()
+        : RemoteCtrlZonalSignal("SET_TEMPERATURE",
+                                0x03U,
+                                hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_TEMPERATURE) {}
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+struct NotifyTemperature {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
 
-inline void ValidateRequstedAirFlow(const char* method_name, const uint8_t& air_flow) {
-    if (air_flow > static_cast<uint8_t>(AirFlow::Floor_Vent_Defrost)) {
-        throw RemoteCtrlParamRangeError(
-                method_name, "AirFlow", static_cast<uint8_t>(AirFlow::Floor_Vent_Defrost), air_flow);
+// MaxDefrostState messaging
+inline void ValidateRequestedMaxDefrost(const char* method_name, const uint8_t& max_defrost_state) {
+    if (max_defrost_state > static_cast<uint8_t>(hidl_remotectrl::MaxDefrostState::OFF)) {
+        throw RemoteCtrlParamRangeError(method_name,
+                                        "MaxDefrostState",
+                                        static_cast<uint8_t>(hidl_remotectrl::MaxDefrostState::OFF),
+                                        max_defrost_state);
     }
 }
+struct GetMaxDefrostState : RemoteCtrlSignal {
+    GetMaxDefrostState()
+        : RemoteCtrlSignal("GET_MAX_DEFROSTER_STATE",
+                           0x00U,
+                           hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_MAX_DEFROST_ON) {}
+    std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+    // NOTE: inherits default implementation for UnpackRequest
+};
+struct SetMaxDefrostState : RemoteCtrlSignal {
+    SetMaxDefrostState()
+        : RemoteCtrlSignal("SET_MAX_DEFROSTER_STATE",
+                           0x01U,
+                           hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_MAX_DEFROST_ON) {}
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+struct NotifyMaxDefrostState {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
+
+// AirConditionState messaging
+enum class ACState : uint8_t { On, Off };
+inline void ValidateRequestedACState(const char* method_name, const uint8_t& ac_defrost_state) {
+    if (ac_defrost_state > static_cast<uint8_t>(ACState::Off)) {
+        throw RemoteCtrlParamRangeError(method_name, "ACState", static_cast<uint8_t>(ACState::Off), ac_defrost_state);
+    }
+}
+struct GetACState : RemoteCtrlSignal {
+    GetACState()
+        : RemoteCtrlSignal("GET_AC_STATE", 0x00U, hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_AC_ON) {}
+    std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) override;
+    // NOTE: inherits default implementation for UnpackRequest
+};
+struct SetACState : RemoteCtrlSignal {
+    SetACState()
+        : RemoteCtrlSignal("SET_AC_STATE", 0x01U, hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_AC_ON) {}
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+struct NotifyACState {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
+
+// Air Distribution messaging
+inline void ValidateRequstedAirFlow(const char* method_name, const uint8_t& air_flow) {
+    if (air_flow > static_cast<uint8_t>(hidl_remotectrl::AirFlow::FLOOR_VENT_DEFROST)) {
+        throw RemoteCtrlParamRangeError(
+                method_name, "AirFlow", static_cast<uint8_t>(hidl_remotectrl::AirFlow::FLOOR_VENT_DEFROST), air_flow);
+    }
+}
+struct GetAirDistribution : RemoteCtrlSignal {
+    GetAirDistribution()
+        : RemoteCtrlSignal("GET_FAN_DIRECTION",
+                           0x00U,
+                           hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_FAN_DIRECTION) {}
+    std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) override;
+    // NOTE: inherits default implementation for UnpackRequest
+};
+struct SetAirDistribution : RemoteCtrlSignal {
+    SetAirDistribution()
+        : RemoteCtrlSignal("SET_FAN_DIRECTION",
+                           0x01U,
+                           hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_FAN_DIRECTION) {}
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+struct NotifyAirDistribution {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
 
 }  // namespace remotectrl
 }  // namespace vcc

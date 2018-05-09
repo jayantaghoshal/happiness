@@ -5,7 +5,17 @@
 
 cc_library_static {
     name: "libremotectrl_common_headers",
+    defaults: ["volvocars_cc_defaults_hq"],
     export_include_dirs: [
         "include",
+    ],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+
+    shared_libs: [
+        "libvsomeip_2_10_10",
+        "vendor.volvocars.hardware.remotectrl@1.0",
     ],
 }

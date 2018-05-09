@@ -23,7 +23,6 @@ cc_binary {
         "libvsomeip_cfg_2_10_10",
         "libhidlbase",
         "libhidltransport",
-        "android.hardware.automotive.vehicle@2.0",
         "vendor.volvocars.hardware.remotectrl@1.0",
     ],
 

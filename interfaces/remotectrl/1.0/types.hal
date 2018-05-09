@@ -1,17 +1,6 @@
 package vendor.volvocars.hardware.remotectrl@1.0;
 
-
-/**
-* Describes whether remotectrl operation is successful
-*/
-enum StatusCode : uint8_t {
-    SUCCESS,
-    ERROR,
-};
-
-///////////////////////////// VolumeCtrl ///////////////////
-////////////////////////////////////////////////////////////
-
+///////////////////////////// TO BE DELETED ///////////////////
 /**
 * Describes audio context.
 * This enum content has direct mapping with audio context exposed over the Convenience API
@@ -26,14 +15,149 @@ enum AudioContext : uint8_t {
 typedef uint8_t VolumeLevel;
 
 /**
-* Request identifier type
-*/
-typedef uint16_t RequestIdentifier;
-
-/**
 * Type used to describe volume information (level and audio context)
 */
 struct VolumeData {
   AudioContext context;
   VolumeLevel level;
+};
+
+/**
+* Describes whether remotectrl operation is successful
+*/
+enum StatusCode : uint8_t {
+    SUCCESS,
+    ERROR,
+};
+
+typedef uint16_t RequestIdentifier;
+
+///////////////////////////// UNTIL HERE ///////////////////
+
+typedef uint32_t UniqueRequestIdentifier;
+
+enum RemoteCtrlHalPropertyType : int32_t {
+    STRING         = 0x00100000,
+    BOOLEAN        = 0x00200000,
+    INT32          = 0x00400000,
+    INT32_VEC      = 0x00410000,
+    INT64          = 0x00500000,
+    INT64_VEC      = 0x00510000,
+    FLOAT          = 0x00600000,
+    FLOAT_VEC      = 0x00610000,
+    BYTES          = 0x00700000,
+
+    MASK           = 0x00ff0000
+};
+
+enum VehicleArea : int32_t {
+      GLOBAL       = 0x01000000,
+      ZONE         = 0x02000000,
+
+      MASK         = 0x0f000000,
+};
+
+enum VehicleAreaZone : int32_t {
+  ROW_1_LEFT = 0x00000001,
+  ROW_1_CENTER = 0x00000002,
+  ROW_1_RIGHT = 0x00000004,
+  ROW_2_LEFT = 0x00000010,
+  ROW_2_CENTER = 0x00000020,
+  ROW_2_RIGHT = 0x00000040,
+  ROW_3_LEFT = 0x00000100,
+  ROW_3_CENTER = 0x00000200,
+  ROW_3_RIGHT = 0x00000400,
+  ROW_4_LEFT = 0x00001000,
+  ROW_4_CENTER = 0x00002000,
+  ROW_4_RIGHT = 0x00004000,
+};
+
+enum RemoteCtrlHalProperty: int32_t {
+
+    /** Undefined property. */
+    INVALID = 0x00000000,
+
+    REMOTECTRLHAL_MEDIA_VOLUME = (
+            0x1133
+            | RemoteCtrlHalPropertyType:INT32
+            | VehicleArea:GLOBAL),
+
+    REMOTECTRLHAL_HVAC_FAN_SPEED = (
+            0x1220
+            | RemoteCtrlHalPropertyType:INT32
+            | VehicleArea:ZONE),
+
+    REMOTECTRLHAL_HVAC_MAX_DEFROST_ON = (
+            0x1223
+            | RemoteCtrlHalPropertyType:INT32
+            | VehicleArea:GLOBAL),
+
+    REMOTECTRLHAL_HVAC_AC_ON = (
+            0x1226
+            | RemoteCtrlHalPropertyType:INT32
+            | VehicleArea:GLOBAL),
+
+    REMOTECTRLHAL_HVAC_FAN_DIRECTION = (
+            0x1229
+            | RemoteCtrlHalPropertyType:INT32
+            | VehicleArea:GLOBAL),
+
+    REMOTECTRLHAL_HVAC_TEMPERATURE = (
+            0x1270
+            | RemoteCtrlHalPropertyType:FLOAT
+            | VehicleArea:ZONE)
+};
+
+enum RemoteCtrlHalPropertyStatus : int32_t {
+    SYSTEM_ERROR = 0,
+    NOT_PRESENT = 1,
+    USER_INPUT_DISABLED = 2,
+    AVAILABLE = 3,
+};
+
+struct RemoteCtrlHalPropertyValue {
+    RemoteCtrlHalProperty prop;
+    int32_t areaId;
+    RemoteCtrlHalPropertyStatus status;
+
+    struct RawValue {
+        vec<int32_t> int32Values;
+        vec<float> floatValues;
+        vec<int64_t> int64Values;
+        vec<uint8_t> bytes;
+        string stringValue;
+    };
+
+    RawValue value;
+};
+
+enum FanLevel : uint8_t {
+    FANLEVEL_0 = 0,
+    FANLEVEL_1 = 1,
+    FANLEVEL_2 = 2,
+    FANLEVEL_3 = 3,
+    FANLEVEL_4 = 4,
+    FANLEVEL_5 = 5,
+    FANLEVEL_6 = 6,
+};
+
+enum AirFlow : uint8_t {
+    AUTOMATIC = 0,
+    FLOOR = 1,
+    VENT = 2,
+    FLOOR_VENT = 3,
+    DEFROST = 4,
+    FLOOR_DEFROST = 5,
+    VENT_DEFROST = 6,
+    FLOOR_VENT_DEFROST = 7
+};
+
+enum ACState : uint8_t {
+    OFF = 0,
+    ON = 1
+};
+
+enum MaxDefrostState : uint8_t {
+    OFF = 0,
+    ON = 1
 };

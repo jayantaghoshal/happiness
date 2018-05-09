@@ -13,15 +13,13 @@
 #include <stdexcept>
 #include <thread>
 
-#include "convapi_signals_def.h"
-#include "service_info.h"
-
 #undef LOG_TAG
 #define LOG_TAG "RemoteCtrl_ClimateCtrl"
 #include <cutils/log.h>
 
 using namespace ::android::hardware;
 using namespace vcc::remotectrl;
+using namespace vcc::remotectrl::remoteclimatectrl;
 
 int main(int argc, char* argv[]) {
     ALOGI("Convenience API climate control daemon 0.1 starting");
@@ -38,25 +36,18 @@ int main(int argc, char* argv[]) {
 
     setenv(environment_variable, environment_value, 1 /*override*/);
     try {
-        ServiceInfo service_info{.service_name_ = "RemoteCtrl_ClimateCtrl",
-                                 .service_id_ = REMOTECTRL_CLIMATECTRL_SERVICE_ID,
-                                 .instance_id_ = REMOTECTRL_CLIMATECTRL_SERVICE_INSTANCE_ID,
-                                 .eventgroup_id_ = REMOTECTRL_CLIMATECTRL_EVENTGROUP_ID,
-                                 .methods_ = {REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION,
-                                              REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION},
-                                 .events_ = {REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED,
-                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED,
-                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED,
-                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED,
-                                             REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED}};
+        ServiceInfo service_info{
+                .service_name_ = "RemoteCtrl_ClimateCtrl",
+                .service_id_ = service_id,
+                .instance_id_ = instance_id,
+                .eventgroup_id_ = eventgroup_id,
+        };
+
+        service_info.methods_ =
+                std::vector<vsomeip::method_t>(remotectrl_service_methods.cbegin(), remotectrl_service_methods.cend());
+
+        service_info.events_ =
+                std::vector<vsomeip::event_t>(remotectrl_service_events.cbegin(), remotectrl_service_events.cend());
 
         ::android::sp<remoteclimatectrl::ClimateCtrlService> climate_ctrl_service =
                 new remoteclimatectrl::ClimateCtrlService(service_info);

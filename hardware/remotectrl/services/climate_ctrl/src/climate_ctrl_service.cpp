@@ -5,10 +5,7 @@
 
 #include "climate_ctrl_service.h"
 #include "convapi_signals_def.h"
-#include "vhal_conv_mappings.h"
 
-#include <cassert>
-#include <chrono>
 #include <memory>
 #include <utility>
 
@@ -17,13 +14,42 @@
 #include <cutils/log.h>
 
 using namespace vcc::remotectrl::remoteclimatectrl;
-using namespace vhal_2_0;
+using namespace vcc::remotectrl;
 
 using ::android::hardware::Return;
 using ::android::hardware::Void;
 
 namespace {
+
 constexpr uint64_t binder_cookie = 0x80085U;
+
+template <int I>
+std::unique_ptr<BaseProp> createObject(const uint16_t& method_id) {
+    if (remotectrl_service_methods[I] == method_id) {
+        return std::make_unique<RemoteProp<remotectrl_service_methods[I]>>();
+    }
+    return createObject<I + 1>(method_id);
+}
+
+template <>
+std::unique_ptr<BaseProp> createObject<remotectrl_service_methods.size()>(const uint16_t& /*method_id*/) {
+    return std::unique_ptr<BaseProp>();
+}
+
+template <int I>
+std::unique_ptr<BaseProp> createObject(const hidl_remotectrl::RemoteCtrlHalProperty& prop) {
+    if (remotectrl_hal_prop_array[I] == prop) {
+        return std::make_unique<RemoteCtrlHalProp<static_cast<int>(remotectrl_hal_prop_array[I])>>();
+    }
+    return createObject<I + 1>(prop);
+}
+
+template <>
+std::unique_ptr<BaseProp> createObject<remotectrl_hal_prop_array.size()>(
+        const hidl_remotectrl::RemoteCtrlHalProperty& /*prop*/) {
+    return std::unique_ptr<BaseProp>();
+}
+
 }  // namespace
 
 Return<void> ClimateCtrlService::registerRemoteCtrlPropertyHandler(
@@ -63,146 +89,62 @@ Return<void> ClimateCtrlService::unregisterRemoteCtrlPropertyHandler(
     return Void();
 }
 
-Return<void> ClimateCtrlService::sendGetPropertyResp(uint16_t requestIdentifier,
-                                                     const vhal_2_0::VehiclePropValue& requestedPropValue) {
+Return<void> ClimateCtrlService::sendGetPropertyResp(uint32_t requestIdentifier,
+                                                     const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
     ALOGD("%s: (0x%04X)", __func__, requestIdentifier);
 
-    std::vector<vsomeip::byte_t> payload_data;
     try {
-        switch (static_cast<vhal_2_0::VehicleProperty>(requestedPropValue.prop)) {
-            case vhal_2_0::VehicleProperty::HVAC_FAN_SPEED: {
-                payload_data = CreateSomeIpResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL>(),
-                                                    requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_MAX_DEFROST_ON: {
-                payload_data = CreateSomeIpResponse(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE>(), requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_AC_ON: {
-                payload_data = CreateSomeIpResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE>(),
-                                                    requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_TEMPERATURE_SET: {
-                payload_data = CreateSomeIpResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE>(),
-                                                    requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_FAN_DIRECTION: {
-                payload_data = CreateSomeIpResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION>(),
-                                                    requestedPropValue);
-                break;
-            }
-            default: {
-                ALOGW("%s: Unhandled Prop [%d]", __func__, requestedPropValue.prop);
-                return Void();
-            }
+        const auto prop = createObject<0>(propValue.prop);
+        if (prop) {
+            std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
+                    prop->CreateSomeIpResponse(BaseProp::MessageType::GET, propValue);
+            SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data.second));
+        } else {
+            ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
         }
     } catch (const RemoteCtrlError& e) {
         ALOGE("%s", e.what());
-        return Void();
     }
 
-    SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data));
     return Void();
 }
 
-Return<void> ClimateCtrlService::sendSetPropertyResp(uint16_t requestIdentifier,
-                                                     const vhal_2_0::VehiclePropValue& requestedPropValue) {
+Return<void> ClimateCtrlService::sendSetPropertyResp(uint32_t requestIdentifier,
+                                                     const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
     ALOGD("%s: (0x%04X)", __func__, requestIdentifier);
 
-    std::vector<vsomeip::byte_t> payload_data;
     try {
-        switch (static_cast<vhal_2_0::VehicleProperty>(requestedPropValue.prop)) {
-            case vhal_2_0::VehicleProperty::HVAC_FAN_SPEED: {
-                payload_data = CreateSomeIpSetResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL>(),
-                                                       requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_MAX_DEFROST_ON: {
-                payload_data = CreateSomeIpSetResponse(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE>(), requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_AC_ON: {
-                payload_data = CreateSomeIpSetResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>(),
-                                                       requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_TEMPERATURE_SET: {
-                payload_data = CreateSomeIpSetResponse(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE>(),
-                                                       requestedPropValue);
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_FAN_DIRECTION: {
-                payload_data = CreateSomeIpSetResponse(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION>(), requestedPropValue);
-                break;
-            }
-            default: {
-                ALOGW("%s: Unhandled Prop [%d]", __func__, requestedPropValue.prop);
-                return Void();
-            }
+        const auto prop = createObject<0>(propValue.prop);
+        if (prop) {
+            std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
+                    prop->CreateSomeIpResponse(BaseProp::MessageType::SET, propValue);
+            SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data.second));
+        } else {
+            ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
         }
     } catch (const RemoteCtrlError& e) {
         ALOGE("%s", e.what());
-        return Void();
     }
 
-    SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data));
     return Void();
 }
 
-Return<void> ClimateCtrlService::notifyPropertyChanged(const vhal_2_0::VehiclePropValue& propValue) {
+Return<void> ClimateCtrlService::notifyPropertyChanged(const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
     ALOGD("%s", __func__);
 
-    std::vector<vsomeip::byte_t> payload_data;
-    uint16_t event_id;
     try {
-        switch (static_cast<vhal_2_0::VehicleProperty>(propValue.prop)) {
-            case vhal_2_0::VehicleProperty::HVAC_FAN_SPEED: {
-                payload_data = CreateSomeIpNotification(SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED>(),
-                                                        propValue);
-                event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED;
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_MAX_DEFROST_ON: {
-                payload_data = CreateSomeIpNotification(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED>(), propValue);
-                event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED;
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_AC_ON: {
-                payload_data = CreateSomeIpNotification(SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED>(),
-                                                        propValue);
-                event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED;
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_TEMPERATURE_SET: {
-                payload_data = CreateSomeIpNotification(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED>(), propValue);
-                event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED;
-                break;
-            }
-            case vhal_2_0::VehicleProperty::HVAC_FAN_DIRECTION: {
-                payload_data = CreateSomeIpNotification(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED>(), propValue);
-                event_id = REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED;
-                break;
-            }
-            default: {
-                ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
-                return Void();
-            }
+        const auto prop = createObject<0>(propValue.prop);
+        if (prop) {
+            std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
+                    prop->CreateSomeIpResponse(BaseProp::MessageType::NOTIFICATION, propValue);
+            SendNotification(payload_data.first, std::move(payload_data.second));
+        } else {
+            ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
         }
     } catch (const RemoteCtrlError& e) {
         ALOGE("%s", e.what());
-        return Void();
     }
 
-    SendNotification(event_id, std::move(payload_data));
     return Void();
 }
 
@@ -245,107 +187,26 @@ void ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message
         }
     }
 
-    std::shared_ptr<vsomeip::payload> msg_payload = message->get_payload();
-
     try {
-        switch (message->get_method()) {
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL: {
-                const auto& prop_value =
-                        VhalGetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL>(), msg_payload);
+        const auto prop_obj = createObject<0>(message->get_method());
+        if (prop_obj) {
+            const auto prop_value = prop_obj->RemoteCtrlHalPropertyReq(message->get_payload());
+
+            if (prop_value.first == BaseProp::MessageType::GET) {
                 std::lock_guard<std::mutex> lock(guard_);
                 if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->getProperty(message->get_session(), prop_value);
+                    system_service_handler_->getProperty(message->get_session(), prop_value.second);
                 }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL: {
-                const auto& prop_value =
-                        VhalSetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL>(), msg_payload);
+            } else if (prop_value.first == BaseProp::MessageType::SET) {
                 std::lock_guard<std::mutex> lock(guard_);
                 if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->setProperty(message->get_session(), prop_value);
+                    system_service_handler_->setProperty(message->get_session(), prop_value.second);
                 }
-                break;
             }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE: {
-                const auto& prop_value = VhalGetPropertyReq(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->getProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE: {
-                const auto& prop_value = VhalSetPropertyReq(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->setProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE: {
-                const auto& prop_value =
-                        VhalGetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->getProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE: {
-                const auto& prop_value =
-                        VhalSetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->setProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE: {
-                const auto& prop_value =
-                        VhalGetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->getProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE: {
-                const auto& prop_value =
-                        VhalSetPropertyReq(SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->setProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION: {
-                const auto& prop_value = VhalGetPropertyReq(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->getProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            case REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION: {
-                const auto& prop_value = VhalSetPropertyReq(
-                        SomeIpProp<REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION>(), msg_payload);
-                std::lock_guard<std::mutex> lock(guard_);
-                if (nullptr != system_service_handler_.get()) {
-                    system_service_handler_->setProperty(message->get_session(), prop_value);
-                }
-                break;
-            }
-            default: {
-                ALOGW("Unhandled message 0x%04X", message->get_method());
-                break;
-            }
+        } else {
+            ALOGW("Unhandled message 0x%04X", message->get_method());
         }
     } catch (const RemoteCtrlError& e) {
         ALOGW("%s. Request ignored", e.what());
-        return;
     }
 }

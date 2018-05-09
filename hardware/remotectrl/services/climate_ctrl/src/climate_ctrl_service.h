@@ -12,14 +12,44 @@
 #include <vendor/volvocars/hardware/remotectrl/1.0/IRemoteCtrlProperty.h>
 #include <vendor/volvocars/hardware/remotectrl/1.0/IRemoteCtrlPropertyResponse.h>
 
+#include "convapi_signals_def.h"
 #include "service_base.h"
 
 namespace vcc {
 namespace remotectrl {
 namespace remoteclimatectrl {
 
-namespace vhal_2_0 = ::android::hardware::automotive::vehicle::V2_0;
 namespace hidl_remotectrl = ::vendor::volvocars::hardware::remotectrl::V1_0;
+
+constexpr vsomeip::service_t service_id = REMOTECTRL_CLIMATECTRL_SERVICE_ID;
+constexpr vsomeip::instance_t instance_id = REMOTECTRL_CLIMATECTRL_SERVICE_INSTANCE_ID;
+constexpr vsomeip::eventgroup_t eventgroup_id = REMOTECTRL_CLIMATECTRL_EVENTGROUP_ID;
+
+constexpr std::array<vsomeip::method_t, 10> remotectrl_service_methods = {
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION,
+        REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION};
+
+constexpr std::array<vsomeip::method_t, 5> remotectrl_service_events = {
+        REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED,
+        REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED,
+        REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED,
+        REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED,
+        REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED};
+
+constexpr std::array<hidl_remotectrl::RemoteCtrlHalProperty, 5> remotectrl_hal_prop_array{
+        hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_FAN_SPEED,
+        hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_MAX_DEFROST_ON,
+        hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_AC_ON,
+        hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_TEMPERATURE,
+        hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_HVAC_FAN_DIRECTION};
 
 class ClimateCtrlService final : public hidl_remotectrl::IRemoteCtrlPropertyResponse,
                                  public vcc::remotectrl::servicebase::ServiceBase,
@@ -28,14 +58,15 @@ class ClimateCtrlService final : public hidl_remotectrl::IRemoteCtrlPropertyResp
     explicit ClimateCtrlService(const ServiceInfo& service_info) : ServiceBase(service_info) {}
 
     ::android::hardware::Return<void> sendGetPropertyResp(
-            uint16_t requestIdentifier,
-            const vhal_2_0::VehiclePropValue& requestedPropValue) override;
+            uint32_t requestIdentifier,
+            const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) override;
 
     ::android::hardware::Return<void> sendSetPropertyResp(
-            uint16_t requestIdentifier,
-            const vhal_2_0::VehiclePropValue& requestedPropValue) override;
+            uint32_t requestIdentifier,
+            const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) override;
 
-    ::android::hardware::Return<void> notifyPropertyChanged(const vhal_2_0::VehiclePropValue& propValue) override;
+    ::android::hardware::Return<void> notifyPropertyChanged(
+            const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) override;
 
     ::android::hardware::Return<void> registerRemoteCtrlPropertyHandler(
             const ::android::sp<hidl_remotectrl::IRemoteCtrlProperty>& handler) override;
@@ -49,26 +80,6 @@ class ClimateCtrlService final : public hidl_remotectrl::IRemoteCtrlPropertyResp
     void OnStateChange(vsomeip::state_type_e state);
 
     void OnMessageReceive(const std::shared_ptr<vsomeip::message>& message);
-
-    template <typename T>
-    std::vector<vsomeip::byte_t> CreateSomeIpResponse(T&& /*dummy*/,
-                                                      const vhal_2_0::VehiclePropValue& requestedPropValue);
-
-    template <typename T>
-    std::vector<vsomeip::byte_t> CreateSomeIpSetResponse(T&& /*dummy*/,
-                                                         const vhal_2_0::VehiclePropValue& requestedPropValue);
-
-    template <typename T>
-    std::vector<vsomeip::byte_t> CreateSomeIpNotification(T&& /*dummy*/,
-                                                          const vhal_2_0::VehiclePropValue& requestedPropValue);
-
-    template <typename T>
-    vhal_2_0::VehiclePropValue VhalSetPropertyReq(const T& /*dummy*/,
-                                                  const std::shared_ptr<vsomeip::payload>& msg_payload);
-
-    template <typename T>
-    vhal_2_0::VehiclePropValue VhalGetPropertyReq(const T& /*dummy*/,
-                                                  const std::shared_ptr<vsomeip::payload>& msg_payload);
 
     std::mutex guard_;
     ::android::sp<hidl_remotectrl::IRemoteCtrlProperty> system_service_handler_;
