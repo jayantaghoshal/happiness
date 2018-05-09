@@ -37,7 +37,7 @@ cs_button_on  = VehicleHalCommon.app_context_vehiclefunctions + "connected_safet
 
 buttonWaitTimeSeconds = 1.5
 
-class VtsConnectedSafetySettingsComponentTest(base_test.BaseTestClass):
+class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
 
     def setUpClass(self):
 
