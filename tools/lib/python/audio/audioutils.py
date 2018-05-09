@@ -128,14 +128,23 @@ def split(audio_file,  # type: str
 # sudo apt-get install aubio-tools libaubio-dev libaubio-doc
 #
 def get_sounds(audio_file,  # type: str
-               skip_noisy_start=True  # type: bool
+               silence_threshold='-90dB',  # type: str  # '-90' also ok
+               skip_noisy_start=True,  # type: bool
+               # skip_sound_at_eof: Only return sounds followed by silence AND start of new sound.
+               # Avoids incorrect timing when recording is cut off.
+               skip_sound_at_eof=True,  # type: bool
                ):
-    res = subprocess.check_output(['aubioquiet', audio_file],
+    res = subprocess.check_output(['aubioquiet', '-s', silence_threshold, audio_file],
+#    res = subprocess.check_output(['aubioquiet', audio_file],
                                        universal_newlines=True)
 
     line_list = res.strip('\n').split('\n')
     # create list with (type, timestamp) tuple
-    split_list = [(part[0], float(part[1])) for part in [line.split(':') for line in line_list]]
+    try:
+        split_list = [(part[0], float(part[1])) for part in [line.split(':') for line in line_list]]
+    except IndexError:
+        print(line_list)
+        raise
     sound_list = list()
     if skip_noisy_start and split_list[0][0] == 'NOISY' and split_list[0][1] == 0.0:
         split_list = split_list[1:]
@@ -143,11 +152,22 @@ def get_sounds(audio_file,  # type: str
         if l[0] == 'QUIET':
             continue
         # Index i is now NOISY - we need that and one more QUIET entry to create a sound
-        try:
-            lq = split_list[i+1]   # This is the quiet detection following sound
-            ln2 = split_list[i+2]  # And this is the next sound, so we can know duration of silence
-        except IndexError:  # end-of-list
+        if len(split_list) > i + 2:
+            lq = split_list[i+1][1]   # This is the quiet detection following sound
+            ln2 = split_list[i+2][1]  # And this is the next sound, so we can know duration of silence
+        elif not skip_sound_at_eof:
+            res_soxi_len = subprocess.check_output(['soxi', '-D', audio_file],
+                                          universal_newlines=True)
+            wav_lenght = float(res_soxi_len)
+            if len(split_list) == i + 2:
+                lq = split_list[i+1][1]  # This is the quiet detection following sound
+                ln2 = wav_lenght  # Not the next sound, but best we can do without a next sound
+            elif len(split_list) == i + 1:
+                lq = wav_lenght  # Assuming end-of-file means end of silence
+                ln2 = wav_lenght  # Not the next sound, but best we can do without a next sound
+        else:  # skip_sound_at_eof==True
             break
+
         # If we get here, we know we have a sound followed by a 'complete' quiet
-        sound_list.append(Sound(l[1], lq[1], ln2[1]))
+        sound_list.append(Sound(l[1], lq, ln2))
     return sound_list

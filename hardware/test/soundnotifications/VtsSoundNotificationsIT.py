@@ -46,7 +46,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     def _log_list_as_str(self):
         return '\n'.join(self.log_list)
 
-    def getNormalizedSoundlist(self, filename, normalize_level):
+    def getNormalizedSoundlist(self, filename, normalize_level, silence_threshold='-90dB'):
         # Extract ref-channel to separate filecdhost_folder
         ch5_file = audio.audioutils.extract_channel(filename, 5)
 
@@ -54,7 +54,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         norm_file = audio.audioutils.normalize(ch5_file, normalize_level)
 
         # Get list of sounds (seprated by quiet)
-        sounds = audio.audioutils.get_sounds(norm_file)
+        sounds = audio.audioutils.get_sounds(norm_file, silence_threshold=silence_threshold)
         return sounds
 
     # ----------------------------------------------------------------------------------------------------------
@@ -76,6 +76,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         veh_spd_lgt.VehSpdLgtChks = 0
 
         with ar.alsa_recorder(10, host_folder=self.host_folder):
+            time.sleep(0.5)
             self.flexray.send_EpbLampReq(epb_lamp_req)
             self.flexray.send_VehSpdLgtSafe(veh_spd_lgt)
 
@@ -121,10 +122,10 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             self.flexray.send_FltIndcrTurnLeFrnt(de_types.DevErrSts2.NoFlt)
 
             for _ in range(5):
+                time.sleep(_s)
                 self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.LeOn)
                 time.sleep(_s)
                 self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.Off)
-                time.sleep(_s)
 
         fn = ar.host_fn
         try:
@@ -136,7 +137,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
                 0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)],
-                                                  reorder=False, log_buffer_list=self.log_list)
+                                                  reorder=True, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -146,6 +147,89 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         self.logger.info("=== testLeftIndicator result %s ===" % res)
         asserts.assertEqual(
             res, True, "TurnIndicator Left on sound NOT MATCHED - FAILED")
+
+    # ----------------------------------------------------------------------------------------------------------
+    # Test TurnIndicator Left on and broken light (fault) indicator
+    # ----------------------------------------------------------------------------------------------------------
+    def disable_testLeftIndicatorFault(self):
+        # This is (?) Hazard indicator FAULT sound, SPA-UI-S028.wav
+        self.logger.info("=== Test testLeftIndicatorFault Start ===")
+        _s = 0.5
+        ar = audio.alsarecorder.AlsaRecorder()
+        Flt, NoFlt = de_types.DevErrSts2.Flt, de_types.DevErrSts2.NoFlt
+        fault_combinations = [(Flt, NoFlt, NoFlt, NoFlt),
+                              #(NoFlt, Flt, NoFlt, NoFlt),
+                              #(NoFlt, NoFlt, Flt, NoFlt),
+                              #(NoFlt, NoFlt, NoFlt, Flt),
+                              #(Flt, NoFlt, NoFlt, Flt),
+                              #(NoFlt, Flt, Flt, NoFlt),
+                              #(Flt, NoFlt, Flt, Flt),
+                              (NoFlt, Flt, Flt, Flt)]
+        results = list()
+        for le_re_sts, le_frnt_sts, ri_re_sts, ri_frnt_sts in fault_combinations:
+            self.flexray.send_FltIndcrTurnLeRe(le_re_sts)
+            self.flexray.send_FltIndcrTurnLeFrnt(le_frnt_sts)
+            self.flexray.send_FltIndcrTurnRiFrnt(ri_frnt_sts)
+            self.flexray.send_FltIndcrTurnRiRe(ri_re_sts)
+            time.sleep(0.2)
+
+            # start recording for 10 seconds.
+            with ar.alsa_recorder(10, host_folder=self.host_folder):
+                for _ in range(5):
+                    time.sleep(_s)
+                    self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.LeOn)
+                    time.sleep(_s)
+                    self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.Off)
+
+            # Reset fault signals
+            self.flexray.send_FltIndcrTurnLeRe(NoFlt)
+            self.flexray.send_FltIndcrTurnLeFrnt(NoFlt)
+            self.flexray.send_FltIndcrTurnRiFrnt(NoFlt)
+            self.flexray.send_FltIndcrTurnRiRe(NoFlt)
+
+
+            fn = ar.host_fn
+            # Get list of normalized sounds (seprated by quiet)
+            try:
+                # The silence_threshold value experimentally 'determined'
+                sounds = self.getNormalizedSoundlist(fn, -0.9, silence_threshold='-50dB')
+            except Exception as e:
+                self.logger.warning("Exception during testLeftIndicatorFault sounds retrieval", e)
+            try:
+                # Match that list of sounds towards a list of Match objects
+                res = audio.match.match_sound_silence(sounds,
+# Commented out below is based on -73dB detection threshold. Did not work out, since amplifier (or something)
+# does this weird offset thing with audio, which means that only truly silent will be detected as silent.
+# (E.g. a hum of 0.0001dB is, due to offset a sound of 0.003dB in recorded audio from ampl.)
+#                      [audio.match.Match(0.042, 0.02, 0.133, 0.02), audio.match.Match(0.0587, 0.01, 0.144, 0.01),
+#                       audio.match.Match(0.064, 0.01, 0.133, 0.01), audio.match.Match(0.0587, 0.01, 0.365, 0.08)],
+#
+# Comment out below is for -90dB detection threshold. That did not work either...
+#                                                      [audio.match.Match(0.149, 0.05, 0.027, 0.02),
+#                                                       audio.match.Match(0.165, 0.03, 0.037, 0.02),
+#                                                       audio.match.Match(0.171, 0.03, 0.027, 0.02),
+#                                                       audio.match.Match(0.165, 0.03, 0.365, 0.08)],
+# This is for -50dB:
+                                                      [audio.match.Match(0.01, 0.01, 0.165, 0.02),
+                                                       audio.match.Match(0.037, 0.005, 0.165, 0.02),
+                                                       audio.match.Match(0.032, 0.007, 0.165, 0.02),
+                                                       audio.match.Match(0.037, 0.005, 0.38, 0.08)],
+                                                      reorder=False,
+                                                      log_buffer_list=self.log_list)
+                if not res:
+                    self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+            except audio.match.NoMatch:
+                self.logger.warning("Too few sound recorded to match!")
+                res = False
+            results.append(res)
+
+            fault_str = ''.join(('Y' if le_re_sts else 'N', 'Y' if le_frnt_sts else 'N', 'Y' if ri_re_sts else 'N', 'Y' if le_re_sts else 'N'))
+            self.logger.info("+   + testLeftIndicatorFault with for %s gave result %s" % (fault_str, res))
+
+        result = all(results)
+        self.logger.info("=== testLeftIndicatorFault result %s ===" % result)
+        asserts.assertEqual(
+            result, True, "TurnIndicator Left ON + FAULT, FAULT sound NOT MATCHED - FAILED")
 
     # ----------------------------------------------------------------------------------------------------------
     # Test Right Turn Indicator Functionality.
@@ -176,7 +260,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
                 0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)],
-                                                  reorder=False, log_buffer_list=self.log_list)
+                                                  reorder=True, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -186,13 +270,97 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
 
         asserts.assertEqual(res, True, "TurnIndicator Right on sound NOT MATCHED - FAILED")
 
+
     # ----------------------------------------------------------------------------------------------------------
-    # Test TurnIndicator Left on and Right on
+    # Test TurnIndicator Right on and broken light (fault) indicator
+    # ----------------------------------------------------------------------------------------------------------
+    def disable_testRightIndicatorFault(self):
+        # This is (?) Hazard indicator FAULT sound, SPA-UI-S028.wav
+        self.logger.info("=== Test testRightIndicatorFault Start ===")
+        _s = 0.5
+        ar = audio.alsarecorder.AlsaRecorder()
+        Flt, NoFlt = de_types.DevErrSts2.Flt, de_types.DevErrSts2.NoFlt
+        fault_combinations = [#(Flt, NoFlt, NoFlt, NoFlt),
+                              #(NoFlt, Flt, NoFlt, NoFlt),
+                              (NoFlt, NoFlt, Flt, NoFlt),
+                              #(NoFlt, NoFlt, NoFlt, Flt),
+                              #(Flt, NoFlt, NoFlt, Flt),
+                              #(NoFlt, Flt, Flt, NoFlt),
+                              #(Flt, NoFlt, Flt, Flt),
+                              (NoFlt, Flt, Flt, Flt)]
+        results = list()
+        for le_re_sts, le_frnt_sts, ri_re_sts, ri_frnt_sts in fault_combinations:
+            self.flexray.send_FltIndcrTurnLeRe(le_re_sts)
+            self.flexray.send_FltIndcrTurnLeFrnt(le_frnt_sts)
+            self.flexray.send_FltIndcrTurnRiFrnt(ri_frnt_sts)
+            self.flexray.send_FltIndcrTurnRiRe(ri_re_sts)
+            time.sleep(0.2)
+
+            # start recording for 10 seconds.
+            with ar.alsa_recorder(10, host_folder=self.host_folder):
+                for _ in range(5):
+                    time.sleep(_s)
+                    self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.RiOn)
+                    time.sleep(_s)
+                    self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.Off)
+
+            # Reset fault signals
+            self.flexray.send_FltIndcrTurnLeRe(NoFlt)
+            self.flexray.send_FltIndcrTurnLeFrnt(NoFlt)
+            self.flexray.send_FltIndcrTurnRiFrnt(NoFlt)
+            self.flexray.send_FltIndcrTurnRiRe(NoFlt)
+
+            fn = ar.host_fn
+            # Get list of normalized sounds (seprated by quiet)
+            try:
+                # The silence_threshold value experimentally 'determined'
+                sounds = self.getNormalizedSoundlist(fn, -0.9, silence_threshold='-50dB')
+            except Exception as e:
+                self.logger.warning("Exception during testRightIndicatorFault sounds retrieval", e)
+            try:
+                # Match that list of sounds towards a list of Match objects
+                res = audio.match.match_sound_silence(sounds,
+# Commented out below is based on -73dB detection threshold. Did not work out, since amplifier (or something)
+# does this weird offset thing with audio, which means that only truly silent will be detected as silent.
+# (E.g. a hum of 0.0001dB is, due to offset a sound of 0.003dB in recorded audio from ampl.)
+#                      [audio.match.Match(0.042, 0.02, 0.133, 0.02), audio.match.Match(0.0587, 0.01, 0.144, 0.01),
+#                       audio.match.Match(0.064, 0.01, 0.133, 0.01), audio.match.Match(0.0587, 0.01, 0.365, 0.08)],
+#
+# Comment out below is for -90dB detection threshold. That did not work either...
+#                                                      [audio.match.Match(0.149, 0.05, 0.027, 0.02),
+#                                                       audio.match.Match(0.165, 0.03, 0.037, 0.02),
+#                                                       audio.match.Match(0.171, 0.03, 0.027, 0.02),
+#                                                       audio.match.Match(0.165, 0.03, 0.365, 0.08)],
+# This is for -50dB:
+                                                      [audio.match.Match(0.01, 0.01, 0.165, 0.02),
+                                                       audio.match.Match(0.037, 0.005, 0.165, 0.02),
+                                                       audio.match.Match(0.032, 0.007, 0.165, 0.02),
+                                                       audio.match.Match(0.037, 0.005, 0.38, 0.08)],
+                                                      reorder=False,
+                                                      log_buffer_list=self.log_list)
+                if not res:
+                    self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+            except audio.match.NoMatch:
+                self.logger.warning("Too few sound recorded to match!")
+                res = False
+            results.append(res)
+
+            fault_str = ''.join(('Y' if le_re_sts else 'N', 'Y' if le_frnt_sts else 'N', 'Y' if ri_re_sts else 'N', 'Y' if le_re_sts else 'N'))
+            self.logger.info("+   + testRightIndicatorFault with for %s gave result %s" % (fault_str, res))
+
+        result = all(results)
+        self.logger.info("=== testRightIndicatorFault result %s ===" % result)
+        asserts.assertEqual(
+            result, True, "TurnIndicator Right ON, FAULT sound NOT MATCHED - FAILED")
+
+
+    # ----------------------------------------------------------------------------------------------------------
+    # Test TurnIndicator Left on and Right on (Hazard)
     # ----------------------------------------------------------------------------------------------------------
     def testBothIndicator(self):
         # This is (?) Hazard indicator sound, SPA-UI-S028.wav
         self.logger.info("=== Test testBothIndicator Start ===")
-        _s = 1
+        _s = 0.5
         ar = audio.alsarecorder.AlsaRecorder()
         self.flexray.send_FltIndcrTurnLeRe(de_types.DevErrSts2.NoFlt)
         self.flexray.send_FltIndcrTurnLeFrnt(de_types.DevErrSts2.NoFlt)
@@ -217,7 +385,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
                 0.218, 0.02, 0.0693, 0.05), audio.match.Match(0.0587, 0.02, 0.6773, 0.05)],
-                                                  reorder=False, log_buffer_list=self.log_list)
+                                                  reorder=True, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -227,6 +395,74 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         self.logger.info("=== testBothIndicator result %s ===" % res)
         asserts.assertEqual(
             res, True, "TurnIndicator Left ON and Right ON sound NOT MATCHED - FAILED")
+
+
+    # ----------------------------------------------------------------------------------------------------------
+    # Test TurnIndicator Left on and Right on (Hazard) and broken light indicator
+    # ----------------------------------------------------------------------------------------------------------
+    def testBothIndicatorFault(self):
+        # This is (?) Hazard indicator FAULT sound, SPA-UI-S028.wav
+        self.logger.info("=== Test testBothIndicatorFault Start ===")
+        _s = 0.5
+        ar = audio.alsarecorder.AlsaRecorder()
+        Flt, NoFlt = de_types.DevErrSts2.Flt, de_types.DevErrSts2.NoFlt
+        fault_combinations = [(Flt, NoFlt, NoFlt, NoFlt),
+                              #(NoFlt, Flt, NoFlt, NoFlt),
+                              #(NoFlt, NoFlt, Flt, NoFlt),
+                              #(NoFlt, NoFlt, NoFlt, Flt),
+                              #(Flt, NoFlt, NoFlt, Flt),
+                              #(NoFlt, Flt, Flt, NoFlt),
+                              #(Flt, NoFlt, Flt, Flt),
+                              (NoFlt, Flt, Flt, Flt)]
+        results = list()
+        for le_re_sts, le_frnt_sts, ri_re_sts, ri_frnt_sts in fault_combinations:
+            self.flexray.send_FltIndcrTurnLeRe(le_re_sts)
+            self.flexray.send_FltIndcrTurnLeFrnt(le_frnt_sts)
+            self.flexray.send_FltIndcrTurnRiFrnt(ri_frnt_sts)
+            self.flexray.send_FltIndcrTurnRiRe(ri_re_sts)
+            time.sleep(0.2)
+
+            # start recording for 10 seconds.
+            with ar.alsa_recorder(10, host_folder=self.host_folder):
+                for _ in range(5):
+                    time.sleep(_s)
+                    self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.LeAndRiOn)
+                    time.sleep(_s)
+                    self.flexray.send_IndcrDisp1WdSts(de_types.IndcrSts1.Off)
+
+            # Reset fault signals
+            self.flexray.send_FltIndcrTurnLeRe(NoFlt)
+            self.flexray.send_FltIndcrTurnLeFrnt(NoFlt)
+            self.flexray.send_FltIndcrTurnRiFrnt(NoFlt)
+            self.flexray.send_FltIndcrTurnRiRe(NoFlt)
+
+            fn = ar.host_fn
+            # Get list of normalized sounds (seprated by quiet)
+            try:
+                sounds = self.getNormalizedSoundlist(fn, -0.9)
+            except Exception as e:
+                self.logger.warning("Exception during testBothIndicator sounds retrieval", e)
+            try:
+                # Match that list of sounds towards a list of Match objects
+                res = audio.match.match_sound_silence(sounds, [audio.match.Match(
+                    0.218, 0.02, 0.0693, 0.05), audio.match.Match(0.0587, 0.02, 0.6773, 0.05)],
+                                                      reorder=False, log_buffer_list=self.log_list)
+                if not res:
+                    self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+            except audio.match.NoMatch:
+                self.logger.warning("Too few sound recorded to match!")
+                res = False
+            results.append(res)
+
+            fault_str = ''.join(('Y' if le_re_sts else 'N', 'Y' if le_frnt_sts else 'N', 'Y' if ri_re_sts else 'N', 'Y' if le_re_sts else 'N'))
+            self.logger.info("+   + testBothIndicatorFault with for %s gave result %s" % (fault_str, res))
+
+        result = all(results)
+        self.logger.info("=== testBothIndicatorFault result %s ===" % result)
+        asserts.assertEqual(
+            result, True, "TurnIndicator Left ON and Right ON, FAULT sound NOT MATCHED - FAILED")
+
+
 
     # ----------------------------------------------------------------------------------------------------------
     # Test Belt Reminder Sound1 On
@@ -256,7 +492,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # S055.wav is 1.400s, so we expect sound + silence to be 2.0s
             # The level is low the last 0.2s of file, but probably enough for detection, so expect 1.4 + 0.6
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.386, 0.02, 0.6133, 0.05)], log_buffer_list=self.log_list)
+                1.386, 0.02, 0.6133, 0.05)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -315,7 +551,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # S023.wav is 1.997s, so we expect sound + silence to be 2.0s
             # This sound is a bit 'iffy' so may be difficult to match with current logic?
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.997, 0.02, 0.05, 0.04)], log_buffer_list=self.log_list)
+                1.997, 0.02, 0.05, 0.04)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -352,7 +588,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # Match that list of sounds towards a list of Match objects
             # S024.wav is 1.400s long and goes all the way, so we expect 1.4 + 0.6
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.386, 0.02, 0.6133, 0.05)], reorder=False, log_buffer_list=self.log_list)
+                1.395, 0.02, 0.6133, 0.05)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:

@@ -33,25 +33,37 @@ def analyze(args):
         files['mono'] = files['org']
 
     files['norm_-0.9'] = audioutils.normalize(files['mono'], level=-0.9)
-    files['norm_-0.5'] = audioutils.normalize(files['mono'], level=-0.5)
-    files['norm_-0.1'] = audioutils.normalize(files['mono'], level=-0.1)
 
-    sounds_09_F = audioutils.get_sounds(files['norm_-0.9'], skip_noisy_start=False)
-    sounds_05_F = audioutils.get_sounds(files['norm_-0.5'], skip_noisy_start=False)
-    sounds_01 = audioutils.get_sounds(files['norm_-0.1'], skip_noisy_start=False)
+    sounds_90 = audioutils.get_sounds(files['norm_-0.9'], silence_threshold='-90dB', skip_noisy_start=False,
+                                      skip_sound_at_eof=False)
+    sounds_80 = audioutils.get_sounds(files['norm_-0.9'], silence_threshold='-80dB', skip_noisy_start=False,
+                                      skip_sound_at_eof=False)
+    sounds_70 = audioutils.get_sounds(files['norm_-0.9'], silence_threshold='-70dB', skip_noisy_start=False,
+                                      skip_sound_at_eof=False)
+    sounds_50 = audioutils.get_sounds(files['norm_-0.9'], silence_threshold='-50dB', skip_noisy_start=False,
+                                      skip_sound_at_eof=False)
+    sounds_custom = audioutils.get_sounds(files['norm_-0.9'], silence_threshold=args.silence_threshold,
+                                          skip_noisy_start=False, skip_sound_at_eof=False)
 
-    print("Sounds for norm -0.9F:")
-    for s in sounds_09_F:
+    print("Sounds for detection threshold -90dB:")
+    for s in sounds_90:
         print('\t', s)
 
-    print("Sounds for norm -0.5F:")
-    for s in sounds_05_F:
+    print("Sounds for detection threshold -80dB:")
+    for s in sounds_80:
         print('\t', s)
 
-    print("Sounds for norm -0.1:")
-    for s in sounds_01:
+    print("Sounds for detection threshold -70dB:")
+    for s in sounds_70:
         print('\t', s)
 
+    print("Sounds for detection threshold -50dB:")
+    for s in sounds_50:
+        print('\t', s)
+
+    print("Sounds for CUSTOM detection threshold %s:" % args.silence_threshold)
+    for s in sounds_custom:
+        print('\t', s)
 
 
 
@@ -62,8 +74,8 @@ if __name__ == "__main__":
     parser.add_argument('--channel', type=int, help='Use only the given channel (ref-ch is 5)')
     parser.add_argument('file', help='The file to operate on')
     parser.add_argument('--prefix', default='')
+    parser.add_argument('--silence-threshold', default='-75dB')
 
     parsed_args = parser.parse_args()
-    #print(parsed_args.no_copy)
     analyze(parsed_args)
 
