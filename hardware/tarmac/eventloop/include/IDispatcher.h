@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -22,13 +22,13 @@ class IDispatcher {
     static IDispatcher& GetDefaultDispatcher();
 
     // Helper function for easy job scheduling
-    static void EnqueueTask(std::function<void()>&& f);
+    static void EnqueueOnDefaultDispatcher(std::function<void()>&& f);
 
     // Helper function for easy job scheduling of delayed or cyclic task
     // User is responsible to cancel the timer at shutdown, e.g. in dtor when cyclic timer is used
-    static JobId EnqueueTaskWithDelay(std::chrono::microseconds delay,
-                                      std::function<void()>&& f,
-                                      bool cyclic_timer = false);
+    static JobId EnqueueWithDelayOnDefaultDispatcher(std::chrono::microseconds delay,
+                                                     std::function<void()>&& f,
+                                                     bool cyclic_timer = false);
 
     // Create a new dispatcher instance with the provided priority
     static std::shared_ptr<IDispatcher> CreateDispatcher(bool auto_start_on_new_thread = true);

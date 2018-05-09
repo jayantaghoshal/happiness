@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -45,7 +45,7 @@ void Gnss::updateLocation(const GnssLocation& location) {
 Return<bool> Gnss::setCallback(const sp<IGnssCallback>& callback) {
     ALOGV("setCallback %d", callback != nullptr);
 
-    IDispatcher::EnqueueTask([this, callback]() {
+    IDispatcher::EnqueueOnDefaultDispatcher([this, callback]() {
         callback_ = callback;
         if (callback_ != nullptr) {
             ALOGV("Cap+SysInfo callback");

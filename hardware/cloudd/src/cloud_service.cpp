@@ -132,7 +132,8 @@ Return<void> CloudService::registerCloudConnectionEventListener(
         const android::sp<ICloudConnectionEventListener>& listener) {
     listeners_.push_back(listener);
 
-    IDispatcher::EnqueueTask([&, listener]() { listener->isConnected(state_ == ConnectionState::CONNECTED); });
+    IDispatcher::EnqueueOnDefaultDispatcher(
+            [&, listener]() { listener->isConnected(state_ == ConnectionState::CONNECTED); });
 
     return Void();
 }

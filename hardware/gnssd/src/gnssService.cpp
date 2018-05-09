@@ -193,9 +193,9 @@ Return<void> GnssService::onMessageRcvd(const Msg& msg) {
     // if we dispatch it to a new thread?!
 
     if ((int)msg.pdu.header.operationID == (int)VccIpCmd::OperationId::GNSSPositionData) {
-        IDispatcher::EnqueueTask([msg, this]() { GNSSPositionDataNotificationHandler(msg); });
+        IDispatcher::EnqueueOnDefaultDispatcher([msg, this]() { GNSSPositionDataNotificationHandler(msg); });
     } else if ((int)msg.pdu.header.operationID == (int)VccIpCmd::OperationId::GNSSPositionDataAccuracy) {
-        IDispatcher::EnqueueTask([msg, this]() { GNSSPositionDataAccuracyNotificationHandler(msg); });
+        IDispatcher::EnqueueOnDefaultDispatcher([msg, this]() { GNSSPositionDataAccuracyNotificationHandler(msg); });
     } else {
         ALOGV("Unhandled signal received! (%04X.%04X)", msg.pdu.header.serviceID, (int)msg.pdu.header.operationID);
     }

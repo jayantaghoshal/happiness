@@ -145,7 +145,7 @@ void IplmService::HandleMessageRcvd(const Msg& msg) {
 
 // Methods from vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback follow.
 Return<void> IplmService::onMessageRcvd(const Msg& msg) {
-    IDispatcher::EnqueueTask([msg, this]() { HandleMessageRcvd(msg); });
+    IDispatcher::EnqueueOnDefaultDispatcher([msg, this]() { HandleMessageRcvd(msg); });
 
     return Void();
 }

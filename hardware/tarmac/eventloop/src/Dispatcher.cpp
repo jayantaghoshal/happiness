@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -66,11 +66,13 @@ IDispatcher& IDispatcher::GetDefaultDispatcher() {
     return *dispatcher;
 }
 
-void IDispatcher::EnqueueTask(std::function<void()>&& f) { GetDefaultDispatcher().Enqueue(std::move(f)); }
+void IDispatcher::EnqueueOnDefaultDispatcher(std::function<void()>&& f) {
+    GetDefaultDispatcher().Enqueue(std::move(f));
+}
 
-IDispatcher::JobId IDispatcher::EnqueueTaskWithDelay(std::chrono::microseconds delay,
-                                                     std::function<void()>&& f,
-                                                     bool cyclic_timer) {
+IDispatcher::JobId IDispatcher::EnqueueWithDelayOnDefaultDispatcher(std::chrono::microseconds delay,
+                                                                    std::function<void()>&& f,
+                                                                    bool cyclic_timer) {
     if (cyclic_timer) {
         return GetDefaultDispatcher().EnqueueWithDelayCyclic(delay, std::move(f));
     } else {

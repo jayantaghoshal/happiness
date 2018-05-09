@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -147,7 +147,7 @@ bool CarTimeHal::GetTimeFromFlexray(VehiclePropValue& prop_value) {
 
 void CarTimeHal::StartSetTimeSequenceOnFlexray(time_t timetoset) {
     activatevfc_.send({Vfc::UserInputSettings, 3});  // Make sure the CEM & FR is alive
-    IDispatcher::EnqueueTask([this, timetoset]() {
+    IDispatcher::EnqueueOnDefaultDispatcher([this, timetoset]() {
         if (settime_job_ > 0) {  // stop any potential already running set sequence
             IDispatcher::GetDefaultDispatcher().Cancel(settime_job_);
             settime_job_ = 0;
@@ -166,7 +166,7 @@ void CarTimeHal::StartSetTimeSequenceOnFlexray(time_t timetoset) {
 
         time_sender_.send(datetime_signal_value);  // set time in CEM
 
-        settime_job_ = IDispatcher::EnqueueTaskWithDelay(std::chrono::milliseconds(1000), [this]() {
+        settime_job_ = IDispatcher::EnqueueWithDelayOnDefaultDispatcher(std::chrono::milliseconds(1000), [this]() {
             // it seems we didn't receive anything within 1 sec -> lets end this
             StopSetTimeSequenceOnFlexray();
             ALOGW("Failed to receive response from CEM withing 1sec");
