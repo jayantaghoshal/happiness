@@ -90,17 +90,17 @@ enum RemoteCtrlHalProperty: int32_t {
     REMOTECTRLHAL_HVAC_MAX_DEFROST_ON = (
             0x1223
             | RemoteCtrlHalPropertyType:INT32
-            | VehicleArea:GLOBAL),
+            | VehicleArea:ZONE),
 
     REMOTECTRLHAL_HVAC_AC_ON = (
             0x1226
             | RemoteCtrlHalPropertyType:INT32
-            | VehicleArea:GLOBAL),
+            | VehicleArea:ZONE),
 
     REMOTECTRLHAL_HVAC_FAN_DIRECTION = (
             0x1229
             | RemoteCtrlHalPropertyType:INT32
-            | VehicleArea:GLOBAL),
+            | VehicleArea:ZONE),
 
     REMOTECTRLHAL_HVAC_TEMPERATURE = (
             0x1270
@@ -131,7 +131,7 @@ struct RemoteCtrlHalPropertyValue {
     RawValue value;
 };
 
-enum FanLevel : uint8_t {
+enum FanLevel : uint32_t {
     FANLEVEL_0 = 0,
     FANLEVEL_1 = 1,
     FANLEVEL_2 = 2,
@@ -141,7 +141,7 @@ enum FanLevel : uint8_t {
     FANLEVEL_6 = 6,
 };
 
-enum AirFlow : uint8_t {
+enum AirFlow : uint32_t {
     AUTOMATIC = 0,
     FLOOR = 1,
     VENT = 2,
@@ -152,12 +152,12 @@ enum AirFlow : uint8_t {
     FLOOR_VENT_DEFROST = 7
 };
 
-enum ACState : uint8_t {
+enum ACState : uint32_t {
     OFF = 0,
     ON = 1
 };
 
-enum MaxDefrostState : uint8_t {
+enum MaxDefrostState : uint32_t {
     OFF = 0,
     ON = 1
 };
