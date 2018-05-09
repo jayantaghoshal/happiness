@@ -20,25 +20,54 @@ namespace {
 double min = 17;
 double max = 27;
 
-double mccLo = 2;
-double mccHi = 22;
+// This should be changed if resolution is changed (ie. the other map is used, see below)
+double mccLo = 1;
+double mccHi = 23;
 
+// constexpr std::array<const std::pair<double, double>, 11> celsiusFahrenheitMap{{
+//     std::make_pair(17, 62),
+//     std::make_pair(18, 64),
+//     std::make_pair(19, 66),
+//     std::make_pair(20, 68),
+//     std::make_pair(21, 70),
+//     std::make_pair(22, 72), // Default
+//     std::make_pair(23, 74),
+//     std::make_pair(24, 76),
+//     std::make_pair(25, 78),
+//     std::make_pair(26, 80),
+//     std::make_pair(27, 82)
+// }};
+
+// constexpr std::array<const std::pair<double, double>, 11> celsiusMCCMap{{
+//     std::make_pair(15, 1),
+//     std::make_pair(16, 2),
+//     std::make_pair(17, 3),
+//     std::make_pair(18, 4),
+//     std::make_pair(19, 5),
+//     std::make_pair(20, 6), // Default
+//     std::make_pair(21, 7),
+//     std::make_pair(22, 8),
+//     std::make_pair(23, 9),
+//     std::make_pair(24, 10),
+//     std::make_pair(25, 11)
+// }};
+
+// Old map then half-degrees was a thing, keep for if they change their minds.
 constexpr std::array<const std::pair<double, double>, 21> celsiusFahrenheitMap{
-        {std::make_pair(17.0, 62), std::make_pair(17.5, 63), std::make_pair(18, 64), std::make_pair(18.5, 65),
-         std::make_pair(19, 66),   std::make_pair(19.5, 67), std::make_pair(20, 68), std::make_pair(20.5, 69),
-         std::make_pair(21, 70),   std::make_pair(21.5, 71), std::make_pair(22, 72), std::make_pair(22.5, 73),
-         std::make_pair(23, 74),   std::make_pair(23.5, 75), std::make_pair(24, 76), std::make_pair(24.5, 77),
-         std::make_pair(25, 78),   std::make_pair(25.5, 79), std::make_pair(26, 80), std::make_pair(26.5, 81),
+        {std::make_pair(17, 62), std::make_pair(17.5, 63), std::make_pair(18, 64), std::make_pair(18.5, 65),
+         std::make_pair(19, 66), std::make_pair(19.5, 67), std::make_pair(20, 68), std::make_pair(20.5, 69),
+         std::make_pair(21, 70), std::make_pair(21.5, 71), std::make_pair(22, 72), std::make_pair(22.5, 73),
+         std::make_pair(23, 74), std::make_pair(23.5, 75), std::make_pair(24, 76), std::make_pair(24.5, 77),
+         std::make_pair(25, 78), std::make_pair(25.5, 79), std::make_pair(26, 80), std::make_pair(26.5, 81),
          std::make_pair(27, 82)}};
 
-constexpr std::array<const std::pair<double, double>, 23> celsiusMCCMap{{
-        std::make_pair(15, 1),    std::make_pair(16, 2),    std::make_pair(16.5, 3),  std::make_pair(17, 4),
-        std::make_pair(18, 5),    std::make_pair(18.5, 6),  std::make_pair(19, 7),    std::make_pair(20, 8),
-        std::make_pair(20.5, 9),  std::make_pair(21, 10),   std::make_pair(22, 11),   std::make_pair(22.5, 12),
-        std::make_pair(23, 13),   std::make_pair(23.5, 14), std::make_pair(24.5, 15), std::make_pair(25, 16),
-        std::make_pair(25.5, 17), std::make_pair(26.5, 18), std::make_pair(27, 19),   std::make_pair(27.5, 20),
-        std::make_pair(28.5, 21), std::make_pair(29, 22),   std::make_pair(29.5, 23),
-}};
+constexpr std::array<const std::pair<double, double>, 23> celsiusMCCMap{
+        {std::make_pair(15, 1),    std::make_pair(16, 2),    std::make_pair(16.5, 3),  std::make_pair(17, 4),
+         std::make_pair(18, 5),    std::make_pair(18.5, 6),  std::make_pair(19, 7),    std::make_pair(20, 8),
+         std::make_pair(20.5, 9),  std::make_pair(21, 10),   std::make_pair(22, 11),   std::make_pair(22.5, 12),
+         std::make_pair(23, 13),   std::make_pair(23.5, 14), std::make_pair(24.5, 15), std::make_pair(25, 16),
+         std::make_pair(25.5, 17), std::make_pair(26.5, 18), std::make_pair(27, 19),   std::make_pair(27.5, 20),
+         std::make_pair(28.5, 21), std::make_pair(29, 22),   std::make_pair(29.5, 23)}};
 
 double rangeCheck(double celsius) {
     auto retval = celsius;
@@ -95,7 +124,7 @@ double fahrenheitToCelsius(double fahrenheit) {
 }
 
 double celsiusToMCC(double celsius) {
-    auto retval = 11.0;
+    auto retval = 11.0;  // This should be changed if resolution is changed
 
     auto foundPair = std::find_if(celsiusMCCMap.begin(),
                                   celsiusMCCMap.end(),
@@ -172,6 +201,7 @@ double TemperatureConverter::toSingle(autosar::AmbTIndcdUnit unit, double temp) 
 
 double TemperatureConverter::fromSingle(autosar::AmbTIndcdUnit unit, double temp) const {
     if (isMCC_) {
+        temp = roundToClosestWholeDegree(temp);
         if (temp < mccLo) {
             ALOGI("temp request below range");
             temp = mccLo;
@@ -184,10 +214,12 @@ double TemperatureConverter::fromSingle(autosar::AmbTIndcdUnit unit, double temp
 
     switch (unit) {
         case autosar::AmbTIndcdUnit::Fahrenheit:
+            temp = roundToClosestWholeDegree(temp);
             temp = fahrenheitToCelsius(temp);
             break;
         case autosar::AmbTIndcdUnit::UkwnUnit:
         case autosar::AmbTIndcdUnit::Celsius:
+            temp = roundToClosestHalfDegree(temp);
             temp = rangeCheck(temp);
             break;
     }
@@ -211,5 +243,10 @@ std::pair<double, double> TemperatureConverter::range(autosar::AmbTIndcdUnit uni
 
     return std::make_pair(celsiusFahrenheitMap.front().first, celsiusFahrenheitMap.back().first);
 }
+
+double TemperatureConverter::roundToClosestWholeDegree(double temp) const { return std::round(temp); }
+
+double TemperatureConverter::roundToClosestHalfDegree(double temp) const { return std::round(temp * 2) / 2; }
+
 }  // namespace daemon
 }  // namespace common

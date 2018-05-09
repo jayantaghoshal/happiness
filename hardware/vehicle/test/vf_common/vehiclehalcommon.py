@@ -61,8 +61,34 @@ property_list = [
     ('TSI_SPEED_AUDIO_WARN_ON', 555745299),
     ('TSI_SPEEDCAM_AUDIO_WARN_ON', 555745301),
     ('TSI_SPEED_WARN_OFFSET', 557842455),
+    ('HVAC_TEMPERATURE_MODE', 574619679)
 ]
 
+
+def isclose(first_value, second_value, margin):
+    return abs(first_value-second_value) <= margin
+
+
+def wait_for_close_value(get_function, expected_value, timeout_sec, extra_message=None):
+    # type: (typing.Callable[[], float], float, int, str) -> None
+    end = time.time() + timeout_sec
+    read_value = get_function()
+
+    result = True
+    while time.time() < end:
+        read_value = get_function()
+
+        usable_read_value = float(read_value)
+        usable_expected_value = float(expected_value)
+
+        if isclose(usable_read_value, usable_expected_value, 0.01):
+            break
+        else:
+            result = False
+
+        time.sleep(0.2)
+
+    asserts.assertTrue(result, "Expected value: " + str(usable_expected_value) + " within " + str(timeout_sec) + " sec, latest received value: " + str(usable_read_value) + " (" + extra_message +")")
 
 def wait_for(get_function, expected_value, timeout_sec, extra_message=None):
     # type: (typing.Callable[[], T], T, int, str) -> None

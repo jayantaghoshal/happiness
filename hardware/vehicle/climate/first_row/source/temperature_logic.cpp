@@ -148,7 +148,7 @@ bool TemperatureLogic::isPassengerCarConfigValid() {
 
 void TemperatureLogic::request(double temp) {
     std::lock_guard<std::recursive_mutex> lock(mutex_);
-    if (active_) {
+    if (active_ && state_.get() == FirstRowGen::StateType::AVAILABLE) {
         auto const converted = tempConverter_.fromSingle(tUnit_, temp);
         update(converted);
     }
@@ -157,7 +157,7 @@ void TemperatureLogic::request(double temp) {
 void TemperatureLogic::request(autosar::HmiCmptmtTSpSpcl tempHiLoN) {
     std::lock_guard<std::recursive_mutex> lock(mutex_);
 
-    if (active_) {
+    if (active_ && state_.get() == FirstRowGen::StateType::AVAILABLE) {
         update(tempHiLoN);
     }
 }

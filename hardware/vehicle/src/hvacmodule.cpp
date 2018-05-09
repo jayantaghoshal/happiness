@@ -127,6 +127,28 @@ vhal20::VehiclePropConfig propconfig_fandirection() {
     return c;
 }
 
+const std::map<vccvhal10::TemperatureMode, autosar::HmiCmptmtTSpSpcl> HiLoMap{
+        {vccvhal10::TemperatureMode::Normal, autosar::HmiCmptmtTSpSpcl::Norm},
+        {vccvhal10::TemperatureMode::Low, autosar::HmiCmptmtTSpSpcl::Lo},
+        {vccvhal10::TemperatureMode::Hi, autosar::HmiCmptmtTSpSpcl::Hi}};
+
+autosar::HmiCmptmtTSpSpcl HiLo_VhalToAutosar(vccvhal10::TemperatureMode value) {
+    auto it = HiLoMap.find(value);
+    if (it != HiLoMap.end()) {
+        return it->second;
+    }
+    return autosar::HmiCmptmtTSpSpcl::Norm;
+}
+
+vccvhal10::TemperatureMode HiLo_AutosarToVhal(autosar::HmiCmptmtTSpSpcl value) {
+    for (auto it = HiLoMap.begin(); it != HiLoMap.end(); ++it) {
+        if (it->second == value) {
+            return it->first;
+        }
+    }
+    return vccvhal10::TemperatureMode::Normal;
+}
+
 }  // namespace
 
 HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
@@ -162,14 +184,14 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
-        log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
+        log_debug() << "fireDriverTemperatureAttributeChanged (value), " << pubVal;
         prop_temperature.PushProp(value, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_LEFT));
     }));
     subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto&) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
-        log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
+        log_debug() << "fireDriverTemperatureAttributeChanged (state), " << pubVal;
         // TODO: PA Availability to VHAL
     }));
 
@@ -177,7 +199,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
-        log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
+        log_debug() << "firePassengerTemperatureAttributeChanged (value), " << pubVal;
         prop_temperature.PushProp(value, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_RIGHT));
     }));
 
@@ -185,7 +207,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
-        log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
+        log_debug() << "firePassengerTemperatureAttributeChanged (state), " << pubVal;
         // TODO: PA Availability to VHAL
     }));
 
@@ -196,37 +218,15 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     prop_temperature_mode.subscribe_set_prop(
             [&](std::underlying_type<vccvhal10::TemperatureMode>::type temperature_mode, int32_t areaId) {
                 auto temp_mode = static_cast<vccvhal10::TemperatureMode>(temperature_mode);
-                if (areaId == toInt(VehicleAreaZone::ROW_1_LEFT)) {
-                    ALOGD("Request temp mode left %s", vccvhal10::toString(temp_mode).c_str());
-                    switch (temp_mode) {
-                        case vccvhal10::TemperatureMode::Hi:
-                            logicFactory_.driverTemperatureLogic_.request(autosar::HmiCmptmtTSpSpcl::Hi);
-                            break;
-                        case vccvhal10::TemperatureMode::Low:
-                            logicFactory_.driverTemperatureLogic_.request(autosar::HmiCmptmtTSpSpcl::Lo);
-                            break;
-                        case vccvhal10::TemperatureMode::Normal:
-                            logicFactory_.driverTemperatureLogic_.request(autosar::HmiCmptmtTSpSpcl::Norm);
-                            break;
-                        default:
-                            ALOGW("Invalid left temperature mode requested");
-                    }
+                auto autosar_temp_mode = HiLo_VhalToAutosar(temp_mode);
+                ALOGD("Request temp mode = %s (%s)",
+                      vccvhal10::toString(temp_mode).c_str(),
+                      vhal20::toString<vhal20::VehicleAreaZone>(areaId).c_str());
 
+                if (areaId == toInt(VehicleAreaZone::ROW_1_LEFT)) {
+                    logicFactory_.driverTemperatureLogic_.request(autosar_temp_mode);
                 } else if (areaId == toInt(VehicleAreaZone::ROW_1_RIGHT)) {
-                    ALOGD("Request temp mode right %s", vccvhal10::toString(temp_mode).c_str());
-                    switch (temp_mode) {
-                        case vccvhal10::TemperatureMode::Hi:
-                            logicFactory_.passengerTemperatureLogic_.request(autosar::HmiCmptmtTSpSpcl::Hi);
-                            break;
-                        case vccvhal10::TemperatureMode::Low:
-                            logicFactory_.passengerTemperatureLogic_.request(autosar::HmiCmptmtTSpSpcl::Lo);
-                            break;
-                        case vccvhal10::TemperatureMode::Normal:
-                            logicFactory_.passengerTemperatureLogic_.request(autosar::HmiCmptmtTSpSpcl::Norm);
-                            break;
-                        default:
-                            ALOGW("Invalid right temperature mode requested");
-                    }
+                    logicFactory_.passengerTemperatureLogic_.request(autosar_temp_mode);
                 }
             });
 
@@ -235,7 +235,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
               static_cast<int>(logicFactory_.driverTempState_.get()),
               commonFactory_.getDriverTempHiLoNProperty().get());
         prop_temperature_mode.PushProp(
-                toInt(value), VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_LEFT));
+                toInt(HiLo_AutosarToVhal(value)), VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_LEFT));
     }));
 
     subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto&) {
@@ -250,8 +250,9 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         ALOGD("firePassengerTemperatureHiLoNormalMode State: %d, Mode: %d",
               static_cast<int>(logicFactory_.passengerTempState_.get()),
               logicFactory_.passengerTempHiLoN_.get());
-        prop_temperature_mode.PushProp(
-                toInt(value), VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_RIGHT));
+        prop_temperature_mode.PushProp(toInt(HiLo_AutosarToVhal(value)),
+                                       VehiclePropertyStatus::AVAILABLE,
+                                       toInt(VehicleAreaZone::ROW_1_RIGHT));
     }));
 
     subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto&) {

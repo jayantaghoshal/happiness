@@ -27,6 +27,10 @@ class TemperatureConverter {
 
     std::pair<double, double> range(autosar::AmbTIndcdUnit unit) const;
 
+    double roundToClosestWholeDegree(double temp) const;
+
+    double roundToClosestHalfDegree(double temp) const;
+
   private:
     bool isMCC_;
 };
