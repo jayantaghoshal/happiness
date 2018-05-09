@@ -637,6 +637,41 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         self.logger.info("=== testBeltReminderSound4 result %s ===" % res)
         asserts.assertEqual(res, True, "Belt Reminder sound4 NOT MATCHED - FAILED")
 
+    # ----------------------------------------------------------------------------------------------------------
+    # Test ACC Brake Release Warning Sound On
+    # ----------------------------------------------------------------------------------------------------------
+    def testACCBrakeReleaseWarningSound(self):
+        # This is the ACC Brake Release Warning sound, SPA-UI-S029.wav
+        self.logger.info("=== Test testACCBrakeReleaseWarningSound Start ===")
+        _s = 1.5
+        ar = audio.alsarecorder.AlsaRecorder()
+        # start recording for 10 seconds.
+        with ar.alsa_recorder(10, host_folder=self.host_folder):
+            for _ in range(5):
+                time.sleep(0.1) #cut off
+                self.flexray.send_BrkRelsWarnReq(de_types.NoYes1.Yes)
+                time.sleep(_s)
+                self.flexray.send_BrkRelsWarnReq(de_types.NoYes1.No)
+                time.sleep(_s)
+
+        fn = ar.host_fn
+        try:
+            # Get list of normalized sounds (seprated by quiet)
+            sounds = self.getNormalizedSoundlist(fn, -0.9)
+        except Exception as e:
+            self.logger.warning("Exception during testACCBrakeReleaseWarningSound sounds retrieval", e)
+        try:
+            # Match that list of sounds towards a list of Match objects
+            res = audio.match.match_sound_silence(sounds, [audio.match.Match(
+                1.5, 0.1, 1.6, 0.1)],reorder=False, log_buffer_list=self.log_list)
+        except audio.match.NoMatch:
+            self.logger.warning("Too few sound recorded to match!")
+            res = False
+        if not res:
+            self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+        self.logger.info("=== testACCBrakeReleaseWarningSound result %s ===" % res)
+        asserts.assertEqual(res, True, "ACC Brake Release sound NOT MATCHED - FAILED")
+
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s   %(message)s')
