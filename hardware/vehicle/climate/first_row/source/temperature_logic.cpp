@@ -42,17 +42,18 @@ TemperatureLogic::TemperatureLogic(bool isValidCarConfig,
     if (isValidCarConfig) {
         temp_.set(storedTemp.get());
         tempHiLoN_.set(storedTempHiLoN.get());
-        convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get(), tempHiLoN_.get()));
+        convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get()));
 
         tempId_ = temp_.subscribe([this](const auto&) {
             // We own temp_ so no need to lock mutex
-            convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get(), tempHiLoN_.get()));
+            convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get()));
         });
 
-        tempHiLoNId_ = tempHiLoN_.subscribe([this](const auto&) {
-            // We own temp_ so no need to lock mutex
-            convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get(), tempHiLoN_.get()));
-        });
+        // TODO TS Should not be needed if we now go with keeping
+        // tempHiLoNId_ = tempHiLoN_.subscribe([this](const auto&) {
+        //     // We own temp_ so no need to lock mutex
+        //     convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get(), tempHiLoN_.get()));
+        // });
 
         storedTempId_ = storedTemp_.subscribe([this](const auto&) {
             std::lock_guard<std::recursive_mutex> lock(mutex_);
@@ -118,7 +119,7 @@ TemperatureLogic::TemperatureLogic(bool isValidCarConfig,
 
             if (newTUnit != tUnit_) {
                 tUnit_ = newTUnit;
-                convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get(), tempHiLoN_.get()));
+                convertedTemp_.set(tempConverter_.toSingle(tUnit_, temp_.get()));
             }
         });
     } else {
@@ -143,18 +144,18 @@ bool TemperatureLogic::isPassengerCarConfigValid() {
     }
 }
 
-void TemperatureLogic::request(double temperature) {
+void TemperatureLogic::request(double temp) {
     std::lock_guard<std::recursive_mutex> lock(mutex_);
-
-    auto const converted = tempConverter_.fromSingle(tUnit_, temperature);
-    request(converted.first, converted.second);
+    if (active_) {
+        auto const converted = tempConverter_.fromSingle(tUnit_, temp);
+        update(converted);
+    }
 }
 
-void TemperatureLogic::request(double temp, autosar::HmiCmptmtTSpSpcl tempHiLoN) {
+void TemperatureLogic::request(autosar::HmiCmptmtTSpSpcl tempHiLoN) {
     std::lock_guard<std::recursive_mutex> lock(mutex_);
 
     if (active_) {
-        update(temp);
         update(tempHiLoN);
     }
 }

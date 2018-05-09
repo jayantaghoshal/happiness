@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -41,7 +41,8 @@ void TemperatureSynchronizer::synchronize(double temp, autosar::HmiCmptmtTSpSpcl
     if ((temperatureSync_.get() == FirstRowGen::TemperatureSyncState::ON) &&
         (maxDefroster_.get() != FirstRowGen::MaxDefrosterState::ON)) {
         log_debug() << "TemperatureSynchronizer, sync is ON and max Defroster Not ON, request temp";
-        passengerTemperatureLogic_.request(temp, tempHiLoN);
+        passengerTemperatureLogic_.request(temp);
+        passengerTemperatureLogic_.request(tempHiLoN);
     } else {
         log_debug() << "TemperatureSynchronizer, sync is NOT ON, do noting";
     }

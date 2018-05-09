@@ -20,13 +20,13 @@ double max = 27;
 double mccLo = 2;
 double mccHi = 22;
 
-constexpr std::array<const std::pair<double, double>, 23> celsiusFahrenheitMap{
-        {std::make_pair(16.5, 61), std::make_pair(17.0, 62), std::make_pair(17.5, 63), std::make_pair(18, 64),
-         std::make_pair(18.5, 65), std::make_pair(19, 66),   std::make_pair(19.5, 67), std::make_pair(20, 68),
-         std::make_pair(20.5, 69), std::make_pair(21, 70),   std::make_pair(21.5, 71), std::make_pair(22, 72),
-         std::make_pair(22.5, 73), std::make_pair(23, 74),   std::make_pair(23.5, 75), std::make_pair(24, 76),
-         std::make_pair(24.5, 77), std::make_pair(25, 78),   std::make_pair(25.5, 79), std::make_pair(26, 80),
-         std::make_pair(26.5, 81), std::make_pair(27, 82),   std::make_pair(27.5, 83)}};
+constexpr std::array<const std::pair<double, double>, 21> celsiusFahrenheitMap{
+        {std::make_pair(17.0, 62), std::make_pair(17.5, 63), std::make_pair(18, 64), std::make_pair(18.5, 65),
+         std::make_pair(19, 66),   std::make_pair(19.5, 67), std::make_pair(20, 68), std::make_pair(20.5, 69),
+         std::make_pair(21, 70),   std::make_pair(21.5, 71), std::make_pair(22, 72), std::make_pair(22.5, 73),
+         std::make_pair(23, 74),   std::make_pair(23.5, 75), std::make_pair(24, 76), std::make_pair(24.5, 77),
+         std::make_pair(25, 78),   std::make_pair(25.5, 79), std::make_pair(26, 80), std::make_pair(26.5, 81),
+         std::make_pair(27, 82)}};
 
 constexpr std::array<const std::pair<double, double>, 23> celsiusMCCMap{{
         std::make_pair(15, 1),    std::make_pair(16, 2),    std::make_pair(16.5, 3),  std::make_pair(17, 4),
@@ -150,33 +150,9 @@ TemperatureConverter::TemperatureConverter() : isMCC_(isCarConfigMCC()) {}
 
 TemperatureConverter::~TemperatureConverter() = default;
 
-double TemperatureConverter::toSingle(autosar::AmbTIndcdUnit unit, double temp, autosar::HmiCmptmtTSpSpcl hiLoN) const {
+double TemperatureConverter::toSingle(autosar::AmbTIndcdUnit unit, double temp) const {
     if (isMCC_) {
-        switch (hiLoN) {
-            case autosar::HmiCmptmtTSpSpcl::Lo:
-                temp = celsiusMCCMap.front().first;
-                break;
-            case autosar::HmiCmptmtTSpSpcl::Hi:
-                temp = celsiusMCCMap.back().first;
-                break;
-            case autosar::HmiCmptmtTSpSpcl::Norm:
-                // Do nothing, is initialized correctly
-                break;
-        }
-
         return celsiusToMCC(temp);
-    }
-
-    switch (hiLoN) {
-        case autosar::HmiCmptmtTSpSpcl::Lo:
-            temp = 16.5;
-            break;
-        case autosar::HmiCmptmtTSpSpcl::Hi:
-            temp = 27.5;
-            break;
-        case autosar::HmiCmptmtTSpSpcl::Norm:
-            // Do nothing, is initialized correctly
-            break;
     }
 
     switch (unit) {
@@ -191,20 +167,16 @@ double TemperatureConverter::toSingle(autosar::AmbTIndcdUnit unit, double temp, 
     return temp;
 }
 
-std::pair<double, autosar::HmiCmptmtTSpSpcl> TemperatureConverter::fromSingle(autosar::AmbTIndcdUnit unit,
-                                                                              double temp) const {
-    auto tempHiLoN = autosar::HmiCmptmtTSpSpcl::Norm;
-
+double TemperatureConverter::fromSingle(autosar::AmbTIndcdUnit unit, double temp) const {
     if (isMCC_) {
         if (temp < mccLo) {
-            tempHiLoN = autosar::HmiCmptmtTSpSpcl::Lo;
+            ALOGI("temp request below range");
+            temp = mccLo;
         } else if (temp > mccHi) {
-            tempHiLoN = autosar::HmiCmptmtTSpSpcl::Hi;
-        } else {
-            tempHiLoN = autosar::HmiCmptmtTSpSpcl::Norm;
+            ALOGI("temp request above range");
+            temp = mccHi;
         }
-
-        return std::make_pair(mccToCelsius(temp), tempHiLoN);
+        return mccToCelsius(temp);
     }
 
     switch (unit) {
@@ -217,15 +189,7 @@ std::pair<double, autosar::HmiCmptmtTSpSpcl> TemperatureConverter::fromSingle(au
             break;
     }
 
-    if (temp < min) {
-        tempHiLoN = autosar::HmiCmptmtTSpSpcl::Lo;
-    } else if (temp > max) {
-        tempHiLoN = autosar::HmiCmptmtTSpSpcl::Hi;
-    } else {
-        tempHiLoN = autosar::HmiCmptmtTSpSpcl::Norm;
-    }
-
-    return std::make_pair(temp, tempHiLoN);
+    return temp;
 }
 
 std::pair<double, double> TemperatureConverter::range(autosar::AmbTIndcdUnit unit) const {

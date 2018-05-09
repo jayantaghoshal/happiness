@@ -41,8 +41,8 @@ class TemperatureLogic : public common::daemon::ITemperatureLogic {
 
     static bool isPassengerCarConfigValid();
 
-    void request(double temperature);
-    void request(double temp, autosar::HmiCmptmtTSpSpcl tempHiLoN) override;
+    void request(double temp);
+    void request(autosar::HmiCmptmtTSpSpcl tempHiLoN) override;
 
     FirstRowGen::Range range();
 

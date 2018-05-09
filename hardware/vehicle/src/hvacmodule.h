@@ -85,4 +85,5 @@ class HvacModule {
     VhalPropertyHandler<bool> prop_ac;
     VhalPropertyHandler<int32_t> prop_fanlevelfront;
     VhalPropertyHandler<int32_t> prop_fandir;
+    VhalPropertyHandler<int32_t> prop_temperature_mode;
 };

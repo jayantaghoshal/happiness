@@ -325,6 +325,18 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
+
+    /**
+     * HVAC temperature mode
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     * @data_enum TemperatureMode
+     */
+    HVAC_TEMPERATURE_MODE = (
+      0x001F
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:ZONE),
     };
 
 enum PAStatus: int32_t {
@@ -332,4 +344,10 @@ enum PAStatus: int32_t {
   Disabled = 1,
   Active = 2,
   SystemError = 3,
+};
+
+enum TemperatureMode: int32_t {
+  Low = 0,
+  Normal = 1,
+  Hi = 2,
 };

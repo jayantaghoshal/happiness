@@ -21,9 +21,9 @@ class TemperatureConverter {
 
     ~TemperatureConverter();
 
-    double toSingle(autosar::AmbTIndcdUnit unit, double temp, autosar::HmiCmptmtTSpSpcl hiLoN) const;
+    double toSingle(autosar::AmbTIndcdUnit unit, double temp) const;
 
-    std::pair<double, autosar::HmiCmptmtTSpSpcl> fromSingle(autosar::AmbTIndcdUnit unit, double temp) const;
+    double fromSingle(autosar::AmbTIndcdUnit unit, double temp) const;
 
     std::pair<double, double> range(autosar::AmbTIndcdUnit unit) const;
 
