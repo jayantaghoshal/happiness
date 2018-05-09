@@ -175,8 +175,8 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         time.sleep(populateWaitTimeSeconds)
 
         # Get buttons. They shall be gone if CC is disabled
-        buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_on)
+        buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_off, 30, True)
+        buttonOn = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_on, 30, True)
         print("buttonOff -> ") + str(buttonOff)
         print("buttonOn -> ") + str(buttonOn)
 
@@ -228,6 +228,7 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
 
         vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
         fr.send_VehModMngtGlbSafe1(vehmod)
+        vc.sleep(buttonWaitTimeSeconds)
 
         # On/Off shall be default 0 and mode shall be 0.
         vHalCommon.assert_prop_equals(LANE_KEEPING_AID_ON, False)
@@ -309,9 +310,9 @@ class VtsLaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
 
         # Get buttons. They shall be enabled if CC is enabled
         # Search mode buttons for mode tests.
-        buttonBoth = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_both)
-        buttonSteering = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_steering)
-        buttonSound = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_sound)
+        buttonBoth = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_both, 30, True)
+        buttonSteering = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_steering, 30, True)
+        buttonSound = vHalCommon.scrollAndFindViewByIdOrRaise(lka_button_mode_sound, 30, True)
 
         vc.dump(window=-1)
         buttonBoth = vc.findViewByIdOrRaise(lka_button_mode_both)

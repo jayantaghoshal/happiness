@@ -256,13 +256,13 @@ class VehicleHalCommon():
         asserts.assertTrue(False, "Time out! User didn't switch")
 
     # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
-    def scrollAndFindViewByIdOrRaise(self, text, maxFlings=10):
-        view = self.scrollAndFindViewById(text, maxFlings)
+    def scrollAndFindViewByIdOrRaise(self, text, maxFlings=10, fineScroll=False):
+        view = self.scrollAndFindViewById(text, maxFlings, fineScroll)
         asserts.assertNotEqual(None, view, "Did not find view")
         return view
 
     # Scroll until view with given Id is found within maxFlings tries. Returns None if view not found.
-    def scrollAndFindViewById(self, text, maxFlings=10):
+    def scrollAndFindViewById(self, text, maxFlings=10, fineScroll=False):
         vc, device = self.getActiveViewClient()
         print("Searching for view with id -> ") + str(text)
         for n in range(maxFlings):
@@ -270,7 +270,7 @@ class VehicleHalCommon():
             v = vc.findViewById(text)
             if v is not None:
                 return v
-            device.dragDip((100,300), (100, 100), 300)
+            device.dragDip((100,300), (100, 200 if fineScroll else 100), 300)
         return None
 
     def emptyValueProperty(self, propertyId, areaId=0):
