@@ -10,6 +10,7 @@
 
 #include "accbrakerelease.h"
 #include "beltreminder.h"
+#include "forwardcollision.h"
 #include "parking_brake.h"
 #include "turnindicator.h"
 
@@ -39,6 +40,10 @@ int32_t main(int argc, char* argv[]) {
     auto accBrakeReleaseModule = std::unique_ptr<SoundNotifications::ACCBrakeReleaseWarning>(
             new SoundNotifications::ACCBrakeReleaseWarning());
     (void)accBrakeReleaseModule;
+
+    auto forwardCollisionModule =
+            std::unique_ptr<SoundNotifications::ForwardCollision>(new SoundNotifications::ForwardCollision());
+    (void)forwardCollisionModule;
 
     android::hardware::configureRpcThreadpool(1, true /* callerWillJoin */);
     android::hardware::joinRpcThreadpool();
