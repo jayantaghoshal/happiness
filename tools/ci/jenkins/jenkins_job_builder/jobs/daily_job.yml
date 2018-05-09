@@ -119,6 +119,14 @@
                             </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    publishers:
+        - workspace-cleanup
+            clean-if:
+              - success: true
+              - unstable: false
+              - failure: false
+              - aborted: false
+              - not-built: false
 
 - job:
     name: ihu_daily
@@ -311,6 +319,13 @@
                 <customProjectName>ihu_daily_test-generic</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+        - workspace-cleanup
+            clean-if:
+              - success: true
+              - unstable: false
+              - failure: false
+              - aborted: false
+              - not-built: false
 
 - job:
     name: ihu_daily_test-flexray
@@ -397,6 +412,14 @@
                             </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
+    publishers:
+        - workspace-cleanup
+            clean-if:
+              - success: true
+              - unstable: false
+              - failure: false
+              - aborted: false
+              - not-built: false
 
 - job:
     name: ihu_analyze_code-sonarqube
@@ -445,7 +468,14 @@
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
-
+    publishers:
+        - workspace-cleanup
+            clean-if:
+              - success: true
+              - unstable: false
+              - failure: false
+              - aborted: false
+              - not-built: false
 - job:
     name: ihu_deliver_to_infotainment
     project-type: freestyle
@@ -527,4 +557,11 @@
                 <customProjectName>ihu_deliver_to_infotainment</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+        - workspace-cleanup
+            clean-if:
+              - success: true
+              - unstable: false
+              - failure: false
+              - aborted: false
+              - not-built: false
 

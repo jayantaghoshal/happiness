@@ -67,9 +67,16 @@
                 - bootstrap_ihu_repo_sync_before_test.sh
                 - bootstrap_ihu_hourly_test_common.sh
     publishers:
-      - archive:
-          artifacts: 'aosp/out/host/linux-x86/vcc_test_results/current/**/*'
-          allow-empty: true
+        - archive:
+            artifacts: 'aosp/out/host/linux-x86/vcc_test_results/current/**/*'
+            allow-empty: true
+        - workspace-cleanup
+            clean-if:
+              - success: true
+              - unstable: false
+              - failure: false
+              - aborted: false
+              - not-built: false
     notifications:
         - http:
             url: http://gotsvl1416.got.volvocars.net:3002/events
