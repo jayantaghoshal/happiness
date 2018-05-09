@@ -1,6 +1,15 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
-subdirs = ["localconfig_nativelib"]
+cc_test {
+    name: "liblocalconfig_ct",
+    defaults: ["volvocars_cc_defaults_hq_tests"],
+
+    srcs: ["localconfig_ct_test.cpp"],
+
+    shared_libs: ["liblocalconfig"],
+    static_libs: ["libgmock"],
+    test_suites: ["vts"],
+}

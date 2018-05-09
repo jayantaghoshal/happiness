@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH := $(call my-dir)
@@ -25,7 +25,5 @@ LOCAL_COMPATIBILITY_SUITE := cts
 LOCAL_CERTIFICATE := platform
 
 LOCAL_PRIVILEGED_MODULE := true
-
-LOCAL_MULTILIB := 64
 
 include $(BUILD_CTS_PACKAGE)

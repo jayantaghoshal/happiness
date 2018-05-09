@@ -41,7 +41,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/pac/early_app/test/ut",                      standard_caps), #VtsPacEarlyApp, Staffan Rydén
     VTSTest("vendor/volvocars/hardware/pac/test/example/ut",                        standard_caps), #VtsPacExampleTest, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/infotainmentIpBus/test/ut",                  standard_caps), #Martin Hansson
-    VTSTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_nativelib",  standard_caps), #RRAJAGO1
+    VTSTest("vendor/volvocars/hardware/localconfig/test/ct",                        standard_caps), #RRAJAGO1
     VTSTest("vendor/volvocars/hardware/netman/test/ct/apix_obd_traffic_split",      standard_caps), #Samuel Idowu
     VTSTest("vendor/volvocars/hardware/netman/test/ct/boot",                        standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/netman/test/ct/kernel_ip_stack",             standard_caps | {cp.audio}), #Uguudei
@@ -91,7 +91,7 @@ test_plan_staging_daily = [
     ),
     TradefedTest("vendor/volvocars/hardware/carconfig/carconfig_java_lib/test/ct/carconfig_api", standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/ipcbd/test/ct",                              standard_caps), #Andreas Bengtsson
-    TradefedTest("vendor/volvocars/hardware/localconfig/test/ct/localconfig_java",  standard_caps), #lveeraku
+    TradefedTest("vendor/volvocars/packages/LocalConfigService/test/ct",            standard_caps), #Renjith Rajagopal
     VTSTest("vendor/volvocars/hardware/powermoding/test/ct",                        standard_caps | {cp.flexray}), #Mats Berggrund
     VTSTest("vendor/volvocars/hardware/profiles/test/ct",                           standard_caps), #Torbjorn Sandsgard
     VTSTest("vendor/volvocars/hardware/settings/test/ct",                           standard_caps), #Erik Elmeke
