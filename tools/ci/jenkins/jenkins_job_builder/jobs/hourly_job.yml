@@ -70,7 +70,7 @@
         - archive:
             artifacts: 'aosp/out/host/linux-x86/vcc_test_results/current/**/*'
             allow-empty: true
-        - workspace-cleanup
+        - workspace-cleanup:
             clean-if:
               - success: true
               - unstable: false

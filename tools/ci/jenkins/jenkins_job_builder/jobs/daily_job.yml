@@ -120,7 +120,7 @@
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
     publishers:
-        - workspace-cleanup
+        - workspace-cleanup:
             clean-if:
               - success: true
               - unstable: false
@@ -319,7 +319,7 @@
                 <customProjectName>ihu_daily_test-generic</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
-        - workspace-cleanup
+        - workspace-cleanup:
             clean-if:
               - success: true
               - unstable: false
@@ -413,7 +413,7 @@
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
     publishers:
-        - workspace-cleanup
+        - workspace-cleanup:
             clean-if:
               - success: true
               - unstable: false
@@ -469,7 +469,7 @@
             abort: true
             type: absolute
     publishers:
-        - workspace-cleanup
+        - workspace-cleanup:
             clean-if:
               - success: true
               - unstable: false
@@ -557,7 +557,7 @@
                 <customProjectName>ihu_deliver_to_infotainment</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
-        - workspace-cleanup
+        - workspace-cleanup:
             clean-if:
               - success: true
               - unstable: false
