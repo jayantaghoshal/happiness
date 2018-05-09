@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -56,9 +56,9 @@ public class FoundationServicesApi implements ServiceConnection{
     * @param feature wanted feature
     * @return boolean indicating if this feature exist or not.
     */
-    public boolean IsFeatureAvailable(String feature) throws RemoteException {
+    public boolean isFeatureAvailable(String feature, IFoundationServicesApiCallback callback) throws RemoteException {
         if(mService!=null && mBound)
-            return mService.IsFeatureAvailable(feature);
+            return mService.isFeatureAvailable(feature, callback);
         else
             return false;
     }

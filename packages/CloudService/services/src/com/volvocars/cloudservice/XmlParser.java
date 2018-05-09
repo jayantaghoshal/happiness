@@ -66,25 +66,23 @@ public final class XmlParser {
     /* @return a Feature object.
      */
     private static Feature readFeature(XmlPullParser parser) throws XmlPullParserException, IOException {
+        Feature feature = new Feature();
+
         parser.require(XmlPullParser.START_TAG, null_string, "feature");
-        String name = "";
-        Boolean enabled = false;
-        Boolean visible = false;
-        String uri = "";
-        ArrayList<String> tags = null;
+
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String attributeName = parser.getName();
             if (attributeName.equals("name")) {
-                name = readAttributeAsString(parser, "name");
+                feature.name = readAttributeAsString(parser, "name");
             } else if (attributeName.equals("enabled")) {
-                enabled = readAttributeAsBool(parser, "enabled");
+                feature.enabled = readAttributeAsBool(parser, "enabled");
             } else if (attributeName.equals("visible")) {
-                visible = readAttributeAsBool(parser, "visible");
+                feature.visible = readAttributeAsBool(parser, "visible");
             } else if (attributeName.equals("uri")) {
-                uri = readAttributeAsString(parser, "uri");
+                feature.uri = readAttributeAsString(parser, "uri");
             } else if (attributeName.equals("tags")) {
                 //Todo implement tags
                 SkipElement(parser);
@@ -92,7 +90,7 @@ public final class XmlParser {
                 SkipElement(parser);
             }
         }
-        return new Feature(name, enabled, visible, uri, null);
+        return feature;
     }
 
     /**

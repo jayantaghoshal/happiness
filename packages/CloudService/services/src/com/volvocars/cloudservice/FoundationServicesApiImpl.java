@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 import org.xmlpull.v1.XmlPullParserException;
 import android.os.SystemProperties;
@@ -30,6 +32,10 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
 
     private boolean foundation_services_is_available = false;
 
+    private ArrayList<Feature> features = new ArrayList();
+
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
     public FoundationServicesApiImpl() {
 
     }
@@ -39,8 +45,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
         foundation_services_is_available = true;
     }
 
-    public Feature getFeatureAvailable(String feature) {
-        Log.v(LOG_TAG, "getFeatureAvailable [" + feature + "]");
+    public boolean getFeatureList() {
         //Setup request fields
         HttpHeaderField field = new HttpHeaderField();
         field.value = "application/volvo.cloud.Features+XML";
@@ -64,12 +69,11 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
             }
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
-            //ParseData
-            ArrayList<Feature> features = XmlParser.parse(stream);
-            for (Feature f : features) {
-                if (f.name.equals(feature))
-                    return f;
-            }
+
+            //Parse XML data
+            features = XmlParser.parse(stream);
+
+            return true;
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
             Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
@@ -78,7 +82,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
             Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -89,11 +93,36 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
     * @return boolean indicating if the feature exist.
     */
     @Override
-    public boolean IsFeatureAvailable(String feature) throws RemoteException {
+    public boolean isFeatureAvailable(String feature, IFoundationServicesApiCallback callback) throws RemoteException {
+        Log.v(LOG_TAG, "isFeatureAvailable [" + feature + "]");
+
         if (!foundation_services_is_available) {
             return false;
         }
-        return (getFeatureAvailable(feature) != null);
+
+        executorService.execute( () -> {
+            //If feature list isn't retrieved yet, get it now
+            if (features.size() == 0) {
+                getFeatureList();
+            }
+
+            Feature theFeature = null;
+            for (Feature f : features) {
+                if (f.name.equals(feature)) {
+                    theFeature = f;
+                    break;
+                }
+            }
+
+            try {
+                callback.featureAvailableResponse(theFeature);
+            }
+            catch (RemoteException e) {
+                Log.e(LOG_TAG, "featureAvailableResponse callback failed (" + e.getMessage() + ")");
+            }
+        });
+
+        return true;
     }
 
     private boolean HandleHttpResponseCode(final int code) {

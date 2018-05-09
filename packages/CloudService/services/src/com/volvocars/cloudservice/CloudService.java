@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -26,6 +26,28 @@ public class CloudService extends Service {
     private FoundationServicesApiImpl foundation_services_api = null;
     private SoftwareManagementApiImpl software_management_api = null;
     private CloudConnection cloud_connection = null;
+
+    private class SoftwareManagementFeatureCallbackImpl extends IFoundationServicesApiCallback.Stub {
+        @Override
+        public void featureAvailableResponse(Feature feature) {
+            Log.v(LOG_TAG, "Got feature available response for SoftwareManagement");
+
+            if (feature != null) {
+                if (!feature.name.equals("SoftwareManagement")) {
+                    Log.w(LOG_TAG, "Got wrong feature in callback response ("+ feature.name + ")");
+                    return;
+                }
+
+                Log.v(LOG_TAG, "Feature: " + feature.toString());
+
+                //TODO: Check enabled/visible? Check with Lukas, previously this was not
+                // needed, if item is in list it is available... Still valid?
+                software_management_api.init(cloud_connection, feature.uri);
+            } else {
+                Log.e(LOG_TAG, "Software Management is not available");
+            }
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -90,12 +112,7 @@ public class CloudService extends Service {
             foundation_services_api.init(cloud_connection);
 
             Log.v(LOG_TAG, "Calling fsapi.GetFeatureAvailable(SoftwareManagement)");
-            Feature software_management = foundation_services_api.getFeatureAvailable("SoftwareManagement");
-            if (software_management != null) {
-                software_management_api.init(cloud_connection, software_management.uri);
-            } else {
-                Log.e(LOG_TAG, "Software Management is not available");
-            }
+            foundation_services_api.isFeatureAvailable("SoftwareManagement", new SoftwareManagementFeatureCallbackImpl());
         } catch (Exception ex) {
             Log.e(LOG_TAG, "Unhandled exception:\n" + ex.getMessage());
         }
