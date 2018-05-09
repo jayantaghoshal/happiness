@@ -107,7 +107,7 @@ class ci_database_reporter(abstract_reporter):
                     'description' : "IHU fastboot flashing",
                     'module_name' : "Software_Download_fastboot",
                     'job_name' : os.environ["JOB_NAME"],
-                    'test_job_build_number' : os.environ["BUILD_NUMBER"],
+                    'test_job_build_number' : int(os.environ["BUILD_NUMBER"]),
                     'test_dir_name' : os.environ["PWD"],
                     'result' : bool(result.success),
                     'test_type' : 'SWDL',
