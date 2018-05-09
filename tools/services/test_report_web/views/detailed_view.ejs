@@ -181,18 +181,20 @@
                         </div>
 
             </fieldset>
-            <fieldset >
-                <legend>Screenshots on test failure</legend>
-                <div class="list-group">
-                    <% Object.keys(test_detail["screenshots"]).forEach(function(key) {%>
-                    <a class="list-group-item list-group-item-action" href="<%= "/screenshot?id=" +  test_detail["screenshots"][key] %>">
-                        <i class="fas fa-file-alt"></i>
-                        <%= key +" "%>
-                    </a>
-                    <% }); %>
-                </div>
+            <%if(typeof test_detail["screenshots"] !== 'undefined' && Object.keys(test_detail["screenshots"]).length){%>
+                <fieldset >
+                    <legend>Screenshots on test failure</legend>
+                    <div class="list-group">
+                        <% Object.keys(test_detail["screenshots"]).forEach(function(key) {%>
+                        <a class="list-group-item list-group-item-action" href="<%= "/screenshot?id=" +  test_detail["screenshots"][key] %>">
+                            <i class="fas fa-file-alt"></i>
+                            <%= key +" "%>
+                        </a>
+                        <% }); %>
+                    </div>
 
-            </fieldset>
+                </fieldset>
+            <%}%>
             <br>		
     </div>
             
