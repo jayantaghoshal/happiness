@@ -20,6 +20,8 @@ __pycache__/
 #Ignore component_test_build logs
 build.log
 build.log.*
+cloudsim.log
+db.json.run
 
 # eclipse
 .settings/language.settings.xml
@@ -42,3 +44,7 @@ build.log.*
 #Sublime, workspace and project settings
 *.sublime-project
 *.sublime-workspace
+
+#External library repositories
+external/paho.mqtt.c/
+external/paho.mqtt.cpp/
