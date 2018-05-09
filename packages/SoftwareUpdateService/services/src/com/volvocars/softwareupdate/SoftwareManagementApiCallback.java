@@ -7,6 +7,7 @@ package com.volvocars.softwareupdate;
 
 import android.os.RemoteException;
 
+import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.InstallNotification;
 import com.volvocars.cloudservice.SoftwareAssignment;
@@ -37,26 +38,19 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
         if (code == 200) {
             Log.d(LOG_TAG, "updating softwarestate, remove when MQTT is in place!");
             service.UpdateSoftwareState(uuid, SoftwareState.COMMISSIONED);
-            //try {
-            //    callback.ProvideErrorMessage(code, "Request for Software Assignment List failed.");
-            //} catch (RemoteException e) {
-            //    Log.w(LOG_TAG, "Cannot event send error message. Client is super stupid...");
-            //}
+        } else {
+            Log.w(LOG_TAG, "CommissionStatus for uuid: " + uuid + "failed with code: " + code);
         }
     }
 
     @Override
-    public void SoftwareAssignmentList(int code, List<SoftwareAssignment> software_list) {
+    public void SoftwareAssignmentList(int code, AssignmentType type, List<SoftwareAssignment> software_list) {
         Log.v(LOG_TAG,
-                "Got result of getting software assingment list [size of list: " + software_list.size() + "]: " + code);
+                "Got result of getting software assingment list (type: " + type + ") [size of list: " + software_list.size() + "]: " + code);
         if (code == 200) {
-            service.onNewSoftwareAssignmentList(software_list);
+            service.onNewSoftwareAssignmentList(software_list, type);
         } else {
-            //try {
-            //    callback.ProvideErrorMessage(code, "Request for Software Assignment List failed.");
-            //} catch (RemoteException e) {
-            //    Log.w(LOG_TAG, "Cannot event send error message. Client is super stupid...");
-            //}
+            Log.w(LOG_TAG, "SoftwareAssignmentList for list of type: " + type + "failed with code: " + code);
         }
 
     }
@@ -68,6 +62,9 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
             service.UpdateSoftwareList(info);
             Log.v(LOG_TAG, "Received download information, ask service to download according to information");
             service.download(info);
+        }
+        else {
+            Log.w(LOG_TAG, "DownloadInfo for uuid: " + info.id + "failed with code: " + code);
         }
     }
 
@@ -81,6 +78,9 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
         Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.id + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(downloadInfo);
+        }
+        else {
+            Log.w(LOG_TAG, "DownloadData for uuid: " + downloadInfo.id + "failed with code: " + code);
         }
     }
 

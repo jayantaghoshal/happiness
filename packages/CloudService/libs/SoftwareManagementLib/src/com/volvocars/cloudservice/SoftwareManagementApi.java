@@ -95,9 +95,9 @@ public class SoftwareManagementApi implements ServiceConnection {
      * @param query Query
      * @param callback
      */
-    public void GetSoftwareAssignment(Query query, ISoftwareManagementApiCallback callback) throws RemoteException{
+    public void GetSoftwareAssignment(Query query, AssignmentType type, ISoftwareManagementApiCallback callback) throws RemoteException{
         if (software_management != null && service_bound) {
-            software_management.GetSoftwareAssignment(query, callback);
+            software_management.GetSoftwareAssignment(query, type, callback);
         }
     }
 

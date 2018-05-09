@@ -93,7 +93,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             uris = XmlParser.ParseSoftwareManagementURIs(stream);
             stream.close();
 
-            Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_software_assignments + "\n" + uris.downloads
+            Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_updates + "\n" + uris.available_accessories + "\n" + uris.downloads
                     + "\n" + uris.pending_installations);
 
         } catch (XmlPullParserException ex) {
@@ -105,7 +105,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
     }
 
-    private SwListResponse<SoftwareAssignment> FetchSoftwareAssignment(Query query) {
+    private SwListResponse<SoftwareAssignment> FetchSoftwareAssignment(Query query, AssignmentType type) {
         Log.v(LOG_TAG, "FetchSoftwareAssignmentsList");
         // Build request
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
@@ -132,10 +132,12 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uris.available_software_assignments);
+            String uri = (type == AssignmentType.UPDATE) ? uris.available_updates : uris.available_accessories;
+
+            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uri);
             Response response = null;
 
-            response = cloudConnection.doGetRequest(uris.available_software_assignments + query.buildQuery(), headers,
+            response = cloudConnection.doGetRequest(uri + query.buildQuery(), headers,
                     timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
@@ -507,17 +509,18 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     /**
      * Get available assignments with specified query parameters
      * @param queryParams Query parameters
+     * @param type AssignmentType (possible values: UPDATE or ACCESSORY)
      * @param callback
      */
-    public void GetSoftwareAssignment(Query query, ISoftwareManagementApiCallback callback) throws RemoteException {
+    public void GetSoftwareAssignment(Query query, AssignmentType type, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (!softwareManagementAvailable) {
-            callback.SoftwareAssignmentList(-1, null);
+            callback.SoftwareAssignmentList(-1, type, null);
         }
 
-        SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query);
+        SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query, type);
         Log.d(LOG_TAG, "GetSoftwareAssignment: list size: " + swrsp.swlist.size());
 
-        callback.SoftwareAssignmentList(swrsp.code, swrsp.swlist);
+        callback.SoftwareAssignmentList(swrsp.code, type, swrsp.swlist);
     }
 
     /**

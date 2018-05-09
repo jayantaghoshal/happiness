@@ -1,5 +1,6 @@
 package com.volvocars.cloudservice;
 
+import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.InstallationOrder;
@@ -19,9 +20,10 @@ oneway interface ISoftwareManagementApiCallback {
     /**
      * Return result for GetSoftwareAssignmentList when received.
      * @param code          The HTTP code of the response
+     * @param type          The type of the assignments (UPDATE/ACCESSORY)
      * @param software_list The list of SoftwareAssignments
      */
-    void SoftwareAssignmentList(in int code, in List<SoftwareAssignment> software_list);
+    void SoftwareAssignmentList(in int code, in AssignmentType type, in List<SoftwareAssignment> software_list);
 
     /**
      * Return the result for GetDownloadInfo

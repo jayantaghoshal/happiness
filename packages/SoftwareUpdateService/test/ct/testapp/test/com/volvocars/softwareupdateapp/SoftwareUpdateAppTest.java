@@ -122,36 +122,11 @@ public class SoftwareUpdateAppTest {
                 mDevice.findObject(textSelector).click();
 
                 // Find menu item "Get available assignments"
-                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available updates");
                 assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
-                // Click on menu item "Get available assignments"
+                // Click on menu item "Get available updates"
                 mDevice.findObject(textSelector).click();
-
-                // Find root layout of new activity (AvailableAssignmentsActivity) to verify
-                // that the activity has started and is in foreground
-                frame = By.clazz("android.widget.FrameLayout")
-                                .res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
-
-                // Find "Send GetAvailableAssignments" button
-                BySelector send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton")
-                                .enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
-
-                // Click on GetAvailableAssignments" button
-                mDevice.findObject(send).click();
-
-                // Find back button in toolbar
-                toolbarObj = mDevice.findObject(
-                                By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar"));
-                children = toolbarObj.getChildren();
-                assertTrue(children.get(0).getClassName().equals("android.widget.ImageButton"));
-
-                home = children.get(0);
-
-                // Click on back button
-                home.click();
 
                 // Find assignments view (to verify that main activity is in foreground)
                 BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW)
@@ -165,6 +140,11 @@ public class SoftwareUpdateAppTest {
                 // Find assignment with name "Security patch for IHU"
                 textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name")
                                 .text("Security patch for IHU");
+                assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
+
+                // Find assignment with name "Spotify"
+                textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name")
+                                .text("Adaptive cruise control");
                 assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
         }
 
@@ -234,36 +214,11 @@ public class SoftwareUpdateAppTest {
                 mDevice.findObject(textSelector).click();
 
                 // Find menu item "Get available assignments"
-                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available updates");
                 assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
                 // Click on menu item "Get available assignments"
                 mDevice.findObject(textSelector).click();
-
-                // Find root layout of new activity (AvailableAssignmentsActivity) to verify
-                // that the activity has started and is in foreground
-                frame = By.clazz("android.widget.FrameLayout")
-                                .res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
-
-                // Find "Send GetAvailableAssignments" button
-                BySelector send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton")
-                                .enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
-
-                // Click on GetAvailableAssignments" button
-                mDevice.findObject(send).click();
-
-                // Find back button in toolbar
-                toolbarObj = mDevice.findObject(
-                                By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar"));
-                children = toolbarObj.getChildren();
-                assertTrue(children.get(0).getClassName().equals("android.widget.ImageButton"));
-
-                // Click on back button
-                home = children.get(0);
-
-                home.click();
 
                 // Find assignments view (to verify that main activity is in foreground)
                 BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW)
@@ -303,39 +258,11 @@ public class SoftwareUpdateAppTest {
                 mDevice.findObject(textSelector).click();
 
                 // Find menu item "Get available assignments"
-                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available updates");
                 assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
                 // Click on menu item "Get available assignments"
                 mDevice.findObject(textSelector).click();
-
-                // Find root layout of new activity (AvailableAssignmentsActivity) to verify
-                // that the activity has started and is in foreground
-                frame = By.clazz("android.widget.FrameLayout")
-                                .res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
-
-                // Find "Send GetAvailableAssignments" button
-                send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
-
-                // Click on GetAvailableAssignments" button
-                mDevice.findObject(send).click();
-
-                // Find back button in toolbar
-                toolbarObj = mDevice.findObject(
-                                By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar"));
-                children = toolbarObj.getChildren();
-                assertTrue(children.get(0).getClassName().equals("android.widget.ImageButton"));
-
-                // Click on back button
-                home = children.get(0);
-
-                home.click();
-
-                // Find assignments view (to verify that main activity is in foreground)
-                recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
-                assertTrue(mDevice.wait(Until.hasObject(recycleSelector), LAUNCH_TIMEOUT));
 
                 // Find assignment with name "Spotify"
                 textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name").text("Spotify");
@@ -413,36 +340,11 @@ public class SoftwareUpdateAppTest {
                 mDevice.findObject(textSelector).click();
 
                 // Find menu item "Get available assignments"
-                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available updates");
                 assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
                 // Click on menu item "Get available assignments"
                 mDevice.findObject(textSelector).click();
-
-                // Find root layout of new activity (AvailableAssignmentsActivity) to verify
-                // that the activity has started and is in foreground
-                frame = By.clazz("android.widget.FrameLayout")
-                                .res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
-
-                // Find "Send GetAvailableAssignments" button
-                BySelector send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton")
-                                .enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
-
-                // Click on GetAvailableAssignments" button
-                mDevice.findObject(send).click();
-
-                // Find back button in toolbar
-                toolbarObj = mDevice.findObject(
-                                By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar"));
-                children = toolbarObj.getChildren();
-                assertTrue(children.get(0).getClassName().equals("android.widget.ImageButton"));
-
-                // Click on back button
-                home = children.get(0);
-
-                home.click();
 
                 // Find assignments view (to verify that main activity is in foreground)
                 BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW)
@@ -506,35 +408,11 @@ public class SoftwareUpdateAppTest {
                 mDevice.findObject(textSelector).click();
 
                 // Find menu item "Get available assignments"
-                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available updates");
                 assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
                 // Click on menu item "Get available assignments"
                 mDevice.findObject(textSelector).click();
-
-                // Find root layout of new activity (AvailableAssignmentsActivity) to verify
-                // that the activity has started and is in foreground
-                frame = By.clazz("android.widget.FrameLayout")
-                                .res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
-
-                // Find "Send GetAvailableAssignments" button
-                send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
-
-                // Click on GetAvailableAssignments" button
-                mDevice.findObject(send).click();
-
-                // Find back button in toolbar
-                toolbarObj = mDevice.findObject(
-                                By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar"));
-                children = toolbarObj.getChildren();
-                assertTrue(children.get(0).getClassName().equals("android.widget.ImageButton"));
-
-                // Click on back button
-                home = children.get(0);
-
-                home.click();
 
                 // Find assignments view (to verify that main activity is in foreground)
                 recycleSelector = By.clazz(CLASS_RECYCLER_VIEW).res("com.volvocars.softwareupdateapp:id/recycler_view");
@@ -623,36 +501,11 @@ public class SoftwareUpdateAppTest {
                 mDevice.findObject(textSelector).click();
 
                 // Find menu item "Get available assignments"
-                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available assignments");
+                textSelector = By.clazz(CLASS_TEXT_VIEW).res("android:id/title").text("Get available updates");
                 assertTrue(mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT));
 
                 // Click on menu item "Get available assignments"
                 mDevice.findObject(textSelector).click();
-
-                // Find root layout of new activity (AvailableAssignmentsActivity) to verify
-                // that the activity has started and is in foreground
-                frame = By.clazz("android.widget.FrameLayout")
-                                .res("com.volvocars.softwareupdateapp:id/availableAssignmentsRootLayout").enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(frame), LAUNCH_TIMEOUT));
-
-                // Find "Send GetAvailableAssignments" button
-                BySelector send = By.clazz(CLASS_BUTTON).res("com.volvocars.softwareupdateapp:id/sendButton")
-                                .enabled(true);
-                assertTrue(mDevice.wait(Until.hasObject(send), LAUNCH_TIMEOUT));
-
-                // Click on GetAvailableAssignments" button
-                mDevice.findObject(send).click();
-
-                // Find back button in toolbar
-                toolbarObj = mDevice.findObject(
-                                By.clazz("android.view.ViewGroup").res("com.volvocars.softwareupdateapp:id/toolbar"));
-                children = toolbarObj.getChildren();
-                assertTrue(children.get(0).getClassName().equals("android.widget.ImageButton"));
-
-                // Click on back button
-                home = children.get(0);
-
-                home.click();
 
                 BySelector recycleSelector = By.clazz(CLASS_RECYCLER_VIEW)
                                 .res("com.volvocars.softwareupdateapp:id/recycler_view");

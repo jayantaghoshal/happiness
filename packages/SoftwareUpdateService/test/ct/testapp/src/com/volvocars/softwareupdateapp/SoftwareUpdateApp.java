@@ -26,6 +26,8 @@ import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
 import com.volvocars.cloudservice.SoftwareAssignment;
+import com.volvocars.cloudservice.AssignmentType;
+import com.volvocars.cloudservice.Query;
 import com.volvocars.softwareupdate.*;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import java.util.*;
@@ -158,10 +160,26 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-            case R.id.getAvailableItem:
+            case R.id.getUpdatesItem:
                 try {
-                    Intent intent = new Intent(context, AvailableAssignmentsActivity.class);
-                    startActivity(intent);
+                    Log.v(LOG_TAG, "Sending GetSoftwareUpdates");
+                    //Intent intent = new Intent(context, AvailableAssignmentsActivity.class);
+                    //startActivity(intent);
+                    Query query = new Query();
+                    softwareUpdateManager.GetSoftwareAssignment(query, AssignmentType.UPDATE);
+                    Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareUpdates" , Snackbar.LENGTH_SHORT).show();
+                    return true;
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "GetSoftwareAssignments failed, remote exception");
+                }
+                case R.id.getAccessoriesItem:
+                try {
+                    Log.v(LOG_TAG, "Sending GetSoftwareAccessories");
+                    //Intent intent = new Intent(context, AvailableAssignmentsActivity.class);
+                    //startActivity(intent);
+                    Query query = new Query();
+                    softwareUpdateManager.GetSoftwareAssignment(query, AssignmentType.ACCESSORY);
+                    Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareAccessories" , Snackbar.LENGTH_SHORT).show();
                     return true;
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "GetSoftwareAssignments failed, remote exception");

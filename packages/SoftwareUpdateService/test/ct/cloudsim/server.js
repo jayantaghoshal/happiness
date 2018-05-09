@@ -25,6 +25,8 @@ router.render = function (req, res) {
     tag = "software_management";
   } else if (req._parsedUrl.pathname == '/availableUpdates') {
     tag = "available_updates";
+  } else if (req._parsedUrl.pathname == '/availableAccessories') {
+    tag = "available_accessories";
   } else if (req._parsedUrl.pathname == '/commission') {
     tag = "commission";
   } else if (req._parsedUrl.pathname == '/downloads') {
@@ -45,55 +47,99 @@ server.post('/availableUpdates', function (req, res, next) {
 var counter = -1;
 server.post('/commission', function (req, res, next) {
 
-  var t = db.get('availableUpdates').get('software');
+  var updates = db.get('availableUpdates').get('software');
+  var accessories = db.get('availableAccessories').get('software');
   var found = false;
-  for (i = 0; i < t.value().length; i++) {
-    if (t.value()[i]['id'] == req.body.id) {
+
+  for (i = 0; i < updates.value().length; i++) {
+    if (updates.value()[i]['id'] == req.body.id) {
       found = true;
-      var tmp = t.value()[i];
+      var tmp = updates.value()[i];
 
       counter++;
 
-      var installation_order_data = {};
-      installation_order_data['id'] = counter.toString();
-      installation_order_data['status'] = "READY";
-      installation_order_data['created_by'] = "1FTKR1EDXBPB10452";
-      installation_order_data['created'] = "2002-05-30T09:00:00";
-      installation_order_data['downloads_uri'] = "/downloads/";
-      installation_order_data['install_notifications_uri'] = "installnotifications";
-      installation_order_data['installation_report_uri'] = "/installationreport";
+      addInstallationOrder(tmp, counter.toString());
 
-      tmp['installation_order'] = installation_order_data
-      tmp['status'] = "COMMISSIONED";
-      db.get('availableUpdates').get('software').write();
-
-      var d = db.get('preDownloadInfo');
-      for (j = 0; j < d.value().length; j++) {
-        if (d.value()[j]['id'] == req.body.id) {
-          var tmpObj = Object.assign({}, d.value()[j]);
-          tmpObj['id'] = req.body.id;
-          tmpObj['installation_order_id'] = counter.toString();
-          db.get('downloads').push(tmpObj).write();
-          break;
+      for (i = 0; i < updates.value().length; i++) {
+        if (updates.value()[i]['id'] != req.body.id) {
+          var tmp2 = updates.value()[i];
+          tmp2['status'] = "NON-COMMISSIONABLE";
         }
       }
+
+      for (i = 0; i < accessories.value().length; i++) {
+        var tmp2 = accessories.value()[i];
+        tmp2['status'] = "NON-COMMISSIONABLE";
+      }
+
+      db.get('availableUpdates').get('software').write();
+      db.get('availableAccessories').get('software').write();
+
       break;
     }
   }
 
-  if (found) {
-    for (i = 0; i < t.value().length; i++) {
-      if (t.value()[i]['id'] != req.body.id) {
-        var tmp2 = t.value()[i];
-        tmp2['status'] = "NON-COMMISSIONABLE";
+  if (!found) {
+    for (i = 0; i < accessories.value().length; i++) {
+      if (accessories.value()[i]['id'] == req.body.id) {
+        found = true;
+        var tmp = accessories.value()[i];
+
+        counter++;
+
+        addInstallationOrder(tmp, counter.toString());
+
+        for (i = 0; i < accessories.value().length; i++) {
+          if (accessories.value()[i]['id'] != req.body.id) {
+            var tmp2 = accessories.value()[i];
+            tmp2['status'] = "NON-COMMISSIONABLE";
+          }
+        }
+
+        for (i = 0; i < updates.value().length; i++) {
+          var tmp2 = updates.value()[i];
+          tmp2['status'] = "NON-COMMISSIONABLE";
+        }
+
+        db.get('availableUpdates').get('software').write();
+        db.get('availableAccessories').get('software').write();
+
+        break;
       }
     }
-    db.get('availableUpdates').get('software').write();
+  }
+
+  if (found) {
+    var d = db.get('preDownloadInfo');
+    for (j = 0; j < d.value().length; j++) {
+      if (d.value()[j]['id'] == req.body.id) {
+        var tmpObj = Object.assign({}, d.value()[j]);
+        tmpObj['id'] = req.body.id;
+        tmpObj['installation_order_id'] = counter.toString();
+        db.get('downloads').push(tmpObj).write();
+        break;
+      }
+    }
   }
 
   req.method = 'GET';
   next();
 });
+
+function addInstallationOrder(obj, id) {
+  var installation_order_data = {};
+  installation_order_data['id'] = id;
+  installation_order_data['status'] = "READY";
+  installation_order_data['created_by'] = "1FTKR1EDXBPB10452";
+  installation_order_data['created'] = "2002-05-30T09:00:00";
+  installation_order_data['downloads_uri'] = "/downloads/";
+  installation_order_data['install_notifications_uri'] = "installnotifications";
+  installation_order_data['installation_report_uri'] = "/installationreport";
+
+  obj['installation_order'] = installation_order_data
+  obj['status'] = "COMMISSIONED";
+  return obj;
+}
 
 server.get('/downloads', function (req, res, next) {
   var d = db.get('downloads');
@@ -192,6 +238,7 @@ server.post('/installationReport', function (req, res, next) {
   var tag = "installation_order_id";
   obj[tag] = getValue(xml, tag);
   var installation_order_id = getValue(xml, tag);
+  console.log(installation_order_id)
 
   tag = "timestamp";
   obj[tag] = getValue(xml, tag);
@@ -313,7 +360,6 @@ server.post('/installationReport', function (req, res, next) {
       }
     }
   }
-
   db.get('availableUpdates').get('software').write();
   t = db.get('availableUpdates').get('software');
 
@@ -323,6 +369,26 @@ server.post('/installationReport', function (req, res, next) {
   }
 
   db.get('availableUpdates').get('software').write();
+
+  //"Close" installation order by removing from available accessories and make other assignments COMMISSIONABLE
+  var t = db.get('availableAccessories').get('software');
+  for (i = 0; i < t.value().length; i++) {
+    if (t.value()[i]['status'] == 'COMMISSIONED') {
+      if (t.value()[i]['installation_order']['id'] == installation_order_id) {
+        var tmp = t.value()[i];
+        t.remove(tmp).write();
+      }
+    }
+  }
+  db.get('availableAccessories').get('software').write();
+  t = db.get('availableAccessories').get('software');
+
+  for (i = 0; i < t.value().length; i++) {
+    var tmp2 = t.value()[i];
+    tmp2['status'] = "COMMISSIONABLE";
+  }
+
+  db.get('availableAccessories').get('software').write();
 });
 
 server.get('/availableUpdates', function (req, res, next) {
@@ -355,6 +421,39 @@ server.get('/availableUpdates', function (req, res, next) {
   }
 
   var str = js2xmlparser.parse("available_updates", tmpObj);
+  return res.send(str);
+});
+
+server.get('/availableAccessories', function (req, res, next) {
+  var d = db.get('availableAccessories').get('software');
+  var tmpObj = {};
+  if (req.query.id) {
+    for (i = 0; i < d.value().length; i++) {
+      if (req.query.installation_order_id && d.value()[i]['installation_order']) {
+        if ((d.value()[i]['id'] == req.query.id) && (d.value()[i]['installation_order']['id'] == req.query.installation_order_id)) {
+          tmpObj['software'] = d.value()[i];
+        }
+      }
+      else if (!req.query.installation_order_id) {
+        if (d.value()[i]['id'] == req.query.id) {
+          tmpObj['software'] = d.value()[i];
+        }
+      }
+    }
+  }
+
+  else if (req.query.installation_order_id) {
+    for (i = 0; i < d.value().length; i++) {
+      if ((d.value()[i]['installation_order']) && (d.value()[i]['installation_order']['id'] == req.query.installation_order_id)) {
+        tmpObj['software'] = d.value()[i];
+      }
+    }
+  }
+  else {
+    tmpObj['software'] = d.value()
+  }
+
+  var str = js2xmlparser.parse("available_accessories", tmpObj);
   return res.send(str);
 });
 

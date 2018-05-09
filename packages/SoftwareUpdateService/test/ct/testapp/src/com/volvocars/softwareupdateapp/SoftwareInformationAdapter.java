@@ -6,6 +6,7 @@
 package com.volvocars.softwareupdateapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
         public TextView swId, name, desc, installationId, installationStatus, state, downloads, downloadedResources;
         public LinearLayout swIdLayout, installationIdLayout, installationStatusLayout, downloadsLayout,
                 downloadedResourcesLayout;
-        public ImageView overflow;
+        public ImageView overflow, icon;
         public CardView cardView;
         private boolean moreInfo = false;
         private boolean showInstallNotifcationItem = false;
@@ -54,6 +55,7 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             installationStatusLayout = (LinearLayout) view.findViewById(R.id.installationStatusLayout);
             state = (TextView) view.findViewById(R.id.state);
             overflow = (ImageView) view.findViewById(R.id.overflow);
+            icon = (ImageView) view.findViewById(R.id.icon);
             cardView = (CardView) view.findViewById(R.id.assignmentCV);
         }
     }
@@ -199,6 +201,14 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                 }
             }
         });
+
+        if (swInfo.softwareAssignment.deliverableType == SoftwareAssignment.DeliverableType.NEW) {
+            holder.icon.setImageResource(R.drawable.outline_add_black_24dp);
+        }
+        else if (swInfo.softwareAssignment.deliverableType == SoftwareAssignment.DeliverableType.UPDATE) {
+            holder.icon.setImageResource(R.drawable.ic_system_update_black_24dp);
+        }
+
     }
 
     @Override

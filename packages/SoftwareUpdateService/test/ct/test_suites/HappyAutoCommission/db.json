@@ -7,7 +7,6 @@
     "host": "localhost",
     "port": 3000
   },
-
   "features-1": {
     "this": "features-1",
     "feature": [
@@ -19,18 +18,15 @@
       }
     ]
   },
-
   "softwaremanagement-1": {
     "this": "softwaremanagement-1",
     "available_updates": "/softwaremanagement-1/availableUpdates",
     "available_accessories": "/softwaremanagement-1/availableAccessories",
     "map_updates": "/softwaremanagement-1/mapUpdates",
     "downloads": "/softwaremanagement-1/downloads",
-    "delete_notification": "/softwaremanagement-1/deleteNotification",
-    "pending_installations": "/softwaremanagement-1/pendingInstallations"
+    "delete_notification": "/softwaremanagement-1/deleteNotification"
   },
-
-   "availableUpdates": {
+  "availableUpdates": {
     "@": {
       "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/available_updates",
       "xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",
@@ -47,6 +43,7 @@
         },
         "size": "366.4",
         "status": "COMMISSIONABLE",
+        "type": "SYSTEM",
         "commission_uri": "commission"
       },
       {
@@ -63,20 +60,11 @@
         },
         "size": "366.4",
         "status": "COMMISSIONABLE",
+        "type": "SYSTEM",
         "commission_uri": "commission"
       }
     ]
   },
-  "pendingInstallations": {
-    "@": {
-      "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/pending_installations",
-      "xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",
-      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
-    },
-    "this": "pendingInstallations",
-    "installation_order": []
-  },
-
   "commission": {
     "id": "466c6c25-4169-480c-ad0b-ba37cc321ade",
     "client_id": "FTKR1EDXBPB10452",
@@ -84,11 +72,58 @@
   },
   "preDownloadInfo": [
     {
-      "id": "466c6c25-4169-480c-ad0b-ba37cc321ce9"
+      "id": "10",
+      "downloads": {
+        "file": [
+          "/test/helloworld.txt"
+        ]
+      }
     },
     {
-      "id": "466c6c25-4169-480c-ad0b-ba37cc321aaa"
+      "id": "20",
+      "downloads": {
+        "file": [
+          "/test/helloworld.txt",
+          "/test/helloworld2.txt"
+        ]
+      }
+    },
+    {
+      "id": "4a50f73-a51b-4301-bf52-d62629be3807",
+      "downloads": {
+        "file": [
+          "/test/helloworld2.txt"
+        ]
+      }
     }
   ],
-  "downloads": []
+  "availableAccessories": {
+    "@": {
+      "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/available_accessories",
+      "xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",
+      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+    },
+    "this": "availableaccessories",
+    "software": [
+      {
+        "id": "4a50f73-a51b-4301-bf52-d62629be3807",
+        "name": "Adaptive cruise control",
+        "short_description": "Ease your driving!",
+        "long_description": {
+          "textblock": "Helps you maintain an even speed combined with a pre-selected time interval to the vehicle ahead:",
+          "listelement": [
+            "Making your drive safe",
+            "Making your drive easier"
+          ]
+        },
+        "size": "23.5",
+        "status": "COMMISSIONABLE",
+        "type": "ACCESSORY",
+        "commission_uri": "commission"
+      }
+    ]
+  },
+  "downloads": [],
+  "installNotification": [],
+  "installationReport": []
 }

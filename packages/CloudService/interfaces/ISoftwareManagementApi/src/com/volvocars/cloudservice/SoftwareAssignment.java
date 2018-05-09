@@ -18,7 +18,7 @@ public class SoftwareAssignment implements Parcelable {
     }
 
     public enum DeliverableType {
-        UNKNOWN, UPDATE
+        UNKNOWN, UPDATE, NEW
     }
 
     public enum InstallationType {
@@ -91,7 +91,7 @@ public class SoftwareAssignment implements Parcelable {
     public Status status = Status.UNKNOWN;
     // Software type can be either: SYSTEM, ACCESSORY
     public Type type = Type.UNKNOWN;
-    // Deliverable type can be either: UPDATE
+    // Deliverable type can be either: UPDATE, NEW (depending on type (need a check for this?))
     public DeliverableType deliverableType = DeliverableType.UNKNOWN;
     // Installation type can be either: BOOT, NORMAL
     public InstallationType installationType = InstallationType.UNKNOWN;
@@ -146,7 +146,7 @@ public class SoftwareAssignment implements Parcelable {
 
     @Override
     public String toString() {
-        String string = id + "\n" + name + "\n" + shortDescription + "\n" + status + "\n" + installationOrder.status;
+        String string = "id: " + id + "\n name: " + name + "\n shortDescription: " + shortDescription + "\n status: " + status + "\n installationOrder.status: " + installationOrder.status + "\n deliverableType: " + deliverableType.toString();
         return string;
     }
 
@@ -218,6 +218,8 @@ public class SoftwareAssignment implements Parcelable {
                 return DeliverableType.UNKNOWN;
             case "UPDATE":
                 return DeliverableType.UPDATE;
+            case "NEW":
+                return DeliverableType.NEW;
             default:
                 return DeliverableType.UNKNOWN;
             }

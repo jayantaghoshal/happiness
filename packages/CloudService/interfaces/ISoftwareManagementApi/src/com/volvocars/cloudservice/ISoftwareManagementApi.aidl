@@ -1,5 +1,6 @@
 package com.volvocars.cloudservice;
 
+import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 import com.volvocars.cloudservice.SoftwareAssignment;
@@ -16,9 +17,10 @@ oneway interface ISoftwareManagementApi {
     /**
      * Get available assignments with specified query parameters
      * @param query Query
+     * @param type AssignmentType (possible values: UPDATE or ACCESSORY)
      * @param callback
      */
-    void GetSoftwareAssignment(in Query query, in ISoftwareManagementApiCallback callback);
+    void GetSoftwareAssignment(in Query query, in AssignmentType type, in ISoftwareManagementApiCallback callback);
 
     /**
      * Issue a commission of an SoftwareAssignment.

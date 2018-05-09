@@ -44,7 +44,8 @@
         "size": "366.4",
         "status": "COMMISSIONABLE",
         "type": "SYSTEM",
-        "commission_uri": "commission"
+        "commission_uri": "commission",
+        "deliverable_type": "UPDATE"
       },
       {
         "id": "20",
@@ -61,7 +62,9 @@
         "size": "366.4",
         "status": "COMMISSIONABLE",
         "type": "SYSTEM",
-        "commission_uri": "commission"
+        "commission_uri": "commission",
+        "deliverable_type": "UPDATE"
+
       }
     ]
   },
@@ -87,8 +90,43 @@
           "/test/helloworld2.txt"
         ]
       }
+    },
+    {
+      "id": "4a50f73-a51b-4301-bf52-d62629be3807",
+      "downloads": {
+        "file": [
+          "/test/helloworld2.txt"
+        ]
+      }
     }
   ],
+  "availableAccessories": {
+    "@": {
+      "xmlns": "http://schemas.volvocars.biz/conncar/foundation_services/software_management/available_accessories",
+      "xmlns:ds": "http://www.w3.org/2000/09/xmldsig#",
+      "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance"
+    },
+    "this": "availableaccessories",
+    "software": [
+      {
+        "id": "4a50f73-a51b-4301-bf52-d62629be3807",
+        "name": "Adaptive cruise control",
+        "short_description": "Ease your driving!",
+        "long_description": {
+          "textblock": "Helps you maintain an even speed combined with a pre-selected time interval to the vehicle ahead:",
+          "listelement": [
+            "Making your drive safe",
+            "Making your drive easier"
+          ]
+        },
+        "size": "23.5",
+        "status": "COMMISSIONABLE",
+        "type": "ACCESSORY",
+        "commission_uri": "commission",
+        "deliverable_type": "NEW"
+      }
+    ]
+  },
   "downloads": [],
   "installNotification": [],
   "installationReport": []

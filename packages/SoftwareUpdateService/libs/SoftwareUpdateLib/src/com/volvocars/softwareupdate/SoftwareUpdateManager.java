@@ -13,6 +13,7 @@ import android.os.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.volvocars.cloudservice.AssignmentType;;
 import com.volvocars.cloudservice.Query;
 /**
  * Library/wrapper class that is used to access SoftwareUpdateManager features
@@ -85,9 +86,9 @@ public class SoftwareUpdateManager implements ServiceConnection {
         }
     }
 
-    public void GetSoftwareAssignment(Query query) throws RemoteException {
+    public void GetSoftwareAssignment(Query query, AssignmentType type) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.GetSoftwareAssignment(query);
+            softwareUpdateManager.GetSoftwareAssignment(query, type);
         }
     }
 

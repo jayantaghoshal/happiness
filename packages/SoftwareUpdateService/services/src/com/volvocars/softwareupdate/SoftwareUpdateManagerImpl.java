@@ -9,6 +9,7 @@ import android.util.Log;
 
 import android.os.RemoteException;
 
+import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.CommissionElement;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.SoftwareAssignment;
@@ -177,8 +178,8 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void GetSoftwareAssignment(Query query) {
-        service.GetSoftwareAssignment(query);
+    public void GetSoftwareAssignment(Query query, AssignmentType type) {
+        service.GetSoftwareAssignment(query, type);
     }
 
     @Override

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
+import com.volvocars.cloudservice.AssignmentType;;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.DownloadSummary;
 import com.volvocars.cloudservice.InstallationSummary;
@@ -70,7 +71,10 @@ public class SoftwareUpdateService extends Service {
 
     private int state = 0; // Dummy state
 
-    private ArrayList<SoftwareInformation> softwareInformationList;
+    private ArrayList<SoftwareInformation> softwareInformationListUpdates;
+    private ArrayList<SoftwareInformation> softwareInformationListAccessory;
+    private ArrayList<SoftwareInformation> mergedSoftwareInformationList;
+
     private Map<String, Boolean> settings;
     private SoftwareManagementApiCallback swapiCallback;
 
@@ -129,7 +133,10 @@ public class SoftwareUpdateService extends Service {
         settingsStorageManager = new SettingsStorageManager(context, settingsConnectionCallback);
         settingsCallback = new SettingsStorageManagerCallback(this);
 
-        softwareInformationList = new ArrayList();
+        softwareInformationListUpdates = new ArrayList();
+        softwareInformationListAccessory = new ArrayList();
+        mergedSoftwareInformationList = new ArrayList();
+
         settings = new HashMap();
 
         installationMaster = new InstallationMaster(this);
@@ -162,17 +169,17 @@ public class SoftwareUpdateService extends Service {
     }
 
     public ArrayList<SoftwareInformation> GetSoftwareInformationList() {
-        return softwareInformationList;
+        return mergedSoftwareInformationList;
     }
 
     public Map<String, Boolean> GetSettings() {
         return settings;
     }
 
-    public void GetSoftwareAssignment(Query query) {
+    public void GetSoftwareAssignment(Query query, AssignmentType type) {
         if (swapi != null) {
             try {
-                swapi.GetSoftwareAssignment(query, swapiCallback);
+                swapi.GetSoftwareAssignment(query, type, swapiCallback);
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "GetSoftwareAssignmentList failed: RemoteException [" + e.getMessage() + "]");
             }
@@ -181,13 +188,15 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void onNewSoftwareAssignmentList(List<SoftwareAssignment> software_list) {
+    public void onNewSoftwareAssignmentList(List<SoftwareAssignment> software_list, AssignmentType type) {
         // Check if software has been removed from list (and downloaded) to clear local
         // storage
+        UpdateSoftwareList(software_list, type);
         clearStorageOnRemovedSoftwareAssignment(software_list);
 
         // Check status of software assignment if there is an action to be taken
         for (SoftwareAssignment software : software_list) {
+
             if (SoftwareAssignment.Status.COMMISSIONED == software.status) {
                 doGetDownloadInfo(software.installationOrder);
             }
@@ -197,11 +206,11 @@ public class SoftwareUpdateService extends Service {
             }
         }
 
-        UpdateSoftwareList(software_list);
     }
 
     public void clearStorageOnRemovedSoftwareAssignment(List<SoftwareAssignment> software_list) {
-        for (SoftwareInformation swInfo : softwareInformationList) {
+
+        for (SoftwareInformation swInfo : mergedSoftwareInformationList) {
             boolean found = false;
             for (SoftwareAssignment swAssignment : software_list) {
                 if (swInfo.softwareAssignment.id.equals(swAssignment.id)) {
@@ -224,6 +233,7 @@ public class SoftwareUpdateService extends Service {
 
             }
         }
+
     }
 
     private void delete(File file) throws IOException {
@@ -246,9 +256,10 @@ public class SoftwareUpdateService extends Service {
         if (swapi != null) {
             try {
                 Log.v(LOG_TAG, "CommissionAssignment called with uuid: " + uuid + " and reason: " + reason.name());
-                for (SoftwareInformation software : softwareInformationList) {
-                    // check if assignment is valid for commssion (i.e in status COMMISSONABLE)
+
+                for (SoftwareInformation software : mergedSoftwareInformationList) {
                     if (software.softwareAssignment.id.equals(uuid)) {
+                        // check if assignment is valid for commission (i.e in status COMMISSONABLE)
                         if (software.softwareAssignment.status.equals(SoftwareAssignment.Status.COMMISSIONABLE)) {
                             CommissionElement commissionElement = new CommissionElement();
                             commissionElement.id = uuid;
@@ -263,6 +274,7 @@ public class SoftwareUpdateService extends Service {
                         }
                     }
                 }
+
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "CommissionAssignment failed: RemoteException [" + e.getMessage() + "]");
             }
@@ -375,34 +387,41 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
-    public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments) {
-        Log.v(LOG_TAG, "UpdateSoftwareList: Clearing softwareInformationList");
-        softwareInformationList.clear();
-        Log.v(LOG_TAG,
-                "UpdateSoftwareList: Before update, softwareInformationList.size = " + softwareInformationList.size());
-
-        for (SoftwareAssignment assignment : softwareAssignments) {
-            boolean found = false;
-            for (SoftwareInformation information : softwareInformationList) {
-                if (assignment.id.equals(information.softwareAssignment.id)) {
-                    found = true;
-                    break;
-                }
+    public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments, AssignmentType type) {
+        Log.v(LOG_TAG, "UpdateSoftwareList of type " + type);
+        if (AssignmentType.UPDATE == type) {
+            Log.v(LOG_TAG, "UpdateSoftwareList: Before update, softwareInformationListUpdates.size = "
+                    + softwareInformationListUpdates.size());
+            softwareInformationListUpdates.clear();
+            for (SoftwareAssignment assignment : softwareAssignments) {
+                softwareInformationListUpdates.add(new SoftwareInformation(assignment));
             }
-            if (!found) {
-                softwareInformationList.add(new SoftwareInformation(assignment));
+            Log.v(LOG_TAG, "UpdateSoftwareList: After update, softwareInformationListUpdates.size = "
+                    + softwareInformationListUpdates.size());
+        } else if (AssignmentType.ACCESSORY == type) {
+            Log.v(LOG_TAG, "UpdateSoftwareList: Before update, softwareInformationListAccessory.size = "
+                    + softwareInformationListAccessory.size());
+            softwareInformationListAccessory.clear();
+            for (SoftwareAssignment assignment : softwareAssignments) {
+                softwareInformationListAccessory.add(new SoftwareInformation(assignment));
             }
+            Log.v(LOG_TAG, "UpdateSoftwareList: After update, softwareInformationListAccessory.size = "
+                    + softwareInformationListAccessory.size());
+        } else {
+            Log.w(LOG_TAG, "Unknown AssignmentType: " + type);
         }
 
-        Log.v(LOG_TAG,
-                "UpdateSoftwareList: After update, softwareInformationList.size = " + softwareInformationList.size());
+        mergedSoftwareInformationList.clear();
+        mergedSoftwareInformationList.addAll(softwareInformationListUpdates);
+        mergedSoftwareInformationList.addAll(softwareInformationListAccessory);
 
-        softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
+        softwareUpdateManager.UpdateSoftwareList(mergedSoftwareInformationList);
     }
 
     public void UpdateSoftwareList(DownloadInfo downloadInfo) {
         boolean found = false;
-        for (SoftwareInformation information : softwareInformationList) {
+
+        for (SoftwareInformation information : mergedSoftwareInformationList) {
             if (downloadInfo.installationOrderId.equals(information.softwareAssignment.installationOrder.id)) {
                 found = true;
                 information.AddDownloadInfo(downloadInfo);
@@ -415,12 +434,15 @@ public class SoftwareUpdateService extends Service {
                     + "] not found in list which is weird...");
         }
 
-        softwareUpdateManager.UpdateSoftwareList(softwareInformationList);
+        ArrayList<SoftwareInformation> mergedList = new ArrayList<>(softwareInformationListUpdates);
+        mergedList.addAll(softwareInformationListAccessory);
+        softwareUpdateManager.UpdateSoftwareList(mergedList);
     }
 
     public void UpdateSoftwareState(String uuid, SoftwareInformation.SoftwareState state) {
         boolean found = false;
-        for (SoftwareInformation information : softwareInformationList) {
+
+        for (SoftwareInformation information : mergedSoftwareInformationList) {
             if (uuid.equals(information.softwareAssignment.id)
                     || uuid.equals(information.softwareAssignment.installationOrder.id)) {
                 found = true;
@@ -429,6 +451,7 @@ public class SoftwareUpdateService extends Service {
                 break;
             }
         }
+
         if (!found) {
             Log.v(LOG_TAG, "UpdateSoftwareState, uuid [" + uuid + "] not found in list which is weird...");
         }
@@ -447,7 +470,7 @@ public class SoftwareUpdateService extends Service {
     public void showInstallationPopup(String installationOrderId) {
         Log.v(LOG_TAG, "showInstallationPopup,  Note: Temporary solution until framework for popups is in place!");
 
-        for (SoftwareInformation information : softwareInformationList) {
+        for (SoftwareInformation information : mergedSoftwareInformationList) {
             if (installationOrderId.equals(information.softwareAssignment.installationOrder.id)) {
                 Intent intent = new Intent(this, InstallationPopup.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
