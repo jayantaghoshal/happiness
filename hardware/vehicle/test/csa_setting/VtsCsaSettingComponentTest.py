@@ -170,14 +170,18 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         vehmod.UsgModSts =  DE.UsgModSts1.UsgModAbdnd
         self.fr.send_VehModMngtGlbSafe1(vehmod)
 
-        # csa_on.touch() # Stress the function as this button shouldnt change the output ####################
         vc.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (IN-ACTIVE using UsgMod)")
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (IN-ACTIVE using UsgMod)")
 
+        csa_on.touch() # Stress the function as this button shouldnt change the output ####################
+        vc.sleep(self.delay)
 
+        logging.info("EVALUATE")
+        vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (No Change on Touch in IN-ACTIVE State)")
+        asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (No Change on Touch in IN-ACTIVE State)")
 
         logging.info("----------------------------------------------------------------------------------------------------------")
         logging.info("Test set function ACTIVE using UsgMod")
@@ -192,6 +196,17 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 1, "CURVE_SPEED_ADAPTION_ON (Active using UsgMod)")
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.On, "AccAdprTurnSpdActv (ACTIVE using UsgMod)")
 
+        csa_off.touch()
+        vc.sleep(self.delay)
+
+        vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (Change on Touch in ACTIVE MODE)")
+        asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (Change on Touch in ACTIVE MODE)")
+
+        csa_on.touch()
+        vc.sleep(self.delay)
+
+        vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 1, "CURVE_SPEED_ADAPTION_ON (Change on Touch in ACTIVE State)")
+        asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.On, "AccAdprTurnSpdActv (Change on Touch in ACTIVE State)")
 
 
         logging.info("----------------------------------------------------------------------------------------------------------")
@@ -208,6 +223,12 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (function SYSTEM-ERROR using CrvtSpdAdpvSts)")
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (function SYSTEM-ERROR using CrvtSpdAdpvSts)")
 
+        csa_on.touch() # Stress the function as this button shouldnt change the output ####################
+        vc.sleep(self.delay)
+
+        logging.info("EVALUATE")
+        vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (No Change on Touch in Error State)")
+        asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (No Change on Touch in Error State)")
 
 
         logging.info("----------------------------------------------------------------------------------------------------------")
