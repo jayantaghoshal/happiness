@@ -4,10 +4,10 @@
 import logging
 import os
 import time
-from shipit.process_tools import check_output_logged
-
+from shipit.process_tools import ProcessRunner
 
 logger = logging.getLogger(__name__)
+
 
 class FlashResult():
     def __init__(self):
@@ -26,7 +26,8 @@ def flash_ihu(max_attempts=3, power_cycle_length=120):
         try:
             startFlashTime = time.time()
             result.attempts += 1
-            check_output_logged(['ihu_update', '--profile=ci-machinery'])
+            runner = ProcessRunner(childloglevel=logging.DEBUG)
+            runner.check_output_logged(['ihu_update', '--profile=ci-machinery'])
             logger.debug("Updating IHU complete")
             elapsedFlashTime = time.time() - startFlashTime
             result.info = "Flashing IHU complete"

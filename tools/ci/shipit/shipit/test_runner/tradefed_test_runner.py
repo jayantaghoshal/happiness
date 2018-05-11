@@ -4,9 +4,7 @@
 # This file is covered by LICENSE file in the root of this project
 
 import logging
-import logging.config
 import re
-import sys
 from shipit.process_tools import check_output_logged
 from shipit.test_runner.test_types import TestFailedException, ResultData
 import xml.etree.cElementTree as ET
@@ -14,11 +12,12 @@ import concurrent.futures
 import zipfile
 import os
 import subprocess
-import typing
+
+logger = logging.getLogger(__name__)
 
 def tradefed_run(test_path: str, max_test_time_sec: int):
     xml_path = os.path.join(test_path, "AndroidTest.xml")
-    logging.info("Running tradefed test from xml %s" % xml_path)
+    logger.info("Running tradefed test from xml %s" % xml_path)
     tradefed_run_xml(xml_path, max_test_time_sec)
     return ResultData(True, "", dict(), dict(), [])   #TODO: ...
 

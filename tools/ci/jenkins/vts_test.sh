@@ -43,7 +43,7 @@ set +e
 
 # Run vts tests
 #TODO Copy this to the above if statement as the command for cts differ a bit?
-time vts-tradefed run commandAndExit "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/test/vts-volvo.xml --skip-all-system-status-check --skip-preconditions #--abi x86_64
+time vts-tradefed run commandAndExit "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/test/vts-volvo.xml --skip-all-system-status-check --skip-preconditions
 teststatus=$? #This will be 0 even if tests fail. Only nonzero on crashes
 
 # Upload results to MongoDB

@@ -7,15 +7,11 @@ import glob
 import traceback
 import logging
 import datetime
-import multiprocessing
 import shlex
-from typing import List, Set, Tuple
+from typing import List, Set
 from os.path import join as pathjoin
 import xml.etree.ElementTree as ET
-from shipit.test_runner import vts_test_runner as vts_test_run
-from shipit.test_runner import tradefed_test_runner
-from shipit.test_runner import test_types
-from shipit.test_runner.test_types import TestFailedException
+from shipit.test_runner import vts_test_runner, tradefed_test_runner, test_types
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 import subprocess
 import re
@@ -43,35 +39,35 @@ class NamedTestResult():
 def build_testcases(tests_to_run: List[test_types.IhuBaseTest]):
     all_vts_tests = [t for t in tests_to_run if isinstance(t, test_types.VTSTest)]
     all_tradefed_tests = [t for t in tests_to_run if isinstance(t, test_types.TradefedTest)]
-    logging.debug("VTS tests: %r" % all_vts_tests)
-    logging.debug("Tradefed tests: %r" % all_vts_tests)
+    logger.debug("VTS tests: %r" % all_vts_tests)
+    logger.debug("Tradefed tests: %r" % all_vts_tests)
 
     test_modules_to_build = (
         [t.test_root_dir for t in all_vts_tests] +
         [t.test_root_dir for t in all_tradefed_tests])
 
     if len(test_modules_to_build) > 0:
-        print(test_modules_to_build)
+        logger.debug(str(test_modules_to_build))
         test_modules_space_separated = " ".join((shlex.quote(t) for t in test_modules_to_build))
         try:
             run_in_lunched_env("atest --rebuild-module-info --build %s" % (test_modules_space_separated), cwd=aosp_root)
         except subprocess.CalledProcessError as cpe:
-            print(cpe.output.decode())
-            print(cpe.stderr.decode())
-            print("%s Failed to build test cases" % (os.linesep * 3))
+            logger.error(cpe.output.decode())
+            logger.error(cpe.stderr.decode())
+            logger.error("%s Failed to build test cases" % (os.linesep * 3))
             sys.exit(-1)
 
 
 def run_test(test: test_types.IhuBaseTest, max_testtime_sec: int) -> test_types.ResultData:
     try:
         if isinstance(test, test_types.AndroidVTS):
-            print(test)
-            return vts_test_run.vts_tradefed_run_module(test.module_name, None, max_test_time_sec=max_testtime_sec)
+            logger.debug(str(test))
+            return vts_test_runner.vts_tradefed_run_module(test.module_name, None, max_test_time_sec=max_testtime_sec)
         elif isinstance(test, test_types.VTSTest):
-            print(test)
-            return vts_test_run.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir), test.tests_to_run, max_testtime_sec)
+            logger.debug(str(test))
+            return vts_test_runner.vts_tradefed_run_file(pathjoin(aosp_root, test.test_root_dir), test.tests_to_run, max_testtime_sec)
         elif isinstance(test, test_types.TradefedTest):
-            print(test)
+            logger.debug(str(test))
             return tradefed_test_runner.tradefed_run(pathjoin(aosp_root, test.test_root_dir), max_testtime_sec)
         elif isinstance(test, test_types.Disabled):
             if datetime.datetime.now() > test.deadline:

@@ -6,10 +6,8 @@
 # TODO: We should move the vts_test_runner.py to ../test-fw directory.
 #       But we want to discuss the structure with CI-guards first.
 
-import argparse
 import glob
 import logging
-import logging.config
 import json
 import os
 import re
@@ -21,6 +19,8 @@ import xml.etree.cElementTree as ET
 import concurrent.futures
 from typing import Dict, List, Optional
 from subprocess import check_output
+
+logger = logging.getLogger(__name__)
 
 # Add pwd to the PYTHONPATH because VTS runs in its own environment with different working directory
 # than where we launch it. It then translates the <option name="test-case-path" value="x/y/z" />
@@ -46,7 +46,8 @@ def vts_tradefed_run_module(module_name: str,
                             tests_to_run: Optional[List[str]],
                             env: Dict[str, str] = os.environ.copy(),
                             max_test_time_sec=60 * 60) -> ResultData:
-    logging.info("Running test module %s with environment %r" % (module_name, env))
+    logger.info("Running test module %s)" % (module_name))
+    logger.debug("Environment %r" % (env))
     try:
         os.unlink("/tmp/test_run_kpis.json")
     except FileNotFoundError:
@@ -110,12 +111,12 @@ def vts_tradefed_run_module(module_name: str,
     logdict = dict()
     if log_dir_match:
         log_dir = os.path.abspath(log_dir_match.group(1))
-        logging.info("Log dir is %s" % log_dir)
+        logger.debug("Log dir is %s" % log_dir)
         assert("out/host/linux-x86/vts/android-vts/logs" in log_dir)
 
         def read(name, pattern):
             matches = glob.glob(pattern, recursive=True)
-            logging.info("Attempting %s, found mathces: %r" % (pattern, matches))
+            logger.debug("Attempting %s, found mathces: %r" % (pattern, matches))
             if len(matches) == 1:
                 gzip_filename = matches[0]
                 logdict[name] = check_output(["gzip", "-d", "-c", gzip_filename]).decode('UTF-8', 'backslashreplace')
@@ -139,7 +140,7 @@ def get_json_kpi_results():
         with open('/tmp/test_run_kpis.json') as kpis:
             return json.load(kpis)
     except FileNotFoundError:
-        logging.info("test_run_kpis.json not found, ignoring test kpis")
+        logger.info("test_run_kpis.json not found, ignoring test kpis")
         return {}
 
 def get_json_change_time(module_name):
@@ -153,7 +154,7 @@ def get_json_change_time(module_name):
             else:
                 return None
     except (EnvironmentError, TypeError, IndexError) as error:
-        print("Error: Cannot find JSON result file that matches running module.")
+        logger.error("Error: Cannot find JSON result file that matches running module.")
         return None
 
 
@@ -166,12 +167,12 @@ def get_json_object(module_name):
             else:
                 return None
     except (EnvironmentError, TypeError, IndexError) as error:
-        print("Error: Cannot find JSON result file that matches running module.")
+        logger.error("Error: Cannot find JSON result file that matches running module.")
         return None
 
 
 def read_module_name(android_test_xml_file: str):
-    logging.info("Reading module name from %s" % android_test_xml_file)
+    logger.debug("Reading module name from %s" % android_test_xml_file)
 
     et = ET.parse(android_test_xml_file)
 

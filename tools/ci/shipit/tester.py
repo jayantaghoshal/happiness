@@ -4,7 +4,6 @@
 import argparse
 import json
 import logging
-import logging.config
 import os
 import sys
 from os.path import join as pathjoin
@@ -18,41 +17,40 @@ from shipit.testscripts import get_test_set, assemble_plan, get_component, build
 from utilities import ihuhandler, artifact_handler
 
 
-logger = logging.getLogger(__name__)
+class Tester:
 
-
-class tester:
-
-    def __init__(self):
+    def __init__(self, logger=logging.getLogger(__name__)):
+        self.logger = logger
+        self.logger.setLevel(logging.DEBUG)
         self.reporter_list = set() #type: Set[abstract_reporter]
 
     def _plan_started(self):
-        logger.info("Plan started")
+        self.logger.info("Plan started")
         for r in self.reporter_list:
             r.plan_started()
 
     def _plan_finished(self, test_results):
-        logger.info("Plan finished")
+        self.logger.info("Plan finished")
         for r in self.reporter_list:
             r.plan_finished(test_results)
 
     def _module_started(self, test):
-        logger.info("Module started: {}".format(str(test)))
+        self.logger.info("Module started: {}".format(str(test)))
         for r in self.reporter_list:
             r.module_started(test)
 
     def _module_finished(self, test, test_result):
-        logger.info("Module finished: {}, Result: {}".format(str(test), str(test_result)))
+        self.logger.info("Module finished: {}, Result: {}".format(str(test), str(test_result)))
         for r in self.reporter_list:
             r.module_finished(test, test_result)
 
     def _flash_started(self):
-        logger.info("Flashing started")
+        self.logger.info("Flashing started")
         for r in self.reporter_list:
             r.flash_started()
 
     def _flash_finished(self, result):
-        logger.info("Flashing finished")
+        self.logger.info("Flashing finished")
         for r in self.reporter_list:
             r.flash_finished(result)
 
@@ -75,17 +73,40 @@ class tester:
         self._flash_finished(result)
         return result
 
-    def _set_log_config(self):
+    def _set_log_config(self, args):
         with open(pathjoin(os.path.dirname(__file__), "logging.json"), "rt") as f:
             log_config = json.load(f)
-        logging.config.dictConfig(log_config)
+            if args.verbose:
+                loglevel = 'DEBUG'
+            else:
+                loglevel = 'INFO'
+            #if args.quiet:
+            #    loglevel = 'WARNING'
+            log_config['handlers']['console']['level'] = loglevel
+            filename = 'tester.log'
+            i = 0
+            while os.path.isfile(filename):
+                i += 1
+                filename = 'tester_{}.log'.format(i)
+            log_config['handlers']['file_handler']['filename'] = filename
+            log_config['handlers']['file_handler']['mode'] = 'w'
+            logging.config.dictConfig(log_config)
+
+        '''console_log = logging.StreamHandler()
+        console_log.setLevel(logging.INFO)
+        logger.addHandler(console_log)
+        file_log = logging.FileHandler('tester.log')
+        file_log.setLevel(logging.DEBUG)
+        logger.addHandler(file_log)'''
 
     def _parse_args(self):
         root_parser = argparse.ArgumentParser()
         subparsers = root_parser.add_subparsers(dest="program")
         analyze_parser = subparsers.add_parser("analyze")  # NOQA
+        analyze_parser.add_argument('--verbose', action='store_true')
         build_parser = subparsers.add_parser("build")
         build_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
+        build_parser.add_argument('--verbose', action='store_true')
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument("-c", "--capabilities",
                             type=str,
@@ -106,6 +127,7 @@ class tester:
         run_parser.add_argument('--update_ihu', action='store_true')
         run_parser.add_argument('--download', default=None)
         run_parser.add_argument('--download_latest', default=None)
+        run_parser.add_argument('--verbose', action='store_true')
         run_parser.add_argument(
             '--abort-on-first-failure', action='store_true', dest="abort_on_first_failure")
         build_parser.add_argument('--test_component', default=None,
@@ -126,12 +148,12 @@ class tester:
                 else:
                     raise ValueError('Could not get any plan')
         except ValueError as e:
-            logger.error(str(e))
+            self.logger.error(str(e))
             sys.exit(1)
 
     def main(self):
-        self._set_log_config()
         args = self._parse_args()
+        self._set_log_config(args)
 
         if args.program == "analyze":
             detect_loose_test_cases()
@@ -151,7 +173,7 @@ class tester:
             selected_tests = get_test_set(plan, capabilities, args.only_matching)
 
             if len(selected_tests) == 0:
-                logger.warning('No applicable tests found.')
+                self.logger.warning('No applicable tests found.')
                 return
 
             self.reporter_list.add(console_reporter())
@@ -168,7 +190,7 @@ class tester:
             if args.update_ihu:
                 result = self.flash_ihu()
                 if not result.success:
-                    logger.error('IHU update failed')
+                    self.logger.error('IHU update failed')
                     sys.exit(1)
 
             max_testtime_sec = 60 * 60
@@ -182,11 +204,11 @@ class tester:
                 sys.exit(1)
 
         else:
-            #root_parser.print_usage() # This wont work...
-            logger.error("Unknown parameter: {}".format(args.program))
+            self.logger.error("Unknown parameter: {}".format(args.program))
             sys.exit(1)
 
 
 if __name__ == "__main__":
-    tester().main()
+    logger = logging.getLogger("Tester")
+    Tester(logger).main()
 
