@@ -168,19 +168,21 @@
                 </table>
             </fieldset>
             <br>
-            <fieldset >    	
-                    <legend>Logs</legend>
-                        <div class="list-group">
-                            <% Object.keys(test_detail["logs"]).forEach(function(key) {%>
-                            <a class="list-group-item list-group-item-action" href="<%= "/log?id=" + test_detail['logs'][key]['id'] %>">
-                                <i class="fas fa-file-alt"></i>
-                                <%= key +" "%>
-                                <span class="badge badge-secondary"><%= Math.ceil(test_detail['logs'][key]["size"] / 1024) %> kb</span>
-                            </a>
-                            <% }); %>
-                        </div>
+            <%if(typeof test_detail["logs"] !== 'undefined' && Object.keys(test_detail["logs"]).length){%>
+                <fieldset >    	
+                        <legend>Logs</legend>
+                            <div class="list-group">
+                                <% Object.keys(test_detail["logs"]).forEach(function(key) {%>
+                                <a class="list-group-item list-group-item-action" href="<%= "/log?id=" + test_detail['logs'][key]['id'] %>">
+                                    <i class="fas fa-file-alt"></i>
+                                    <%= key +" "%>
+                                    <span class="badge badge-secondary"><%= Math.ceil(test_detail['logs'][key]["size"] / 1024) %> kb</span>
+                                </a>
+                                <% }); %>
+                            </div>
 
-            </fieldset>
+                </fieldset>
+            <%}%>
             <%if(typeof test_detail["screenshots"] !== 'undefined' && Object.keys(test_detail["screenshots"]).length){%>
                 <fieldset >
                     <legend>Screenshots on test failure</legend>

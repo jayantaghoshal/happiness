@@ -34,7 +34,7 @@
             <tbody>
             <% for(var i=0; i < basic_test_detail.length; i++) { %>
             <tr>
-                <td><a href=<%= "/detailed_view?module_name="+basic_test_detail[i].module_name + "&job_name=" + basic_test_detail[i].job_name + "&build_number=" + basic_test_detail[i].test_job_build_number  %> >
+                <td><a href=<%= "/detailed_view?module_name="+basic_test_detail[i].module_name + "&job_name=" + basic_test_detail[i].job_name + "&build_number=" + basic_test_detail[i].test_job_build_number + "&test_dir_name=" + encodeURI(basic_test_detail[i].test_dir_name)  %> >
                 <%= basic_test_detail[i].module_name %></a></td>
                 <td><%= basic_test_detail[i].test_type %></td>
                 <td><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/view/Hourly_Daily_Pipeline/job/" + basic_test_detail[i].job_name + "/" + basic_test_detail[i].test_job_build_number %> target="_blank">

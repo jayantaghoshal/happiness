@@ -42,21 +42,30 @@ app.get('/', cors(), (req, res) => {
 });
 
 app.get('/latest', cors(), (req, res) => {
-    var details = db.collection('records').find(
-        { "top_test_job_name": req.query.top_job_name, }, 
-        { "test_job_build_number": 1})
-    .sort({ test_job_build_number: -1 })
-    .limit(1)
-    .toArray().then(function(test_detail) {
-        build_number = test_detail[0]["test_job_build_number"]
-        res.redirect('/tests?top_job_name=' + req.query.top_job_name +  "&build_number=" + build_number);
-    });
+    if (req.query.top_job_name == "ihu_gate") {
+        build_number_name = "test_job_build_number"
+        project_dict = { "test_job_build_number": 1 }
+        query_dict = { "job_name": "ihu_gate_test" }
+    } else {
+        build_number_name = "top_test_job_build_number"
+        project_dict = { "top_test_job_build_number": 1 }
+        query_dict = { "top_test_job_name": req.query.top_job_name }
+    }
+
+    var details = db.collection('records').find(query_dict).project(project_dict)
+        .sort({ test_job_build_number: -1 })
+        .limit(1)
+        .toArray().then(function(test_detail) {
+            build_number = test_detail[0][build_number_name]
+            res.redirect('/tests?top_job_name=' + req.query.top_job_name + "&build_number=" + build_number);
+        });
 });
 
 
 app.get('/home', cors(), (req, res) => {
     var cursor = db.collection('records').distinct("top_test_job_name")
         .then(function(top_test_job_names) {
+            top_test_job_names.push("ihu_gate");
             res.render('index.ejs', { view: "top_job_page", top_job_names: top_test_job_names });
         });
 });
@@ -107,7 +116,7 @@ app.get('/tests/', cors(), (req, res) => {
         if (top_job_name == "ihu_gate") {
             var build_number = req.query.build_number;
             var cursor = db.collection('records').find({ "job_name": "ihu_gate_test", "test_job_build_number": parseInt(build_number) })
-                .project({ "top_test_job_build_number": 1, "result": 1, "test_type": 1, "job_name": 1, "test_job_build_number": 1, "module_name": 1, "_id": 0 }).toArray(function(err, basic_test_detail) {
+                .project({ "top_test_job_build_number": 1, "result": 1, "test_type": 1, "job_name": 1, "test_job_build_number": 1, "module_name": 1, "test_dir_name": 1, "_id": 0 }).toArray(function(err, basic_test_detail) {
                     res.render('test_modules.ejs', { view: "list_tests_page", basic_test_detail: basic_test_detail, build_numbers: [build_number], top_job_name: top_job_name });
                 });
 
@@ -117,7 +126,7 @@ app.get('/tests/', cors(), (req, res) => {
                     "top_test_job_name": top_job_name,
                     "top_test_job_build_number": parseInt(build_number)
                 })
-                .project({ "top_test_job_build_number": 1, "result": 1, "test_type": 1, "job_name": 1, "test_job_build_number": 1, "module_name": 1, "_id": 0 }).toArray(function(err, basic_test_detail) {
+                .project({ "top_test_job_build_number": 1, "result": 1, "test_type": 1, "job_name": 1, "test_job_build_number": 1, "module_name": 1, "test_dir_name": 1, "_id": 0 }).toArray(function(err, basic_test_detail) {
                     res.render('test_modules.ejs', { view: "list_tests_page", basic_test_detail: basic_test_detail, build_numbers: [build_number], top_job_name: top_job_name });
 
                 });
@@ -132,13 +141,13 @@ app.get('/detailed_view', cors(), (req, res) => {
     module_name = req.query.module_name;
     test_job_name = req.query.job_name;
     test_job_build_number = req.query.build_number;
-
-
+    test_dir_name = req.query.test_dir_name;
 
     var details = db.collection('records').find({
             "job_name": test_job_name,
             "test_job_build_number": parseInt(test_job_build_number),
-            "module_name": module_name
+            "module_name": module_name,
+            "test_dir_name": test_dir_name
         })
         .project({
             _id: 0
@@ -205,7 +214,7 @@ app.get('/detailed_view', cors(), (req, res) => {
 });
 
 app.get('/log', cors(), (req, res) => {
-    db.collection('logs').findOne({"_id": ObjectId(req.query.id)}, {"contents":1})
+    db.collection('logs').findOne({ "_id": ObjectId(req.query.id) }, { "contents": 1 })
         .then(function(log) {
             res.set('Content-Type', 'text/plain');
             res.send(new Buffer(log["contents"]));
@@ -214,7 +223,7 @@ app.get('/log', cors(), (req, res) => {
 
 
 app.get('/screenshot', cors(), (req, res) => {
-    db.collection('screenshots').findOne({"_id": ObjectId(req.query.id)}, {"data":1})
+    db.collection('screenshots').findOne({ "_id": ObjectId(req.query.id) }, { "data": 1 })
         .then(function(screenshot) {
             res.set('Content-Type', 'image/png');
             res.send(screenshot["data"].buffer);
