@@ -91,8 +91,6 @@ class ci_database_reporter(abstract_reporter):
 
         try:
             insert_influx_data("flash_result", data, tags)
-            mongodb_wrapper.insert_data(self.store_swdl_to_mongodb(FlashResult))
-
         except Exception as e:
             logger.info(str(e))
 
