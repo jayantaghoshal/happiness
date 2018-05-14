@@ -3,7 +3,11 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include <chrono>
+#include <cinttypes>
+#include <cstdint>
 #include <cstdlib>
+#include <thread>
 
 #include <hidl/HidlTransportSupport.h>
 #include <utils/Errors.h>
@@ -27,6 +31,9 @@ using ::android::status_t;
 // libpacconfig
 using ::pac::config::PacConfig;
 
+// thread
+using std::this_thread::sleep_for;
+
 // Generated HIDL EVS interface
 using ::android::hardware::automotive::evs::V1_0::IEvsEnumerator;
 
@@ -43,6 +50,8 @@ constexpr int kMaxNumberOfThreads = 1;
 // one less thread than specified by kMaxNumberOfThreads as it expects the caller to join the pool.
 constexpr bool kCallerWillJoin = true;
 
+// How many milliseconds the service shall wait before retrying to get the EVS hardware service
+constexpr uint32_t kServiceRetryInterval = 100;
 }  // namespace service_cfg
 }  // namespace
 
@@ -55,11 +64,16 @@ int main() {
     }
 
     dbgD("Attempting to connect to EVS hardware service %s", kEvsHardwareServiceName);
-    sp<IEvsEnumerator> hwEnumerator = IEvsEnumerator::getService(kEvsHardwareServiceName);
-    if (hwEnumerator == nullptr) {
-        dbgE("Failed to connect to EVS hardware service %s", kEvsHardwareServiceName);
-        return EXIT_FAILURE;
-    }
+    sp<IEvsEnumerator> hwEnumerator;
+    do {
+        hwEnumerator = IEvsEnumerator::tryGetService(kEvsHardwareServiceName);
+        if (hwEnumerator == nullptr) {
+            dbgW("Failed to connect to EVS hardware service %s, will retry in %" PRIu32 "ms",
+                 kEvsHardwareServiceName,
+                 service_cfg::kServiceRetryInterval);
+            sleep_for(std::chrono::milliseconds(service_cfg::kServiceRetryInterval));
+        }
+    } while (hwEnumerator == nullptr);
 
     sp<EvsEnumerator> enumerator = new EvsEnumerator();
     if (!enumerator->Init(hwEnumerator)) {
