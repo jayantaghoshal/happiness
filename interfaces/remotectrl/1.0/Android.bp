@@ -24,6 +24,7 @@ hidl_interface {
         "RemoteCtrlHalPropertyType",
         "RemoteCtrlHalPropertyValue",
         "StatusCode",
+        "StreamPlayBackStatus",
         "VehicleArea",
         "VehicleAreaZone",
         "VolumeData",

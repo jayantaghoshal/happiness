@@ -105,7 +105,12 @@ enum RemoteCtrlHalProperty: int32_t {
     REMOTECTRLHAL_HVAC_TEMPERATURE = (
             0x1270
             | RemoteCtrlHalPropertyType:FLOAT
-            | VehicleArea:ZONE)
+            | VehicleArea:ZONE),
+
+    REMOTECTRLHAL_MEDIA_STREAM_CONTROL = (
+            0x1410
+            | RemoteCtrlHalPropertyType:INT32
+            | VehicleArea:GLOBAL)
 };
 
 enum RemoteCtrlHalPropertyStatus : int32_t {
@@ -160,4 +165,15 @@ enum ACState : uint32_t {
 enum MaxDefrostState : uint32_t {
     OFF = 0,
     ON = 1
+};
+
+enum StreamPlayBackStatus : uint32_t {
+    STOPPED = 0,
+    PLAYING = 1,
+    PAUSED = 2,
+    RESERVED_1 = 3,
+    RESERVED_2 = 4,
+    NEXT = 5,
+    PREVIOUS = 6,
+    RESERVED_3 = 7
 };
