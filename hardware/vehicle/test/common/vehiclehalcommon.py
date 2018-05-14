@@ -133,6 +133,10 @@ class VehicleHalCommon():
     temperature_minus_button = "com.volvocars.launcher:id/minus_button"
     ac_button = "com.volvocars.launcher:id/climate_ctrl_ac"
     defrost_button = "com.volvocars.launcher:id/climate_ctrl_max_defrost"
+    air_dist_middle = "com.volvocars.launcher:id/arrow_middle"
+    air_dist_top = "com.volvocars.launcher:id/arrow_top"
+    air_dist_bottom = "com.volvocars.launcher:id/arrow_down"
+    air_dist_auto = "com.volvocars.launcher:id/climate_auto_button"
 
     # ViewClient
     active_view_client = None
