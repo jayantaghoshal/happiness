@@ -27,11 +27,20 @@ class ci_database_reporter(abstract_reporter):
     def plan_finished(self, test_results: List[NamedTestResult]) -> None:
         failing_testcases = [x for x in test_results if not x.result.passed]
         passing_testcases = len(test_results) - len(failing_testcases)
+        # NOTE: Gate test does not have top job name and build number yet, hard code the value to align with hourly and daily
+        if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
+            top_job_jobname = os.environ["TOP_JOB_JOBNAME"]
+            top_job_build_number = int(os.environ["TOP_JOB_NUMBER"])
+        else:
+            top_job_jobname = "gate"
+            top_job_build_number = 0
         data = {
             'build_number' : os.environ["BUILD_NUMBER"],
             'gerrit_id' : os.environ["ZUUL_CHANGE"],
             'build_host' : os.environ["HOST_HOSTNAME"],
             'job_name' : os.environ["JOB_NAME"],
+            'top_job_name': top_job_jobname,
+            'top_job_build_number' : top_job_build_number,
             'passing_testcases' : passing_testcases,
             'failing_testcases' : len(failing_testcases),
             'total_testcases' : len(test_results),
