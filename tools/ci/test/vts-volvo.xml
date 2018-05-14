@@ -107,7 +107,7 @@ It is copypasted into a special xml file as som tests does not compile and/or ru
   <!-- <option name="compatibility:include-filter" value="VtsHalWifiV1_2Target" /> Does not compile -->
   <!-- <option name="compatibility:include-filter" value="VtsHalWifiV1_2TargetProfiling" /> Does not compile -->
   <!-- <option name="compatibility:include-filter" value="VtsKernelApiSysfsTest" /> Crashes -->
-  <option name="compatibility:include-filter" value="VtsKernelBinderTest" />
+  <!-- <option name="compatibility:include-filter" value="VtsKernelBinderTest" /> Crashes -->
   <option name="compatibility:include-filter" value="VtsKernelConfig" />
   <option name="compatibility:include-filter" value="VtsKernelHwBinder" />
   <option name="compatibility:include-filter" value="VtsKernelLibcutilsTest" />
