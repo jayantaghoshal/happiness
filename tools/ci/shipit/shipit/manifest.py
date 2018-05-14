@@ -28,6 +28,21 @@ class CommentedTreeBuilder(ET.TreeBuilder):
         self.data(data)
         self.end(ET.Comment)
 
+def set_sha_in_template_manifest(project_root: str, template_path: str, repository: str):
+    parser = ET.XMLParser(target=CommentedTreeBuilder())
+    tree = ET.parse(template_path, parser)
+    root = tree.getroot()
+    revision = ""
+
+    for project in root.iter('project'):
+        current_repo = project.get('name')
+        if current_repo == repository:
+            revision = git.Repo.ls_remote(repository)
+            project.set('revision', revision)
+
+    tree.write(template_path)
+    return revision
+
 def update_file(project_root: str, template_path: str, output_path: str, repository: str, using_zuul: bool):
     logger.info("Arguments in update_file: " "project_root: "+ project_root + " template_path: " + template_path + " output_path: " + output_path + " repository: " + repository)
     parser = ET.XMLParser(target=CommentedTreeBuilder())
@@ -77,8 +92,6 @@ def get_repo_path_from_git_name(template_path: str, git_repo: str):
     for project in root.findall('project'):
         name = project.get('name')
         path = project.get('path')
-        logger.info("path = " + path)
-        logger.info("name = " + name)
         if name == git_repo:
             logger.info("The path = " + path)
             return str(path)
@@ -94,10 +107,9 @@ def get_revision_from_git_name(template_path: str, git_repo: str):
         name = project.get('name')
         path = project.get('path')
         revision = project.get('revision')
-        logger.info("path = " + path)
-        logger.info("name = " + name)
         if name == git_repo:
             logger.info("The path = " + path)
+            logger.info("The revision = " + revision)
             return str(revision)
 
     return None
@@ -120,12 +132,11 @@ def get_all_repos_with_zuul_commit_or_head(template_path: str):
 
     for project in root.findall('project'):
         name = project.get('name')
-        path = project.get('path')
         revision = project.get('revision')
         zuul_repos = []
         if revision == "ZUUL_COMMIT_OR_HEAD":
             zuul_repos.append(name)
-            logger.info("The path = " + path)
+            #logger.info("The path = " + path)
     return zuul_repos
 
 

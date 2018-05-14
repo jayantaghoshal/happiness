@@ -6,12 +6,14 @@ import glob
 import logging
 import re
 import logging.config
-from xml.etree import ElementTree as ET
 import distutils
+from gerrit.gerrit_handler import gerrit
+from xml.etree import ElementTree as ET
 from typing import Tuple, List, Dict, Union, Any
 from . import manifest
 from . import process_tools
 from . import git
+
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +67,7 @@ def check_manifest(aosp_root_dir: str, branch: str):
     for manifest_template_file in vcc_manifest_files:
         manifest.verify_no_floating_branches(manifest_template_file, branch)
 
+
 def repo_init(aosp_root_dir: str, branch: str):
     process_tools.check_output_logged(
         ["repo", "init",
@@ -72,6 +75,36 @@ def repo_init(aosp_root_dir: str, branch: str):
          "-u", "ssh://gotsvl1415.got.volvocars.net:29421/manifest",
          "-b", branch],
         cwd=os.path.abspath(aosp_root_dir))
+
+
+def progression_manifest(aosp_root_dir: str, repository: str):
+
+    volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
+    volvocars_repo = git.Repo(volvocars_repo_path)
+    vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
+    commit = ""
+
+    for template_manifest in vcc_manifest_files:
+        commit = manifest.set_sha_in_template_manifest(aosp_root_dir, template_manifest, repository)
+
+    logger.info("Setting " + repository + " commit to " + commit)
+    logger.info("Commit change in manifest")
+    commit_title = "Updating " + repository  + " sha in the manifest"
+    volvocars_repo.commit(commit_title)
+
+    # Do a Gerrit update for the manifest and fullfill the requirement to trigger pipeline
+    gerrit_cli(commit)
+
+
+def gerrit_cli(commit: str):
+    host = "gotsvl1722.got.volvocars.net"
+    port = "29426"
+    user = os.environ["$USER"]
+
+    args = ["--code-review", " +2", "--verified", "+1", "--label", "Automerge=+1", commit]
+    gerrit_instance = gerrit(host, port, user)
+    gerrit_instance.review(args)
+
 
 def on_commit(aosp_root_dir: str, sync: bool, repository: str):
     # Zuul will have already cloned vendor/volvocars
@@ -227,12 +260,6 @@ def copy_and_apply_templates_to_manifest_repo(aosp_root_dir: str,
 
     logger.info("Path for vcc_manifest_files " + str(volvocars_repo.path))
     logger.info("Path for old_manifest_files_in_manifest_repo: " + str(manifest_repo.path))
-
-    for manifest_file in old_manifest_files_in_manifest_repo:
-        logger.debug("Manifests in old_manifest_files_in_manifest_repo: " + manifest_file)
-
-    for manifest_file in vcc_manifest_files:
-        logger.debug("Manifests in vcc_manifest_files: " + manifest_file)
 
     for f in old_manifest_files_in_manifest_repo:
         os.unlink(f)

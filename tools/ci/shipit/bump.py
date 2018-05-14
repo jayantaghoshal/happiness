@@ -34,6 +34,9 @@ def main(args):
     elif mode == "sync_repo_based_on_manifest":
         repository = args[2]
         autobumper.sync_repo(aosp_root_dir, repository)
+    elif mode == "update_manifest_for_progression":
+        repository = args[2]
+        autobumper.progression_manifest(aosp_root_dir, repository)
     elif mode == "autobump":
         if len(args) != 5:
             raise SystemExit('Error: Mode autobump requires 4 args')

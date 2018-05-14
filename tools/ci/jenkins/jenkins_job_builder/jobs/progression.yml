@@ -1,0 +1,57 @@
+- job:
+    name: icup_android_progression
+    # TODO: temp_only_high_because_right_now_repo_is_not_installed_on_low
+    # TODO: The script is not even using repo????, node-filter not relevant            
+    node: high 
+    description: DO NOT EDIT MANUALLY THROUGH JENKINS WEB UI - Config in vendor/volvocars/tools/ci/jenkins_job_builder
+    
+    triggers:
+        - gerrit:  
+            server-name: 'iCUP Android Gerrit'
+            silent: true
+            trigger-on: 
+                - change-merged-event 
+            projects:
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'vendor/volvocars/apps/ihu_test'
+                  branches:
+                    - branch-compare-type: 'REG_EXP'
+                      branch-pattern: '.*'
+    scm:
+        - git:
+            url: ssh://gotsvl1415.got.volvocars.net:29421/vendor/volvocars
+            credentials-id: 0cc7da38-6d74-4a55-8773-e706f59cb82f
+            branches:
+                - "*/${GERRIT_BRANCH}"
+            basedir: vendor/volvocars
+    notifications:
+        - http:
+            url: http://gotsvl1416.got.volvocars.net:3002/events
+            format: json
+            event: all
+            timeout: 10000
+            log: 0
+    builders:
+        - shell: |
+                
+                # vendor/volvocars is downloaded through jenkins plugin
+                export WORKSPACE_ROOT=$(pwd)
+
+                ## Do an update to the manifest
+                ## Make local commit
+                ## Send commit to Gerrit
+                ## Use rgerrit to set +1 Verify, +2 Review and Automerge +1 to trigger the pipeline and test the manifest change
+
+                python3 ./vendor/volvocars/tools/ci/shipit/bump.py . update_manifest_for_progression ${GERRIT_PROJECT}
+
+    publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>icup_android_manifest_bump</customProjectName>
+                <customPrefix>IhuManifestBump</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
+        - description-setter:
+            regexp-for-failed: "fatal: (.*)"
+
