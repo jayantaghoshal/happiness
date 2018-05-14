@@ -220,17 +220,24 @@ class VtsSystemClockTest(base_test.BaseTestClass):
         thhandle = threading.currentThread()
         connection = self.fr
         retry = 0
+        retry_fr_rcv = 0
         print("Started --->",arg)
 
         while True:
 
             try:
-                date_time_flry = connection.get_SetTiAndDate()
+                if retry_fr_rcv <= 5:
+                    date_time_flry = connection.get_SetTiAndDate()
+                else:
+                 retry_fr_rcv = 0
+                 asserts.assertTrue(False,"TiAndDate not received in CEM due to Key Error after retry !!")
+                 break
             except Exception, e:
                 logging.info("KeyError ")
                 time.sleep(0.2)
+                retry_fr_rcv = retry_fr_rcv + 1
                 continue
-
+            retry_fr_rcv = 0
             if retry <= 4:
                 if not self.CheckTiAndDate(input_date,date_time_flry,settings):
                     time.sleep(0.5)
@@ -241,7 +248,7 @@ class VtsSystemClockTest(base_test.BaseTestClass):
                     break
             else:
                  retry = 0
-                 asserts.assertTrue(False,"TiAndDate not received in CEM after retry !!")
+                 asserts.assertTrue(False,"Valid TiAndDate not received in CEM after retry !!")
                  break
 
         print("Stopped --->",arg)

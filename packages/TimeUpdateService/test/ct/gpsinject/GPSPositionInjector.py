@@ -46,8 +46,8 @@ class GPSPositionInjector(object):
         logging.info(" VCC PDU header : %s ",self.vccPDUheader_append)
 
         self.vccPDUheader_decoded = self.vccPDUheader_append.decode("hex")
-        self.product_out_dir_path = os.environ.get('ANDROID_PRODUCT_OUT')
-        self.localconfig_path = self.product_out_dir_path + '/vendor/etc/localconfig/localconfig.json'
+        self.product_out_dir_path = os.environ.get('ANDROID_BUILD_TOP')
+        self.localconfig_path = self.product_out_dir_path + '/vendor/volvocars/hardware/localconfig/misc/localconfig.json'
 
         self.SetGPSTimeAndDate(epoch_time)
         self.SetGPSPosition(self.latitude,self.longitude)
