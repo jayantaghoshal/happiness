@@ -33,13 +33,22 @@
                                                 <td><span class="badge badge-danger">Failure</span></td>
                                     <% } %>
                                 </tr>
+                                <tr>
+                                    <td>Build number :</td>
+                                    <td style="font-weight:bold">
+                                        <a href=<%="/tests/?top_job_name=" + test_detail["Top Job"] + "&build_number=" + test_detail["top_test_job_build_number"] %>>
+                                            <%= test_detail["top_test_job_build_number"]%>
+                                        </a>
+                                    </td>
+                                </tr>
                                 <tr><td>Test Directory :</td><td style="font-weight:bold"><%= test_detail["Test Directory"]%></td></tr>
                                 <tr><td>Test Type :</td><td style="font-weight:bold"><%= test_detail["Test Type"]%></td></tr>
                                 <tr><td>Host :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/computer/" + test_detail["Host"]%>><%= test_detail["Host"]%></td></tr>
                                 <tr><td>Test Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Test Job"] + "/" + test_detail["test_job_build_number"]%>><%= test_detail["Test Job"]%></td></tr>
                                 <tr><td>Top Job :</td><td style="font-weight:bold"><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/job/" + test_detail["Top Job"] + "/" + test_detail["top_test_job_build_number"]%>><%= test_detail["Top Job"]%></td></tr>
                                 <tr><td>Capabilities :</td><td style="font-weight:bold"><%= test_detail["Capabilities"]%></td></tr>
-                                <tr><td>Runtime :</td><td style="font-weight:bold"><%= test_detail["Runtime"]%></td></tr>
+                                <tr><td>Started at:</td><td style="font-weight:bold"><%= test_detail["started_at"]%></td></tr>
+                                <tr><td>Runtime :</td><td style="font-weight:bold"><%= Math.round(test_detail["Runtime"] / 1000)%> sec</td></tr>
 
                             </table>
                         </div>
@@ -60,7 +69,7 @@
                                     <tr><td><%= i %> </td><td style="font-weight:bold;"><%= test_detail["KPI"][i]%></td></tr>
                                 <%}%>
                             </table>
-                        </div>    
+                        </div>
                 </fieldset>
             <%}%>
             <br>
@@ -140,7 +149,7 @@
                         <td style="font-weight:bold;color:white;background-color:#15317E;">Build ID:</td>
                         <% for (var i in build_trend) { %>
                         <td>
-                            <a href=<%= "/detailed_view?module_name=" + module_name +"&job_name=" + test_job_name + "&build_number=" + build_trend[i]["test_job_build_number"]  %> >
+                            <a href=<%= "/detailed_view?module_name=" + module_name +"&job_name=" + test_job_name + "&build_number=" + build_trend[i]["test_job_build_number"]  +"&test_dir_name=" + encodeURI(test_detail["Test Directory"])  %> >
                                 <%=build_trend[i]["test_job_build_number"]%>
                             </a>
                         </td>
@@ -160,11 +169,31 @@
                         <% } %>
                     </tr>
                     <tr>
-                        <td style="font-weight:bold;color:white;background-color:#15317E;">Test time: </td>
+                        <td style="font-weight:bold;color:white;background-color:#15317E;">Test time (sec): </td>
                         <% for (var i in build_trend) { %>
-                        <td><%=build_trend[i]["runtime"]%></td>
+                        <td><%=Math.round(build_trend[i]["runtime"] / 1000)%></td>
                         <% } %>
                     </tr>
+                </table>
+                <table>
+                    <% for (var i=0;i < notable_events.length; i++) {
+                        var trendEvent = notable_events[i];
+                    %>
+                    <tr>
+                        <td><%=trendEvent["name"] %></td>
+                        <td>
+                            <% if (trendEvent["value"]) { %>
+                            <a href="<%= "/detailed_view?module_name=" + module_name +"&job_name=" + test_job_name + "&build_number=" + trendEvent["value"]["test_job_build_number"]  +"&test_dir_name=" + encodeURI(test_detail["Test Directory"])  %>"" >
+                                <%=trendEvent["value"]["test_job_build_number"] %> --- <%=trendEvent["value"]["started_at"] %>
+                            </a>
+                            <% } else { %>
+                                Never
+                            <% } %>
+                        </td>
+                    </tr>
+                    <%
+                    }
+                    %>
                 </table>
             </fieldset>
             <br>

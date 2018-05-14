@@ -137,11 +137,19 @@ app.get('/tests/', cors(), (req, res) => {
 });
 
 app.get('/detailed_view', cors(), (req, res) => {
-
+    var records = db.collection('records');
     module_name = req.query.module_name;
     test_job_name = req.query.job_name;
-    test_job_build_number = req.query.build_number;
+    test_job_build_number = parseInt(req.query.build_number);
     test_dir_name = req.query.test_dir_name;
+
+    var defaultFilterForThisTest = function() {
+        return {
+            "job_name": test_job_name,
+            "module_name": module_name,
+            "test_dir_name": test_dir_name
+        };
+    };
 
     var details = db.collection('records').find({
             "job_name": test_job_name,
@@ -167,6 +175,7 @@ app.get('/detailed_view', cors(), (req, res) => {
             meta_test_record["Capabilities"] = test_record["capabilities"];
             meta_test_record["Host"] = test_record["hostname"];
             meta_test_record["Runtime"] = test_record["runtime"];
+            meta_test_record["started_at"] = test_record["started_at"];
             meta_test_record["KPI"] = test_record["kpis"];
             meta_test_record["screenshots"] = test_record["screenshots"];
             meta_test_record["description"] = test_record["description"];
@@ -184,30 +193,99 @@ app.get('/detailed_view', cors(), (req, res) => {
             };
         });
 
-    var trend = db.collection('records').find({
-            "job_name": test_job_name,
-            "module_name": module_name
-        })
-        .project({
-            result: 1,
-            runtime: 1,
-            test_job_build_number: 1
-        })
+    var trendProjection = {
+        result: 1,
+        runtime : 1,
+        test_job_build_number: 1,
+        started_at: 1
+    };
+
+    var trend = records.find(defaultFilterForThisTest())
+        .project(trendProjection)
         .sort({ test_job_build_number: -1 })
         .limit(15)
         .toArray();
 
-    Promise.all([details, trend]).then(
+
+    var lastFail = records.find({
+            "job_name": test_job_name,
+            "module_name": module_name,
+            "test_dir_name": test_dir_name,
+            "result": false,
+        })
+        .project(trendProjection)
+        .sort({ test_job_build_number: -1 })
+        .limit(1)
+        .toArray();
+
+    var lastSuccess = records.find({
+            "job_name": test_job_name,
+            "module_name": module_name,
+            "test_dir_name": test_dir_name,
+            "result": true,
+        })
+        .project(trendProjection)
+        .sort({ test_job_build_number: -1 })
+        .limit(1)
+        .toArray();
+
+    var lastSuccessBeforeLastFail = lastFail.then(function(lastFailResult) {
+        var filter = {
+            "job_name": test_job_name,
+            "module_name": module_name,
+            "test_dir_name": test_dir_name,
+            "result": true,
+        }
+        if (lastFailResult.length > 0) {
+            filter["test_job_build_number"] = {"$lt": lastFailResult[0]["test_job_build_number"]};
+        }
+        return records.find(filter)
+            .project(trendProjection)
+            .sort({ test_job_build_number: -1 })
+            .limit(1)
+            .toArray();
+    });
+
+    var firstFailAfterSuccess = lastSuccessBeforeLastFail.then(function(lastSuccessBeforeLastFailResults) {
+        var filter =  {
+            "job_name": test_job_name,
+            "module_name": module_name,
+            "test_dir_name": test_dir_name,
+            "result": false,
+        };
+        if (lastSuccessBeforeLastFailResults.length > 0) {
+            filter["test_job_build_number"] = {"$gt": lastSuccessBeforeLastFailResults[0]["test_job_build_number"]};
+        }
+
+        return db.collection('records').find(filter)
+            .project(trendProjection)
+            .sort({ test_job_build_number: 1 })
+            .limit(1)
+            .toArray();
+    });
+
+    Promise.all([details, trend, lastSuccess, firstFailAfterSuccess, lastFail, lastSuccessBeforeLastFail]).then(
         function(promiseResults) {
             var detailResults = promiseResults[0];
             var trendResults = promiseResults[1];
+            var lastSuccessResult = promiseResults[2];
+            var firstFailAfterSuccessResult = promiseResults[3];
+            var lastFailResult = promiseResults[4];
+            var lastSuccessBeforeLastFailResults = promiseResults[5];
+
             res.render('detailed_view.ejs', {
                 module_name: module_name,
                 test_job_name: test_job_name,
                 test_detail: detailResults.test_detail,
                 logs_test_record: detailResults.logs_test_record,
                 testcases_test_record: detailResults.testcases_test_record,
-                build_trend: trendResults.reverse()
+                build_trend: trendResults.reverse(),
+                notable_events: [
+                    { name: "Last success", value: lastSuccessResult && lastSuccessResult[0]},
+                    { name: "Last fail",  value: lastFailResult && lastFailResult[0]},
+                    { name: "First fail after last success", value:  firstFailAfterSuccessResult && firstFailAfterSuccessResult[0]},
+                    { name: "Last success before last fail", value: lastSuccessBeforeLastFailResults && lastSuccessBeforeLastFailResults[0]}
+                ]
             });
         }
     );
