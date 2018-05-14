@@ -26,4 +26,4 @@ licensing-components.py software-bom vendor/volvocars/ .
 (cd vendor/volvocars/tools/ci/shipit && python3 -m unittest)
 (cd vendor/volvocars/hardware/signals/dataelements/AutosarCodeGen && ./analyze.sh)
 (cd vendor/volvocars/tools/testing/fdx_client && ./analyze.sh)
-
+(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py analyze)

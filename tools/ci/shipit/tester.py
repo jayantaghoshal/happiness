@@ -15,7 +15,7 @@ from handle_result.ci_database_reporter import ci_database_reporter
 from handle_result.vcc_dashboard_reporter import vcc_dashboard_reporter
 from handle_result.console_reporter import console_reporter
 from shipit.testscripts import get_test_set, assemble_plan, get_component, build_testcases, run_test, \
-    detect_loose_test_cases, enforce_timeout_in_gate_tests
+    detect_loose_test_cases, enforce_timeout_in_gate_tests, pre_static_analysis_on_all_testcases, pre_static_analysis_on_testcases
 from shipit.test_runner.test_types import ResultData
 from utilities import ihuhandler, artifact_handler
 import bson
@@ -101,13 +101,14 @@ class Tester:
         subparsers = root_parser.add_subparsers(dest="program")
         analyze_parser = subparsers.add_parser("analyze")  # NOQA
         build_parser = subparsers.add_parser("build")
+        analyze_testplan_parser = subparsers.add_parser("analyze_testplan")  # NOQA
         print_parser = subparsers.add_parser("print_plan")
         run_parser = subparsers.add_parser("run")
 
-        for common_args in [analyze_parser, build_parser, run_parser, print_parser]:
+        for common_args in [analyze_parser, build_parser, run_parser, print_parser, analyze_testplan_parser]:
             common_args.add_argument('--verbose', action='store_true')
 
-        for parser_dependent_on_plan in [print_parser, run_parser, build_parser]:
+        for parser_dependent_on_plan in [print_parser, run_parser, build_parser, analyze_testplan_parser]:
             parser_dependent_on_plan.add_argument('--plan', nargs="+", default=[],
                                       choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
             parser_dependent_on_plan.add_argument('--test_component', default=None,
@@ -157,8 +158,12 @@ class Tester:
         args = self._parse_args()
         self._set_log_config(args)
 
-        if args.program == "analyze":
+        if args.program == "analyze_testplan":
+            # Special case not used for normal "analyze" to avoid circular dependencies between repositories
             detect_loose_test_cases()
+
+        if args.program == "analyze":
+            pre_static_analysis_on_all_testcases()
             enforce_timeout_in_gate_tests()
 
         elif args.program == "build":
@@ -206,6 +211,9 @@ class Tester:
             max_testtime_sec = 60 * 60
             if args.plan == "gate":
                 max_testtime_sec = 10 * 60
+
+            if args.test_component:
+                pre_static_analysis_on_testcases(plan, half_analysis_without_external_repos=False)
 
             results = self.run_testcases(selected_tests, args.abort_on_first_failure, max_testtime_sec)
             failing_testcases = [x for x in results if not x.passed]

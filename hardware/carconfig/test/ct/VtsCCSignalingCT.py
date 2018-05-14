@@ -20,12 +20,12 @@ import time
 import csv
 
 import vehiclehalcommon
-from generated.datatypes import *
+from generated import datatypes as DT
 from generated import datatypes as DE
 
 
 def sendCCParameters(self, event, fr, good=True, sendAll=True):
-    vehCfgPrm = VehCfgPrm()
+    vehCfgPrm = DT.VehCfgPrm()
     for aa in range (1, 600):
         cc_no_of_variables_per_block = 7
         cc_no_of_blocks = 72 #cc_no_of_variables / cc_no_of_variables_per_block

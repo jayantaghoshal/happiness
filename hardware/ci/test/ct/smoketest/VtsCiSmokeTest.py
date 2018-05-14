@@ -19,7 +19,7 @@ import typing
 # All services, listed here or not will however be reported as kpi.
 services_allowed_to_crash = [
     # None
-]
+] # type: typing.List[str]
 
 class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     """

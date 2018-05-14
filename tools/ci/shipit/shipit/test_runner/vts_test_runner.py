@@ -12,13 +12,13 @@ import json
 import os
 import re
 import datetime
-from shipit.test_runner.test_types import ResultData
+from shipit.test_runner.test_types import ResultData, VTSTest
 from shipit.process_tools import check_output_logged, ProcessRunner
 #from shipit.test_runner.test_types import VtsTestFailedException
 import xml.etree.cElementTree as ET
 import concurrent.futures
-from typing import Dict, List, Optional
-from subprocess import check_output
+from typing import Dict, List, Optional, Set
+from subprocess import check_output, CalledProcessError
 import typing
 #import zipfile
 
@@ -269,3 +269,40 @@ def read_module_name(android_test_xml_file: str):
         return test_module_name_option.attrib["value"]
 
     raise Exception("Did not find module-name with value in %s" % android_test_xml_file)
+
+def analyze_tests(test_root_dirs: Set[str], half_analysis_without_external_repos):
+    py_files_in_dir = []
+    mypy_config_file = os.path.join(os.path.dirname(__file__), "mypy_component_test_run.ini")
+    env = os.environ.copy()
+
+    for d in test_root_dirs:
+        py_files_in_dir.extend([os.path.join(d, f) for f in os.listdir(d) if f.endswith(".py")])
+        env["PYTHONPATH"] = env["PYTHONPATH"] + os.pathsep + d
+    if len(py_files_in_dir) == 0:
+        return
+
+
+    env["MYPYPATH"] = env["PYTHONPATH"] + os.pathsep + os.path.expandvars("$ANDROID_BUILD_TOP/test")
+    logging.info("Mypy version: %s, environment: %r",
+                 check_output_logged(["mypy", "--version"]),
+                 env)
+
+    extra_args = []
+    if half_analysis_without_external_repos:
+        # In the commit_check stage there is no test/vts repository available so ignore missing imports
+        extra_args.append("--ignore-missing-imports")
+
+    try:
+        check_output_logged(
+            [
+                "mypy",
+                "--py2"
+            ] +
+            extra_args +
+            ["--config-file", mypy_config_file] +
+            py_files_in_dir,
+            env=env)
+    except CalledProcessError as cpe:
+        raise Exception("mypy static analyis failed: " + os.linesep + cpe.output.decode() + os.linesep +  cpe.stderr.decode())
+
+

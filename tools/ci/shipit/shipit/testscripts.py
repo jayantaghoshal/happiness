@@ -141,6 +141,21 @@ def get_test_set(plan, supported_capabilities: Set[str], ignore_tests_not_requir
         return supported_tests
 
 
+def pre_static_analysis_on_testcases(testcases: List[test_types.IhuBaseTest], half_analysis_without_external_repos: bool):
+    vts_tests = [d for d in testcases if isinstance(d, test_types.VTSTest)]
+    vts_test_dirs = [os.path.join(aosp_root, d.test_root_dir) for d in vts_tests]
+    vts_test_runner.analyze_tests(set(vts_test_dirs), half_analysis_without_external_repos)
+
+
+def pre_static_analysis_on_all_testcases():
+    all_plans = test_plan.test_plan_gate + \
+                test_plan.test_plan_hourly + \
+                test_plan.test_plan_nightly + \
+                test_plan.test_plan_staging_hourly + \
+                test_plan.test_plan_staging_daily
+    pre_static_analysis_on_testcases(all_plans, half_analysis_without_external_repos=True)
+
+
 def detect_loose_test_cases():
     all_plans = test_plan.test_plan_gate + \
                 test_plan.test_plan_hourly + \

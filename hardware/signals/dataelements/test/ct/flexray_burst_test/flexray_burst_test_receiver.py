@@ -7,6 +7,8 @@ import os
 import sys
 import logging
 import time
+import typing
+
 from vts.runners.host import asserts
 from vts.runners.host import base_test
 from vts.runners.host import test_runner
@@ -57,7 +59,12 @@ class ComponentTest(base_test.BaseTestClass):
 
         sleep_buckets = [20, 10, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0]
         nr_of_signals_buckets = range(1, len(signals))
-        results = {t: {} for t in sleep_buckets}  # 2d dict with 1st key=burst_sleep_ms, 2nd key=nr_of_signals_to_burst
+
+        # 2d dict with:
+        #    1st key = burst_sleep_ms,
+        #    2nd key = nr_of_signals_to_burst
+        #    value   = nr of fails
+        results = {t: {} for t in sleep_buckets}   # type: typing.Dict[int, typing.Dict[int, int]]
 
         all_fails = []
         for burst_sleep_ms in sleep_buckets:
