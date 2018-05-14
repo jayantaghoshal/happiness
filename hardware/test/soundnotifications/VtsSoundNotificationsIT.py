@@ -95,7 +95,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # Match that list of sounds towards a list of Match objects
             # S018.wav is currently 1.493s, so we expect sound to repeated every 1.5s
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.23, 0.04, 0.25, 0.06)], reorder=False, log_buffer_list=self.log_list)
+                1.23, 0.04, 0.25, 0.08)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
 
@@ -136,7 +136,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         try:
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)],
+                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.08)],
                                                   reorder=True, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
@@ -234,7 +234,8 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
     # ----------------------------------------------------------------------------------------------------------
     # Test Right Turn Indicator Functionality.
     # ----------------------------------------------------------------------------------------------------------
-    def testRightIndicator(self):
+    # Note: Changed name to test***L***RightIndicator since order matters. NOT A LONG TERM SOLUTION.
+    def testLRightIndicator(self):
         # This is (?) Right indicator sound, SPA-UI-S026.wav
         self.logger.info("=== Test testRightIndicator Start ===")
         _s = 0.5
@@ -259,7 +260,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         try:
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.05)],
+                0.218, 0.05, 0.176, 0.05), audio.match.Match(0.0587, 0.05, 0.554, 0.08)],
                                                   reorder=True, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
@@ -384,7 +385,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         try:
             # Match that list of sounds towards a list of Match objects
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                0.218, 0.02, 0.0693, 0.05), audio.match.Match(0.0587, 0.02, 0.6773, 0.05)],
+                0.218, 0.03, 0.0693, 0.08), audio.match.Match(0.0587, 0.03, 0.6773, 0.08)],
                                                   reorder=True, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
@@ -445,7 +446,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             try:
                 # Match that list of sounds towards a list of Match objects
                 res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                    0.218, 0.02, 0.0693, 0.05), audio.match.Match(0.0587, 0.02, 0.6773, 0.05)],
+                    0.218, 0.03, 0.0693, 0.08), audio.match.Match(0.0587, 0.03, 0.6773, 0.08)],
                                                       reorder=False, log_buffer_list=self.log_list)
                 if not res:
                     self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
@@ -492,7 +493,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # S055.wav is 1.400s, so we expect sound + silence to be 2.0s
             # The level is low the last 0.2s of file, but probably enough for detection, so expect 1.4 + 0.6
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.386, 0.02, 0.6133, 0.05)], reorder=False, log_buffer_list=self.log_list)
+                1.386, 0.03, 0.61, 0.08)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -551,7 +552,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # S023.wav is 1.997s, so we expect sound + silence to be 2.0s
             # This sound is a bit 'iffy' so may be difficult to match with current logic?
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.997, 0.02, 0.05, 0.04)], reorder=False, log_buffer_list=self.log_list)
+                1.997, 0.03, 0.05, 0.08)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -588,7 +589,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # Match that list of sounds towards a list of Match objects
             # S024.wav is 1.400s long and goes all the way, so we expect 1.4 + 0.6
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.395, 0.02, 0.6133, 0.05)], reorder=False, log_buffer_list=self.log_list)
+                1.395, 0.03, 0.61, 0.08)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
@@ -626,7 +627,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
             # Match that list of sounds towards a list of Match objects
             # S054.wav is 2.000s, with 1.997s sound, so we expect silence to be short!
             res = audio.match.match_sound_silence(sounds, [audio.match.Match(
-                1.986, 0.02, 0.0426, 0.08)], reorder=False, log_buffer_list=self.log_list)
+                1.986, 0.03, 0.043, 0.08)], reorder=False, log_buffer_list=self.log_list)
             if not res:
                 self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
         except audio.match.NoMatch:
