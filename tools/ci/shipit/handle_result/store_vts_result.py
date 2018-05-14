@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 import json
 import mongodb_wrapper
 from typing import Any, Dict
-from .influxdb_wrapper import insert_influx_data
+from influxdb_wrapper import insert_influx_data
 import logging
 logger = logging.getLogger(__name__)
 
@@ -65,6 +65,7 @@ def upload_results(file):
     totalmodulecount = 0
     totaltestcasecount = 0
     failingtestcasecount = 0
+    failingtestmodulecount = 0
     for module in root.findall('Module'):
         totalmodulecount += 1
         module_json = {**json_base, **module.attrib}
@@ -81,7 +82,8 @@ def upload_results(file):
                 result = False
                 failingtestcasecount += 1
         module_json["result"] = result
-
+        if not result:
+            failingtestmodulecount += 1
         logger.info("Inserting VTS test data: {}".format(module_json))
         mongodb_wrapper.insert_data(module_json)
 
@@ -93,6 +95,8 @@ def upload_results(file):
         'top_test_job_name' : "ihu_vts",
         'total_test_modules' : totalmodulecount,
         'total_testcases' : totaltestcasecount,
+        'passing_testmodules' : totalmodulecount - failingtestmodulecount,
+        'failing_testmodules' : failingtestmodulecount,
         'passing_testcases' : totaltestcasecount - failingtestcasecount,
         'failing_testcases' : failingtestcasecount,
     }
