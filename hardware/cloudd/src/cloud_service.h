@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -80,6 +80,8 @@ class CloudService : public ICloudConnection {
      * @return A Response containing the code, data and a parsed header list that can be sent over Binder.
      */
     Response BuildResponse(std::int32_t code, const std::string& data, const std::string& header);
+
+    void SetConnectionState(const ConnectionState state);
 
     ConnectionState state_;
     std::vector<android::sp<ICloudConnectionEventListener> > listeners_;

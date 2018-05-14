@@ -4,6 +4,7 @@
  */
 
 #include "cloud_service.h"
+#include <IDispatcher.h>
 #include <curl/curl.h>
 #include "certificate_handler.h"
 
@@ -61,8 +62,7 @@ bool CloudService::FetchEntryPoint() {
 
         ALOGD("[Service] CEP URL: %s:%d", cep_url_.c_str(), cep_port_);
 
-        state_ = ConnectionState::CONNECTED;
-
+        SetConnectionState(ConnectionState::CONNECTED);
     });
 
     try {
@@ -109,19 +109,30 @@ Response CloudService::BuildResponse(std::int32_t code, const std::string& data,
     return rsp;
 }
 
+void CloudService::SetConnectionState(const ConnectionState state) {
+    if (state_ != state) {
+        state_ = state;
+
+        for (std::vector<android::sp<ICloudConnectionEventListener>>::iterator listener = listeners_.begin();
+             listener != listeners_.end();
+             /* increased inside loop */) {
+            auto result = listener->get()->isConnected(state == ConnectionState::CONNECTED);
+            if (!result.isOk()) {
+                ALOGE(LOG_TAG, "Listener no longer valid, removing from list");
+                listener = listeners_.erase(listener);
+            } else {
+                ++listener;
+            }
+        }
+    }
+}
+
 // Methods from ICloudConnection follow.
 Return<void> CloudService::registerCloudConnectionEventListener(
         const android::sp<ICloudConnectionEventListener>& listener) {
     listeners_.push_back(listener);
 
-    bool connected = false;
-    if (state_ == ConnectionState::CONNECTED) {
-        connected = true;
-    }
-
-    // Register somne death listener??
-
-    listener->isConnected(connected);
+    IDispatcher::EnqueueTask([&, listener]() { listener->isConnected(state_ == ConnectionState::CONNECTED); });
 
     return Void();
 }
