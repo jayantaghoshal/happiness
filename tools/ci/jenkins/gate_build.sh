@@ -44,7 +44,6 @@ lunch ihu_vcc-eng
 
 # Rerun commit check in case it changed after the change was validated at the check step
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
-time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py analyze
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/bin/gate_check.py
 
 VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
