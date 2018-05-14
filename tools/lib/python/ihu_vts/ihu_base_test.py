@@ -4,15 +4,12 @@
 # This file is covered by LICENSE file in the root of this project
 
 import os
-
-from vts.runners.host import test_runner
-from vts.runners.host import base_test
 import json
 import sys
+from vts.runners.host import test_runner, base_test, const
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
-import typing
-from typing import Union, List, Optional, Dict
+from typing import Union, List, Dict#, Optional
 
 _number = Union[int, float]
 _kpi_value_type = Union[_number, List[Union[List[_number], _number]], str, List[str]]
@@ -46,6 +43,9 @@ class IhuBaseTestClass(base_test.BaseTestClass):
         except Exception:
             print("*** Unable to patch test_runner.TestRunner._writeResultsJsonString ***")
 
+    def setUpClass(self):
+        self.dut = self.android_devices[0]
+        self.dut.shell.InvokeTerminal("IhuBaseShell")
 
     def tearDownClass(self):
         try:
@@ -57,7 +57,34 @@ class IhuBaseTestClass(base_test.BaseTestClass):
 
         super(IhuBaseTestClass, self).tearDownClass()
 
+    def executeInShell(self, command):
+        return self.dut.shell.IhuBaseShell.Execute(command)
 
     def write_kpi(self, name, value, unit=None):
         # type: (str, _kpi_value_type, str) -> None
         self.vcc_kpis[name] = value
+
+    def deviceReboot(self):
+        self.executeInShell("reboot")
+        self.dut.stopServices()
+        self.dut.waitForBootCompletion()
+        self.dut.startServices()
+        self.dut.shell.InvokeTerminal("IhuBaseShell")
+
+    def set_carconfig_value(self, name, value):
+        current = self.executeInShell("readcarconfig {}".format(name))[const.STDOUT][0].strip()
+        try:
+            int(current)
+        except ValueError:
+            raise Exception("Bad response from readcarconfig")
+        if str(current) == str(value):
+            return False
+        else:
+            self.executeInShell("changecarconfig {} {}".format(name, value))
+            return True
+
+    def set_carconfig(self, carconfig):
+        change = False
+        for config in carconfig:
+            change |= self.set_carconfig_value(config[0], config[1])
+        return change

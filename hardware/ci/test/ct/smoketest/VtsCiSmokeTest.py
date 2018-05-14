@@ -4,22 +4,14 @@
 # This file is covered by LICENSE file in the root of this project
 
 import logging
-import time
-import sys
-import os
 import re
-import subprocess
-import shlex
 import io
+import sys
 from time import sleep
-
 from vts.runners.host import asserts
-from vts.runners.host import base_test
 from vts.runners.host import const
 from vts.runners.host import test_runner
-from vts.utils.python.controllers import android_device
 import ihu_base_test
-import sys
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 import typing
 
@@ -35,16 +27,24 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
        The old smoke test requirements for earlier projects was at
        90 % load and 90 % free memory.
     """
-    def setUpClass(self):
-        self.dut = self.registerController(android_device)[0]
-        self.dut.shell.InvokeTerminal("one")
+
+    def testCarconfig(self):
+        self.executeInShell("changecarconfig 148 2")
+        self.deviceReboot()
+        need_reboot = self.set_carconfig_value(148, 2)
+        asserts.assertEqual(need_reboot, False, "Expected set_carconfig_value False on non-changed value.")
+        need_reboot = self.set_carconfig_value(148, 3)
+        asserts.assertEqual(need_reboot, True, "Expected set_carconfig_value True on changed value.")
+        self.deviceReboot()
+        set_value = self.executeInShell("readcarconfig 148")[const.STDOUT][0].strip()
+        asserts.assertEqual(set_value, '3', "Failed to set carconfig value.")
 
     def testCpuLoadLong(self):
         requirement = 90
         #Before there is a clear indication of system boot completed,
         #give CPU load some time to avoid the load spike after ihu_update and boot.
         sleep(30) # wait a bit
-        shell_response = self.dut.shell.one.Execute("cat /proc/cpuinfo")
+        shell_response = self.executeInShell("cat /proc/cpuinfo")
 
         model_name = re.findall('model\s*name\s*:\s*([^\n\r]*)', shell_response[const.STDOUT][0])[0]
         number_of_cores = re.findall('cpu\s*cores\s*:\s*(\d+)', shell_response[const.STDOUT][0])[0]
@@ -55,7 +55,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load[core])
             self.write_kpi("cpu_core_%d" % core, total_load[core], "%")
             if total_load[core] > requirement:
-                process_running = self.dut.shell.one.Execute(["top -n1"])
+                process_running = self.executeInShell(["top -n1"])
                 logging.info("top -n1")
                 logging.info(process_running[const.STDOUT][0])
                 asserts.assertLess(total_load[core], requirement, "The load on the core is over " + str(requirement) + "%" + "\n" + process_running[const.STDOUT][0])
@@ -65,9 +65,9 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
     def testBootchartBootTime(self):
         max_boot_time = 40  # s
-        self.dut.shell.one.Execute("touch /data/bootchart/enabled")
+        self.executeInShell("touch /data/bootchart/enabled")
         self.deviceReboot()
-        shell_response = self.dut.shell.one.Execute("tail -20 /data/bootchart/proc_stat.log")
+        shell_response = self.executeInShell("tail -20 /data/bootchart/proc_stat.log")
         boot_time = float(re.findall('\n(\d{3,5})\n', shell_response[const.STDOUT][0])[-1])
         boot_time = boot_time / 100.0
         logging.info("The bootchart boot time is: " + str(boot_time) + " s")
@@ -75,12 +75,12 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
         self.write_kpi("bootchart_boot_time", boot_time, "s")
 
         asserts.assertLess(boot_time, max_boot_time, "Bootchart boot time longer than the maximum allowed {} s".format(max_boot_time / 100))
-        self.dut.shell.one.Execute("rm /data/bootchart/enabled")
-        self.dut.shell.one.Execute("rm /data/bootchart/proc_stat.log")
+        self.executeInShell("rm /data/bootchart/enabled")
+        self.executeInShell("rm /data/bootchart/proc_stat.log")
 
     def testCpuLoadShort(self):
         requirement = 90
-        shell_response = self.dut.shell.one.Execute(["cat /proc/cpuinfo"])
+        shell_response = self.executeInShell(["cat /proc/cpuinfo"])
 
         model_name = re.findall('model\s*name\s*:\s*([^\n\r]*)', shell_response[const.STDOUT][0])[0]
         number_of_cores = re.findall('cpu\s*cores\s*:\s*(\d+)', shell_response[const.STDOUT][0])[0]
@@ -100,7 +100,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
                     logging.info("load in core" + str(core) + " = " + '%.1f%%' % total_load_secondtry[core])
                     self.write_kpi("cpu_core_%d" % core, total_load_secondtry[core], "%")
                     if total_load_secondtry[core] > requirement:
-                        process_running = self.dut.shell.one.Execute(["top -n1"])
+                        process_running = self.executeInShell(["top -n1"])
                         logging.info("top -n1")
                         logging.info(process_running[const.STDOUT][0])
                         asserts.assertLess(total_load_secondtry[core], requirement, "The load on the core is over " + str(requirement) + "%" + "\n" + process_running[const.STDOUT][0])
@@ -112,7 +112,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     def testMemory(self):
         requirement = 10
         #requirement = 99
-        shell_response = self.dut.shell.one.Execute(["cat /proc/meminfo"])
+        shell_response = self.executeInShell(["cat /proc/meminfo"])
 
         mem_free_kb = float(re.findall('MemFree:\s*(\d+)', shell_response[const.STDOUT][0])[0])
         buffers_kb = float(re.findall('Buffers:\s*(\d+)', shell_response[const.STDOUT][0])[0])
@@ -138,7 +138,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
     def testDisk(self):
         requirement = 75
         number_of_disks = [] # type: typing.List[str]
-        shell_response = self.dut.shell.one.Execute(["df","-h"])
+        shell_response = self.executeInShell(["df","-h"])
         vendor = re.findall('([^\n]*/\s*vendor\s*)', shell_response[const.STDOUT][0])[0]
         number_of_disks.append(vendor)
         data = re.findall('([^\n]*/\s*data\s*)', shell_response[const.STDOUT][0])[0]
@@ -159,27 +159,20 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
             if (float(disk_load[str(disk)]['usage'][3].strip('%'))) > requirement:
                asserts.assertLess(float(disk_load[str(disk)]['usage'][3].strip('%')), requirement, "The disk usage is over " + str(requirement) + "%")
 
-    def deviceReboot(self):
-        self.dut.shell.one.Execute("reboot")
-        self.dut.stopServices()
-        self.dut.waitForBootCompletion()
-        self.dut.startServices()
-        self.dut.shell.InvokeTerminal("one")
-
     def testCrashes(self):
         def crash_allowed(process_name):
             if process_name in services_allowed_to_crash:
                 return True
             return False
 
-        shell_response = self.dut.shell.one.Execute(["ls /data/tombstones"])
+        shell_response = self.executeInShell(["ls /data/tombstones"])
         shell_response_stdout = shell_response[const.STDOUT][0].strip()
         tombstones_files = [x.strip() for x in shell_response_stdout.split("\n") if len(x) > 0]
         if len(tombstones_files) > 0:
             logging.info("Found tombstones")
         crashing_processes = []
         for t in tombstones_files:
-            tombstone_output = self.dut.shell.one.Execute(["cat /data/tombstones/%s" %t ])[const.STDOUT][0]
+            tombstone_output = self.executeInShell(["cat /data/tombstones/%s" %t ])[const.STDOUT][0]
             pidmatches = re.findall("^pid:.*>>>(.*)<<<.*$", tombstone_output, re.MULTILINE)
             if pidmatches:
                 crashing_processes.extend(pidmatches)
@@ -202,7 +195,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
 
     def get_data(self, cores):
-        shell_response = self.dut.shell.one.Execute(["cat /proc/stat"])
+        shell_response = self.executeInShell(["cat /proc/stat"])
         stats_data = io.StringIO((shell_response[const.STDOUT][0]).decode('utf-8'))
         stats_data.readline() #remove first line with total cpu load
         core_load = {} # type: typing.Any

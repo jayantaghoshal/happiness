@@ -130,7 +130,8 @@ PRODUCT_PACKAGES += \
     carconfig-client-tester \
     hisipcmd \
     apix_setup_sock_util \
-    changecarconfig
+    changecarconfig \
+    readcarconfig
 endif
 
 ##############################################################

@@ -7,7 +7,7 @@
     <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
     <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
         <option name="test-module-name" value="VtsCiSmokeTest"/>
-	<option name="test-case-path" value="VtsCiSmokeTest" />
+        <option name="test-case-path" value="VtsCiSmokeTest" />
         <option name="test-timeout" value="7m"/>
     </test>
 </configuration>
