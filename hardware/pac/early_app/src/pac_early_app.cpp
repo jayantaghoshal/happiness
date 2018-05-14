@@ -5,6 +5,9 @@
 
 #include "pac_early_app.h"
 
+#include <chrono>
+#include <cinttypes>
+#include <cstdint>
 #include <cstdlib>
 #include <thread>
 
@@ -23,8 +26,21 @@ namespace vcc_implementation {
 
 using android::hardware::automotive::evs::V1_0::IEvsEnumerator;
 using android::sp;
+
+// chrono
 using std::chrono::milliseconds;
+
+// thread
 using std::this_thread::sleep_for;
+
+namespace {
+namespace app_cfg {
+
+// How many milliseconds the app shall wait before retrying to get the EVS manager service
+constexpr uint32_t kServiceRetryInterval = 100;
+
+}  // namespace app_cfg
+}  // namespace
 
 // Main entry point
 bool PacEarlyApp::Start() {
@@ -35,12 +51,18 @@ bool PacEarlyApp::Start() {
     dbgD("App trying to connect to service [%s]", kManagedServiceName);
 
     // Get the EVS manager service
-    sp<IEvsEnumerator> evs = IEvsEnumerator::getService(kManagedServiceName);
+    sp<IEvsEnumerator> evs;
+    do {
+        evs = IEvsEnumerator::tryGetService(kManagedServiceName);
+        if (evs == nullptr) {
+            dbgW("Failed to connect to EVS manager service %s, will retry in %" PRIu32 "ms",
+                 kManagedServiceName,
+                 app_cfg::kServiceRetryInterval);
+            sleep_for(milliseconds(app_cfg::kServiceRetryInterval));
+        }
+    } while (evs == nullptr);
+
     dbgD("EVS getService(%s) returned with interface %s", kManagedServiceName, evs->descriptor);
-    if (evs == nullptr) {
-        dbgE("EVS getService(%s) returned NULL.  Exiting.", kManagedServiceName);
-        return false;
-    }
 
     // Run forever
     dbgI("Entering running state");
