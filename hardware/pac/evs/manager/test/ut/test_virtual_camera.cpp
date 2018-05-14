@@ -3,6 +3,8 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
+#include <thread>
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -27,6 +29,7 @@ class MockIEvsVideoProvider : public IEvsVideoProvider {
     MOCK_METHOD0(GetClientCount, std::list<wp<IVirtualCamera>>::size_type());
     MOCK_METHOD0(RequestVideoStream, Return<EvsResult>());
     MOCK_METHOD0(ReleaseVideoStream, void());
+    MOCK_METHOD1(DoneWithFrame, void(const BufferDesc& buffer));
     MOCK_METHOD1(deliverFrame, Return<void>(const BufferDesc& buffer));
 };
 
@@ -55,6 +58,24 @@ class VirtualCameraTest : public ::testing::Test {
         virtual_camera.clear();
     }
 };
+
+namespace {
+namespace test_utils {
+using android::hardware::hidl_handle;
+using android::hardware::automotive::evs::V1_0::BufferDesc;
+
+// Helper method for creating dummy buffer
+BufferDesc CreateDummyBuffer(uint32_t buffer_id) {
+    BufferDesc dummy_buffer = {};
+    native_handle_t* dummy_native_handle = new native_handle_t();
+    hidl_handle dummy_handle = hidl_handle(dummy_native_handle);
+    dummy_buffer.memHandle = dummy_handle;
+    dummy_buffer.bufferId = buffer_id;
+    return dummy_buffer;
+}
+
+}  // namespace test_utils
+}  // namespace
 
 TEST_F(VirtualCameraTest, ConstructObject) { EXPECT_NE(virtual_camera, nullptr); }
 
@@ -136,13 +157,104 @@ TEST_F(VirtualCameraTest, stopVideoStream) {
     // The intended behaviour here is for the method to close the output stream and inform the input
     // stream that we no longer need it.
     // SetUp
-    virtual_camera->output_stream_state_ = StreamState::RUNNING;
     virtual_camera->output_stream_ = mock_output_stream;
+    virtual_camera->output_stream_state_ = StreamState::RUNNING;
     EXPECT_CALL(*mock_output_stream, deliverFrame(_)).WillOnce(testing::Return(testing::ByMove(Void())));
     EXPECT_CALL(*mock_input_stream, ReleaseVideoStream());
     // Test and verify
     virtual_camera->stopVideoStream();
     ASSERT_FALSE(virtual_camera->IsStreaming());
+}
+
+TEST_F(VirtualCameraTest, DeliverFrameOutputStreamStopped) {
+    // We should not accept frames if the output stream is stopped, i.e. if we have no use for them.
+    // SetUp
+    virtual_camera->output_stream_ = mock_output_stream;
+    virtual_camera->output_stream_state_ = StreamState::STOPPED;
+    BufferDesc dummy_buffer = test_utils::CreateDummyBuffer(1);
+    auto initial_size = virtual_camera->frames_held_.size();
+
+    // Test and verify
+    bool result = virtual_camera->DeliverFrame(dummy_buffer);
+    EXPECT_FALSE(result);
+    auto size_after_call = virtual_camera->frames_held_.size();
+    EXPECT_EQ(size_after_call, initial_size);
+}
+
+TEST_F(VirtualCameraTest, DeliverFrameEndOfStream) {
+    // Test handling of input of an empty buffer.
+    // An empty buffer indicates end of stream. Normally the input stream should not end
+    // without a call to stopVideoStream(), so if we receive an empty buffer anyway we
+    // close the output stream since we have no video to deliver.
+    // SetUp
+    BufferDesc empty_buffer = {};
+    virtual_camera->output_stream_ = mock_output_stream;
+    virtual_camera->output_stream_state_ = StreamState::RUNNING;
+    EXPECT_CALL(*mock_output_stream, deliverFrame(_));
+    EXPECT_CALL(*mock_input_stream, ReleaseVideoStream());
+
+    // Test and verify
+    bool result = virtual_camera->DeliverFrame(empty_buffer);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(virtual_camera->output_stream_state_, StreamState::STOPPED);
+}
+
+TEST_F(VirtualCameraTest, DeliverFrame) {
+    // Test the "Happy Path"
+    // SetUp
+    BufferDesc dummy_buffer = test_utils::CreateDummyBuffer(1);
+    virtual_camera->output_stream_ = mock_output_stream;
+    virtual_camera->output_stream_state_ = StreamState::RUNNING;
+    EXPECT_CALL(*mock_output_stream, deliverFrame(_));
+
+    // Test and verify
+    bool result = virtual_camera->DeliverFrame(dummy_buffer);
+    EXPECT_TRUE(result);
+    uint32_t held_frame_id = virtual_camera->frames_held_.begin()->bufferId;
+    EXPECT_EQ(held_frame_id, dummy_buffer.bufferId);
+}
+
+TEST_F(VirtualCameraTest, doneWithFrameEmptyBuffer) {
+    // Test handling of the empty buffer used to indicate end of stream.
+    // SetUp
+    BufferDesc empty_buffer = {};
+
+    // Test and verify
+    auto result = virtual_camera->doneWithFrame(empty_buffer);  // Implicitly verifies that no function calls were made.
+    EXPECT_TRUE(result.isOk());
+}
+
+TEST_F(VirtualCameraTest, doneWithFrameUnrecognizedBufferId) {
+    // Test handling of a buffer with an unknown Id.
+    // SetUp
+    BufferDesc dummy_buffer = test_utils::CreateDummyBuffer(1);
+
+    // Test and verify
+    auto result = virtual_camera->doneWithFrame(dummy_buffer);  // Implicitly verifies that no function calls were made.
+    EXPECT_TRUE(result.isOk());
+}
+
+TEST_F(VirtualCameraTest, doneWithFrame) {
+    // Test handling of a known buffer, the "Happy Path" case
+    // SetUp
+    BufferDesc dummy_buffer_1 = test_utils::CreateDummyBuffer(1);
+    BufferDesc dummy_buffer_2 = test_utils::CreateDummyBuffer(2);
+    BufferDesc dummy_buffer_3 = test_utils::CreateDummyBuffer(3);
+    virtual_camera->frames_held_.emplace_back(dummy_buffer_1);
+    virtual_camera->frames_held_.emplace_back(dummy_buffer_2);
+    virtual_camera->frames_held_.emplace_back(dummy_buffer_3);
+
+    EXPECT_CALL(*mock_input_stream, DoneWithFrame(_));
+    auto initial_size = virtual_camera->frames_held_.size();
+
+    // Test and verify
+    auto result = virtual_camera->doneWithFrame(dummy_buffer_1);
+    EXPECT_TRUE(result.isOk());
+    // Verify that entry was deleted
+    auto size_after_call = virtual_camera->frames_held_.size();
+    EXPECT_NE(size_after_call, initial_size);
+    virtual_camera->doneWithFrame(
+            dummy_buffer_1);  // Implicitly verifies deletion since DoneWithFrame is not called on mock_input_stream
 }
 
 }  // namespace vcc_implementation

@@ -40,6 +40,7 @@ class EvsVideoProvider : public IEvsVideoProvider {
     // Stream handling methods
     Return<EvsResult> RequestVideoStream() override;
     void ReleaseVideoStream() override;
+    void DoneWithFrame(const BufferDesc& buffer) override;
 
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCameraStream follow.
     Return<void> deliverFrame(const BufferDesc& buffer) override;
@@ -47,12 +48,22 @@ class EvsVideoProvider : public IEvsVideoProvider {
   private:
     sp<IEvsCamera> hw_camera_;
     std::list<wp<IVirtualCamera>> clients_;  // Weak pointers -> object destructs if client dies
-
     StreamState output_stream_state_ = StreamState::STOPPED;
+
+    struct FrameRecord {
+        uint32_t frame_id;
+        uint32_t ref_count;
+        FrameRecord(uint32_t id) : frame_id(id), ref_count(0){};
+    };
+    std::vector<FrameRecord> frames_;
 
     FRIEND_TEST(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamStopped);
     FRIEND_TEST(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamRunning);
     FRIEND_TEST(EvsVideoProviderTest, ReleaseVideoStreamNotLastClient);
+    FRIEND_TEST(EvsVideoProviderTest, deliverFrameNoTakers);
+    FRIEND_TEST(EvsVideoProviderTest, deliverFrame);
+    FRIEND_TEST(EvsVideoProviderTest, DoneWithFrameNotLastUser);
+    FRIEND_TEST(EvsVideoProviderTest, DoneWithFrameLastUser);
 };
 
 }  // namespace vcc_implementation

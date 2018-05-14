@@ -23,8 +23,37 @@ VirtualCamera::~VirtualCamera() { Shutdown(); }
 void VirtualCamera::Shutdown() {
     dbgD("called");
 
+    // TODO(ihu) Improve handling of stream state and frames
+
     // Drop our reference to our camera stream provider
     input_stream_ = nullptr;
+}
+
+bool VirtualCamera::DeliverFrame(const BufferDesc& buffer) {
+    dbgD("called with bufferId %" PRIu32,
+         buffer.memHandle != nullptr ? buffer.bufferId : 0);  // Use 0 if buffer is empty
+
+    if (!IsStreaming()) {
+        return false;  // Only accept frames if output stream is running
+    }
+
+    if (buffer.memHandle == nullptr) {  // A nullptr buffer indicates end of stream
+        // Warn that stream termination is unexpected, the stream should be stopped by a call to stopVideoStream().
+        dbgE("Input stream stopped unexpectedly");  // TODO(ihu) Downgrade to warning if we restart stack.
+
+        // TODO(ihu) Consider triggering restart of the stack in this case
+
+        // Stop the video stream
+        stopVideoStream();
+        return false;  // We do hold the buffer, so return false;
+    }
+
+    // TODO(ihu) Add handling of max number of frames held.
+
+    // Log our use of frame and forward it to the output stream
+    frames_held_.emplace_back(buffer);
+    output_stream_->deliverFrame(buffer);
+    return true;
 }
 
 Return<void> VirtualCamera::getCameraInfo(getCameraInfo_cb hidl_cb) {
@@ -46,8 +75,6 @@ Return<EvsResult> VirtualCamera::startVideoStream(const sp<IEvsCameraStream>& st
         return EvsResult::STREAM_ALREADY_RUNNING;
     }
 
-    // TODO(ihu) Add frame handling
-
     // Inform the input stream provider that we want to stream
     Return<EvsResult> result = input_stream_->RequestVideoStream();
     if (!result.isOk() || result != EvsResult::OK) {
@@ -65,7 +92,30 @@ Return<EvsResult> VirtualCamera::startVideoStream(const sp<IEvsCameraStream>& st
 Return<void> VirtualCamera::doneWithFrame(const BufferDesc& buffer) {
     dbgD("called with bufferId %" PRIu32,
          buffer.memHandle != nullptr ? buffer.bufferId : 0);  // Use 0 if buffer is empty
-    // TODO(ihu) Implement VirtualCamera::doneWithFrame method
+
+    if (buffer.memHandle == nullptr) {
+        // doneWithFrame() should not be called for end of stream marker.
+        dbgE("called with buffer.memHandle == nullptr. Ignoring call.");
+        return Void();
+    }
+
+    auto it = frames_held_.begin();
+    while (it != frames_held_.end()) {
+        if (it->bufferId == buffer.bufferId) {
+            break;
+        }
+        ++it;
+    }
+    if (it == frames_held_.end()) {
+        dbgE("called with unrecognized bufferId %" PRIu32 ". Ignoring call.", buffer.bufferId);
+        return Void();
+    }
+    // Remove frame from list of held frames.
+    frames_held_.erase(it);
+
+    // Inform parent that we are done with buffer.
+    input_stream_->DoneWithFrame(buffer);
+
     return Void();
 }
 
@@ -79,6 +129,8 @@ Return<void> VirtualCamera::stopVideoStream() {
 
     // Inform the input stream that we don't want any more frames
     output_stream_state_ = StreamState::STOPPING;
+
+    // TODO(ihu) Consider handling of currently held frames in this situation
 
     // Deliver an empty frame to close the output stream
     BufferDesc empty_frame = {};

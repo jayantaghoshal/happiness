@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <deque>
+
 #include <android/hardware/automotive/evs/1.0/IEvsCamera.h>
 #include <gtest/gtest_prod.h>
 #include "i_evs_video_provider.h"
@@ -33,6 +35,9 @@ class VirtualCamera final : public IVirtualCamera {
     sp<IEvsVideoProvider> GetEvsVideoProvider() override { return input_stream_; };
     bool IsStreaming() override { return output_stream_state_ == StreamState::RUNNING; };
 
+    // Proxy to receive frames from the input stream and forward them to the output stream
+    bool DeliverFrame(const BufferDesc& buffer) override;
+
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCamera follow.
     Return<void> getCameraInfo(getCameraInfo_cb hidl_cb) override;
     Return<EvsResult> setMaxFramesInFlight(uint32_t buffer_count) override;
@@ -46,10 +51,16 @@ class VirtualCamera final : public IVirtualCamera {
     sp<IEvsVideoProvider> input_stream_;  // The low level camera interface to the hardware camera
     sp<IEvsCameraStream> output_stream_;  // The output stream to the consumer
 
+    std::deque<BufferDesc> frames_held_;
+
     StreamState output_stream_state_ = StreamState::STOPPED;
 
     FRIEND_TEST(VirtualCameraTest, startVideoStreamWhenStreamAlreadyRunning);
     FRIEND_TEST(VirtualCameraTest, stopVideoStream);
+    FRIEND_TEST(VirtualCameraTest, DeliverFrameOutputStreamStopped);
+    FRIEND_TEST(VirtualCameraTest, DeliverFrameEndOfStream);
+    FRIEND_TEST(VirtualCameraTest, DeliverFrame);
+    FRIEND_TEST(VirtualCameraTest, doneWithFrame);
 };
 
 }  // namespace vcc_implementation

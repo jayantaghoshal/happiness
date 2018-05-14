@@ -33,6 +33,7 @@ class IEvsVideoProvider : public IEvsCameraStream {
     // Stream handling methods
     virtual Return<EvsResult> RequestVideoStream() = 0;
     virtual void ReleaseVideoStream() = 0;
+    virtual void DoneWithFrame(const BufferDesc& buffer) = 0;
 };
 
 }  // namespace vcc_implementation

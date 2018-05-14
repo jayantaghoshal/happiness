@@ -39,7 +39,7 @@ void EvsVideoProvider::DisownVirtualCamera(const sp<IVirtualCamera>& virtual_cam
     dbgD("called");
     // Validate input
     if (virtual_camera == nullptr) {
-        dbgE("Input virtual_camera was nullptr.");
+        dbgE("Input virtual_camera was nullptr. Ignoring call.");
         return;
     }
 
@@ -50,7 +50,7 @@ void EvsVideoProvider::DisownVirtualCamera(const sp<IVirtualCamera>& virtual_cam
     auto client_count_pre_remove = GetClientCount();
     clients_.remove(virtual_camera);
     if (GetClientCount() == client_count_pre_remove) {
-        dbgE("EVS camera client to be removed was not present in list of clients.");
+        dbgE("Virtual camera to be removed was not present in list of clients.");
     }
     virtual_camera->Shutdown();
 
@@ -95,10 +95,71 @@ void EvsVideoProvider::ReleaseVideoStream() {
     }
 }
 
+void EvsVideoProvider::DoneWithFrame(const BufferDesc& buffer) {
+    dbgD("called with bufferId %" PRIu32,
+         buffer.memHandle != nullptr ? buffer.bufferId : 0);  // Use 0 if buffer is empty
+
+    if (buffer.memHandle == nullptr) {
+        dbgE("called with buffer.memHandle == nullptr. Ignoring call.");
+        return;
+    }
+
+    // Find frame in list of outstanding frames
+    unsigned int i;
+    for (i = 0; i < frames_.size(); i++) {
+        if (frames_[i].frame_id == buffer.bufferId) {
+            break;
+        }
+    }
+
+    if (i == frames_.size()) {
+        dbgE("called with unrecognized bufferId %" PRIu32 ". Ignoring call.", buffer.bufferId);
+        return;
+    }
+
+    // Check if other clients are using the buffer
+    frames_[i].ref_count--;
+    if (frames_[i].ref_count <= 0) {
+        // No client is using the buffer, return it to the device layer
+        hw_camera_->doneWithFrame(buffer);
+    }
+}
+
 Return<void> EvsVideoProvider::deliverFrame(const BufferDesc& buffer) {
     dbgD("called with bufferId %" PRIu32,
          buffer.memHandle != nullptr ? buffer.bufferId : 0);  // Use 0 if buffer is empty
-    // TODO(ihu) Implement EvsVideoProvider::deliverFrame method
+
+    // Deliver frame to any eligible client
+    unsigned int frame_deliveries = 0;
+    for (auto&& client : clients_) {
+        sp<IVirtualCamera> cam_client = client.promote();
+        if (cam_client != nullptr && cam_client->DeliverFrame(buffer)) {
+            frame_deliveries++;
+        }
+    }
+
+    if (frame_deliveries == 0) {
+        // If no client could accept the frame, return it
+        dbgI("Trivially rejecting frame with no acceptances");  // TODO(ihu) consider downgrading to debug
+        hw_camera_->doneWithFrame(buffer);
+        return Void();
+    }
+
+    // Add an entry for the frame in the tracking list
+    // If the list has an unused entry (ref_count == 0) replace it, else create a new entry.
+    size_t i;
+    for (i = 0; i < frames_.size(); i++) {
+        if (frames_[i].ref_count == 0) {
+            break;
+        }
+    }
+    if (i == frames_.size()) {
+        frames_.emplace_back(buffer.bufferId);
+    } else {
+        frames_[i].frame_id = buffer.bufferId;
+    }
+    frames_[i].ref_count = frame_deliveries;
+
     return Void();
 }
 

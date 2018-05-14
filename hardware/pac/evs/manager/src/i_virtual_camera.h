@@ -27,6 +27,9 @@ class IVirtualCamera : public IEvsCamera {
     // Inline implementations
     virtual sp<IEvsVideoProvider> GetEvsVideoProvider() = 0;
     virtual bool IsStreaming() = 0;
+
+    // Proxy to receive frames from the EvsCameraStream and forward them to the consumer
+    virtual bool DeliverFrame(const BufferDesc& buffer) = 0;
 };
 
 }  // namespace vcc_implementation
