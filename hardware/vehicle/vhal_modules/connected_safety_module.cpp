@@ -101,9 +101,8 @@ ConnectedSafetyModule::ConnectedSafetyModule(gsl::not_null<VFContext*> ctx)
             is_alivetimeout_ = false;
             ALOGD("Signal Ok. Alive timeout is now false");
             auto roadfricindcnsts_value = signal.value();
-            connected_safety_on_ = (roadfricindcnsts_value == autosar::FctSts2::On);
-
-            is_invalid_connected_safety_signal_ = (roadfricindcnsts_value == autosar::FctSts2::SrvRqrd);
+            is_invalid_connected_safety_signal_ =
+                    (roadfricindcnsts_value != autosar::FctSts2::On && roadfricindcnsts_value != autosar::FctSts2::Off);
             ALOGD("is_invalid_connected_safety_signal_ is changed: %d", is_invalid_connected_safety_signal_);
         }
         Update();

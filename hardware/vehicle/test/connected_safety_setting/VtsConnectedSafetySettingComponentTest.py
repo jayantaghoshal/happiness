@@ -186,8 +186,6 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
 
         print("----------- UsgModSts Active -----------")
 
-        vc.sleep(buttonWaitTimeSeconds)
-
         buttonOff.touch()
         vc.sleep(buttonWaitTimeSeconds)
         # Verify that On/Off is false after Off button click.

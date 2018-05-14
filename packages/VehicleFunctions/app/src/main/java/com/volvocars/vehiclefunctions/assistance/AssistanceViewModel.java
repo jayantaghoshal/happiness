@@ -73,7 +73,8 @@ public class AssistanceViewModel extends ViewModel {
             if (supportedFeatures.contains(VehicleProperty.CONNECTED_SAFETY_ON)) {
                 intelliSafeFunctions.add(new OnOffFunction("Connected Safety",
                         new VhalOnOffDelegate(mVendorExtensionClient,
-                                VehicleProperty.CONNECTED_SAFETY_ON),
+                                VehicleProperty.CONNECTED_SAFETY_ON,
+                                VehicleProperty.CONNECTED_SAFETY_ON_STATUS),
                         R.id.connected_safety_button_on, R.id.connected_safety_button_off));
             }
             sections.add(new Section("Intellisafe", intelliSafeFunctions));
