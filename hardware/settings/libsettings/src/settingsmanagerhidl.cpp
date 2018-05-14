@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -137,10 +137,19 @@ andrHw::Return<void> SettingsManagerHidl::onRegistration(const andrHw::hidl_stri
     }
     ALOGV("Link to death ok");
 
-    auto settingsProxyCopy = settingsProxy;
-    reloadAllSettings(*settingsProxyCopy);
-
-    ALOGV("Link to death reloadsettings done");
+    // Dispatch reloadAllSettings to other thread before returning to avoid recursive IPC causing potential deadlocks
+    android::wp<SettingsManagerHidl> weak_this{this};
+    dispatcher.Enqueue([weak_this]() mutable {
+        android::sp<SettingsManagerHidl> lockWeak = weak_this.promote();
+        if (lockWeak == nullptr) {
+            return;
+        }
+        auto settingsProxyCopy = lockWeak->settingsProxy;
+        if (settingsProxyCopy != nullptr) {
+            lockWeak->reloadAllSettings(*settingsProxyCopy);
+            ALOGD("reloadAllSettings done");
+        }
+    });
 
     return andrHw::Return<void>();
 }

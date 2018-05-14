@@ -8,6 +8,6 @@ interface ISettingsStorage
 {
     set(uint32_t key, ProfileIdentifier profileId, string data);
     get(uint32_t key,  ProfileIdentifier profileId) generates (string data);
-    subscribe(uint32_t key, UserScope userScope, ISettingsListener listener);
-    unsubscribe(uint32_t key, ISettingsListener listener);
+    oneway subscribe(uint32_t key, UserScope userScope, ISettingsListener listener);
+    oneway unsubscribe(uint32_t key, ISettingsListener listener);
 };
