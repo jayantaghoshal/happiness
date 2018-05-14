@@ -67,7 +67,7 @@ def wait_for(get_function, expected_value, timeout_sec, extra_message=None):
 
 
 def wait_until_signal(fdx_signal, expected_value, deadline, extra_message=""):
-    # type: (PydataElementsSenderType, int, int) -> None
+    # type: (PydataElementsSenderType, int, int, str) -> None
     read_value = fdx_signal.get()
     while time.time() < deadline:
         read_value = fdx_signal.get()
