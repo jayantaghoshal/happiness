@@ -160,7 +160,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
                                               logicFactory_.driverConvertedTemp_.get(),
                                               logicFactory_.driverTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        prop_temperature.PushProp(value, toInt(VehicleAreaZone::ROW_1_LEFT));
+        prop_temperature.PushProp(value, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_LEFT));
     }));
     subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto&) {
         FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
@@ -175,7 +175,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
                                               logicFactory_.passengerConvertedTemp_.get(),
                                               logicFactory_.passengerTemperatureLogic_.range());
         log_debug() << "fireDriverTemperatureAttributeChanged, " << pubVal;
-        prop_temperature.PushProp(value, toInt(VehicleAreaZone::ROW_1_RIGHT));
+        prop_temperature.PushProp(value, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_RIGHT));
     }));
 
     subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto&) {
@@ -231,7 +231,8 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         ALOGD("fireDriverTemperatureHiLoNormalMode State: %d, Mode: %d",
               static_cast<int>(logicFactory_.driverTempState_.get()),
               commonFactory_.getDriverTempHiLoNProperty().get());
-        prop_temperature_mode.PushProp(toInt(value), toInt(VehicleAreaZone::ROW_1_LEFT));
+        prop_temperature_mode.PushProp(
+                toInt(value), VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_LEFT));
     }));
 
     subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto&) {
@@ -246,7 +247,8 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
         ALOGD("firePassengerTemperatureHiLoNormalMode State: %d, Mode: %d",
               static_cast<int>(logicFactory_.passengerTempState_.get()),
               logicFactory_.passengerTempHiLoN_.get());
-        prop_temperature_mode.PushProp(toInt(value), toInt(VehicleAreaZone::ROW_1_RIGHT));
+        prop_temperature_mode.PushProp(
+                toInt(value), VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_RIGHT));
     }));
 
     subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto&) {
@@ -274,7 +276,9 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     });
     subs_.push_back(logicFactory_.fanLevelFront_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireFanLevelFrontAttributeChanged " << state;
-        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_), toInt(VehicleAreaZone::ROW_1_CENTER));
+        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_),
+                                    VehiclePropertyStatus::AVAILABLE,
+                                    toInt(VehicleAreaZone::ROW_1_CENTER));
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,7 +293,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     subs_.push_back(logicFactory_.autoClimate_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireAutoClimateAttributeChanged " << state;
         bool on = (state == FirstRowGen::AutoClimateState::ON);
-        prop_autoclimate.PushProp(on, toInt(VehicleAreaZone::ROW_1_CENTER));
+        prop_autoclimate.PushProp(on, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_CENTER));
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -304,7 +308,9 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     });
     subs_.push_back(logicFactory_.manualRecirc_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireManualRecircAttributeChanged " << state;
-        prop_recirculation.PushProp(state == FirstRowGen::ManualRecircState::ON, toInt(VehicleAreaZone::ROW_1_CENTER));
+        prop_recirculation.PushProp(state == FirstRowGen::ManualRecircState::ON,
+                                    VehiclePropertyStatus::AVAILABLE,
+                                    toInt(VehicleAreaZone::ROW_1_CENTER));
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,11 +339,13 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     subs_.push_back(logicFactory_.electricDefrosterRear_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireAirConditionerAttributeChanged " << state;
         prop_defroster.PushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
+                                VehiclePropertyStatus::AVAILABLE,
                                 toInt(VehicleAreaWindow::REAR_WINDSHIELD));
     }));
     subs_.push_back(logicFactory_.electricDefrosterWindscreen_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireElectricDefrosterWindscreenAttributeChanged " << state;
         prop_defroster.PushProp(state == FirstRowGen::ElectricDefrosterRearState::ON,
+                                VehiclePropertyStatus::AVAILABLE,
                                 toInt(VehicleAreaWindow::FRONT_WINDSHIELD));
     }));
 
@@ -353,7 +361,9 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     });
     subs_.push_back(commonFactory_.getMaxDefrosterProperty().subscribeAndCall([this](const auto& state) {
         log_debug() << "fireMaxDefrosterAttributeChanged " << state;
-        prop_maxdefroster.PushProp(state == FirstRowGen::MaxDefrosterState::ON, {toInt(VehicleAreaZone::ROW_1_CENTER)});
+        prop_maxdefroster.PushProp(state == FirstRowGen::MaxDefrosterState::ON,
+                                   VehiclePropertyStatus::AVAILABLE,
+                                   {toInt(VehicleAreaZone::ROW_1_CENTER)});
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -368,7 +378,9 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     });
     subs_.push_back(logicFactory_.airConditioner_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireAirConditionerAttributeChanged " << state;
-        prop_ac.PushProp(state == FirstRowGen::AirConditionerState::AUTO, {toInt(VehicleAreaZone::ROW_1_CENTER)});
+        prop_ac.PushProp(state == FirstRowGen::AirConditionerState::AUTO,
+                         VehiclePropertyStatus::AVAILABLE,
+                         {toInt(VehicleAreaZone::ROW_1_CENTER)});
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -411,7 +423,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
 
         for (const auto& c : air_dist_conversions) {
             if (c.first == state) {
-                prop_fandir.PushProp(c.second, toInt(VehicleAreaZone::ROW_1_CENTER));
+                prop_fandir.PushProp(c.second, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_CENTER));
                 return;
             }
         }

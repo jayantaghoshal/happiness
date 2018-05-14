@@ -10,7 +10,7 @@ using namespace std::placeholders;
 using namespace android;
 
 template <>
-void VhalPropertyHandler<int32_t>::PushProp(int32_t value, int32_t zone) {
+void VhalPropertyHandler<int32_t>::PushProp(int32_t value, VehiclePropertyStatus status, int32_t zone) {
     if (IsGlobal()) zone = 0;  // Need better solution?
 
     auto it = values_.find(zone);
@@ -20,12 +20,13 @@ void VhalPropertyHandler<int32_t>::PushProp(int32_t value, int32_t zone) {
 
     it->second.value.int32Values.resize(1);
     it->second.value.int32Values[0] = value;
+    it->second.status = status;
     if (registeredWithVhal) {
         pushProp(it->second);
     }
 }
 template <>
-void VhalPropertyHandler<float>::PushProp(float value, int32_t zone) {
+void VhalPropertyHandler<float>::PushProp(float value, VehiclePropertyStatus status, int32_t zone) {
     if (IsGlobal()) zone = 0;  // Need better solution?
 
     auto it = values_.find(zone);
@@ -35,13 +36,14 @@ void VhalPropertyHandler<float>::PushProp(float value, int32_t zone) {
 
     it->second.value.floatValues.resize(1);
     it->second.value.floatValues[0] = value;
+    it->second.status = status;
     if (registeredWithVhal) {
         pushProp(it->second);
     }
 }
 
 template <>
-void VhalPropertyHandler<bool>::PushProp(bool value, int32_t zone) {
+void VhalPropertyHandler<bool>::PushProp(bool value, VehiclePropertyStatus status, int32_t zone) {
     if (IsGlobal()) zone = 0;  // Need better solution?
 
     auto it = values_.find(zone);
@@ -51,6 +53,7 @@ void VhalPropertyHandler<bool>::PushProp(bool value, int32_t zone) {
 
     it->second.value.int32Values.resize(1);
     it->second.value.int32Values[0] = value;
+    it->second.status = status;
     if (registeredWithVhal) {
         pushProp(it->second);
     }

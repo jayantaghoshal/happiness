@@ -73,7 +73,7 @@ class VhalPropertyHandler : public vhal20::impl::ModuleBase {
         registeredWithVhal = true;
     }
 
-    void PushProp(T value, int32_t zone = 0);
+    void PushProp(T value, vhal20::VehiclePropertyStatus status, int32_t zone = 0);
     void subscribe_set_prop(std::function<void(T value, int32_t zone)> func) { request_set_prop_ = func; };
 
   protected:

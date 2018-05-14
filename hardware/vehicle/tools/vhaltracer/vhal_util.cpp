@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -121,6 +121,7 @@ void DumpPropertyValue(const vhal20::VehiclePropValue& property_value, const std
             cout << "ERROR: NO VALUES IN PROPERTY" << endl;
         }
     }
+    cout << indentation << " .status: " << toString(property_value.status) << endl;
     cout << indentation << " .timestamp: " << property_value.timestamp << endl;
 }
 
