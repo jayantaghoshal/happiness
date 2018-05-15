@@ -93,6 +93,9 @@ public abstract class VHalDelegate<T> {
             public void onChangeEvent(CarPropertyValue value) {
                 Log.d(TAG_COMMON, "onChangeEvent: Value received: " + value + " Property ID :" + mVehicleProperty);
                 setUiValue((T) value.getValue());
+                if (vehiclePropertyStatus == NO_STATUS) { // no status handling
+                    setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
+                }
             }
 
             @Override
