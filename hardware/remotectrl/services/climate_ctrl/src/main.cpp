@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 
         configureRpcThreadpool(1, true);
 
-        if (::android::OK != climate_ctrl_service->registerAsService()) {
+        if (::android::OK != climate_ctrl_service->registerAsService("RemoteCtrl_ClimateCtrl")) {
             throw std::runtime_error("Failed to register Service...");
         }
 

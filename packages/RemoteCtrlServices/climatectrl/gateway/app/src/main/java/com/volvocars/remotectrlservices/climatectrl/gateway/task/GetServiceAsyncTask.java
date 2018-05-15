@@ -40,7 +40,7 @@ public class GetServiceAsyncTask extends AsyncTask<Void, Void, Void> {
         boolean isTryingToGetService = true;
         do {
             try {
-                mService = IRemoteCtrlPropertyResponse.getService();
+                mService = IRemoteCtrlPropertyResponse.getService("RemoteCtrl_ClimateCtrl");
                 mRemoteClimateGateway.setRemoteCtrlPropertyResponseService(mService);
                 isTryingToGetService = false;
                 break;

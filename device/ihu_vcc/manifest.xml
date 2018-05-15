@@ -109,7 +109,7 @@
         </interface>
         <interface>
             <name>IRemoteCtrlPropertyResponse</name>
-            <instance>default</instance>
+            <instance>RemoteCtrl_ClimateCtrl</instance>
         </interface>
     </hal>
         <hal format="hidl">
