@@ -72,6 +72,12 @@
   <remove-project name="bsp/vendor/intel/external/open-avb" />
   <project name="bsp/vendor/intel/external/open-avb" path="hardware/intel/external/open-avb" revision="0548339676b89f47d0b03ebd1f7767704149e532" />
 
+  <!-- Fix for gdbserver64 failing with "Unknown register bnd0raw requested".
+       Intel is aware of problem and are working on upstreaming patch to AOSP. ravisankar.madasamy@intel.com (2018-05-04)    -->
+  <remove-project name="aosp/platform/prebuilts/misc" />
+  <project name="aosp/platform/prebuilts/misc" path="prebuilts/misc" revision="068feea8f468b33ec8aa8770a6e7ae5c173b4427" />
+
+
   <project name="aosp/platform/prebuilts/gdb/linux-x86" path="prebuilts/gdb/linux-x86" revision="4adfde8bc82dd39f59e0445588c3e599ada477d2" />
   <project name="aosp/platform/vendor/google_auto/vms" path="vendor/google_auto/vms" revision="329494736d16d9418663c8c42bfef7134ac7faa7" />
 
