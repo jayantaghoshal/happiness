@@ -17,8 +17,9 @@ from vts.utils.python.controllers import android_device
 from vts.utils.python.precondition import precondition_utils
 from subprocess import call
 
+
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
-from com.dtmilano.android.viewclient import ViewClient
+
 import vehiclehalcommon
 import threading
 from generated.datatypes import \
@@ -29,13 +30,18 @@ from generated import datatypes as DE
 import logging.config
 import logging.handlers
 
-from vehiclehalcommon import VehicleHalCommon, wait_for_signal
+from vehiclehalcommon import VehicleHalCommon, wait_for_signal, PAStatus
+
+from uiautomator import device as device
+
+
 
 # Get button Ids for testing.
 cs_button_off = VehicleHalCommon.app_context_vehiclefunctions + "connected_safety_button_off"
 cs_button_on  = VehicleHalCommon.app_context_vehiclefunctions + "connected_safety_button_on"
 
-buttonWaitTimeSeconds = 1.5
+buttonWaitTimeSeconds = 1.0
+
 
 class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
 
@@ -66,7 +72,7 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
         self.dut.shell.InvokeTerminal("one")
         time.sleep(1)
         self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
-        time.sleep(5)
+        time.sleep(3)
 
     # ----------------------------------------------------------------------------------------------------
     # Test Car Config Disabled
@@ -97,9 +103,6 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
         vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
         vHalCommon.setUpVehicleFunction()
 
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
         # UsgModSts Drive
         # RoadFricIndcnSts On (not SrvRqrd)
         fr.send_RoadFricIndcnSts(DE.FctSts2.On)
@@ -107,9 +110,9 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
         fr.send_VehModMngtGlbSafe1(vehmod)
         time.sleep(buttonWaitTimeSeconds)
 
-        # Find buttons. They shall be disabled when CC is disabled.
-        buttonOff = vHalCommon.scrollAndFindViewById(cs_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewById(cs_button_on)
+        # Find buttons. They shall be gone when CC is disabled.
+        buttonOff = vHalCommon.scrollDownAndFindViewByIdUiAutomator(cs_button_off, device)
+        buttonOn = vHalCommon.scrollDownAndFindViewByIdUiAutomator(cs_button_on, device)
         print("buttonOff -> ") + str(buttonOff)
         print("buttonOn -> ") + str(buttonOn)
         asserts.assertEqual(None, buttonOff, "Expect no buttonOff")
@@ -151,10 +154,8 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
         vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
         vHalCommon.setUpVehicleFunction()
 
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
         CONNECTED_SAFETY_ON = vHalCommon.get_id('CONNECTED_SAFETY_ON')
+        CONNECTED_SAFETY_ON_STATUS = vHalCommon.get_id('CONNECTED_SAFETY_ON_STATUS')
 
         # UsgModSts Drive
         # RoadFricIndcnSts On (not SrvRqrd)
@@ -163,22 +164,16 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
         time.sleep(buttonWaitTimeSeconds)
 
         # Get buttons. They shall be here if CC is enabled.
-        buttonOff = vHalCommon.scrollAndFindViewByIdOrRaise(cs_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewByIdOrRaise(cs_button_on)
+        buttonOff = vHalCommon.scrollDownAndFindViewByIdOrRaiseUiAutomator(cs_button_off, device)
+        buttonOn = vHalCommon.scrollDownAndFindViewByIdOrRaiseUiAutomator(cs_button_on, device)
         print("buttonOff -> ") + str(buttonOff)
         print("buttonOn -> ") + str(buttonOn)
 
-        vc.dump(window=-1)
-        buttonOff = vc.findViewByIdOrRaise(cs_button_off)
-        buttonOn = vc.findViewByIdOrRaise(cs_button_on)
+        asserts.assertEqual(buttonOff.enabled, True, "Off button is disabled")
+        asserts.assertEqual(buttonOn.enabled, True, "On button is disabled")
 
-        print("buttonOff enabled -> ") + str(buttonOff.__getattr__('enabled')())
-        print("buttonOn  enabled -> ") + str(buttonOn.__getattr__('enabled')())
-        asserts.assertEqual(buttonOff.__getattr__('enabled')(),True, "Off button is disabled")
-        asserts.assertEqual(buttonOn.__getattr__('enabled')(),True, "On button is disabled")
-
-        buttonOn.touch()
-        vc.sleep(buttonWaitTimeSeconds)
+        buttonOn.click()
+        time.sleep(buttonWaitTimeSeconds)
 
         # ----------------------------------------------------------------------------------------------------------
         # Test active state
@@ -186,14 +181,14 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
 
         print("----------- UsgModSts Active -----------")
 
-        buttonOff.touch()
-        vc.sleep(buttonWaitTimeSeconds)
+        buttonOff.click()
+        time.sleep(buttonWaitTimeSeconds)
         # Verify that On/Off is false after Off button click.
         vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON, False)
         asserts.assertEqual(fr.get_RoadFricIndcnActv().Sts, 0, "on/off shall be 0")
-
-        buttonOn.touch()
-        vc.sleep(buttonWaitTimeSeconds)
+        vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON_STATUS, PAStatus.Active, "CONNECTED_SAFETY_ON_STATUS (State Active)")
+        buttonOn.click()
+        time.sleep(buttonWaitTimeSeconds)
 
         # Verify that On/Off is true after On button click.
         vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON, True)
@@ -207,24 +202,26 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
 
         vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
         fr.send_VehModMngtGlbSafe1(vehmod)
-        vc.sleep(buttonWaitTimeSeconds)
+        time.sleep(buttonWaitTimeSeconds)
 
         # On/Off shall be default 0.
         vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON, False)
         asserts.assertEqual(fr.get_RoadFricIndcnActv().Sts, 0, "on/off shall be 0")
+        vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON_STATUS, PAStatus.Disabled, "CONNECTED_SAFETY_ON_STATUS (State Disabled)")
 
         # Set usage mode UsgModDrvg.
         vehmod.UsgModSts = DE.UsgModSts1.UsgModDrvg
         fr.send_VehModMngtGlbSafe1(vehmod)
-        vc.sleep(buttonWaitTimeSeconds)
+        time.sleep(buttonWaitTimeSeconds)
+        vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON_STATUS, PAStatus.Active, "CONNECTED_SAFETY_ON_STATUS (State Active)")
 
         # On/Off shall be restored.
         vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON, True)
         asserts.assertEqual(fr.get_RoadFricIndcnActv().Sts, 1, "on/off shall be 1")
 
-        # # ----------------------------------------------------------------------------------------------------------
-        # # Test System Error
-        # # ----------------------------------------------------------------------------------------------------------
+        # ----------------------------------------------------------------------------------------------------------
+        # Test System Error
+        # ----------------------------------------------------------------------------------------------------------
         print("System Error test")
 
         # Set Service required.
@@ -233,14 +230,13 @@ class VtsConnectedSafetySettingComponentTest(base_test.BaseTestClass):
         # UsgModSts ACTIVE
         vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
         fr.send_VehModMngtGlbSafe1(vehmod)
-        vc.sleep(buttonWaitTimeSeconds)
+        time.sleep(buttonWaitTimeSeconds)
 
-        print("System Error test, pre fr check")
         # Connected Safety shall be Off on Flexray on system error.
         asserts.assertEqual(fr.get_RoadFricIndcnActv().Sts, 0, "on/off shall be 0")
-        print("System Error test, pre prop check")
         # Button/Prop On/Off shall be Off on System error.
         vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON, False)
+        vHalCommon.assert_prop_equals(CONNECTED_SAFETY_ON_STATUS, PAStatus.SystemError, "CONNECTED_SAFETY_ON_STATUS (State SystemError)")
 
 if __name__ == "__main__":
     test_runner.main()

@@ -46,8 +46,11 @@ property_list = [
     ('DAI_SETTING', 557842437),
     ('CURVE_SPEED_ADAPTION_ON', 555745286),
     ('LANE_KEEPING_AID_ON', 555745289),
+    ('LANE_KEEPING_AID_ON_STATUS', 557842442),
     ('LANE_KEEPING_AID_MODE', 557842443),
+    ('LANE_KEEPING_AID_MODE_STATUS', 557842444),
     ('CONNECTED_SAFETY_ON', 555745284),
+    ('CONNECTED_SAFETY_ON_STATUS', 557842461),
     ('DRIVER_SUPPORT_FUNCTION_ON', 557842459),
     ('EMERGENCY_LANE_KEEPING_AID_ON',555745294),
     ('LANE_DEPARTURE_WARNING_ON', 555745306),
@@ -100,6 +103,13 @@ def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec=3):
         asserts.assertEqual(read_value, expected_value,
                             "Expected signal %s to be %d within %d sec, got %d)" %
                             (fdx_signal.fdx_name, expected_value, timeout_sec, read_value))
+
+
+class PAStatus:
+    NotAvailable = 0
+    Disabled = 1
+    Active = 2
+    SystemError = 3
 
 class VehicleHalCommon():
 
