@@ -6,7 +6,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := remote-climate-support-lib
-LOCAL_SRC_FILES := $(call all-java-files-under,src)
+LOCAL_SRC_FILES := $(call all-java-files-under,app/src/main)
 
 LOCAL_JAVA_LIBRARIES += \
     vehicle-hal-support-lib  \
@@ -14,6 +14,10 @@ LOCAL_JAVA_LIBRARIES += \
     android.car \
     vendor.volvocars.hardware.remotectrl-V1.0-java \
     com.volvocars.remotectrlservices.climatectrl.IRemoteClimateCtrlService \
+
+LOCAL_MANIFEST_FILE := app/src/main/AndroidManifest.xml
+#LOCAL_RESOURCE_DIR += \
+#    $(LOCAL_PATH)/app/src/main/res
 
 include $(BUILD_STATIC_JAVA_LIBRARY)
 

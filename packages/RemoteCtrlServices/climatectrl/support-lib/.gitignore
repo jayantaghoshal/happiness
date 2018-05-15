@@ -1,2 +1,13 @@
-.settings
+*.iml
 .gradle
+**/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+**/build
+**/libs
+/captures
+.externalNativeBuild
+.settings
+app/.classpath
+
