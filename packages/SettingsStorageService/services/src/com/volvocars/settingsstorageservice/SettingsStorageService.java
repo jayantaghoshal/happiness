@@ -27,7 +27,7 @@ public class SettingsStorageService extends Service {
         }
         if (null == settingsReader) {
             settingsReader = new SettingsReader();
-            settingsReader.init(this);
+            settingsReader.init(this, getResources().openRawResource(R.raw.settings));
         }
         if (null == settingsStorage) {
             settingsStorage = new SettingsStorage(this);

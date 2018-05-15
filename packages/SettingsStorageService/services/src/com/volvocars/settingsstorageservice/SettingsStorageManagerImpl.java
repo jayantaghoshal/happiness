@@ -11,11 +11,13 @@ import android.util.Log;
 import com.volvocars.settingsstorageservice.ISettingsStorageManager;
 import com.volvocars.settingsstorageservice.ISettingsStorageManagerCallback;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.*;
 
 public class SettingsStorageManagerImpl extends ISettingsStorageManager.Stub {
     private static final String LOG_TAG = "SettingsStorageService";
@@ -33,10 +35,16 @@ public class SettingsStorageManagerImpl extends ISettingsStorageManager.Stub {
     }
 
     public void init(SettingsStorage settingsStorage, SettingsReader settingsReader) {
+        Log.d(LOG_TAG, "init");
         this.settingsStorage = settingsStorage;
         this.settingsReader = settingsReader;
 
-        settings = settingsReader.readJson();
+        try {
+            settings = settingsReader.readJson();
+        } catch (IOException | JSONException e) {
+            Log.v(LOG_TAG, "[ManagerImpl] Error reading/parsing jsonfile [" + e.getClass() + "," + e.getMessage() + "]");
+        }
+
     }
 
     /**
@@ -56,7 +64,7 @@ public class SettingsStorageManagerImpl extends ISettingsStorageManager.Stub {
             if (keyWithOffset != -1) {
                 settingsStorage.set(keyWithOffset, value);
             } else {
-                Log.w(LOG_TAG, "[ManagerImpl] could not set key " + key + "due to invalid value of new key");
+                Log.w(LOG_TAG, "[ManagerImpl] could not set key " + key + " due to invalid value of new key");
                 throw new InvalidValueException(
                         "Could not compute new key, " + (-1 == settings.get(appId).cloudPackage.settings.indexOf(key)
                                 ? "specified key is invalid (not maching any in settings.json"
@@ -84,7 +92,7 @@ public class SettingsStorageManagerImpl extends ISettingsStorageManager.Stub {
             if (keyWithOffset != -1) {
                 settingsStorage.set(keyWithOffset, value);
             } else {
-                Log.w(LOG_TAG, "[ManagerImpl] could not set key " + key + "due to invalid value of new key");
+                Log.w(LOG_TAG, "[ManagerImpl] could not set key " + key + " due to invalid value of new key");
                 throw new InvalidValueException(
                         "Could not compute new key, offset value specified in settings.json is invalid");
             }

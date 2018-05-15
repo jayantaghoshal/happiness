@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.volvocars.settingsstorageservice.tests">
+
+     <application>
+        <uses-library android:name="android.test.runner" />
+    </application>
+    <instrumentation android:name="android.support.test.runner.AndroidJUnitRunner"
+                     android:targetPackage="com.volvocars.settingsstorageservice.tests"
+                     android:label="SettingsStorageService Unit Tests">
+    </instrumentation>
+</manifest>
+

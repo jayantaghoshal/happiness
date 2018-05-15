@@ -115,7 +115,8 @@ PRODUCT_PACKAGES += \
 ##############################################################
 PRODUCT_PACKAGES += \
     CloudService \
-    SoftwareUpdateService
+    SoftwareUpdateService \
+    SettingsStorageService
 
 ##############################################################
 # Configurations for userdebug and engineering build

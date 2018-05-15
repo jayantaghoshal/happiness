@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="SettingsStorageService Unit Tests">
+
+    <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
+        <option name="apk-name" value="settingsstorageserviceut.apk" />
+    </target_preparer>
+
+    <test class="com.android.tradefed.testtype.AndroidJUnitTest">
+        <option name="package" value="com.volvocars.settingsstorageservice.tests" />
+        <option name="runtime-hint" value="2s" />
+    </test>
+
+    <result_reporter class="com.android.tradefed.result.ConsoleResultReporter" />
+    <result_reporter class="com.android.tradefed.result.XmlResultReporter" />
+</configuration>
