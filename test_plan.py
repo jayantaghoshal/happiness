@@ -54,6 +54,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray}),# Torbjörn Sandsgård
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Martin Stigels
     VTSTest("vendor/volvocars/packages/TimeUpdateService/test/ct",                  standard_caps), #Renjith Rajagopal
+    VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",      standard_caps | {cp.flexray}), #Martin Stigels
 ]
 
 test_plan_nightly = test_plan_hourly + [
@@ -74,7 +75,6 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/flexray_burst_test", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
     VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray}), #dfloodh
-    VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",       standard_caps | {cp.flexray}), #Martin Stigels
     VTSTest("vendor/volvocars/hardware/vehicle/test/driversupportfunction_setting",	standard_caps | {cp.flexray}), #Vi Dat
 ]
 
