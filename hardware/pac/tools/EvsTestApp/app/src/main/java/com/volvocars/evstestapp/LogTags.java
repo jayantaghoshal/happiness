@@ -5,6 +5,6 @@
 
 package com.volvocars.evstestapp;
 
-class Tags {
-    public static final String LOG_TAG = "EvsTestApp";
+public class LogTags {
+    public static final String EVSTEST = "EvsTestApp";
 }

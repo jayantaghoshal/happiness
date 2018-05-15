@@ -32,7 +32,7 @@ jstring JNICALL Java_com_volvocars_evstestapp_NdkManager_initEvsCameraStream(JNI
 }
 
 JNIEXPORT
-jstring JNICALL Java_com_volvocars_evstestapp_NdkManager_generateTexture(JNIEnv* env) {
+jstring JNICALL Java_com_volvocars_evstestapp_NdkManager_generateVideoTexture(JNIEnv* env) {
     GLuint gl_id = 0;
     glGenTextures(1, &gl_id);
 

@@ -6,7 +6,6 @@
 package com.volvocars.evstestapp;
 
 class NdkManager {
-
     // Used to load the native library on application startup.
     static {
         System.loadLibrary("evsnative");
@@ -16,5 +15,5 @@ class NdkManager {
     public static native String initEvsCameraStream();
     public static native String refreshVideo();
     public static native String closeCameraStream();
-    public static native String generateTexture();
+    public static native String generateVideoTexture();
 }

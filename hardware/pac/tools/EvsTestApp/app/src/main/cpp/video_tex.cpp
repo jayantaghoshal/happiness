@@ -5,12 +5,16 @@
 
 #include "video_tex.h"
 
-#include <libdbg.h>
 #include <ui/GraphicBuffer.h>
 
 using ::android::GraphicBuffer;
 
 const char* VideoTex::RefreshVideoTex() {
+    // If nothing else the already retrieved texture has to be bound
+    // for the draw call to be made just after this function has been called
+    // in the java part of the application
+    glBindTexture(GL_TEXTURE_2D, gl_id_);
+
     if (!evs_camera_stream_->NewFrameAvailable()) {
         return "No new frames available";
     }
@@ -41,12 +45,8 @@ const char* VideoTex::RefreshVideoTex() {
     KHR_image_ =
             eglCreateImageKHR(egl_display, EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, client_buf, egl_image_attributes);
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, gl_id_);
-
     if (KHR_image_ != EGL_NO_IMAGE_KHR) {
         glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, static_cast<GLeglImageOES>(KHR_image_));
-        dbgD("Texture refreshed!");
     }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.volvocars.evstestapp.MyGLSurfaceView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    tools:context="com.volvocars.evstestapp.MainActivity"
-    android:layout_width="768dp"
-    android:layout_height="480dp"
-    android:layout_gravity="center">
-</com.volvocars.evstestapp.MyGLSurfaceView>
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    tools:context="com.volvocars.evstestapp.MainActivity">
+    <com.volvocars.evstestapp.MyGLSurfaceView
+        android:id="@+id/myglsurfaceview"
+        android:layout_width="768dp"
+        android:layout_height="480dp"
+        android:layout_gravity="top"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="@string/app_name"
+        android:id="@+id/disappearBtn" />
+</LinearLayout>

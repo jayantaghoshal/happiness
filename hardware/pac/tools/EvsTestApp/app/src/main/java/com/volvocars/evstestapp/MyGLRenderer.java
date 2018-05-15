@@ -5,47 +5,95 @@
 
 package com.volvocars.evstestapp;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 class MyGLRenderer implements GLSurfaceView.Renderer {
-    private Square square;
+
+    private static final float VIDEO_CROP_VALUE = 0.46875f; // Calculated from information in specification about camera video resolution
+
+    private int program;
+
+    private RenderObject videoBackground;
+    private RenderObject carImage;
+
+    private TextureManager textureManager;
+
+    public static boolean testingIfWeCanMakeTheCarInvisible = false;
+
+    public MyGLRenderer(Context context) {
+        super();
+
+        textureManager = new TextureManager(context);
+    }
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        // Set the background frame color
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        // This can only occur after having initialized egl
-        Log.d(Tags.LOG_TAG, NdkManager.generateTexture());
+        // create empty OpenGL ES Program
+        program = GLES20.glCreateProgram();
 
-        square = new Square();
+        int vertexShader = ShaderManager.loadShader(GLES20.GL_VERTEX_SHADER,
+                ShaderManager.VERTEX_SHADER_CODE);
+        int fragmentShader = ShaderManager.loadShader(GLES20.GL_FRAGMENT_SHADER,
+                ShaderManager.FRAGMENT_SHADER_CODE);
+
+        // add the vertex shader to program
+        GLES20.glAttachShader(program, vertexShader);
+
+        // add the fragment shader to program
+        GLES20.glAttachShader(program, fragmentShader);
+
+        // creates OpenGL ES program executables
+        GLES20.glLinkProgram(program);
+
+        // This will be used when drawing the car image on top of the video
+        GLES20.glBlendFunc (GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+        // Since there is only one program it doesn't have to be switched to many times
+        GLES20.glUseProgram(program);
     }
 
     public void onDrawFrame(GL10 unused) {
-        // Redraw background color
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        Log.d(Tags.LOG_TAG, "Draw: " + NdkManager.refreshVideo());
-        square.draw();
+
+        Log.d(LogTags.EVSTEST, "Draw: " + NdkManager.refreshVideo());
+        videoBackground.draw(program);
+
+        if(!testingIfWeCanMakeTheCarInvisible) {
+            textureManager.bindCarTexture();
+
+            GLES20.glEnable(GLES20.GL_BLEND);
+            carImage.draw(program);
+            GLES20.glDisable(GLES20.GL_BLEND);
+        }
     }
 
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         GLES20.glViewport(0, 0, width, height);
-    }
 
-    public static int loadShader(int type, String shaderCode) {
+        float[] projection = new float[16];
+        Matrix.orthoM(projection, 0, 0, width, 0, height, -1, 1);
 
-        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
-        int shader = GLES20.glCreateShader(type);
+        float[] videoMp = MatrixManager.getModelProjectionMatrix(0 , 0, projection);
+        Square videoSquare = new Square(width, height, 1, VIDEO_CROP_VALUE);
 
-        // add the source code to the shader and compile it
-        GLES20.glShaderSource(shader, shaderCode);
-        GLES20.glCompileShader(shader);
+        videoBackground = new RenderObject(videoSquare, videoMp);
 
-        return shader;
+        int carWidth = textureManager.carFromTopDownView.getWidth();
+        int carHeight = textureManager.carFromTopDownView.getHeight();
+
+        // The car is supposed to be located in the centre of the viewport
+        float[] carMp = MatrixManager.getModelProjectionMatrix(width / 2 - carWidth / 2,height / 2 - carHeight / 2, projection);
+        Square carSquare = new Square(carWidth, carHeight, 1, 1);
+
+        carImage = new RenderObject(carSquare, carMp);
+
+        Log.d(LogTags.EVSTEST, NdkManager.generateVideoTexture());
+        textureManager.genGlTextures();
     }
 }
