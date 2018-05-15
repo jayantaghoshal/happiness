@@ -117,9 +117,14 @@ RUN apt-get install -y \
 
 ##################################################
 # Install android view client, used for android test automation
+# TODO: Replaced with uiautomator, remove this once all test cases have transitioned.
 # https://github.com/dtmilano/AndroidViewClient/wiki
 # RUN pip install git+https://github.com/dtmilano/AndroidViewClient.git
 RUN pip install androidviewclient
+
+##################################################
+# Install uiautomator, used for android HMI test automation
+RUN pip install uiautomator
 
 
 ##################################################

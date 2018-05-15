@@ -1,6 +1,8 @@
 #!/bin/bash
-# Copyright 2017 Volvo Car Corporation
+
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
+
 set -ue
 
 # Determine the absolute path to this script
@@ -12,7 +14,7 @@ CHANGE_ID=$(git log -n 1 | grep Change-Id: | sed -r 's/.*Change-Id: (.*)/\1/')
 IMAGE_NAME=vcc_aosp_build
 
 #collect SWF1 username and password(API) for PYPI access
-echo "Enter your credentials for accessing SWF1_PYPI"
+echo "Enter your credentials for accessing SWF1_PYPI (needed to install VCC python packages such as SWAT)"
 read -p 'CDSID:' pypi_user
 read -sp 'Password:' pypi_pass
 
