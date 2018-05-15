@@ -67,23 +67,26 @@ def upload_results(file):
     failingtestcasecount = 0
     failingtestmodulecount = 0
     for module in root.findall('Module'):
-        totalmodulecount += 1
         module_json = {**json_base, **module.attrib}
         module_json['test_dir_name'] = module.attrib['name']
         module_json['module_name'] = module.attrib['name']
         del module_json['name']
         testcase = module.find('TestCase')
-        module_json['testcases'] = [{'tests': [], 'testcase_name': testcase.attrib['name']}]
-        result = True
-        for test in testcase.findall('Test'):
-            totaltestcasecount += 1
-            module_json['testcases'][0]['tests'].append({'name': test.attrib['name'], 'status': test.attrib['result']})
-            if not test.attrib['result'] == 'pass':
-                result = False
-                failingtestcasecount += 1
-        module_json["result"] = result
-        if not result:
-            failingtestmodulecount += 1
+        if not testcase:
+            module_json["result"] = None # Module did not start
+        else:
+            totalmodulecount += 1
+            module_json['testcases'] = [{'tests': [], 'testcase_name': testcase.attrib['name']}]
+            result = True
+            for test in testcase.findall('Test'):
+                totaltestcasecount += 1
+                module_json['testcases'][0]['tests'].append({'name': test.attrib['name'], 'status': test.attrib['result']})
+                if not test.attrib['result'] == 'pass':
+                    result = False
+                    failingtestcasecount += 1
+            module_json["result"] = result
+            if not result:
+                failingtestmodulecount += 1
         logger.info("Inserting VTS test data: {}".format(module_json))
         mongodb_wrapper.insert_data(module_json)
 
