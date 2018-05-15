@@ -104,6 +104,7 @@
             <instance>RemoteCtrl_AudioCtrl</instance>
             <instance>RemoteCtrl_ClimateCtrl</instance>
             <instance>RemoteCtrl_MediaCtrl</instance>
+            <instance>RemoteCtrl_GeneralSettingsCtrl</instance>
         </interface>
     </hal>
         <hal format="hidl">

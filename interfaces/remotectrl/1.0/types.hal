@@ -76,6 +76,11 @@ enum RemoteCtrlHalProperty: int32_t {
     REMOTECTRLHAL_MEDIA_STREAM_CONTROL = (
             0x1410
             | RemoteCtrlHalPropertyType:INT32
+            | VehicleArea:GLOBAL),
+
+    REMOTECTRLHAL_CSD_ON = (
+            0x1321
+            | RemoteCtrlHalPropertyType:INT32
             | VehicleArea:GLOBAL)
 };
 
@@ -124,6 +129,11 @@ enum AirFlow : uint32_t {
 };
 
 enum ACState : uint32_t {
+    OFF = 0,
+    ON = 1
+};
+
+enum CSDState : uint32_t {
     OFF = 0,
     ON = 1
 };

@@ -1,0 +1,4 @@
+service remotectrl_generalsettingsctrld /vendor/bin/ip netns exec vcc /vendor/bin/remotectrl_generalsettingsctrld /vendor/etc/vsomeip/vsomeip_convapi.json
+    class vcc_conv_api
+    user root
+    group root

@@ -1,0 +1,30 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_binary {
+    name: "remotectrl_generalsettingsctrld",
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+
+    static_libs: [
+        "libremotectrl_common_headers",
+        "libremotectrl_service_base",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libutils",
+        "libvsomeip_2_10_10",
+        "libvsomeip_cfg_2_10_10",
+        "libhidlbase",
+        "libhidltransport",
+        "vendor.volvocars.hardware.remotectrl@1.0",
+    ],
+
+    init_rc: ["init/remotectrl_generalsettingsctrld.rc"],
+}

@@ -98,6 +98,23 @@ std::vector<vsomeip::byte_t> RemoteCtrlZonalSignal::PackResponse(
     return {static_cast<vsomeip::byte_t>(prop_value.status)};
 }
 
+hidl_remotectrl::RemoteCtrlHalPropertyValue RemoteCtrlGlobalSignal::UnpackRequest(
+        const std::shared_ptr<vsomeip::payload>& msg_payload) {
+    if (msg_payload->get_length() != expected_length_) {
+        throw RemoteCtrlMsgLengthError(method_name_, expected_length_, msg_payload->get_length());
+    }
+    hidl_remotectrl::RemoteCtrlHalPropertyValue prop_value{prop_,
+                                                           static_cast<int32_t>(hidl_remotectrl::VehicleArea::GLOBAL),
+                                                           hidl_remotectrl::RemoteCtrlHalPropertyStatus::AVAILABLE,
+                                                           {}};
+    return prop_value;
+}
+
+std::vector<vsomeip::byte_t> RemoteCtrlGlobalSignal::PackResponse(
+        const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) {
+    return {static_cast<vsomeip::byte_t>(prop_value.status)};
+}
+
 hidl_remotectrl::RemoteCtrlHalPropertyValue SetFanLevel::UnpackRequest(
         const std::shared_ptr<vsomeip::payload>& msg_payload) {
     auto prop_value = RemoteCtrlZonalSignal::UnpackRequest(msg_payload);
@@ -278,6 +295,31 @@ hidl_remotectrl::RemoteCtrlHalPropertyValue SetStreamPlayBackStatus::UnpackReque
 }
 
 std::vector<vsomeip::byte_t> NotifyStreamPlayBackStatus::PackNotification(
+        const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) {
+    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(prop_value.status)};
+    for (const auto& val : prop_value.value.int32Values) {
+        payload_data.push_back(static_cast<vsomeip::byte_t>(val));
+    }
+    return payload_data;
+}
+
+hidl_remotectrl::RemoteCtrlHalPropertyValue SetCSDState::UnpackRequest(
+        const std::shared_ptr<vsomeip::payload>& msg_payload) {
+    auto prop_value = RemoteCtrlGlobalSignal::UnpackRequest(msg_payload);
+    const auto csd_state = msg_payload->get_data()[0];
+    prop_value.value.int32Values = android::hardware::hidl_vec<int32_t>{csd_state};
+    return prop_value;
+}
+
+std::vector<vsomeip::byte_t> GetCSDState::PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) {
+    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(prop_value.status)};
+    for (const auto& val : prop_value.value.int32Values) {
+        payload_data.push_back(static_cast<vsomeip::byte_t>(val));
+    }
+    return payload_data;
+}
+
+std::vector<vsomeip::byte_t> NotifyCSDState::PackNotification(
         const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) {
     std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(prop_value.status)};
     for (const auto& val : prop_value.value.int32Values) {

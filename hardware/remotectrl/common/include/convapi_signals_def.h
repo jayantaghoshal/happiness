@@ -61,6 +61,14 @@ constexpr uint16_t REMOTECTRL_MEDIACTRL_EVENTGROUP_ID = 0x1402U;
 constexpr uint16_t REMOTECTRL_MEDIACTRL_METHOD_ID_SETMEDIAPLAYERPLAYBACK = 0x1411U;
 constexpr uint16_t REMOTECTRL_MEDIACTRL_EVENT_ID_MEDIAPLAYERPLAYBACKSTATUS = 0x1422U;
 
+// RemoteCtrlGeneralSettings
+constexpr uint16_t REMOTECTRL_GENERALSETTINGS_SERVICE_ID = 0x1300U;
+constexpr uint16_t REMOTECTRL_GENERALSETTINGS_SERVICE_INSTANCE_ID = 0x1301U;
+constexpr uint16_t REMOTECTRL_GENERALSETTINGS_EVENTGROUP_ID = 0x1320U;
+
+constexpr uint16_t REMOTECTRL_GENERALSETTINGS_METHOD_ID_GET_CSD_STATE = 0X1333U;
+constexpr uint16_t REMOTECTRL_GENERALSETTINGS_METHOD_ID_SET_CSD_STATE = 0X1344U;
+constexpr uint16_t REMOTECTRL_GENERALSETTINGS_EVENT_ID_CSD_STATECHANGED = 0X1322U;
 // TODO (Abhi) Populate this file with all helpers and struct definitions needed for readable code until autogeneated
 // header files from SDB extract are in place
 
@@ -115,6 +123,21 @@ struct RemoteCtrlZonalSignal {
                           const hidl_remotectrl::RemoteCtrlHalProperty& prop)
         : method_name_(method_name), expected_length_(expected_len), prop_(prop) {}
     virtual ~RemoteCtrlZonalSignal() = default;
+    virtual hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload);
+    virtual std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+
+    const char* method_name_;
+    const uint32_t expected_length_;
+    const hidl_remotectrl::RemoteCtrlHalProperty prop_;
+};
+
+struct RemoteCtrlGlobalSignal {
+    RemoteCtrlGlobalSignal(const char* method_name,
+                           uint32_t expected_length,
+                           const hidl_remotectrl::RemoteCtrlHalProperty& prop)
+        : method_name_(method_name), expected_length_(expected_length), prop_(prop) {}
+    virtual ~RemoteCtrlGlobalSignal() = default;
     virtual hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
             const std::shared_ptr<vsomeip::payload>& msg_payload);
     virtual std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
@@ -312,13 +335,41 @@ struct SetStreamPlayBackStatus : RemoteCtrlSignal {
         : RemoteCtrlSignal("SET_STREAM_PLAYBACK_STATUS",
                            0x01U,
                            hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_MEDIA_STREAM_CONTROL) {}
+
     hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
             const std::shared_ptr<vsomeip::payload>& msg_payload) override;
     // NOTE: inherits default implementation for PackResponse
 };
+
 struct NotifyStreamPlayBackStatus {
     std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
 };
 
+// GeneralCtrl messaging
+inline void ValidateRequestedCSDState(const char* method_name, const uint8_t& csd_state) {
+    if (csd_state > static_cast<uint8_t>(hidl_remotectrl::CSDState::OFF)) {
+        throw RemoteCtrlParamRangeError(
+                method_name, "CSDState", static_cast<uint8_t>(hidl_remotectrl::CSDState::OFF), csd_state);
+    }
+}
+struct GetCSDState : RemoteCtrlGlobalSignal {
+    GetCSDState()
+        : RemoteCtrlGlobalSignal("GET_CSD_STATE", 0x00U, hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_CSD_ON) {
+    }
+    std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) override;
+    // NOTE: inherits default implementation for UnpackRequest
+};
+struct SetCSDState : RemoteCtrlGlobalSignal {
+    SetCSDState()
+        : RemoteCtrlGlobalSignal("SET_CSD_STATE", 0x01U, hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_CSD_ON) {
+    }
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+
+struct NotifyCSDState {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
 }  // namespace remotectrl
 }  // namespace vcc

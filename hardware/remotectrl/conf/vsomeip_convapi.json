@@ -24,6 +24,10 @@
         {
             "name" : "RemoteCtrl_MediaCtrl",
             "id" : "0x4464"
+        },
+        {
+            "name" : "RemoteCtrl_GeneralSettingsCtrl",
+            "id" : "0x4474"
         }
     ],
 
@@ -51,12 +55,22 @@
             }
         },
         {
+
             "service" : "0x1400",
             "instance" : "0x1401",
             "reliable" : { "port" : "50024", "enable-magic-cookies" : "false" },
             "eventgroups" : {
                 "eventgroup" : "0x1402",
                 "events" : ["0x1422"]
+            }
+        },
+        {
+            "service" : "0x1300",
+            "instance" : "0x1301",
+            "reliable" : { "port" : "50026", "enable-magic-cookies" : "false" },
+            "eventgroups" : {
+                "eventgroup" : "0x1320",
+                "events" : ["0x1322"]
             }
         }
     ],
