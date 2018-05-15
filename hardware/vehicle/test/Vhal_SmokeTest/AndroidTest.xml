@@ -3,14 +3,17 @@
 This tests verifies the Vhal Properties available for applications
 If property with Ivalid Zone is accessed it shows that  property Id along with the zone requested by application .
 -->
-<configuration description="Vhal Smoke test">
+<configuration description="Vhal Smoke test
+- Reads out all registered properties and tries to get() them to verify get works on all properties
+- Tries to read out properties that are not registered to verify vhal router handles this without crashing. Regression for ARTINFO-2074">
     <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
         <option name="cleanup" value="true" />
         <option name="push" value="vhalsmoketest->/data/nativetest64/vhalsmoketest" />
     </target_preparer>
-    <test class="com.android.tradefed.testtype.GTest" > 
+    <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/nativetest64" />
         <option name="module-name" value="vhalsmoketest" />
         <option name="runtime-hint" value="2s" />
+        <option name="native-test-timeout" value="20000" />
     </test>
 </configuration>

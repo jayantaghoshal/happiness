@@ -85,6 +85,7 @@ test_plan_staging_hourly = [
     TradefedTest("vendor/volvocars/apps/tunerbrowserservice/app/src/androidTest", standard_caps), #Ankit Bhargava
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray_or_carsim}), #Raju Yadav
     VTSTest("vendor/volvocars/hardware/vehicle/test/traffic_sign_information",      standard_caps | {cp.flexray_or_carsim}), #Vivek Kumaar
+    VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -106,7 +107,6 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/test/gnss",                                  standard_caps), #Andreas Bengtsson
     VTSTest("vendor/volvocars/hardware/test/iplm",                                  standard_caps), #Andreas Bengtsson
     VTSTest("vendor/volvocars/hardware/test/keypanel",                              standard_caps | {cp.flexray}), #Tobias Ohrstrom
-    VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
     TradefedTest("vendor/volvocars/hardware/netman/test/ct/usb2ethernet",           standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/speed_limit_adaptation", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge", standard_caps  | {cp.audio}), #Samuel Idowu
