@@ -268,5 +268,23 @@ std::vector<vsomeip::byte_t> NotifyVolume::PackNotification(
     return payload_data;
 }
 
+hidl_remotectrl::RemoteCtrlHalPropertyValue SetStreamPlayBackStatus::UnpackRequest(
+        const std::shared_ptr<vsomeip::payload>& msg_payload) {
+    auto prop_value = RemoteCtrlSignal::UnpackRequest(msg_payload);
+    const auto playback_status = msg_payload->get_data()[0];
+    ValidateStreamPlayBackStatus(method_name_, playback_status);
+    prop_value.value.int32Values = android::hardware::hidl_vec<int32_t>{playback_status};
+    return prop_value;
+}
+
+std::vector<vsomeip::byte_t> NotifyStreamPlayBackStatus::PackNotification(
+        const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) {
+    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(prop_value.status)};
+    for (const auto& val : prop_value.value.int32Values) {
+        payload_data.push_back(static_cast<vsomeip::byte_t>(val));
+    }
+    return payload_data;
+}
+
 }  // namespace remotectrl
 }  // namespace vcc

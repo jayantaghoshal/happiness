@@ -20,6 +20,10 @@
         {
             "name" : "RemoteCtrl_ClimateCtrl",
             "id" : "0x4454"
+        },
+        {
+            "name" : "RemoteCtrl_MediaCtrl",
+            "id" : "0x4464"
         }
     ],
 
@@ -44,6 +48,15 @@
             "eventgroups" : {
                 "eventgroup" : "0x1202",
                 "events" : ["0x1222", "0x1225", "0x1228", "0x1210", "0x1231"]
+            }
+        },
+        {
+            "service" : "0x1400",
+            "instance" : "0x1401",
+            "reliable" : { "port" : "50024", "enable-magic-cookies" : "false" },
+            "eventgroups" : {
+                "eventgroup" : "0x1402",
+                "events" : ["0x1422"]
             }
         }
     ],

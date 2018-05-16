@@ -103,6 +103,7 @@
             <name>IRemoteCtrlPropertyResponse</name>
             <instance>RemoteCtrl_AudioCtrl</instance>
             <instance>RemoteCtrl_ClimateCtrl</instance>
+            <instance>RemoteCtrl_MediaCtrl</instance>
         </interface>
     </hal>
         <hal format="hidl">

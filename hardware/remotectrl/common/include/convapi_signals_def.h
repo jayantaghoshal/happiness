@@ -53,6 +53,14 @@ constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED = 0x1228U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION = 0x1229U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION = 0x1230U;
 constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED = 0x1231U;
+
+// RemoteCtrl_MediaCtrl
+constexpr uint16_t REMOTECTRL_MEDIACTRL_SERVICE_ID = 0x1400U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_SERVICE_INSTANCE_ID = 0x1401U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_EVENTGROUP_ID = 0x1402U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_METHOD_ID_SETMEDIAPLAYERPLAYBACK = 0x1411U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_EVENT_ID_MEDIAPLAYERPLAYBACKSTATUS = 0x1422U;
+
 // TODO (Abhi) Populate this file with all helpers and struct definitions needed for readable code until autogeneated
 // header files from SDB extract are in place
 
@@ -286,6 +294,29 @@ struct SetVolume : RemoteCtrlSignal {
     // NOTE: inherits default implementation for PackResponse
 };
 struct NotifyVolume {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
+
+// MediaStreamControl messaging
+inline void ValidateStreamPlayBackStatus(const char* method_name, const uint8_t& playback_status) {
+    if (playback_status >= static_cast<uint8_t>(hidl_remotectrl::StreamPlayBackStatus::RESERVED_3)) {
+        throw RemoteCtrlParamRangeError(method_name, "PlaybackStatus", 7, playback_status);
+    } else if (playback_status == static_cast<uint8_t>(hidl_remotectrl::StreamPlayBackStatus::RESERVED_1)) {
+        throw RemoteCtrlInvalidArgument(std::string(method_name) + "PlaybackStatus invalid");
+    } else if (playback_status == static_cast<uint8_t>(hidl_remotectrl::StreamPlayBackStatus::RESERVED_2)) {
+        throw RemoteCtrlInvalidArgument(std::string(method_name) + "PlaybackStatus invalid");
+    }
+}
+struct SetStreamPlayBackStatus : RemoteCtrlSignal {
+    SetStreamPlayBackStatus()
+        : RemoteCtrlSignal("SET_STREAM_PLAYBACK_STATUS",
+                           0x01U,
+                           hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_MEDIA_STREAM_CONTROL) {}
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+struct NotifyStreamPlayBackStatus {
     std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
 };
 

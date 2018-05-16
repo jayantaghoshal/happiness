@@ -46,5 +46,10 @@ class RemoteCtrlConversionError : public RemoteCtrlError {
     RemoteCtrlConversionError(const std::string& what) : RemoteCtrlError("RemoteCtrlConversionError: " + what) {}
 };
 
+class RemoteCtrlInvalidArgument : public RemoteCtrlError {
+  public:
+    RemoteCtrlInvalidArgument(const std::string& what) : RemoteCtrlError("RemoteCtrlInvalidArgument: " + what) {}
+};
+
 }  // namespace remotectrl
 }  // namespace vcc

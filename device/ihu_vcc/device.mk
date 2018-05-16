@@ -37,6 +37,7 @@ PRODUCT_PACKAGES += \
     remotectrl_routerd \
     remotectrl_audioctrld \
     remotectrl_climatectrld \
+    remotectrl_mediactrld \
     connectivitymanagerd \
     iplm_ctrl
 
