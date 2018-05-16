@@ -79,6 +79,7 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Jayanta Ghoshal
     TradefedTest("vendor/volvocars/hmi/Launcher/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/apps/tunerbrowserservice/app/src/androidTest", standard_caps), #Ankit Bhargava
+    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray}), #Raju Yadav
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -107,7 +108,6 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray} | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/temperature_adjustment", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray}), #Kirti Goel
-    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray}), #Raju Yadav
 
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set
