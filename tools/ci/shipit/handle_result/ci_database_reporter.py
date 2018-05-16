@@ -11,7 +11,7 @@ from handle_result import store_result, test_visualisation
 from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
 from utilities.ihuhandler import FlashResult
-from .influxdb_wrapper import insert_influx_data
+from .influxdb_wrapper import insert_influx_data, query_influx_data
 from . import mongodb_wrapper
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,10 @@ class ci_database_reporter(abstract_reporter):
             top_job_jobname = os.environ["TOP_JOB_JOBNAME"]
             top_job_build_number = int(os.environ["TOP_JOB_NUMBER"])
         else:
-            top_job_jobname = "gate"
+            if os.environ["JOB_NAME"] == "ihu_gate_test":
+                top_job_jobname = "ihu_gate"
+            else:
+                top_job_jobname = ""
             top_job_build_number = 0
         data = {
             'build_number' : os.environ["BUILD_NUMBER"],
@@ -49,11 +52,56 @@ class ci_database_reporter(abstract_reporter):
             "jobType": "ihu_test",
         }
 
-        logger.info("Storing: {}".format(data))
+        logger.debug("Storing: {}".format(data))
         try:
             insert_influx_data(str(os.environ["JOB_NAME"]), data, tags)
         except Exception as e:
-            logger.info(str(e))
+            logger.error(str(e))
+
+        # create overview measurement for hourly and daily, since they are currently divided in seperated sections
+        self.regroup_data(passing_testcases, len(failing_testcases), len(test_results), top_job_jobname, top_job_build_number, top_job_jobname + "_overview")
+
+    def regroup_data(self, passing_testcases, failing_testcases, total_testcases, top_job_jobname, top_job_build_number, measurement) -> None:
+        fieldPass = "passing_testcases"
+        fieldFail = "failing_testcases"
+        fieldTotal = "total_testcases"
+        fieldTime = "time"
+        build_number = "top_job_build_number={}".format(top_job_build_number)
+        try:
+            results = query_influx_data(fieldPass, fieldFail, fieldTotal, fieldTime, measurement, build_number)
+        except Exception as e:
+            logger.error(str(e))
+        points = results.get_points()
+        logger.debug("Result: {0}".format(results))
+
+        if len(results) > 0 :
+            logger.debug("Has record, append to existing measurement")
+            for item in points:
+                passing_testcases += item[fieldPass]
+                failing_testcases += item[fieldFail]
+                total_testcases += item[fieldTotal]
+                timestamp = item[fieldTime]
+        else:
+            logger.debug("No result yet, insert new measurement")
+            timestamp = ""
+
+        data = {
+            'gerrit_id' : os.environ["ZUUL_CHANGE"],
+            'top_job_name': top_job_jobname,
+            'top_job_build_number' : top_job_build_number,
+            'passing_testcases' : passing_testcases,
+            'failing_testcases' : failing_testcases,
+            'total_testcases' : total_testcases,
+        }
+        tags = {
+            "jobType": "ihu_test_overview",
+        }
+
+        logger.info("Storing: {}".format(data))
+        try:
+            insert_influx_data(measurement, data, tags, timestamp)
+        except Exception as e:
+            logger.error(str(e))
 
 
     def module_started(self, test: IhuBaseTest) -> None:
