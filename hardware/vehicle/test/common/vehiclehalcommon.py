@@ -52,6 +52,11 @@ property_list = [
     ('EMERGENCY_LANE_KEEPING_AID_ON',555745294),
     ('LANE_DEPARTURE_WARNING_ON', 555745306),
     ('CURVE_SPEED_ADAPTION_STATUS', 557842439),
+    ('TSI_RSI_ON', 555745295),
+    ('TSI_SPEED_VISUAL_WARN_ON', 555745297),
+    ('TSI_SPEED_AUDIO_WARN_ON', 555745299),
+    ('TSI_SPEEDCAM_AUDIO_WARN_ON', 555745301),
+    ('TSI_SPEED_WARN_OFFSET', 557842455),
 ]
 
 
@@ -277,17 +282,30 @@ class VehicleHalCommon():
             device.dragDip((100,300), (100, 200 if fineScroll else 100), 300)
         return None
 
-
     # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
     # This function is using uiautomator
-    def scrollAndFindViewByIdOrRaiseUiAutomator(self, viewId, device, maxFlings=10):
-        view = self.scrollAndFindViewByIdUiAutomator(viewId, device, maxFlings)
+    def scrollUpAndFindViewByIdOrRaiseUiAutomator(self, viewId, device, maxFlings=15):
+        view = self.scrollUpAndFindViewByIdUiAutomator(viewId, device, maxFlings)
+        asserts.assertNotEqual(None, view, "Did not find view")
+        return view
+
+    def scrollDownAndFindViewByIdOrRaiseUiAutomator(self, viewId, device, maxFlings=15):
+        view = self.scrollDownAndFindViewByIdUiAutomator(viewId, device, maxFlings)
         asserts.assertNotEqual(None, view, "Did not find view")
         return view
 
     # Scroll until view with given Id is found within maxFlings tries. Returns None if view not found.
     # This function is using uiautomator
-    def scrollAndFindViewByIdUiAutomator(self, viewId, device, maxFlings=10):
+    def scrollUpAndFindViewByIdUiAutomator(self, viewId, device, maxFlings=15):
+        print("Searching for view with id -> ") + str(viewId)
+        for n in range(maxFlings):
+            view = device(resourceId=viewId)
+            if view.exists:
+                return view
+            device.drag(100, 200, 100, 400, 10)
+        return None
+
+    def scrollDownAndFindViewByIdUiAutomator(self, viewId, device, maxFlings=15):
         print("Searching for view with id -> ") + str(viewId)
         for n in range(maxFlings):
             view = device(resourceId=viewId)
@@ -299,7 +317,7 @@ class VehicleHalCommon():
     def findAllViewWithIds(self, ids, device, assert_views_found=True):
         # Scroll all buttons to be shown
         for id in ids:
-            self.scrollAndFindViewByIdUiAutomator(id, device)
+            self.scrollDownAndFindViewByIdUiAutomator(id, device)
         # Assert if all buttons are visible and found
         if assert_views_found:
             for id in ids:

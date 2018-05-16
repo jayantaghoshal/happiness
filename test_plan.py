@@ -83,6 +83,7 @@ test_plan_staging_hourly = [
     TradefedTest("vendor/volvocars/hmi/Launcher/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/apps/tunerbrowserservice/app/src/androidTest", standard_caps), #Ankit Bhargava
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray}), #Raju Yadav
+    VTSTest("vendor/volvocars/hardware/vehicle/test/traffic_sign_information",      standard_caps | {cp.flexray}), #Vivek Kumaar
 ]
 
 #This is for unstable tests that does not need to be run often
