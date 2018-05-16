@@ -1,0 +1,2 @@
+0 22 * * * /bin/bash /workspace/backup_script.sh >> /workspace/cronlog.txt 2>&1
+

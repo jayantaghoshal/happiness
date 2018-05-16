@@ -1,0 +1,8 @@
+MongoDB
+
+MongoDB used by IHU CI
+
+Deploy to production:
+As root@gotsvl1416.got.volvocars.net run:
+docker run --name icup_android-mongo -d -p 27017:27017 -v /cm/mongodb/data:/data/db --restart=always mongo --auth
+
