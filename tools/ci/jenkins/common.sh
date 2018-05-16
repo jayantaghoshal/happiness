@@ -70,6 +70,8 @@ function storecimetrix() {
        buildFunc="reposync"
     elif [[ "$buildFunc" == *"mmma"* ]]; then
        buildFunc="mmma"
+    elif [[ "$buildFunc" == *"artifactory"* ]]; then
+       buildFunc="artifactorypush"
     fi
 
     set +e

@@ -105,7 +105,7 @@ cp out/.ninja_log out/vcc_build_metadata/ninja_log_mmmma_vendor_volvocars || tru
 cp out/.build.trace.gz out/vcc_build_metadata/mmma_vendorvolvocars.trace.gz || true
 
 ls -lh "$OUT_ARCHIVE"
-time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
+citime artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
 
 # Create build meta data metaData.tgz
 BUILD_META_DATA=metaData.tgz
