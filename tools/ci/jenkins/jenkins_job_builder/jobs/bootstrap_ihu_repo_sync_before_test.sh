@@ -15,6 +15,8 @@ function get_repos {
     aosp/platform/prebuilts/go/linux-x86 \
     aosp/platform/prebuilts/build-tools \
     vendor/volvocars \
+    vendor/volvocars/hmi/apps/tunerbrowserservice \
+    vendor/volvocars/hmi/Launcher \
     aosp/platform/build \
     bsp/device/delphi/volvoihu \
     aosp/platform/packages/services/Car \
