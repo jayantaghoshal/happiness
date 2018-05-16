@@ -7,6 +7,7 @@ import logging
 import time
 import sys
 import os
+import json
 
 from vts.runners.host import asserts
 from vts.runners.host import base_test
@@ -25,6 +26,35 @@ import vehiclehalcommon
 from generated import datatypes as de_types
 
 class VtsSoundNotificationIT(base_test.BaseTestClass):
+
+    def _getAudioProcesses(self):
+        #return self.dut.shell.one.Execute('ps -A | grep "sound\|audio"')
+        #res = self.dut.shell.one.Execute('ps -U u0_a9')
+        res = self.dut.shell.one.Execute('ps -A')
+        #self.logger.info(res)
+        try:
+            ps = str(res['stdouts'])
+            ps_lines = ps.split('\\n')
+            audio_lines = [l for l in ps_lines if 'audio' in l or 'soundnotifications' in l]
+            #for p in audio_lines:
+            #    self.logger.info("line %s", p)
+            audio_lines_trunc = list()  # type:list
+            for al in audio_lines:
+
+                try:
+                    parts = al.split()
+                    #right_part = al.rsplit(maxsplit=1)
+                    audio_lines_trunc.append('\t'.join((parts[0], parts[1], parts[-1])))
+                except Exception as e:
+                    self.logger.info('Line %s Exception %s', al, e)
+                    pass
+            return '\n'.join(audio_lines_trunc)
+        except Exception as e:
+            self.logger.info("_getAudioProcesses Excpetion %s", e)
+            return "FAILED!!!"
+
+
+
     def setUpClass(self):
         self.logger = logging.getLogger('Test')
         self.logger.setLevel(logging.DEBUG)
@@ -39,9 +69,30 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         self.host_folder = '/tmp'
         self.log_list = list()  #type: list
 
+        self.ps_res = self._getAudioProcesses()
+        self.logger.info("audio processes:")
+        self.logger.info(self.ps_res)
+
     def setUp(self):
         #clear the log used for sound matching
         self.log_list = list()
+
+    def tearDown(self):
+        ps_res = self._getAudioProcesses()
+        if ps_res != self.ps_res:
+            self.logger.info("Lost one or more audio processes?! Current ps:")
+            self.logger.info(ps_res)
+        # For each tests don't write anything if ok
+
+    def tearDownClass(self):
+        ps_res = self._getAudioProcesses()
+        if ps_res != self.ps_res:
+            self.logger.info("Lost one or more audio processes?! Current ps:")
+            self.logger.info(ps_res)
+        else:
+            self.logger.info("Processes are identical during test")
+
+
 
     def _log_list_as_str(self):
         return '\n'.join(self.log_list)
