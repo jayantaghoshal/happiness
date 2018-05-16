@@ -7,10 +7,6 @@ cc_binary {
     name: "remotectrl_audioctrld",
     defaults: ["volvocars_cc_defaults_hq"],
 
-    local_include_dirs: [
-        "include/",
-    ],
-
     srcs: [
         "src/*.cpp",
     ],

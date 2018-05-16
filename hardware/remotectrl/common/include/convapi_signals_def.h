@@ -266,5 +266,28 @@ struct NotifyAirDistribution {
     std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
 };
 
+// Media Volume level messaging
+inline void ValidateRequstedVolume(const char* method_name, const uint8_t& volume) {
+    if (volume > 0x23U) {
+        throw RemoteCtrlParamRangeError(method_name, "AirFlow", 0x23U, volume);
+    }
+}
+struct GetVolume : RemoteCtrlSignal {
+    GetVolume()
+        : RemoteCtrlSignal("GET_VOLUME", 0x01U, hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_MEDIA_VOLUME) {}
+    std::vector<vsomeip::byte_t> PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) override;
+    // NOTE: inherits default implementation for UnpackRequest
+};
+struct SetVolume : RemoteCtrlSignal {
+    SetVolume()
+        : RemoteCtrlSignal("SET_VOLUME", 0x02U, hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_MEDIA_VOLUME) {}
+    hidl_remotectrl::RemoteCtrlHalPropertyValue UnpackRequest(
+            const std::shared_ptr<vsomeip::payload>& msg_payload) override;
+    // NOTE: inherits default implementation for PackResponse
+};
+struct NotifyVolume {
+    std::vector<vsomeip::byte_t> PackNotification(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value);
+};
+
 }  // namespace remotectrl
 }  // namespace vcc

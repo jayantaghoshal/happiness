@@ -5,10 +5,8 @@ hidl_interface {
     root: "vendor.volvocars.hardware",
     srcs: [
         "types.hal",
-        "INativeRemoteAudioCtrl.hal",
         "IRemoteCtrlProperty.hal",
         "IRemoteCtrlPropertyResponse.hal",
-        "ISystemRemoteAudioCtrl.hal",
     ],
     interfaces: [
         "android.hidl.base@1.0",
@@ -16,18 +14,15 @@ hidl_interface {
     types: [
         "ACState",
         "AirFlow",
-        "AudioContext",
         "FanLevel",
         "MaxDefrostState",
         "RemoteCtrlHalProperty",
         "RemoteCtrlHalPropertyStatus",
         "RemoteCtrlHalPropertyType",
         "RemoteCtrlHalPropertyValue",
-        "StatusCode",
         "StreamPlayBackStatus",
         "VehicleArea",
         "VehicleAreaZone",
-        "VolumeData",
     ],
     gen_java: true,
 }

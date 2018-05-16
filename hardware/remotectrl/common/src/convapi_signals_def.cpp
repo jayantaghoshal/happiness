@@ -240,5 +240,33 @@ std::vector<vsomeip::byte_t> NotifyAirDistribution::PackNotification(
     return payload_data;
 }
 
+hidl_remotectrl::RemoteCtrlHalPropertyValue SetVolume::UnpackRequest(
+        const std::shared_ptr<vsomeip::payload>& msg_payload) {
+    auto prop_value = RemoteCtrlSignal::UnpackRequest(msg_payload);
+    // const auto context = msg_payload->get_data()[0];
+    const auto volume = msg_payload->get_data()[1];
+    // TODO (Abhi) validateContext
+    ValidateRequstedVolume(method_name_, volume);
+    prop_value.value.int32Values = android::hardware::hidl_vec<int32_t>{volume};
+    return prop_value;
+}
+
+std::vector<vsomeip::byte_t> GetVolume::PackResponse(const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) {
+    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(prop_value.status)};
+    for (const auto& val : prop_value.value.int32Values) {
+        payload_data.push_back(static_cast<vsomeip::byte_t>(val));
+    }
+    return payload_data;
+}
+
+std::vector<vsomeip::byte_t> NotifyVolume::PackNotification(
+        const hidl_remotectrl::RemoteCtrlHalPropertyValue& prop_value) {
+    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(prop_value.status), 0x01U};
+    for (const auto& val : prop_value.value.int32Values) {
+        payload_data.push_back(static_cast<vsomeip::byte_t>(val));
+    }
+    return payload_data;
+}
+
 }  // namespace remotectrl
 }  // namespace vcc

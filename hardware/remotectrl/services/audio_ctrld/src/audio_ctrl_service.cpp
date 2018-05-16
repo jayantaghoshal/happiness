@@ -4,10 +4,10 @@
  */
 
 #include "audio_ctrl_service.h"
-#include <cassert>
-#include <future>
-#include <vector>
 #include "convapi_signals_def.h"
+
+#include <memory>
+#include <utility>
 
 #undef LOG_TAG
 #define LOG_TAG "RemoteCtrl_AudioCtrl"
@@ -16,27 +16,20 @@
 namespace {
 const uint64_t binder_cookie = 0x80085U;
 
-// TODO (Abhi): Fix deserializer for signals based on SDB database and move these constants and related sanity checking
-// as part of deserializer
-const uint8_t REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME_PAYLOAD_LEN = 0x01U;
-const uint8_t REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME_PAYLOAD_LEN = 0x02U;
 }  // namespace
 
 namespace vcc {
 namespace remotectrl {
 namespace remoteaudioctrl {
 
-Return<void> AudioCtrlService::registerAudioControlHandler(
-        const ::android::sp<hidl_remotectrl::ISystemRemoteAudioCtrl>& handler) {
-    ALOGD("%s", __FUNCTION__);
+Return<void> AudioCtrlService::registerRemoteCtrlPropertyHandler(
+        const ::android::sp<hidl_remotectrl::IRemoteCtrlProperty>& handler) {
+    ALOGD("%s", __func__);
 
     // TODO (Abhi): validate sender is a system java service
     {
         std::lock_guard<std::mutex> lock(guard_);
-        if (nullptr != system_service_handler_.get()) {
-            ALOGE("Re-registration for binder RemoteCtrlHandler denied..");
-            return Void();
-        }
+        ALOGW_IF(nullptr != system_service_handler_.get(), "Re-registration for binder RemoteCtrlHandler received");
         system_service_handler_ = handler;
         system_service_handler_->linkToDeath(static_cast<::android::hardware::hidl_death_recipient*>(this),
                                              binder_cookie);
@@ -51,9 +44,10 @@ Return<void> AudioCtrlService::registerAudioControlHandler(
     return Void();
 }
 
-Return<void> AudioCtrlService::unregisterAudioControlHandler(
-        const ::android::sp<hidl_remotectrl::ISystemRemoteAudioCtrl>& handler) {
-    ALOGD("%s", __FUNCTION__);
+Return<void> AudioCtrlService::unregisterRemoteCtrlPropertyHandler(
+        const ::android::sp<hidl_remotectrl::IRemoteCtrlProperty>& handler) {
+    ALOGD("%s", __func__);
+
     {
         std::lock_guard<std::mutex> lock(guard_);
         if (system_service_handler_ != handler) {
@@ -65,39 +59,65 @@ Return<void> AudioCtrlService::unregisterAudioControlHandler(
     return Void();
 }
 
-Return<void> AudioCtrlService::updateVolume(const hidl_remotectrl::VolumeData& data) {
-    ALOGD("%s: Context: %hhu, Level: %hhu", __FUNCTION__, data.context, data.level);
+Return<void> AudioCtrlService::sendGetPropertyResp(uint32_t requestIdentifier,
+                                                   const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
+    ALOGD("%s: requestId[0x%08X]", __FUNCTION__, requestIdentifier);
 
-    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(data.context),
-                                              static_cast<vsomeip::byte_t>(data.level)};
-
-    SendNotification(REMOTECTRL_AUDIOCTRL_EVENT_ID_VOLUMESTATUS, std::move(payload_data));
+    try {
+        const auto prop = std::make_unique<RemoteCtrlHalProp<static_cast<int>(
+                hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_MEDIA_VOLUME)>>();
+        if (prop) {
+            std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
+                    prop->CreateSomeIpResponse(MessageType::GET, propValue);
+            SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data.second));
+        } else {
+            ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
+        }
+    } catch (const RemoteCtrlError& e) {
+        ALOGE("%s", e.what());
+    }
 
     return Void();
 }
 
-Return<void> AudioCtrlService::sendGetVolumeResp(uint32_t requestIdentifier,
-                                                 hidl_remotectrl::StatusCode statusCode,
-                                                 const hidl_remotectrl::VolumeData& data) {
-    ALOGD("%s: requestId[0x%08X]", __FUNCTION__, requestIdentifier);
+Return<void> AudioCtrlService::sendSetPropertyResp(uint32_t requestIdentifier,
+                                                   const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
+    ALOGD("%s: requestId(0x%08X)", __func__, requestIdentifier);
 
-    std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(data.context),
-                                              static_cast<vsomeip::byte_t>(data.level)};
+    try {
+        const auto prop = std::make_unique<RemoteCtrlHalProp<static_cast<int>(
+                hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_MEDIA_VOLUME)>>();
+        if (prop) {
+            std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
+                    prop->CreateSomeIpResponse(MessageType::SET, propValue);
+            SendResponse(requestIdentifier, vsomeip::return_code_e::E_OK, std::move(payload_data.second));
+        } else {
+            ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
+        }
+    } catch (const RemoteCtrlError& e) {
+        ALOGE("%s", e.what());
+    }
 
-    vsomeip::return_code_e status = (statusCode == hidl_remotectrl::StatusCode::SUCCESS)
-                                            ? vsomeip::return_code_e::E_OK
-                                            : vsomeip::return_code_e::E_NOT_OK;
-    SendResponse(requestIdentifier, status, std::move(payload_data));
     return Void();
 }
 
-Return<void> AudioCtrlService::sendSetVolumeResp(uint32_t requestIdentifier, hidl_remotectrl::StatusCode statusCode) {
-    ALOGD("%s: requestId[0x%08X]", __FUNCTION__, requestIdentifier);
+Return<void> AudioCtrlService::notifyPropertyChanged(const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
+    ALOGD("%s", __func__);
 
-    vsomeip::return_code_e status = (statusCode == hidl_remotectrl::StatusCode::SUCCESS)
-                                            ? vsomeip::return_code_e::E_OK
-                                            : vsomeip::return_code_e::E_NOT_OK;
-    SendResponse(requestIdentifier, status);
+    try {
+        const auto prop = std::make_unique<RemoteCtrlHalProp<static_cast<int>(
+                hidl_remotectrl::RemoteCtrlHalProperty::REMOTECTRLHAL_MEDIA_VOLUME)>>();
+        if (prop) {
+            std::pair<vsomeip::method_t, std::vector<vsomeip::byte_t>> payload_data =
+                    prop->CreateSomeIpResponse(MessageType::NOTIFICATION, propValue);
+            SendNotification(payload_data.first, std::move(payload_data.second));
+        } else {
+            ALOGW("%s: Unhandled Prop [%d]", __func__, propValue.prop);
+        }
+    } catch (const RemoteCtrlError& e) {
+        ALOGE("%s", e.what());
+    }
+
     return Void();
 }
 
@@ -105,6 +125,8 @@ void AudioCtrlService::serviceDied(uint64_t cookie, const android::wp<::android:
     if (cookie != binder_cookie) {
         return;
     }
+
+    ALOGI("%s", __func__);
 
     {
         std::lock_guard<std::mutex> lock(guard_);
@@ -137,25 +159,38 @@ bool AudioCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>&
             return false;
         }
     }
-    std::shared_ptr<vsomeip::payload> msg_payload = message->get_payload();
-    const auto requestId = message->get_request();
-    if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME &&
-        REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME_PAYLOAD_LEN == msg_payload->get_length()) {
-        ALOGD("Get volume request received requestId[0x%08X]", requestId);
 
-        std::lock_guard<std::mutex> lock(guard_);
-        system_service_handler_->getVolume(requestId,
-                                           static_cast<hidl_remotectrl::AudioContext>(msg_payload->get_data()[0]));
-    } else if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME &&
-               REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME_PAYLOAD_LEN == msg_payload->get_length()) {
-        ALOGD("Set volume to %d, request received requestId[0x%08X]", msg_payload->get_data()[1], requestId);
+    try {
+        std::shared_ptr<vsomeip::payload> msg_payload = message->get_payload();
+        std::unique_ptr<BaseProp> prop_obj;
+        if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME) {
+            prop_obj = std::make_unique<RemoteProp<REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME>>();
+        } else if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME) {
+            prop_obj = std::make_unique<RemoteProp<REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME>>();
+        }
 
-        std::lock_guard<std::mutex> lock(guard_);
-        system_service_handler_->setVolume(requestId,
-                                           {static_cast<hidl_remotectrl::AudioContext>(msg_payload->get_data()[0]),
-                                            static_cast<hidl_remotectrl::VolumeLevel>(msg_payload->get_data()[1])});
+        if (prop_obj) {
+            const auto prop_value = prop_obj->RemoteCtrlHalPropertyReq(message->get_payload());
+
+            if (prop_value.first == MessageType::GET) {
+                std::lock_guard<std::mutex> lock(guard_);
+                if (nullptr != system_service_handler_.get()) {
+                    system_service_handler_->getProperty(message->get_request(), prop_value.second);
+                }
+            } else if (prop_value.first == MessageType::SET) {
+                std::lock_guard<std::mutex> lock(guard_);
+                if (nullptr != system_service_handler_.get()) {
+                    system_service_handler_->setProperty(message->get_request(), prop_value.second);
+                }
+            }
+        } else {
+            ALOGW("Unhandled message 0x%04X", message->get_method());
+            return false;
+        }
+    } catch (const RemoteCtrlError& e) {
+        ALOGW("%s. Request ignored", e.what());
+        return false;
     }
-
     return true;
 }
 

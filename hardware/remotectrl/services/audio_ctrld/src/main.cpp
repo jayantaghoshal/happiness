@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 
         configureRpcThreadpool(1, true);
 
-        if (::android::OK != audio_ctrl_service->registerAsService()) {
+        if (::android::OK != audio_ctrl_service->registerAsService(service_info.service_name_)) {
             throw std::runtime_error("Failed to register Service...");
         }
 

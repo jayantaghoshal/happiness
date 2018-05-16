@@ -39,13 +39,12 @@ public class AppApiHandler extends IAudioCtrlAppService.Stub {
      * Calls from system service
      */
     @Override
-    public void getVolume(int requestIdentifier, byte audioContext) {
+    public void getVolume(int requestIdentifier) {
         synchronized (this) {
             assertRemoteCtrlPermission(mAppService);
-            Log.v(TAG, "Get volume: requestIdentifier-" + requestIdentifier + ", audioContext-"
-                            + audioContext);
+            Log.v(TAG, "Get volume: requestIdentifier-" + requestIdentifier);
             try {
-                mAppService.getVolume(requestIdentifier, audioContext);
+                mAppService.getVolume(requestIdentifier);
             } catch (Exception e) {
                 Log.e(TAG, "Get Volume Error : " + e.getMessage());
             }
@@ -53,13 +52,14 @@ public class AppApiHandler extends IAudioCtrlAppService.Stub {
     }
 
     @Override
-    public void setVolume(int requestIdentifier, byte audioContext, byte volumeLevel) {
+    public void setVolume(int requestIdentifier, int volumeLevel) {
         synchronized (this) {
             assertRemoteCtrlPermission(mAppService);
-            Log.v(TAG, "Set volume: requestIdentifier-" + requestIdentifier + ", audioContext-"
-                            + audioContext + ", volumeLevel-" + volumeLevel);
+            Log.v(TAG,
+                    "Set volume: requestIdentifier: " + requestIdentifier
+                            + ", volumeLevel: " + volumeLevel);
             try {
-                mAppService.setVolume(requestIdentifier, audioContext, volumeLevel);
+                mAppService.setVolume(requestIdentifier, volumeLevel);
             } catch (Exception e) {
                 Log.e(TAG, "Set Volume error : " + e.getMessage());
             }

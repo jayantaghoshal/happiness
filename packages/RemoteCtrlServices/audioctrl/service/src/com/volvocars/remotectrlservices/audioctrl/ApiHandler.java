@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -32,24 +32,22 @@ public class ApiHandler extends IAudioCtrlService.Stub {
      * Calls from AppService
      */
     @Override
-    public void updateVolume(byte audioContext, byte volumeLevel) {
+    public void updateVolume(int volumeLevel) {
         synchronized (this) {
-            Log.v(TAG, "UpdateVolume" + audioContext + "," + volumeLevel);
+            Log.v(TAG, "UpdateVolume volume: " + volumeLevel);
             assertRemoteCtrlPermission(mContext);
-            mHalHandler.updateVolume(audioContext, volumeLevel);
+            mHalHandler.updateVolume(volumeLevel);
         }
     }
 
     @Override
-    public void sendGetVolumeResp(
-            int requestIdentifier, boolean requestStatus, byte audioContext, byte volumeLevel) {
+    public void sendGetVolumeResp(int requestIdentifier, boolean requestStatus, int volumeLevel) {
         synchronized (this) {
             Log.v(TAG,
-                    "sendGetVolumeResp :requestIdentifier-" + requestIdentifier + ", +audioContext-"
-                            + audioContext + ", volumeLevel-" + volumeLevel);
+                    "sendGetVolumeResp :requestIdentifier-" + requestIdentifier + ", volumeLevel-"
+                            + volumeLevel);
             assertRemoteCtrlPermission(mContext);
-            mHalHandler.sendGetVolumeResp(
-                    requestIdentifier, requestStatus, audioContext, volumeLevel);
+            mHalHandler.sendGetVolumeResp(requestIdentifier, requestStatus, volumeLevel);
         }
     }
 

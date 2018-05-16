@@ -42,7 +42,6 @@ public class AudioCtrlAppService extends Service {
     private CarVolumeCallback mVolumeCallback = new CarVolumeCallback();
 
     private ServiceConnection mSystemServiceConnection = new ServiceConnection() {
-
         public void onServiceConnected(ComponentName name, IBinder service) {
             mSystemService = IAudioCtrlService.Stub.asInterface(service);
         }
@@ -56,7 +55,6 @@ public class AudioCtrlAppService extends Service {
      * Car Service stuffs
      */
     private final ServiceConnection mCarServiceConnection = new ServiceConnection() {
-
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             try {
@@ -136,23 +134,21 @@ public class AudioCtrlAppService extends Service {
     /**
      * Calls towards system service.
      */
-    public void updateVolume(byte audioContext) {
+    public void updateVolume() {
         try {
-            int volumeGroupId = mCarAudioManager.getVolumeGroupIdForUsage(audioContext);
-            byte volumeLevel = (byte) mCarAudioManager.getGroupVolume(volumeGroupId);
-            Log.v(TAG,
-                    "Update volume: audioContext- " + audioContext + " newvolume " + volumeLevel);
+            int volumeGroupId =
+                    mCarAudioManager.getVolumeGroupIdForUsage(AudioAttributes.USAGE_MEDIA);
+            int volumeLevel = mCarAudioManager.getGroupVolume(volumeGroupId);
+            Log.v(TAG, "Update volume:  newvolume " + volumeLevel);
 
-            mSystemService.updateVolume(audioContext, volumeLevel);
+            mSystemService.updateVolume(volumeLevel);
         } catch (RemoteException | CarNotConnectedException e) {
             Log.e(TAG, "UpdateVolume error : " + e.getMessage());
         }
     }
 
-    public void getVolume(int requestIdentifier, byte audioContext)
-            throws CarNotConnectedException {
-        Log.v(TAG, "Get volume: requestIdentifier- " + requestIdentifier + ", audioContext- "
-                        + audioContext);
+    public void getVolume(int requestIdentifier) throws CarNotConnectedException {
+        Log.v(TAG, "Get volume: requestIdentifier- " + requestIdentifier);
 
         new Thread(new Runnable() {
             public void run() {
@@ -160,7 +156,8 @@ public class AudioCtrlAppService extends Service {
                 int volume = -1; // indicates wrong volumelevel?
 
                 try {
-                    int volumeGroupId = mCarAudioManager.getVolumeGroupIdForUsage(audioContext);
+                    int volumeGroupId =
+                            mCarAudioManager.getVolumeGroupIdForUsage(AudioAttributes.USAGE_MEDIA);
 
                     volume = mCarAudioManager.getGroupVolume(volumeGroupId);
                     /*    volume = upScaleVolume(
@@ -175,32 +172,33 @@ public class AudioCtrlAppService extends Service {
 
                 // return response
                 try {
-                    byte bytevolume = (byte) volume;
-                    mSystemService.sendGetVolumeResp(
-                            requestIdentifier, status, audioContext, bytevolume);
+                    mSystemService.sendGetVolumeResp(requestIdentifier, status, volume);
                 } catch (RemoteException e) {
                     Log.e(TAG, "SendGetVolumeResp error : " + e.getMessage());
                 }
             }
-        }).start();
+        })
+                .start();
     }
 
-    public void setVolume(int requestIdentifier, byte audioContext, byte volumeLevel)
-            throws CarNotConnectedException {
-        Log.v(TAG, "Set volume: requestIdentifier- " + requestIdentifier + ", audioContext- "
-                        + audioContext + ", volumeLevel- " + volumeLevel);
+    public void setVolume(int requestIdentifier, int volumeLevel) throws CarNotConnectedException {
+        Log.v(TAG,
+                "Set volume: requestIdentifier- " + requestIdentifier + ", volumeLevel- "
+                        + volumeLevel);
 
         // Use carAudioManager to set volume here
-        int volumeGroupId = mCarAudioManager.getVolumeGroupIdForUsage(audioContext);
-        Log.d(TAG, "Max vol of stream" + String.valueOf(volumeGroupId) + ""
+        int volumeGroupId = mCarAudioManager.getVolumeGroupIdForUsage(AudioAttributes.USAGE_MEDIA);
+        Log.d(TAG,
+                "Max vol of stream" + String.valueOf(volumeGroupId) + ""
                         + String.valueOf(mCarAudioManager.getGroupMaxVolume(volumeGroupId)));
         new Thread(new Runnable() {
             public void run() {
                 boolean status = true;
                 try {
-                    byte actualVolume = volumeLevel;
+                    byte actualVolume = (byte) volumeLevel;
                     mCarAudioManager.setGroupVolume(volumeGroupId, actualVolume, 0);
-                    Log.d(TAG, "Max vol of stream " + String.valueOf(volumeGroupId) + " is "
+                    Log.d(TAG,
+                            "Max vol of stream " + String.valueOf(volumeGroupId) + " is "
                                     + String.valueOf(
                                               mCarAudioManager.getGroupMaxVolume(volumeGroupId)));
 
@@ -215,11 +213,9 @@ public class AudioCtrlAppService extends Service {
                 } catch (RemoteException e) {
                     Log.e(TAG, "SendSetVolumeResp error +" + e.getMessage());
                 }
-
-                // Send notification
-                updateVolume(audioContext);
             }
-        }).start();
+        })
+                .start();
     }
 
     /**
@@ -233,7 +229,7 @@ public class AudioCtrlAppService extends Service {
                 int[] usage = mCarAudioManager.getUsagesForVolumeGroupId(groupId);
                 for (int musage : usage) {
                     if (musage == AudioAttributes.USAGE_MEDIA) {
-                        updateVolume((byte) musage);
+                        updateVolume();
                     }
                 }
 

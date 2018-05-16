@@ -14,7 +14,6 @@ import android.hardware.automotive.vehicle.V2_0.VehiclePropValue;
 
 import vendor.volvocars.hardware.remotectrl.V1_0.IRemoteCtrlProperty;
 import vendor.volvocars.hardware.remotectrl.V1_0.IRemoteCtrlPropertyResponse;
-import vendor.volvocars.hardware.remotectrl.V1_0.StatusCode;
 
 import com.volvocars.remotectrlservices.carproperty.CarPropertyUtils;
 

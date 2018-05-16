@@ -33,8 +33,8 @@ const ClientInfo client_info = {
         .events_ = {REMOTECTRL_AUDIOCTRL_EVENT_ID_VOLUMESTATUS}};
 
 const std::uint16_t GETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x02U;
-const std::uint16_t SETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x00U;
-const std::uint16_t VOLUME_NOTIFICATION_EXPECTED_PAYLOAD_LEN = 0x02U;
+const std::uint16_t SETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN = 0x01U;
+const std::uint16_t VOLUME_NOTIFICATION_EXPECTED_PAYLOAD_LEN = 0x03U;
 const std::uint16_t MEDIA_CONTEXT = 0x01U;
 
 }  // namespace
@@ -73,7 +73,7 @@ TEST_F(RemoteAudioCtrlFixture, GetVolume_SuccessTest) {
 
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
     ASSERT_THAT(received_reply_->get_payload()->get_length(), GETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN);
-    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], MEDIA_CONTEXT);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
     EXPECT_THAT(received_reply_->get_payload()->get_data()[1], AllOf(Ge(0), Le(100)));
 }
 
@@ -107,9 +107,9 @@ TEST_F(RemoteAudioCtrlFixture, SetVolume_SuccessTest) {
     ASSERT_THAT(WaitForNotification(2s), true);
     ASSERT_THAT(received_notification_->get_return_code(), vsomeip::return_code_e::E_OK);
     ASSERT_THAT(received_notification_->get_payload()->get_length(), VOLUME_NOTIFICATION_EXPECTED_PAYLOAD_LEN);
-    // EXPECT_THAT(received_notification_->get_payload()->get_data()[0], availability_status);
-    EXPECT_THAT(received_notification_->get_payload()->get_data()[0], MEDIA_CONTEXT);
-    EXPECT_THAT(received_notification_->get_payload()->get_data()[1], volume_level);
+    EXPECT_THAT(received_notification_->get_payload()->get_data()[0], 0x03);
+    EXPECT_THAT(received_notification_->get_payload()->get_data()[1], MEDIA_CONTEXT);
+    EXPECT_THAT(received_notification_->get_payload()->get_data()[2], volume_level);
 }
 
 /* SetVolume_GetVolume_SuccessTest
@@ -133,10 +133,8 @@ TEST_F(RemoteAudioCtrlFixture, SetVolume_GetVolume_SuccessTest) {
     ASSERT_THAT(WaitForResponse(2s), true);
     ASSERT_THAT(received_reply_->get_return_code(), vsomeip::return_code_e::E_OK);
     ASSERT_THAT(received_reply_->get_payload()->get_length(), GETVOLUME_RESPONSE_EXPECTED_PAYLOAD_LEN);
-    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], MEDIA_CONTEXT);
-    // TODO (Abhi) : because of up/down scaling involved in volume levels in between ConvAPI and Android; below
-    // expectioation is currently disabled. This should be enabled/removed(?) after discussion is concluded
-    // EXPECT_THAT(received_reply_->get_payload()->get_data()[1], volume_level);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[0], 0x03);
+    EXPECT_THAT(received_reply_->get_payload()->get_data()[1], volume_level);
 }
 
 /* SetVolume_FailureTest

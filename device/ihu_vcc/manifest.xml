@@ -96,19 +96,12 @@
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>INativeRemoteAudioCtrl</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
-            <name>ISystemRemoteAudioCtrl</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
             <name>IRemoteCtrlProperty</name>
             <instance>default</instance>
         </interface>
         <interface>
             <name>IRemoteCtrlPropertyResponse</name>
+            <instance>RemoteCtrl_AudioCtrl</instance>
             <instance>RemoteCtrl_ClimateCtrl</instance>
         </interface>
     </hal>
