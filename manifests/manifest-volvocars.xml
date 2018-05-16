@@ -54,7 +54,7 @@
   <project name="bsp/external/vim" path="vendor/aptiv/external/vim" revision="9ad5bdf6e9546f9e96f6f44bee5375e62e335c40" />
 
   <remove-project name="vendor/delphi/android_vehicle-hal" />
-  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="80c227c0c6e5a523dcf75ac2871b2326c08ae363" />
+  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="e15258283f218ffe58d29c892c051c8f7b7b904c" />
 
   <remove-project name="vendor/delphi/android_devices" />
   <project name="vendor/delphi/android_devices" path="device/aptiv" revision="7d4b69f25984b3cf99330ec9d8c6b8db32996db1" >
