@@ -55,6 +55,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Martin Stigels
     VTSTest("vendor/volvocars/packages/TimeUpdateService/test/ct",                  standard_caps), #Renjith Rajagopal
     VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",      standard_caps | {cp.flexray}), #Martin Stigels
+    VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Jayanta Ghoshal
 ]
 
 test_plan_nightly = test_plan_hourly + [
@@ -76,7 +77,6 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
     VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray}), #dfloodh
     VTSTest("vendor/volvocars/hardware/vehicle/test/driversupportfunction_setting",	standard_caps | {cp.flexray}), #Vi Dat
-    VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Jayanta Ghoshal
     TradefedTest("vendor/volvocars/hmi/Launcher/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/apps/tunerbrowserservice/app/src/androidTest", standard_caps), #Ankit Bhargava
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray}), #Raju Yadav
