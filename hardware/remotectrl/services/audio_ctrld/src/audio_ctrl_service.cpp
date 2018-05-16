@@ -76,10 +76,10 @@ Return<void> AudioCtrlService::updateVolume(const hidl_remotectrl::VolumeData& d
     return Void();
 }
 
-Return<void> AudioCtrlService::sendGetVolumeResp(uint16_t requestIdentifier,
+Return<void> AudioCtrlService::sendGetVolumeResp(uint32_t requestIdentifier,
                                                  hidl_remotectrl::StatusCode statusCode,
                                                  const hidl_remotectrl::VolumeData& data) {
-    ALOGD("%s: session[0x%04X]", __FUNCTION__, requestIdentifier);
+    ALOGD("%s: requestId[0x%08X]", __FUNCTION__, requestIdentifier);
 
     std::vector<vsomeip::byte_t> payload_data{static_cast<vsomeip::byte_t>(data.context),
                                               static_cast<vsomeip::byte_t>(data.level)};
@@ -91,8 +91,8 @@ Return<void> AudioCtrlService::sendGetVolumeResp(uint16_t requestIdentifier,
     return Void();
 }
 
-Return<void> AudioCtrlService::sendSetVolumeResp(uint16_t requestIdentifier, hidl_remotectrl::StatusCode statusCode) {
-    ALOGD("%s: session[0x%04X]", __FUNCTION__, requestIdentifier);
+Return<void> AudioCtrlService::sendSetVolumeResp(uint32_t requestIdentifier, hidl_remotectrl::StatusCode statusCode) {
+    ALOGD("%s: requestId[0x%08X]", __FUNCTION__, requestIdentifier);
 
     vsomeip::return_code_e status = (statusCode == hidl_remotectrl::StatusCode::SUCCESS)
                                             ? vsomeip::return_code_e::E_OK
@@ -137,21 +137,21 @@ bool AudioCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message>&
             return false;
         }
     }
-
     std::shared_ptr<vsomeip::payload> msg_payload = message->get_payload();
+    const auto requestId = message->get_request();
     if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME &&
         REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME_PAYLOAD_LEN == msg_payload->get_length()) {
-        ALOGD("Get volume request received session[0x%04X]", message->get_session());
+        ALOGD("Get volume request received requestId[0x%08X]", requestId);
 
         std::lock_guard<std::mutex> lock(guard_);
-        system_service_handler_->getVolume(message->get_session(),
+        system_service_handler_->getVolume(requestId,
                                            static_cast<hidl_remotectrl::AudioContext>(msg_payload->get_data()[0]));
     } else if (message->get_method() == REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME &&
                REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME_PAYLOAD_LEN == msg_payload->get_length()) {
-        ALOGD("Set volume to %d, request received session[0x%04X]", msg_payload->get_data()[1], message->get_session());
+        ALOGD("Set volume to %d, request received requestId[0x%08X]", msg_payload->get_data()[1], requestId);
 
         std::lock_guard<std::mutex> lock(guard_);
-        system_service_handler_->setVolume(message->get_session(),
+        system_service_handler_->setVolume(requestId,
                                            {static_cast<hidl_remotectrl::AudioContext>(msg_payload->get_data()[0]),
                                             static_cast<hidl_remotectrl::VolumeLevel>(msg_payload->get_data()[1])});
     }

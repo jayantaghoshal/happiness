@@ -37,11 +37,11 @@ class AudioCtrlService final : public hidl_remotectrl::INativeRemoteAudioCtrl,
 
     Return<void> updateVolume(const hidl_remotectrl::VolumeData& data) override;
 
-    Return<void> sendGetVolumeResp(uint16_t requestIdentifier,
+    Return<void> sendGetVolumeResp(uint32_t requestIdentifier,
                                    hidl_remotectrl::StatusCode statusCode,
                                    const hidl_remotectrl::VolumeData& data) override;
 
-    Return<void> sendSetVolumeResp(uint16_t requestIdentifier, hidl_remotectrl::StatusCode statusCode) override;
+    Return<void> sendSetVolumeResp(uint32_t requestIdentifier, hidl_remotectrl::StatusCode statusCode) override;
 
   private:
     void serviceDied(uint64_t cookie, const android::wp<::android::hidl::base::V1_0::IBase>& who) override;

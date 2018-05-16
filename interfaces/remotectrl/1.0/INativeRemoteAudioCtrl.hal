@@ -34,7 +34,7 @@ interface INativeRemoteAudioCtrl {
   * @param statusCode represents the outcome of setVolume request
   * @param data containing the audio context and volume level
   */
-  oneway sendGetVolumeResp(RequestIdentifier requestIdentifier, StatusCode statusCode, VolumeData data);
+  oneway sendGetVolumeResp(UniqueRequestIdentifier requestIdentifier, StatusCode statusCode, VolumeData data);
 
  /**
   * RemoteCtrl system service reports the result of pending SetVolume request
@@ -42,5 +42,5 @@ interface INativeRemoteAudioCtrl {
   * @param requestIdentifier identifier used to map response to pending request
   * @param statusCode represents the outcome of setVolume request
   */
-  oneway sendSetVolumeResp(RequestIdentifier requestIdentifier, StatusCode statusCode);
+  oneway sendSetVolumeResp(UniqueRequestIdentifier requestIdentifier, StatusCode statusCode);
 };

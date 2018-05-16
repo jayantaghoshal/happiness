@@ -91,7 +91,7 @@ Return<void> ClimateCtrlService::unregisterRemoteCtrlPropertyHandler(
 
 Return<void> ClimateCtrlService::sendGetPropertyResp(uint32_t requestIdentifier,
                                                      const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
-    ALOGD("%s: (0x%04X)", __func__, requestIdentifier);
+    ALOGD("%s: (0x%08X)", __func__, requestIdentifier);
 
     try {
         const auto prop = createObject<0>(propValue.prop);
@@ -111,7 +111,7 @@ Return<void> ClimateCtrlService::sendGetPropertyResp(uint32_t requestIdentifier,
 
 Return<void> ClimateCtrlService::sendSetPropertyResp(uint32_t requestIdentifier,
                                                      const hidl_remotectrl::RemoteCtrlHalPropertyValue& propValue) {
-    ALOGD("%s: (0x%04X)", __func__, requestIdentifier);
+    ALOGD("%s: (0x%08X)", __func__, requestIdentifier);
 
     try {
         const auto prop = createObject<0>(propValue.prop);
@@ -205,6 +205,7 @@ bool ClimateCtrlService::OnMessageReceive(const std::shared_ptr<vsomeip::message
             }
         } else {
             ALOGW("Unhandled message 0x%04X", message->get_method());
+            return false;
         }
     } catch (const RemoteCtrlError& e) {
         ALOGW("%s. Request ignored", e.what());

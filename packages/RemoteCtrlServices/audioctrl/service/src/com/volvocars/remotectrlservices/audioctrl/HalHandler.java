@@ -123,7 +123,7 @@ public class HalHandler {
         }
 
         try {
-            mNativeHalService.sendGetVolumeResp((short) requestIdentifier,
+            mNativeHalService.sendGetVolumeResp(requestIdentifier,
                     (requestStatus == true) ? StatusCode.SUCCESS : StatusCode.ERROR, volumeData);
         } catch (RemoteException ex) {
             Log.e(TAG, "Error calling sendGetVolumeResp function on native HAL interface: "
@@ -133,7 +133,7 @@ public class HalHandler {
 
     public void sendSetVolumeResp(int requestIdentifier, boolean requestStatus) {
         try {
-            mNativeHalService.sendSetVolumeResp((short) requestIdentifier,
+            mNativeHalService.sendSetVolumeResp(requestIdentifier,
                     (requestStatus == true) ? StatusCode.SUCCESS : StatusCode.ERROR);
         } catch (RemoteException ex) {
             Log.e(TAG, "Error calling sendSetVolumeResp function over native HAL interface: "
@@ -160,7 +160,7 @@ public class HalHandler {
 
     public class SystemHalServiceHandler extends ISystemRemoteAudioCtrl.Stub {
         @Override
-        public void getVolume(short requestIdentifier, byte context) {
+        public void getVolume(int requestIdentifier, byte context) {
             Log.v(TAG, "getVolume request received from HAL daemon");
             synchronized (this) {
                 try {
@@ -173,7 +173,7 @@ public class HalHandler {
         }
 
         @Override
-        public void setVolume(short requestIdentifier, VolumeData data) {
+        public void setVolume(int requestIdentifier, VolumeData data) {
             Log.v(TAG, "setVolume request received from HAL daemon");
             synchronized (this) {
                 try {

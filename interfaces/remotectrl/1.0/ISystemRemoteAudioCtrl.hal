@@ -12,7 +12,7 @@ interface ISystemRemoteAudioCtrl {
   * @param context Audio context of interest
   * @param requestIdentifier Identifier used to map request to response
   */
-  oneway getVolume(RequestIdentifier requestIdentifier, AudioContext context);
+  oneway getVolume(UniqueRequestIdentifier requestIdentifier, AudioContext context);
 
   /**
   * Notify upper layer service that there is a request to set volume.
@@ -20,5 +20,5 @@ interface ISystemRemoteAudioCtrl {
   * @param data VolumeData indicate the volume level and audio context to modify
   * @param requestIdentifier Identifier used to map request to response
   */
-  oneway setVolume(RequestIdentifier requestIdentifier, VolumeData data);
+  oneway setVolume(UniqueRequestIdentifier requestIdentifier, VolumeData data);
 };

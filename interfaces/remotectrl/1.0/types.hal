@@ -30,8 +30,6 @@ enum StatusCode : uint8_t {
     ERROR,
 };
 
-typedef uint16_t RequestIdentifier;
-
 ///////////////////////////// UNTIL HERE ///////////////////
 
 typedef uint32_t UniqueRequestIdentifier;
