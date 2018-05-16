@@ -672,6 +672,82 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         self.logger.info("=== testACCBrakeReleaseWarningSound result %s ===" % res)
         asserts.assertEqual(res, True, "ACC Brake Release sound NOT MATCHED - FAILED")
 
+    # ----------------------------------------------------------------------------------------------------------
+    # Test Forward Collision warning sound
+    # ----------------------------------------------------------------------------------------------------------
+    def testForwardCollisionWarnReqSound(self):
+        # This is (?) the Forward Collision warning sound, SPA-UI-S013.wav
+        self.logger.info("=== Test testForwardCollisionWarnReqSound Start ===")
+        _s = 1
+        ar = audio.alsarecorder.AlsaRecorder()
+        # start recording for 10 seconds.
+        with ar.alsa_recorder(10, host_folder=self.host_folder):
+            time.sleep(0.5) #record some silence first.
+            for _ in range(5):
+                self.flexray.send_CllsnFwdWarnReq(de_types.OnOff1.On)
+                time.sleep(_s)
+                self.flexray.send_CllsnFwdWarnReq(de_types.OnOff1.Off)
+                time.sleep(_s)
+
+        fn = ar.host_fn
+        try:
+            # Get list of normalized sounds (seprated by quiet)
+            sounds = self.getNormalizedSoundlist(fn, -0.9)
+        except Exception as e:
+            self.logger.warning("Exception during testForwardCollisionWarnReqSound sounds retrieval", e)
+            raise e
+        try:
+            # Match that list of sounds towards a list of Match objects
+            # S013.wav is 1.10s, with 1.06s sound, so we expect silence to be short!
+            res = audio.match.match_sound_silence(sounds, [audio.match.Match(
+                1.070, 0.05, 0.90, 0.1)], reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+        except audio.match.NoMatch:
+            self.logger.warning("Too few sound recorded to match!")
+            res = False
+
+        self.logger.info("=== testForwardCollisionWarnReqSound result %s ===" % res)
+        asserts.assertEqual(res, True, "Forward Collision Warning Sound NOT MATCHED - FAILED")
+
+    # ----------------------------------------------------------------------------------------------------------
+    # Test Collision warning sound
+    # ----------------------------------------------------------------------------------------------------------
+    def testCollisionWarnReqSound(self):
+        # This is (?) the Forward Collision warning sound, SPA-UI-S013.wav
+        self.logger.info("=== Test testCollisionWarnReqSound Start ===")
+        _s = 1
+        ar = audio.alsarecorder.AlsaRecorder()
+        # start recording for 10 seconds.
+        with ar.alsa_recorder(10, host_folder=self.host_folder):
+            time.sleep(0.5) #record some silence first.
+            for _ in range(5):
+                self.flexray.send_CllsnWarnReq(de_types.OnOff1.On)
+                time.sleep(_s)
+                self.flexray.send_CllsnWarnReq(de_types.OnOff1.Off)
+                time.sleep(_s)
+
+        fn = ar.host_fn
+        try:
+            # Get list of normalized sounds (seprated by quiet)
+            sounds = self.getNormalizedSoundlist(fn, -0.9)
+        except Exception as e:
+            self.logger.warning("Exception during testCollisionWarnReqSound sounds retrieval", e)
+            raise e
+        try:
+            # Match that list of sounds towards a list of Match objects
+            # S013.wav is 1.10s, with 1.06s sound, so we expect silence to be short!
+            res = audio.match.match_sound_silence(sounds, [audio.match.Match(
+                1.070, 0.05, 0.90, 0.1)], reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+        except audio.match.NoMatch:
+            self.logger.warning("Too few sound recorded to match!")
+            res = False
+
+        self.logger.info("=== testCollisionWarnReqSound result %s ===" % res)
+        asserts.assertEqual(res, True, "Collision Warning Req Sound NOT MATCHED - FAILED")
+
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s   %(message)s')
