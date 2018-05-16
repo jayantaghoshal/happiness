@@ -46,9 +46,6 @@ lunch ihu_vcc-eng
 time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/bin/gate_check.py
 
-VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
-# Check vts package is up to date
-time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
 
 # Build image & tradefed
 citime make -j64 droid
@@ -62,16 +59,6 @@ citime make -j64 tradefed-all
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_tradefed_all || true
 cp out/.build.trace.gz out/vcc_build_metadata/make_tradefedall.trace.gz || true
 
-# Download VTS package from artifactory
-# Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
-if [ "$(checkIfVtsPackageUpToDate "$VTS_REPO_HASH")" == "rebuilt" ];then
-    echo "VTS package has already been built"
-else
-    artifactory pull vts_build_package "$VTS_REPO_HASH" outVTS.tgz || die "Could not fetch out archive from Artifactory."
-    mkdir -p -m 755 vtsPackage
-    tar xf outVTS.tgz -C vtsPackage/
-    cp -r -n -a vtsPackage/out/* out/
-fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 citime python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan gate || die "Build Unit and Component tests failed"
@@ -96,7 +83,9 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             ./out/target/product/ihu_abl_car/data \
             ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
-            ./out/host/linux-x86/tradefed || die "Could not create out archive"
+            ./out/host/linux-x86/tradefed \
+            ./out/host/linux-x86/framework \
+            ./tester.log || die "Could not create out archive"
 
 # Ensure our repo can be build with mma
 # Must be done AFTER "make droid", otherwise we risk putting stuff into the image that are not present in device.mk
@@ -117,7 +106,3 @@ time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
 ls -lh "$BUILD_META_DATA"
 time scp "${BUILD_META_DATA}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
 
-# Clean up vtsPackages
-rm -rf vtsPackage/
-
-rm -rf outVTS.tgz

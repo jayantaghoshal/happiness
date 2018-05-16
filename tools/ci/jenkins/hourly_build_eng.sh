@@ -7,7 +7,6 @@ set -ex
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
-VTS_REPO_HASH=$(git -C "${SCRIPT_DIR}"/../../../../../test/vts/ rev-parse HEAD)
 
 # Setup ccache and put cache and Android out folder in a tmpfs.
 # We need to set CC_WRAPPER and CXX_WRAPPER to explicitly use ccache version (3.2.4) in Docker
@@ -30,9 +29,6 @@ MP_PART_NUMBER=$(ihuci vbf get SWL2H)
 export MP_PART_NUMBER
 ihuci vbf inc SWL2H # Increment part number suffix
 
-# Check vts package is up to date
-time checkIfVtsPackageUpToDate "$VTS_REPO_HASH"
-
 # Build image & tradefed
 time make droid tradefed-all
 
@@ -41,16 +37,6 @@ mkdir -p -m 755 out/vcc_build_metadata
 cp out/.ninja_log out/vcc_build_metadata/ninja_log_make_droid_and_tradefed_all || true
 cp out/.build.trace.gz out/vcc_build_metadata/make_droid_and_tradefedall.trace.gz || true
 
-# Download VTS package from artifactory
-# Note: Have tried tar xvkf --skip-old-files, tar xvkf --keep-old-files, they are not able to merge all files to make droid out/
-if [ "$(checkIfVtsPackageUpToDate "$VTS_REPO_HASH")" == "rebuilt" ];then
-    echo "VTS package has already been built"
-else
-    artifactory pull vts_build_package "$VTS_REPO_HASH" outVTS.tgz || die "Could not fetch out archive from Artifactory."
-    mkdir -p -m 755 vtsPackage
-    tar xf outVTS.tgz -C vtsPackage/
-    cp -r -n -a vtsPackage/out/* out/
-fi
 
 # Build vendor/volovcar tests (Unit and Component Tests)
 time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py build --plan hourly staging_hourly || die "Build Unit and Component tests failed"
@@ -84,10 +70,6 @@ time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
 ls -lh "$BUILD_META_DATA"
 time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${BUILD_META_DATA}" || die "Could not push out archive to Artifactory."
 
-# Clean up vtsPackages
-rm -rf vtsPackage/
-
-rm -rf outVTS.tgz
 
 # Cleanup
 rm ${OUT_ARCHIVE}

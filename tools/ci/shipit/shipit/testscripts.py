@@ -50,6 +50,13 @@ def build_testcases(tests_to_run: List[test_types.IhuBaseTest]):
         logger.debug(str(test_modules_to_build))
         test_modules_space_separated = " ".join((shlex.quote(t) for t in test_modules_to_build))
         try:
+            #TODO: The mmma should not be required if the test configuration(AndroidTest.xml) and
+            #       build modules(Android.mk) are configured correctly
+            #       I can't figure out how though with native gtest binaries, there is always some conflict
+            #       in generating the out/..../$module-name.config from AndroidTest.xml vs building the actual
+            #       test binary vs looking up the module name from the AndroidTest.xml.
+            run_in_lunched_env(("mmma " +
+                                test_modules_space_separated), cwd=aosp_root)
             #NOTE: --verbose is important for this command to work in CI, see https://partnerissuetracker.corp.google.com/u/1/issues/79129588
             run_in_lunched_env(("atest " +
                                 "--rebuild-module-info "
