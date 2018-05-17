@@ -8,7 +8,6 @@ import json
 import sys
 from vts.runners.host import test_runner, base_test, const
 import subprocess
-import shutil
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from typing import Union, List, Dict#, Optional
 
@@ -47,6 +46,7 @@ class IhuBaseTestClass(base_test.BaseTestClass):
     def setUpClass(self):
         self.dut = self.android_devices[0]
         self.dut.shell.InvokeTerminal("IhuBaseShell")
+        self.old_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
 
     def tearDownClass(self):
         try:
@@ -55,6 +55,12 @@ class IhuBaseTestClass(base_test.BaseTestClass):
                     json.dump(self.vcc_kpis, f)
         except:
             pass
+
+        all_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
+        new_tombstones = list(set(all_tombstones) - set(self.old_tombstones))
+
+        for new_tombstone in new_tombstones:
+            self.saveFiles(os.path.join('/data/tombstones/', new_tombstone), 'tombstones')
 
         super(IhuBaseTestClass, self).tearDownClass()
 
