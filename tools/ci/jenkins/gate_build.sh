@@ -105,7 +105,9 @@ cp out/.ninja_log out/vcc_build_metadata/ninja_log_mmmma_vendor_volvocars || tru
 cp out/.build.trace.gz out/vcc_build_metadata/mmma_vendorvolvocars.trace.gz || true
 
 ls -lh "$OUT_ARCHIVE"
-citime artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}"
+# shellcheck disable=SC2029
+ssh -o StrictHostKeyChecking=no jenkins@artinfcm.volvocars.net "mkdir -p ~/archive/${JOB_NAME}/${ZUUL_COMMIT}"
+citime scp "${OUT_ARCHIVE}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
 
 # Create build meta data metaData.tgz
 BUILD_META_DATA=metaData.tgz
@@ -113,7 +115,7 @@ time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
             ./out/vcc_build_metadata || die "Could not create metadata archive"
 
 ls -lh "$BUILD_META_DATA"
-time artifactory push ihu_gate_build "${ZUUL_COMMIT}" "${BUILD_META_DATA}"
+time scp "${BUILD_META_DATA}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
 
 # Clean up vtsPackages
 rm -rf vtsPackage/

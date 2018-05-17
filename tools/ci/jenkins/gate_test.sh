@@ -21,6 +21,16 @@ source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "$REPO_ROOT_DIR"/vendor/volvocars/tools/envsetup.sh
 
+# Pull out files uploaded to artinfcm in gate_build.sh.
+OUT_ARCHIVE=out.tgz
+rm -rf out "${OUT_ARCHIVE}"
+
+time scp -o StrictHostKeyChecking=no jenkins@artinfcm.volvocars.net:/home/jenkins/archive/ihu_gate_build/"${ZUUL_COMMIT}"/"${OUT_ARCHIVE}" . \
+    || die "Could not fetch archive from artinfcm."
+
+tar xvf "${OUT_ARCHIVE}" || die "Could not extract out archive."
+rm "${OUT_ARCHIVE}"
+
 capability=""
 if [ "${JOB_NAME}" = "ihu_gate_test_flexray" ]
 then
@@ -51,7 +61,6 @@ time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run \
     ${vcc_dashboard_reporting} \
     --report_results_to_ci_database \
     --update_ihu \
-    --download ihu_gate_build/"${ZUUL_COMMIT}"/out.tgz \
     --abort-on-first-failure \
     -c ihu-generic adb mp-serial vip-serial ${capability} \
     -o ${capability}
