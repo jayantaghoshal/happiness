@@ -340,6 +340,7 @@ public class SoftwareUpdateService extends Service {
         Log.w(LOG_TAG,
                 "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
         InstallationReport installationReport = new InstallationReport();
+        installationReport.installationOrderId = installationOrder;
         installationReport.reportReason = InstallationReport.ReportReason.OK;
         installationReport.timestamp = "2018-05-08T10:00:00";
 
