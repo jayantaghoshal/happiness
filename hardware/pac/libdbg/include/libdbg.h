@@ -16,8 +16,10 @@
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
 #define LOG_LINE_MESSAGE_SIZE 512
+#define LOG_LINE_PREFIX_SIZE 128
 #define LOG_LINE_TAG_SIZE 128
-#define LOG_LINE_SIZE LOG_LINE_TAG_SIZE + LOG_LINE_MESSAGE_SIZE
+
+#define LOG_LINE_SIZE LOG_LINE_PREFIX_SIZE + LOG_LINE_MESSAGE_SIZE
 
 #ifdef LIBDBG_ENABLE_DEBUG
 #define dbgF(message, ...) \

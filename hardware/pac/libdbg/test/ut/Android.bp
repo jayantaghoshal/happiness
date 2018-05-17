@@ -6,15 +6,24 @@
 cc_test {
     name: "libdbgTest",
 
-    defaults: ["volvocars_cc_defaults_hq_tests"],
+    defaults: [
+        "volvocars_cc_defaults_hq_tests",
+    ],
 
     srcs: [
-        "libdbg_test.cpp",
+        "*.cpp",
+    ],
+
+    local_include_dirs: [
+        "include",
+    ],
+
+    header_libs: [
+        "libdbg_headers",
     ],
 
     cppflags: [
-        "-Werror",
-        "-DLOG_TAG=\"libdgb\"",
+        "-DLOG_TAG=\"libdbg\"",
         "-DLIBDBG_ENABLE_DEBUG",
     ],
 

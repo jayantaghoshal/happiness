@@ -6,14 +6,16 @@
 cc_defaults {
     name: "libdbg_defaults",
 
-    defaults: ["volvocars_cc_defaults_hq"],
+    defaults: [
+        "volvocars_cc_defaults_hq",
+    ],
 
-    export_include_dirs: ["include"],
+    export_include_dirs: [
+        "include",
+    ],
 
     cppflags: [
-        "-Wunused",
-        "-Werror",
-        "-DLOG_TAG=\"libdgb\"",
+        "-DLOG_TAG=\"libdbg\"",
     ],
 
     shared_libs: [
@@ -33,12 +35,24 @@ cc_defaults {
 cc_library_shared {
     name: "libdbg",
 
-    defaults: ["libdbg_defaults"],
+    defaults: [
+        "libdbg_defaults",
+    ],
 }
 
 cc_library_static {
     name: "libdbg_static",
 
-    defaults: ["libdbg_defaults"],
+    defaults: [
+        "libdbg_defaults",
+    ],
 
+}
+
+cc_library_headers {
+    name: "libdbg_headers",
+
+    export_include_dirs: [
+        "src",
+    ],
 }

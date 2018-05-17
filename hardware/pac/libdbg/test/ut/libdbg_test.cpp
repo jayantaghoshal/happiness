@@ -3,75 +3,105 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-#include <cutils/properties.h>
 #include <gtest/gtest.h>
-#include <cstdio>
-
 #include <libdbg.h>
 
-#define PROPERTY_LOGLEVEL "debug.pac.loglevel"
+#include "stub_property_set.h"
 
 namespace {
 
-TEST(libdbgTest, PropertyEqualTest) {
+class libdbgTest : public ::testing::Test {
+  protected:
+    void TearDown() override { stub_property_reset(); }
+};
+
+class klogTest : public libdbgTest {
+  protected:
+    void SetUp() override {
+        const char* kPropertyValueSet = "not running";
+        stub_property_set(PROPERTY_LOGCAT_STATUS, kPropertyValueSet);
+
+        // Setting the log level below warn, error and fatal since klog is the main focus of the tests from here on out
+        kPropertyValueSet = "verbose";
+        stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
+    }
+};
+
+TEST_F(libdbgTest, PropertyEqualTest) {
     const char* kPropertyValueSet = "error";
 
-    property_set(PROPERTY_LOGLEVEL, kPropertyValueSet);
+    stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
 
     char property_value_get[strlen(kPropertyValueSet)];
 
-    property_get(PROPERTY_LOGLEVEL, property_value_get, nullptr);
+    property_get(PROPERTY_LOG_LEVEL, property_value_get, nullptr);
 
-    ASSERT_TRUE(strcmp(kPropertyValueSet, property_value_get) == 0);
+    EXPECT_TRUE(strcmp(kPropertyValueSet, property_value_get) == 0);
 }
 
-TEST(libdbgTest, dbgFATALTest) {
+TEST_F(libdbgTest, dbgFATALTest) {
     const char* kPropertyValueSet = "fatal";
 
-    property_set(PROPERTY_LOGLEVEL, kPropertyValueSet);
+    stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
 
-    ASSERT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_FATAL, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
-    ASSERT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_ERROR, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_FATAL, __FILENAME__, __FUNCTION__, __LINE__, "fatal message"));
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_ERROR, __FILENAME__, __FUNCTION__, __LINE__, "fatal message"));
 }
 
-TEST(libdbgTest, dbgERRORTest) {
+TEST_F(libdbgTest, dbgERRORTest) {
     const char* kPropertyValueSet = "error";
-    property_set(PROPERTY_LOGLEVEL, kPropertyValueSet);
+    stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
 
-    ASSERT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_ERROR, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
-    ASSERT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_WARN, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_ERROR, __FILENAME__, __FUNCTION__, __LINE__, "error message"));
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_WARN, __FILENAME__, __FUNCTION__, __LINE__, "error message"));
 }
 
-TEST(libdbgTest, dbgWARNTest) {
+TEST_F(libdbgTest, dbgWARNTest) {
     const char* kPropertyValueSet = "warn";
-    property_set(PROPERTY_LOGLEVEL, kPropertyValueSet);
+    stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
 
-    ASSERT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_WARN, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
-    ASSERT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_INFO, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_WARN, __FILENAME__, __FUNCTION__, __LINE__, "warn message"));
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_INFO, __FILENAME__, __FUNCTION__, __LINE__, "warn message"));
 }
 
-TEST(libdbgTest, dbgDEBUGTest) {
+TEST_F(libdbgTest, dbgDEBUGTest) {
     const char* kPropertyValueSet = "debug";
-    property_set(PROPERTY_LOGLEVEL, kPropertyValueSet);
+    stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
 
-    ASSERT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_DEBUG, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
-    ASSERT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_VERBOSE, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_DEBUG, __FILENAME__, __FUNCTION__, __LINE__, "debug message"));
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_VERBOSE, __FILENAME__, __FUNCTION__, __LINE__, "debug message"));
 }
 
-TEST(libdbgTest, dbgINFOTest) {
+TEST_F(libdbgTest, dbgINFOTest) {
     const char* kPropertyValueSet = "info";
-    property_set(PROPERTY_LOGLEVEL, kPropertyValueSet);
+    stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
 
-    ASSERT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_INFO, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
-    ASSERT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_DEBUG, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_INFO, __FILENAME__, __FUNCTION__, __LINE__, "info message"));
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_DEBUG, __FILENAME__, __FUNCTION__, __LINE__, "info message"));
 }
 
-TEST(libdbgTest, dbgVERBOSETest) {
+TEST_F(libdbgTest, dbgVERBOSETest) {
     const char* kPropertyValueSet = "verbose";
-    property_set(PROPERTY_LOGLEVEL, kPropertyValueSet);
+    stub_property_set(PROPERTY_LOG_LEVEL, kPropertyValueSet);
 
-    ASSERT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_VERBOSE, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
-    ASSERT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_DEFAULT, __FILENAME__, __FUNCTION__, __LINE__, "the message"));
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_VERBOSE, __FILENAME__, __FUNCTION__, __LINE__, "verbose message"));
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_DEFAULT, __FILENAME__, __FUNCTION__, __LINE__, "verbose message"));
 }
 
+TEST_F(klogTest, klogLogLevelBoundsTest) {
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_INFO, __FILENAME__, __FUNCTION__, __LINE__, "klog info message"));
+    EXPECT_FALSE(pdgb(LOG_TAG, ANDROID_LOG_SILENT, __FILENAME__, __FUNCTION__, __LINE__, "klog silent message"));
+}
+
+TEST_F(klogTest, klogFATALTest) {
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_FATAL, __FILENAME__, __FUNCTION__, __LINE__, "klog fatal message"));
+}
+
+TEST_F(klogTest, klogERRORTest) {
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_ERROR, __FILENAME__, __FUNCTION__, __LINE__, "klog error message"));
+}
+
+TEST_F(klogTest, klogWARNTest) {
+    EXPECT_TRUE(pdgb(LOG_TAG, ANDROID_LOG_WARN, __FILENAME__, __FUNCTION__, __LINE__, "klog warn message"));
+}
 }  // namespace
