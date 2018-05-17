@@ -94,8 +94,13 @@ def on_commit(aosp_root_dir: str, sync: bool, repository: str):
                                         "--detach",
                                         "--current-branch"], cwd=aosp_root_dir)
 
+    # Use zuul-cloner to downlad the repos that was removed from the manifest
     for repo_name, repo_path in zuul_repos.items():
-        clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo_name)
+        # Do not download vendor/volvocars again, it is already downloaded by zuul by bootstrap
+        if repo_name is not "vendor/volvocars":
+            clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo_name)
+
+        # Check that the commit from Gerrit is actually downloaded
         if repo_name == os.environ['ZUUL_PROJECT']:
             if not repo_have_zuul_change(repo_path, aosp_root_dir):
                 raise SystemExit("zuul-cloner failed to checkout commit the Zuul commit in " + repo_name)
