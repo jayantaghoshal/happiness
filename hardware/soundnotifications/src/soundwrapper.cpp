@@ -259,6 +259,7 @@ bool SoundWrapper::init(::android::sp<IAudioManager> service) {
         }
     }
 
+#ifndef UNIT_TEST
     // subscribe
     android::hardware::Return<void> ret = am_service->subscribe(::android::sp<IAudioManagerCallback>(this));
     if (!ret.isOk()) {
@@ -267,7 +268,7 @@ bool SoundWrapper::init(::android::sp<IAudioManager> service) {
 
     android::hardware::hidl_death_recipient* this_as_recipient = this;
     am_service->linkToDeath(this_as_recipient, 0);
-
+#endif
     initialized = true;
     return true;
 }

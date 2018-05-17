@@ -61,16 +61,13 @@ class AudioManagerMock : public IAudioManager {  // public vendor::delphi::audio
                                                  const ::android::hardware::hidl_string& soundComp,
                                                  defaultVolumeStep_cb _hidl_cb));
 
-    ::android::sp<IAudioManagerCallback> callback_;
-
     Return<void> subscribe(const ::android::sp<IAudioManagerCallback>& callback) {
-        callback_ = callback;
-        ALOG(LOG_INFO, "soundwrapperUT.Tests", "AudioManagerMock::subscribe: %p", callback.get());
+        ALOG(LOG_INFO, "soundwrapperUT.Tests", "AudioManagerMock::subscribe: %p", (void*)callback.get());
         return android::hardware::Status::fromStatusT(android::OK);
     }
 
     Return<void> unsubscribe(const ::android::sp<IAudioManagerCallback>& callback) {
-        ALOG(LOG_INFO, "soundwrapperUT.Tests", "AudioManagerMock::unsubscribe: %p", callback.get());
+        ALOG(LOG_INFO, "soundwrapperUT.Tests", "AudioManagerMock::unsubscribe: %p", (void*)callback.get());
         return android::hardware::Status::fromStatusT(android::OK);
     }
 };
