@@ -2,7 +2,7 @@
 # This file is covered by LICENSE file in the root of this project
 
 import typing
-from typing import Set, Mapping, Any
+from typing import Set, Mapping, Any, List
 import datetime
 
 class Capabilities:
@@ -78,12 +78,18 @@ class Disabled(IhuBaseTest):
 
 class ResultData:
     def __init__(self,
+                 name: str,
                  passed: bool,
+                 results: List,
+                 info: str,
                  console: str,
                  test_kpis: Mapping[str, Any],
                  logs: Mapping[str, str],
                  screenshot_paths : typing.List[str]) -> None:
+        self.name = name
         self.passed = passed
+        self.results = results
+        self.info = info
         self.console = console
         self.test_kpis = test_kpis
         self.logs = logs

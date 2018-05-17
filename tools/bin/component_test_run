@@ -13,4 +13,4 @@ if [ ! -z "$PY_FILES" ]; then
 fi
 
 # Run the test
-python3 "$REPO_ROOT_DIR"/tools/ci/shipit/tester.py run -c ihu-generic adb mp-serial vip-serial --test_component=.
+python3 "$REPO_ROOT_DIR"/tools/ci/shipit/tester.py run --verbose -c ihu-generic adb mp-serial vip-serial --test_component=.

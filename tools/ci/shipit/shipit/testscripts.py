@@ -30,10 +30,10 @@ _PLAN_MAP = {
 }
 
 
-class NamedTestResult():
+'''class NamedTestResult():
     def __init__(self, name: str, result: test_types.ResultData) -> None:
         self.name = name
-        self.result = result
+        self.result = result'''
 
 
 def build_testcases(tests_to_run: List[test_types.IhuBaseTest]):
@@ -78,19 +78,19 @@ def run_test(test: test_types.IhuBaseTest, max_testtime_sec: int) -> test_types.
                 raise test_types.TestFailedException("Disabled test case has passed due date: %s, JIRA: %s, Reason: %s" %
                                 (test.disabled_test, test.jira_issue, test.reason))
             else:
-                return test_types.ResultData(True, "DISABLED", dict(), dict(), [])  #TODO: Introduce more values than pass/fail?
+                return test_types.ResultData(str(test), True, [], "DISABLED", "DISABLED", dict(), dict(), [])  #TODO: Introduce more values than pass/fail?
 
         raise Exception("Unknown test case: %s" % test)
     except test_types.VtsTestFailedException as exception:
 
         logger.error(str(exception.message))
-        return test_types.ResultData(False, exception.message, dict(), dict(), list())
+        return test_types.ResultData(str(test), False, [], exception.message, exception.message, dict(), dict(), list())
     except test_types.TestFailedException as te:
         logger.error(str(te))
-        return test_types.ResultData(False, str(te), dict(), dict(), [])
+        return test_types.ResultData(str(test), False, [], str(te), str(te), dict(), dict(), [])
     except Exception as e:
         logger.exception(traceback.format_exc())
-        return test_types.ResultData(False, str(e), dict(), dict(), [])
+        return test_types.ResultData(str(test), False, [], str(e), str(e), dict(), dict(), [])
 
 
 def assemble_plan(plan):

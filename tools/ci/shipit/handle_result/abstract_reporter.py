@@ -3,7 +3,6 @@
 
 from abc import ABC, abstractmethod
 from typing import List
-from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
 from utilities.ihuhandler import FlashResult
 
@@ -17,7 +16,7 @@ class abstract_reporter(ABC):
         pass
 
     @abstractmethod
-    def plan_finished(self, test_results: List[NamedTestResult]) -> None:
+    def plan_finished(self, test_results: List[ResultData]) -> None:
         pass
 
     @abstractmethod

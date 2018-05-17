@@ -3,7 +3,7 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-set -ex
+set -e
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 export PIP_CONFIG_FILE="/usr/local/pip/pip.conf"

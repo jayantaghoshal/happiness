@@ -17,9 +17,11 @@ artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die
 # Unpack out.tgz
 tar xfz out.tgz || die "Unpack out.tgz failed"
 
+set +x
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
+set -x
 
 set +e
 for tmp in 1 2 3

@@ -7,17 +7,16 @@ import gzip
 import zipfile
 import shutil
 import xml.etree.ElementTree as ET
-import json
 import glob
 from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Disabled, ResultData
 from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
-from . import mongodb_wrapper
 from pymongo import MongoClient
-import pymongo
-from typing import Dict, List, Any
-
+from typing import Dict, Any
 import sys
+import logging
+
+logger = logging.getLogger(__name__)
 
 def clean_old_results():
     result_dirs = []
@@ -125,7 +124,7 @@ def truncate_to_fit_mongo(log_content: str):
     # Mongodb supports to store max size of 16793598 bytes so we restrict each log shouldn't be more than that
     limit = 16000000
     if(sys.getsizeof(log_content) >= limit):
-        print("Log file exceeds the limit")
+        logger.warning("Log file exceeds the limit")
         return "Log file exceeds the limit so trimmed " + str(sys.getsizeof(log_content) - limit) + " chars in the beginning of the file !!!!!!!!!! \n" + log_content[-limit:]
     else:
         return log_content

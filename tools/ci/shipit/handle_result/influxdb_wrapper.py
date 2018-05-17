@@ -1,15 +1,9 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-import argparse
 from influxdb import InfluxDBClient
-from influxdb.client import InfluxDBClientError
-import json
 import os
-import glob
-import time
 import logging
-import logging.config
 from datetime import datetime
 logger = logging.getLogger(__name__)
 

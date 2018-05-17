@@ -3,11 +3,12 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-set -ex
+set -e
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
+set -x
 # Update the manifests based on the templates for gate test
 time python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local no_sync "${ZUUL_PROJECT}"
 # Sync repos required for build/envsetup.sh and lunch so we can run VTS.
@@ -17,9 +18,11 @@ repo_sync vendor/delphi/android_devices vendor/delphi/bb_reprogramming vendor/de
 # repo sync vendor/google/apps/GAS only needed since gms.mk is included by other makefiles called by lunch
 repo_sync vendor/google/apps/GAS
 
+set +x
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "$REPO_ROOT_DIR"/vendor/volvocars/tools/envsetup.sh
+set -x
 
 # Pull out files uploaded to artinfcm in gate_build.sh.
 OUT_ARCHIVE=out.tgz

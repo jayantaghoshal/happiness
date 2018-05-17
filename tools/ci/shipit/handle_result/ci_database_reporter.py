@@ -8,7 +8,6 @@ import os
 from typing import List
 from .abstract_reporter import abstract_reporter
 from handle_result import store_result, test_visualisation
-from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
 from utilities.ihuhandler import FlashResult
 from .influxdb_wrapper import insert_influx_data, query_influx_data
@@ -24,8 +23,9 @@ class ci_database_reporter(abstract_reporter):
     def plan_started(self) -> None:
         pass
 
-    def plan_finished(self, test_results: List[NamedTestResult]) -> None:
-        failing_testcases = [x for x in test_results if not x.result.passed]
+    def plan_finished(self, test_results: List[ResultData]) -> None:
+        #InfluxDB:
+        failing_testcases = [x for x in test_results if not x.passed]
         passing_testcases = len(test_results) - len(failing_testcases)
         # NOTE: Gate test does not have top job name and build number yet, hard code the value to align with hourly and daily
         if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
@@ -60,6 +60,12 @@ class ci_database_reporter(abstract_reporter):
 
         # create overview measurement for hourly and daily, since they are currently divided in seperated sections
         self.regroup_data(passing_testcases, len(failing_testcases), len(test_results), top_job_jobname, top_job_build_number, top_job_jobname + "_overview")
+
+        #MongoDB:
+        #link_template = "https://reports-ihu-ci.cm.volvocars.biz/tests?top_job_name={}&build_number={}"
+        #link = link_template.format(top_job_jobname, top_job_build_number)
+        link = "https://reports-ihu-ci.cm.volvocars.biz"
+        logging.info("Results and logs can be accessed from: {}".format(link))
 
     def regroup_data(self, passing_testcases, failing_testcases, total_testcases, top_job_jobname, top_job_build_number, measurement) -> None:
         fieldPass = "passing_testcases"
@@ -103,7 +109,6 @@ class ci_database_reporter(abstract_reporter):
         except Exception as e:
             logger.error(str(e))
 
-
     def module_started(self, test: IhuBaseTest) -> None:
         if not self.continue_report:
             return
@@ -144,18 +149,18 @@ class ci_database_reporter(abstract_reporter):
         tags = {
             "jobType": "ihu_flash",
         }
-        logger.info("Storing: {}".format(data))
+        logger.debug("Storing: {}".format(data))
 
         try:
             insert_influx_data("flash_result", data, tags)
         except Exception as e:
-            logger.info(str(e))
+            logger.error(str(e))
 
         try:
             mongodb_wrapper.insert_data(self.store_swdl_to_mongodb(result))
 
         except Exception as e:
-            logger.info(str(e))
+            logger.error(str(e))
 
     def store_swdl_to_mongodb(self, result: FlashResult):
         mongo_data = {
@@ -170,7 +175,6 @@ class ci_database_reporter(abstract_reporter):
                     'runtime' : float(result.totaltime),
                     'flash_attempt' : result.attempts,
                     'result_stored_at' : datetime.datetime.utcnow()
-
                 }
         if "TOP_JOB_NUMBER" in os.environ and "TOP_JOB_JOBNAME" in os.environ and os.environ["TOP_JOB_NUMBER"] and os.environ["TOP_JOB_JOBNAME"]:
             mongo_data["top_test_job_build_number"] = int(os.environ["TOP_JOB_NUMBER"])
@@ -178,6 +182,6 @@ class ci_database_reporter(abstract_reporter):
         else:
             mongo_data["top_test_job_name"] = ""
             mongo_data["top_test_job_build_number"] = 0
-        print(mongo_data)
+        logger.debug("Mongo data: {}".format(mongo_data))
 
         return mongo_data

@@ -2,10 +2,9 @@
 # This file is covered by LICENSE file in the root of this project
 
 from pymongo import MongoClient
-import json
 import os
-import glob
-import pymongo
+import logging
+logger = logging.getLogger(__name__)
 
 
 def mongo_client():
@@ -13,7 +12,7 @@ def mongo_client():
         client = MongoClient(
             "mongodb://jenkins-icup_android:" + os.environ["MONGODB_PASSWORD"] + "@gotsvl1416.got.volvocars.net:27017/admin?authMechanism=SCRAM-SHA-1")
     except Exception:
-        print("ERROR: Connection to mongoDB server failed")
+        logger.error("Connection to mongoDB server failed")
         raise
     db = client['test_results']
     collection = db['records']

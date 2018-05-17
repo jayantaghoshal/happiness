@@ -4,6 +4,7 @@
 import argparse
 import json
 import logging
+import logging.config
 import os
 import sys
 from os.path import join as pathjoin
@@ -13,7 +14,8 @@ from handle_result.ci_database_reporter import ci_database_reporter
 from handle_result.vcc_dashboard_reporter import vcc_dashboard_reporter
 from handle_result.console_reporter import console_reporter
 from shipit.testscripts import get_test_set, assemble_plan, get_component, build_testcases, run_test, \
-    detect_loose_test_cases, NamedTestResult, enforce_timeout_in_gate_tests
+    detect_loose_test_cases, enforce_timeout_in_gate_tests
+from shipit.test_runner.test_types import ResultData
 from utilities import ihuhandler, artifact_handler
 
 
@@ -25,42 +27,42 @@ class Tester:
         self.reporter_list = set() #type: Set[abstract_reporter]
 
     def _plan_started(self):
-        self.logger.info("Plan started")
+        self.logger.debug("Plan started")
         for r in self.reporter_list:
             r.plan_started()
 
     def _plan_finished(self, test_results):
-        self.logger.info("Plan finished")
+        self.logger.debug("Plan finished")
         for r in self.reporter_list:
             r.plan_finished(test_results)
 
     def _module_started(self, test):
-        self.logger.info("Module started: {}".format(str(test)))
+        self.logger.debug("Module started: {}".format(str(test)))
         for r in self.reporter_list:
             r.module_started(test)
 
     def _module_finished(self, test, test_result):
-        self.logger.info("Module finished: {}, Result: {}".format(str(test), str(test_result)))
+        self.logger.debug("Module finished: {}, Result: {}".format(str(test), str(test_result)))
         for r in self.reporter_list:
             r.module_finished(test, test_result)
 
     def _flash_started(self):
-        self.logger.info("Flashing started")
+        self.logger.debug("Flashing started")
         for r in self.reporter_list:
             r.flash_started()
 
     def _flash_finished(self, result):
-        self.logger.info("Flashing finished")
+        self.logger.debug("Flashing finished")
         for r in self.reporter_list:
             r.flash_finished(result)
 
     def run_testcases(self, tests_to_run: List, abort_on_first_failure: bool, max_testtime_sec: int):
-        test_results = []  # type: List[NamedTestResult]
+        test_results = []  # type: List[ResultData]
         self._plan_started()
         for t in tests_to_run:
             self._module_started(t)
             test_result = run_test(t, max_testtime_sec)
-            test_results.append(NamedTestResult(str(t), test_result))
+            test_results.append(test_result)
             self._module_finished(t, test_result)
             if not test_result.passed and abort_on_first_failure:
                 break
@@ -91,13 +93,6 @@ class Tester:
             log_config['handlers']['file_handler']['filename'] = filename
             log_config['handlers']['file_handler']['mode'] = 'w'
             logging.config.dictConfig(log_config)
-
-        '''console_log = logging.StreamHandler()
-        console_log.setLevel(logging.INFO)
-        logger.addHandler(console_log)
-        file_log = logging.FileHandler('tester.log')
-        file_log.setLevel(logging.DEBUG)
-        logger.addHandler(file_log)'''
 
     def _parse_args(self):
         root_parser = argparse.ArgumentParser()
@@ -198,7 +193,7 @@ class Tester:
                 max_testtime_sec = 10 * 60
 
             results = self.run_testcases(selected_tests, args.abort_on_first_failure, max_testtime_sec)
-            failing_testcases = [x for x in results if not x.result.passed]
+            failing_testcases = [x for x in results if not x.passed]
             if len(failing_testcases) > 0:
                 logger.error('Test case failed')
                 sys.exit(1)

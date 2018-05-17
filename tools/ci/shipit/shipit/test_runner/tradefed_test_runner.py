@@ -19,7 +19,7 @@ def tradefed_run(test_path: str, max_test_time_sec: int):
     xml_path = os.path.join(test_path, "AndroidTest.xml")
     logger.info("Running tradefed test from xml %s" % xml_path)
     tradefed_run_xml(xml_path, max_test_time_sec)
-    return ResultData(True, "", dict(), dict(), [])   #TODO: ...
+    return ResultData(xml_path, True, [], "", "", dict(), dict(), [])   #TODO: ...
 
 def tradefed_run_xml(xml_path: str, max_test_time_sec: int):
     if not config_got_xml_reporter(xml_path):

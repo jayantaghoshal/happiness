@@ -3,8 +3,6 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
-set -x
-
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
@@ -14,6 +12,7 @@ cd "${REPO_ROOT_DIR}"
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
+set -x
 
 capability=""
 if [ "${JOB_NAME}" = "ihu_daily_test-flexray" ]

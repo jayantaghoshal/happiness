@@ -13,12 +13,14 @@ import os
 import re
 import datetime
 from shipit.test_runner.test_types import ResultData
-from shipit.process_tools import check_output_logged
-from shipit.test_runner.test_types import VtsTestFailedException
+from shipit.process_tools import check_output_logged, ProcessRunner
+#from shipit.test_runner.test_types import VtsTestFailedException
 import xml.etree.cElementTree as ET
 import concurrent.futures
 from typing import Dict, List, Optional
 from subprocess import check_output
+import typing
+#import zipfile
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +48,7 @@ def vts_tradefed_run_module(module_name: str,
                             tests_to_run: Optional[List[str]],
                             env: Dict[str, str] = os.environ.copy(),
                             max_test_time_sec=60 * 60) -> ResultData:
-    logger.info("Running test module %s)" % (module_name))
+    logger.info("Running test module {}".format(module_name))
     logger.debug("Environment %r" % (env))
     try:
         os.unlink("/tmp/test_run_kpis.json")
@@ -59,11 +61,18 @@ def vts_tradefed_run_module(module_name: str,
 
     tests_to_run_args = []  # type: List[str]
     if tests_to_run is not None:
-        assert len(tests_to_run) != 0
+        nr_tests = len(tests_to_run)
+        assert nr_tests != 0
         tests_to_run_args = ["--test", ",".join(tests_to_run)]
+    else:
+        nr_tests = 0
 
+    output = ""
+    info = ""
+    success = True
     try:
         test_result = check_output_logged(["vts-tradefed",
+        #test_result = ProcessRunner().run(["vts-tradefed",
                                            "run",
                                            "commandAndExit",
                                            "vts-staging-default",
@@ -75,43 +84,82 @@ def vts_tradefed_run_module(module_name: str,
                                            module_name] +
                                           tests_to_run_args,
                                           timeout_sec=max_test_time_sec,
-                                          env=env).decode('UTF-8', 'backslashreplace').strip(" \n\r\t")
+                                          env=env)
+        output = test_result.decode('UTF-8', 'backslashreplace').strip(" \n\r\t")
     except concurrent.futures.TimeoutError as te:
-        raise VtsTestFailedException("Test time out, maximum test time: %d sec" % max_test_time_sec)
+        info = "Test time out, maximum test time: %d sec" % max_test_time_sec
+        success = False
+        logger.error(output)
     except Exception as e:
-        raise VtsTestFailedException(
-            "Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
+        info = str(e)
+        success = False
+        logger.error("Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
 
-    fails = []  # type: List[str]
+    if success:
+        success, info = _check_output_for_failure(output, nr_tests)
+    logdict = _check_output_for_logs(output)
+    screenshots = _check_output_for_screenshots(output)
 
-    fail_pattern1 = "fail:|PASSED: 0"
-    if re.search(fail_pattern1, test_result):
-        fails.append("Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1)
+    results = _parse_xml(output)
+    for result in results:
+        logger.info("Test: {} result: {}".format(result['name'], result['result']))
+        if 'message' in result:
+            logger.error(result['message'])
+        if 'stacktrace' in result:
+            logger.error(result['stacktrace'])
 
-    pass_pattern = "I\/ResultReporter:\s*Invocation finished in.*PASSED:\s*(\d*),\s*FAILED:\s*(\d*)"
-    pass_match = re.search(pass_pattern, test_result)
-    if pass_match is None:
-        fails.append("Test failed, did not find nr of PASSED/FAILED in resultreporter output")
-    nr_of_pass = int(pass_match.group(1))
-    nr_of_fail = int(pass_match.group(2))
-
-    if nr_of_fail != 0:
-        fails.append("Test failed, Number of FAILED != 0")
-
-    if nr_of_pass == 0:
-        fails.append("Test failed, Number of PASSED == 0")
-
-    if tests_to_run is not None and nr_of_pass != len(tests_to_run):
-        fails.append("Test failed, Number of PASSED not equal to number of requested test cases. " +
-                     "Nr of pass: %d, Requested test-cases: [%s]" % (nr_of_pass, ", ".join(tests_to_run)) +
-                     "(Maybe you misspelled one of the requested test cases?)")
+    return ResultData(name=module_name,
+                      passed=success,
+                      console=output,
+                      results=results,
+                      info=info,
+                      test_kpis=get_json_kpi_results(),
+                      logs=logdict,
+                      screenshot_paths=screenshots)
 
 
+def _parse_xml(output: str):
+    result_match = re.search(r"I\/ResultReporter:\s+Test Result:\s+(\S+)", output)
+    if not result_match:
+        return []
+    result_path = os.path.dirname(os.path.abspath(result_match.group(1)))
+
+    tree = ET.parse(os.path.join(result_path, 'test_result.xml'))
+    root = tree.getroot()
+    #module = root.find('Module')
+    results = []
+    for test in root.iter('Test'):
+        result = {'name': test.attrib['name'], 'result': test.attrib['result']}
+        failure = test.find('Failure')
+        if failure:
+            #print("FAILURE: {}".format(failure.text))
+            try:
+                result['message'] = failure.attrib['message']
+            except Exception:
+                pass
+            stacktrace = failure.find('StackTrace')
+            try:
+                result['stacktrace'] = stacktrace.text
+            except Exception:
+                pass
+        results.append(result)
+    return results
+
+
+def _check_output_for_screenshots(test_result: str) -> typing.List[str]:
+    # example: "05-03 05:44:29 D/ResultReporter: Saved logs for VtsFlexraySignalingCT_OneSendOneReceive#testFlexray2-screenshot in /home/eelmeke/android/vcc/out/host/linux-x86/vts/android-vts/logs/2018.05.03_05.43.32/inv_16988131975858974672/VtsFlexraySignalingCT_OneSendOneReceive#testFlexray2-screenshot_2646366068102957666.png"
+    screenshots = [m[1] for m in re.findall(r"./ResultReporter:\s+Saved logs for\s+(.*-screenshot)\s+in\s+(\S+)", test_result)]
+    for screenshot in screenshots:
+        logger.info("Screenshot: {}".format(screenshot))
+    return screenshots
+
+
+def _check_output_for_logs(test_result: str) -> typing.Mapping[str, str]:
     log_dir_match = re.search(r"I\/ResultReporter:\s+Test Logs:\s+(\S+)", test_result)
     logdict = dict()
     if log_dir_match:
         log_dir = os.path.abspath(log_dir_match.group(1))
-        logger.debug("Log dir is %s" % log_dir)
+        logger.info("Log dir is %s" % log_dir)
         assert("out/host/linux-x86/vts/android-vts/logs" in log_dir)
 
         def read(name, pattern):
@@ -124,16 +172,43 @@ def vts_tradefed_run_module(module_name: str,
         read("device_logcat_teardown", os.path.join(log_dir, "**", "*device_logcat_teardown*.txt.gz"))
         read("device_logcat_test", os.path.join(log_dir, "**", "*device_logcat_test*.txt.gz"))
         read("host_log", os.path.join(log_dir, "**", "*host_log*.txt.gz"))
+    return logdict
 
 
-    # example: "05-03 05:44:29 D/ResultReporter: Saved logs for VtsFlexraySignalingCT_OneSendOneReceive#testFlexray2-screenshot in /home/eelmeke/android/vcc/out/host/linux-x86/vts/android-vts/logs/2018.05.03_05.43.32/inv_16988131975858974672/VtsFlexraySignalingCT_OneSendOneReceive#testFlexray2-screenshot_2646366068102957666.png"
-    screenshots = [m[1] for m in re.findall(r"./ResultReporter:\s+Saved logs for\s+(.*-screenshot)\s+in\s+(\S+)", test_result)]
+def _check_output_for_failure(test_result: str, nr_tests: int) -> typing.Tuple[bool, str]:
+    if not test_result:
+        info = "No test results"
+        logger.warning(info)
+        return False, info
 
-    return ResultData(len(fails) == 0,
-                      test_result + os.linesep + os.linesep.join(fails),
-                      get_json_kpi_results(),
-                      logdict,
-                      screenshots)
+    fail_pattern1 = "fail:|PASSED: 0"
+    if re.search(fail_pattern1, test_result):
+        info = "Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1
+        return False, info
+
+    pass_pattern = "I\/ResultReporter:\s*Invocation finished in.*PASSED:\s*(\d*),\s*FAILED:\s*(\d*)"
+    pass_match = re.search(pass_pattern, test_result)
+    if pass_match is None:
+        info = "Test failed, did not find nr of PASSED/FAILED in resultreporter output"
+        return False, info
+
+    nr_of_pass = int(pass_match.group(1))
+    nr_of_fail = int(pass_match.group(2))
+
+    if nr_of_fail != 0:
+        info = "Test failed, Number of FAILED != 0"
+        return False, info
+
+    if nr_of_pass == 0:
+        info = "Test failed, Number of PASSED == 0"
+        return False, info
+
+    if nr_tests and nr_of_pass != nr_tests:
+        info = "Test failed, Number of PASSED not equal to number of requested test cases."
+        return False, info
+
+    return True, ""
+
 
 def get_json_kpi_results():
     try:
@@ -142,6 +217,7 @@ def get_json_kpi_results():
     except FileNotFoundError:
         logger.info("test_run_kpis.json not found, ignoring test kpis")
         return {}
+
 
 def get_json_change_time(module_name):
     try:

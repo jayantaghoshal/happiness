@@ -6,7 +6,6 @@ import os
 import traceback
 from typing import List
 from .abstract_reporter import abstract_reporter
-from shipit.testscripts import NamedTestResult
 from shipit.test_runner.test_types import IhuBaseTest, ResultData
 from utilities.ihuhandler import FlashResult
 from handle_result import store_result, test_visualisation
@@ -42,7 +41,7 @@ class vcc_dashboard_reporter(abstract_reporter):
             logger.error("Initialization of VCC CI failed")
             self.continue_report = False
 
-    def plan_finished(self, test_results: List[NamedTestResult]) -> None:
+    def plan_finished(self, test_results: List[ResultData]) -> None:
         pass
 
     def module_started(self, test: IhuBaseTest) -> None:
