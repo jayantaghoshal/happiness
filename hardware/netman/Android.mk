@@ -1,4 +1,4 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH := $(call my-dir)
@@ -62,17 +62,6 @@ LOCAL_REQUIRED_MODULES := ip6tables
 LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables; \
 	ln -sf ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables-save; \
 	ln -sf ip6tables $(TARGET_OUT_VENDOR)/bin/ip6tables-restore
-include $(BUILD_PHONY_PACKAGE)
-
-
-#
-# Copy /system/bin/dnsmasq to /vendor/bin/dnsmasq
-#
-include $(CLEAR_VARS)
-LOCAL_MODULE := dnsmasq-vcc
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)/bin
-LOCAL_REQUIRED_MODULES := dnsmasq
-LOCAL_POST_INSTALL_CMD := $(hide) cp $(PRODUCT_OUT)/system/bin/dnsmasq $(TARGET_OUT_VENDOR)/bin/dnsmasq
 include $(BUILD_PHONY_PACKAGE)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))

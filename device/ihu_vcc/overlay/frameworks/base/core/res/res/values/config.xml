@@ -34,5 +34,31 @@
     <!--Specifies that Target have multi-window/screen support.
         This setting is enabled as default on phones but disabled for Car, it is however needed for proper DIM/cluster support -->
     <bool name="config_supportsMultiWindow">true</bool>
+
+    <!-- Configuration of Ethernet interfaces in the following format:
+    <interface name|mac address>;[Network Capabilities];[IP config]
+    Where
+        [Network Capabilities] Optional. A comma seprated list of network capabilities.
+            Values must be from NetworkCapabilities#NET_CAPABILITIES_* constants.
+        [IP config] Optional. If empty or not specified - DHCP will be used, otherwise
+            static IP address with the mask.
+    -->
+    <string-array translatable="false" name="config_ethernet_interfaces">
+
+        <!-- Interface eth0
+
+            Default network interface which only becomes active when a usb4ethernet device
+            is connected.
+        -->
+        <item>eth0;12,13,14,15;</item>
+
+        <!-- Interface eth1
+
+            A virtual network interface which bridges the default netns and VCC netns.
+            Interface is reserved for RTP audio streaming for the convinience API.
+        -->
+        <item>eth1;13,14,15;10.0.0.2/28</item>
+
+    </string-array>
 </resources>
 

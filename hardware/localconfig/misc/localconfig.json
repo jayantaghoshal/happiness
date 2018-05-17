@@ -116,7 +116,6 @@
     {
       "CHAINS":[],
         "RULES": [
-          "-A POSTROUTING -4 -o rtp_aud0 -p udp --dport bootpc -d 10.0.0.0/24 -j CHECKSUM --checksum-fil"
         ]
     }
   },

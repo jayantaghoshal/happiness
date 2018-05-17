@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -57,7 +57,6 @@ cc_binary {
 
     init_rc: [
         "init/netmand.rc",
-        "init/dnsmasq.rc",
     ],
 
     // Netman depends upon sysctl.conf, which it will initialize during startup
@@ -65,6 +64,7 @@ cc_binary {
         "sysctl.conf",
         "iptables-vcc",
         "ip6tables-vcc",
+        "netman_conf.json",
     ],
 }
 
