@@ -127,13 +127,13 @@ def _is_test_supported(test: test_types.IhuBaseTest, machine_capabilities: Set[s
     return len(missing_capabilities) == 0
 
 
-def get_test_set(plan, capabilities, only_matching):
-    supported_tests = [t for t in plan if _is_test_supported(t, capabilities)]
-    if len(only_matching) > 0:
-        selected_caps = set(only_matching)
-
+def get_test_set(plan, supported_capabilities: Set[str], ignore_tests_not_requiring_these_capabilities: Set[str]):
+    supported_tests = [t for t in plan if _is_test_supported(t, supported_capabilities)]
+    if len(ignore_tests_not_requiring_these_capabilities) > 0:
+        # To avoid greedy running of all tests a node supports it's possible to filter out capabilities that must be
+        # required by the test. This saves run time on nodes which support special capabilities but also generic ones.
         def _is_all_selected_caps_in_required(t: test_types.IhuBaseTest):
-            return selected_caps.issubset(t.require_capabilities)
+            return len(ignore_tests_not_requiring_these_capabilities.intersection(t.require_capabilities)) > 0
         return [t for t in supported_tests if _is_all_selected_caps_in_required(t)]
     else:
         return supported_tests

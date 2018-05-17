@@ -51,11 +51,11 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications/test/ut",                 standard_caps), #Johan Olsson
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests",         standard_caps | {cp.audio}), #Abhijeet Shirolikar
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray}),# Torbjörn Sandsgård
-    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Martin Stigels
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray_or_carsim}),# Torbjörn Sandsgård
+    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting",      standard_caps | {cp.flexray_or_carsim}), #Martin Stigels
     VTSTest("vendor/volvocars/packages/TimeUpdateService/test/ct",                  standard_caps), #Renjith Rajagopal
-    VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",      standard_caps | {cp.flexray}), #Martin Stigels
-    VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray}), #Jayanta Ghoshal
+    VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",      standard_caps | {cp.flexray_or_carsim}), #Martin Stigels
+    VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray_or_carsim}), #Jayanta Ghoshal
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray},
         tests_to_run=["testFlexrayPingPong"]),  # Torbjorn Sandsgard
 ]
@@ -74,16 +74,16 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray},
             tests_to_run=["testFlexrayPingPong", "testFlexrayPingPongAfterRestartOfVSD"]),       #Torbjorn Sandsgard
-    VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray}), #Uguudei
+    VTSTest("vendor/volvocars/hardware/vehicle/test/dai_setting",                   standard_caps | {cp.flexray_or_carsim}), #Uguudei
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/toggleTest", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/flexray_burst_test", standard_caps | {cp.flexray}), #Erik Elmeke
     VTSTest("vendor/volvocars/hardware/test/soundnotifications",                    standard_caps | {cp.flexray}), #Hitesh Garg
-    VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray}), #dfloodh
-    VTSTest("vendor/volvocars/hardware/vehicle/test/driversupportfunction_setting",	standard_caps | {cp.flexray}), #Vi Dat
+    VTSTest("vendor/volvocars/hardware/vehicle/test/csa_setting",       standard_caps | {cp.flexray_or_carsim}), #dfloodh
+    VTSTest("vendor/volvocars/hardware/vehicle/test/driversupportfunction_setting",	standard_caps | {cp.flexray_or_carsim}), #Vi Dat
     TradefedTest("vendor/volvocars/hmi/Launcher/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/apps/tunerbrowserservice/app/src/androidTest", standard_caps), #Ankit Bhargava
-    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray}), #Raju Yadav
-    VTSTest("vendor/volvocars/hardware/vehicle/test/traffic_sign_information",      standard_caps | {cp.flexray}), #Vivek Kumaar
+    VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray_or_carsim}), #Raju Yadav
+    VTSTest("vendor/volvocars/hardware/vehicle/test/traffic_sign_information",      standard_caps | {cp.flexray_or_carsim}), #Vivek Kumaar
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -111,7 +111,7 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge", standard_caps), #Samuel Idowu
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray} | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/temperature_adjustment", standard_caps | {cp.flexray}), #Justin Saler
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray}), #Kirti Goel
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray_or_carsim}), #Kirti Goel
     TradefedTest("vendor/volvocars/packages/SettingsStorageService/test/ut/services", standard_caps), #Matilda Bengtsson
 
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.

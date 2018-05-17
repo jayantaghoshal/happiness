@@ -7,6 +7,7 @@ import datetime
 
 class Capabilities:
     ihu_generic = "ihu-generic"
+    # Access to CANoe simulation
     flexray     = "flexray"
     adb         = "adb"
     mp_serial   = "mp-serial"
@@ -14,6 +15,10 @@ class Capabilities:
     audio       = "audio"
     cem         = "cem"
     apix        = "apix"
+    # Tests that are written with the python dataelements framework that can run in either
+    # simulated mode through carsim_bridge or with canoe simulation.
+    # They will be run twice, once on generic node with carsim and once on flexray node with canoe.
+    flexray_or_carsim = "flexray_or_carsim"
 
 standard_caps = {
     Capabilities.ihu_generic,

@@ -37,7 +37,8 @@ rm "${OUT_ARCHIVE}"
 capability=""
 if [ "${JOB_NAME}" = "ihu_gate_test_flexray" ]
 then
-    capability="flexray"
+    capability="flexray flexray_or_carsim"
+    export DATAELEMENTS_MODE=canoe
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
@@ -65,5 +66,5 @@ time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run \
     --report_results_to_ci_database \
     --update_ihu \
     --abort-on-first-failure \
-    -c ihu-generic adb mp-serial vip-serial ${capability} \
+    -c ihu-generic adb mp-serial vip-serial flexray_or_carsim ${capability} \
     -o ${capability}

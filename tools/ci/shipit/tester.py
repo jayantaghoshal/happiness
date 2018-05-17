@@ -100,17 +100,26 @@ class Tester:
         root_parser = argparse.ArgumentParser()
         subparsers = root_parser.add_subparsers(dest="program")
         analyze_parser = subparsers.add_parser("analyze")  # NOQA
-        analyze_parser.add_argument('--verbose', action='store_true')
         build_parser = subparsers.add_parser("build")
-        build_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
-        build_parser.add_argument('--verbose', action='store_true')
+        print_parser = subparsers.add_parser("print_plan")
         run_parser = subparsers.add_parser("run")
-        run_parser.add_argument("-c", "--capabilities",
+
+        for common_args in [analyze_parser, build_parser, run_parser, print_parser]:
+            common_args.add_argument('--verbose', action='store_true')
+
+        for parser_dependent_on_plan in [print_parser, run_parser, build_parser]:
+            parser_dependent_on_plan.add_argument('--plan', nargs="+", default=[],
+                                      choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
+            parser_dependent_on_plan.add_argument('--test_component', default=None,
+                                    help="Run without a plan and test a specified directory only")
+
+        for parser_dependent_on_capabilities in [print_parser, run_parser]:
+            parser_dependent_on_capabilities.add_argument("-c", "--capabilities",
                             type=str,
                             nargs="*",
                             default=[],
                             help="The capabilities your rig has access to, select from shipit.test_types.Capabilites")
-        run_parser.add_argument("-o", "--only_matching",
+            parser_dependent_on_capabilities.add_argument("-o", "--only_matching",
                                 type=str,
                                 nargs="*",
                                 default=[],
@@ -118,19 +127,15 @@ class Tester:
                                      "Ignore other tests even though your rig has capabilities enough to run them. "
                                      "This flag is intended to be used to optimize the use of specialized rigs so that they "
                                      "dont run generic test cases")
-        run_parser.add_argument('--plan', nargs="+", default=[], choices=['gate', 'hourly', 'nightly', 'staging_hourly', 'staging_daily'])
+
         run_parser.add_argument('--vcc_dashboard_reporting', action='store_true')
         run_parser.add_argument('--report_results_to_ci_database', action='store_true')
         run_parser.add_argument('--update_ihu', action='store_true')
         run_parser.add_argument('--download', default=None)
         run_parser.add_argument('--download_latest', default=None)
-        run_parser.add_argument('--verbose', action='store_true')
         run_parser.add_argument(
             '--abort-on-first-failure', action='store_true', dest="abort_on_first_failure")
-        build_parser.add_argument('--test_component', default=None,
-                                help="Run without a plan and test a specified directory only")
-        run_parser.add_argument('--test_component', default=None,
-                                help="Run without a plan and test a specified directory only")
+
         return root_parser.parse_args()
 
 
@@ -160,6 +165,14 @@ class Tester:
             plan = self._get_plan(args)
             build_testcases(plan)
 
+        elif args.program == "print_plan":
+            print(args.capabilities)
+            print(args.only_matching)
+            plan = self._get_plan(args)
+            selected_tests = get_test_set(plan, set(args.capabilities), set(args.only_matching))
+            for t in selected_tests:
+                print(t)
+
         elif args.program == "run":
             plan = self._get_plan(args)
             capabilities = set(args.capabilities)
@@ -167,7 +180,7 @@ class Tester:
                 print("ERROR: No capabilities specified, no tests will be able to run")
                 sys.exit(1)
 
-            selected_tests = get_test_set(plan, capabilities, args.only_matching)
+            selected_tests = get_test_set(plan, capabilities, set(args.only_matching))
 
             if len(selected_tests) == 0:
                 self.logger.warning('No applicable tests found.')
