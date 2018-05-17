@@ -101,7 +101,7 @@
             wipe-workspace: true
     triggers:
         - pollscm:
-            cron: "H * * * *"
+            cron: "H/10 * * * *"
             ignore-post-commit-hooks: True
     notifications:
         - http:
