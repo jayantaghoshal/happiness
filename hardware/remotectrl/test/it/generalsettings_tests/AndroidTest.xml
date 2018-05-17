@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="RemoteCtrl GeneralSettings integration test">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.FilePusher">
+        <option name="cleanup" value="true" />
+        <option name="push" value="VtsRemoteCtrlGeneralSettingsIntegrationTest->/data/local/tmp/VtsRemoteCtrlGeneralSettingsIntegrationTest" />
+    </target_preparer>
+
+    <target_preparer class="com.android.tradefed.targetprep.RunHostCommandTargetPreparer">
+        <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/hardware/remotectrl/test/it/generalsettings_tests/push_config_file.sh" />
+        <option name="host-teardown-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/hardware/remotectrl/test/it/generalsettings_tests/remove_config_file.sh" />
+    </target_preparer>
+
+    <test class="com.android.tradefed.testtype.GTest" >
+        <option name="native-test-device-path" value="/data/local/tmp" />
+        <option name="module-name" value="VtsRemoteCtrlGeneralSettingsIntegrationTest" />
+        <option name="native-test-flag" value="--no-isolate" />
+        <option name="runtime-hint" value="5000ms" />
+    </test>
+</configuration>
