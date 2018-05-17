@@ -231,6 +231,11 @@ bool AirDistributionLogic::activationCheck() const {
         const auto carModeIsDyno = carMode == autosar::CarModSts1::CarModDyno;
         const auto climateIsActive = climateActive == autosar::OnOff1::On;
 
+        log_debug() << "CarDynoMode: " << carModeIsDyno << "carModeIsNormal: " << carModeIsNormal;
+        log_debug() << "usageModeNotAbandoned: " << usageModeNotAbandoned
+                    << "usageModeNotInactive: " << usageModeNotInactive;
+        log_debug() << "climateIsActive: " << climateIsActive;
+
         return (carModeIsDyno || carModeIsNormal) &&
                ((usageModeNotAbandoned && usageModeNotInactive) || climateIsActive);
     }

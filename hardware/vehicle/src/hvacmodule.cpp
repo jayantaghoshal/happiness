@@ -399,11 +399,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
              std::make_pair(FirstRowGen::AirDistributionAngle::FLOOR_VENT_DEFROST,
                             toInt(VehicleHvacFanDirection::FLOOR) | toInt(VehicleHvacFanDirection::FACE) |
                                     toInt(VehicleHvacFanDirection::DEFROST)),
-             // TODO: Auto=All OK???
-             std::make_pair(FirstRowGen::AirDistributionAngle::AUTO,
-                            toInt(VehicleHvacFanDirection::FLOOR) | toInt(VehicleHvacFanDirection::FACE) |
-                                    toInt(VehicleHvacFanDirection::DEFROST)),
-             std::make_pair(FirstRowGen::AirDistributionAngle::DISABLED, 0)}};
+             std::make_pair(FirstRowGen::AirDistributionAngle::AUTO, 0)}};
 
     prop_fandir.registerToVehicleHal();
     prop_fandir.subscribe_set_prop([this](int32_t fan_dir, int32_t areaId) {
