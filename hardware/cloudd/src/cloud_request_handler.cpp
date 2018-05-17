@@ -275,8 +275,19 @@ int CloudRequestHandler::SendCloudRequest(std::shared_ptr<CloudRequest> request)
     //
     // Set URL
     verified_curl_easy_setopt(easy, CURLOPT_URL, request->GetURL().c_str());
+
     // Set Timeout
-    verified_curl_easy_setopt(easy, CURLOPT_TIMEOUT_MS, request->GetTimeout().count());
+    if ("" == request->GetFilePath()) {
+        //"Normal" http request (no file download)
+        verified_curl_easy_setopt(easy, CURLOPT_TIMEOUT_MS, request->GetTimeout().count());
+    } else {
+        // If filepath is non-empty we are downloading a file and then using another kind of timeout
+        // Timeout is only used for initial connection, after that download will only fail if we receive
+        // less than 1 byte/sec over a 15 second period
+        verified_curl_easy_setopt(easy, CURLOPT_CONNECTTIMEOUT, request->GetTimeout().count());
+        verified_curl_easy_setopt(easy, CURLOPT_LOW_SPEED_LIMIT, 1);
+        verified_curl_easy_setopt(easy, CURLOPT_LOW_SPEED_TIME, 15);
+    }
 
     if (!request->GetHeaderList().empty()) {
         struct curl_slist* chunk = NULL;
