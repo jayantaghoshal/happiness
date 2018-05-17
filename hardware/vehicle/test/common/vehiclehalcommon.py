@@ -277,6 +277,34 @@ class VehicleHalCommon():
             device.dragDip((100,300), (100, 200 if fineScroll else 100), 300)
         return None
 
+
+    # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
+    # This function is using uiautomator
+    def scrollAndFindViewByIdOrRaiseUiAutomator(self, viewId, device, maxFlings=10):
+        view = self.scrollAndFindViewByIdUiAutomator(viewId, device, maxFlings)
+        asserts.assertNotEqual(None, view, "Did not find view")
+        return view
+
+    # Scroll until view with given Id is found within maxFlings tries. Returns None if view not found.
+    # This function is using uiautomator
+    def scrollAndFindViewByIdUiAutomator(self, viewId, device, maxFlings=10):
+        print("Searching for view with id -> ") + str(viewId)
+        for n in range(maxFlings):
+            view = device(resourceId=viewId)
+            if view.exists:
+                return view
+            device.drag(100, 300, 100, 100, 10)
+        return None
+
+    def findAllViewWithIds(self, ids, device, assert_views_found=True):
+        # Scroll all buttons to be shown
+        for id in ids:
+            self.scrollAndFindViewByIdUiAutomator(id, device)
+        # Assert if all buttons are visible and found
+        if assert_views_found:
+            for id in ids:
+                asserts.assertTrue(device(resourceId=id).exists, "View " + str(id) + " not found!")
+
     def emptyValueProperty(self, propertyId, areaId=0):
         """Creates a property structure for use with the Vehicle HAL.
 

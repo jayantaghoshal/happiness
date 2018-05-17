@@ -38,9 +38,13 @@ public class VhalThreeStateDelegate extends VHalDelegate<Integer> {
         mVehicleProperty = vehicleProperty;
     }
 
+    /*
+     * Used for a three state
+     */
     public VhalThreeStateDelegate(VendorExtensionClient vendorExtensionClient, int vehicleProperty, int vehiclePropertyStatus, boolean useDisabledMode) {
         mVendorExtensionClient = vendorExtensionClient;
         mVehicleProperty = vehicleProperty;
+        this.vehiclePropertyStatus = vehiclePropertyStatus;
         mUseDisabledMode = useDisabledMode;
     }
 
@@ -97,13 +101,14 @@ public class VhalThreeStateDelegate extends VHalDelegate<Integer> {
                 // Register Property value callback
                 registerPropCallback();
 
+                FunctionViewHolder.FunctionState state = FunctionViewHolder.FunctionState.ENABLED;
                 // Check if mode is supported
                 if (mUseDisabledMode) {
                     setDisabledMode();
                 }
 
                 // Since the feature is available, enable it and register PA status handling
-                setUiFunctionState(FunctionViewHolder.FunctionState.ENABLED);
+                setUiFunctionState(state);
                 registerStatusCallback();
 
                 try {

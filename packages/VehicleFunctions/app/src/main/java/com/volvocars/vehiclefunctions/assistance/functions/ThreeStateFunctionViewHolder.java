@@ -51,9 +51,7 @@ public class ThreeStateFunctionViewHolder extends FunctionViewHolder {
 
         LiveData<FunctionState> enabled = Transformations.switchMap(mFunction, ThreeStateFunction::getFunctionState);
         enabled.observeForever(buttonState -> {
-
             switch (buttonState){
-
                 case ENABLED:
                     itemView.setVisibility(View.VISIBLE);
                     mButton1.setVisibility(View.VISIBLE);
@@ -92,23 +90,12 @@ public class ThreeStateFunctionViewHolder extends FunctionViewHolder {
                     mButton3.setEnabled(false);
                     break;
             }
+            removeButtonFromView(mFunction.getValue().getDisabledMode().getValue());
         });
 
         LiveData<Integer> disabledMode = Transformations.switchMap(mFunction, ThreeStateFunction::getDisabledMode);
         disabledMode.observeForever(disabledMode1 -> {
-            switch (disabledMode1) {
-                case MODE_1_DISABLED:
-                    mButton1.setVisibility(View.GONE);
-                    break;
-                case MODE_2_DISABLED:
-                    mButton2.setVisibility(View.GONE);
-                    break;
-                case MODE_3_DISABLED:
-                    mButton3.setVisibility(View.GONE);
-                    break;
-                default:
-                    break;
-            }
+            removeButtonFromView(disabledMode.getValue());
             mButton1.setId(mFunction.getValue().getState1ButtonId());
             mButton2.setId(mFunction.getValue().getState2ButtonId());
             mButton3.setId(mFunction.getValue().getState3ButtonId());
@@ -130,4 +117,19 @@ public class ThreeStateFunctionViewHolder extends FunctionViewHolder {
         mButton3.setText(threeStateFunction.getState3Name());
     }
 
+    private void removeButtonFromView(int disabledMode) {
+        switch (disabledMode) {
+            case MODE_1_DISABLED:
+                mButton1.setVisibility(View.GONE);
+                break;
+            case MODE_2_DISABLED:
+                mButton2.setVisibility(View.GONE);
+                break;
+            case MODE_3_DISABLED:
+                mButton3.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
+    }
 }

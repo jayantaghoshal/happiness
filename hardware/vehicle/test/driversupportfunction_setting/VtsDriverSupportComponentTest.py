@@ -13,10 +13,12 @@ from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
+sys.path.append('/tmp/ihu/.local/lib/python2.7/site-packages')
 
 from generated import datatypes as DE
 from vehiclehalcommon import wait_for
 import vehiclehalcommon
+from uiautomator import device as device
 
 ns_per_ms = 1000000
 
@@ -68,13 +70,10 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
         vHalCommon.setUpVehicleFunction()
 
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
-        self.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], vHalCommon)
-        ACC_button = vc.findViewById(ACC_button_on)
-        CC_button = vc.findViewById(CC_button_on)
-        SL_button = vc.findViewById(SL_button_on)
+        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], device, assert_views_found=False)
+        ACC_button = device(resourceId=ACC_button_on)
+        CC_button = device(resourceId=CC_button_on)
+        SL_button = device(resourceId=SL_button_on)
 
         # Compare result
         asserts.assertFalse(ACC_button, "ACC_button is still visible")
@@ -96,13 +95,10 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
         vHalCommon.setUpVehicleFunction()
 
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
-        self.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], vHalCommon)
-        ACC_button = vc.findViewById(ACC_button_on)
-        CC_button = vc.findViewById(CC_button_on)
-        SL_button = vc.findViewById(SL_button_on)
+        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], device, assert_views_found=False)
+        ACC_button = device(resourceId=ACC_button_on)
+        CC_button = device(resourceId=CC_button_on)
+        SL_button = device(resourceId=SL_button_on)
 
         # Compare result
         asserts.assertFalse(ACC_button, "ACC_button is still visible")
@@ -118,6 +114,11 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("changecarconfig 23 2")
         self.dut.shell.one.Execute("changecarconfig 36 2")
 
+        # Clear database
+        self.dut.shell.one.Execute("stop settingstorage-hidl-server")
+        self.dut.shell.one.Execute("rm /data/vendor/vehiclesettings/vehiclesettings.db*")
+        self.dut.shell.one.Execute("start settingstorage-hidl-server")
+
         # Reboot device after changing carconfig
         self.deviceReboot()
 
@@ -127,13 +128,10 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
 
         # Get buttons
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
-        self.findAllViewWithIds([CC_button_on, SL_button_on], vHalCommon)
-        ACC_button = vc.findViewById(ACC_button_on)
-        CC_button = vc.findViewById(CC_button_on)
-        SL_button = vc.findViewById(SL_button_on)
+        vHalCommon.findAllViewWithIds([CC_button_on, SL_button_on], device, assert_views_found=False)
+        ACC_button = device(resourceId=ACC_button_on)
+        CC_button = device(resourceId=CC_button_on)
+        SL_button = device(resourceId=SL_button_on)
 
         # Compare result
         asserts.assertFalse(ACC_button, "ACC_button is still visible!")
@@ -155,7 +153,7 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
 
-        SL_button.touch()
+        SL_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
@@ -165,12 +163,12 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.flexray.send_VehModMngtGlbSafe1(vehmod)
 
         # TODO: Fix when HMI handles Status. Shall expect DE.DrvrSpprtFct.ACC instead of CC.
-        CC_button.touch()
+        CC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
 
-        SL_button.touch()
+        SL_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
@@ -182,7 +180,7 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.flexray.send_AccSts(DE.AccSts1.Actv)
         self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Actv)
 
-        SL_button.touch()
+        SL_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
@@ -194,6 +192,11 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("changecarconfig 23 3")
         self.dut.shell.one.Execute("changecarconfig 36 1")
 
+        # Clear database
+        self.dut.shell.one.Execute("stop settingstorage-hidl-server")
+        self.dut.shell.one.Execute("rm /data/vendor/vehiclesettings/vehiclesettings.db*")
+        self.dut.shell.one.Execute("start settingstorage-hidl-server")
+
         # Reboot device after changing carconfig
         self.deviceReboot()
 
@@ -203,13 +206,10 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
 
         # Get buttons
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
-        self.findAllViewWithIds([ACC_button_on, CC_button_on], vHalCommon)
-        ACC_button = vc.findViewById(ACC_button_on)
-        CC_button = vc.findViewById(CC_button_on)
-        SL_button = vc.findViewById(SL_button_on)
+        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on], device, assert_views_found=False)
+        ACC_button = device(resourceId=ACC_button_on)
+        CC_button = device(resourceId=CC_button_on)
+        SL_button = device(resourceId=SL_button_on)
 
         # Compare result
         asserts.assertTrue(ACC_button.enabled, "ACC_button is not enabled")
@@ -231,7 +231,7 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
 
-        ACC_button.touch()
+        ACC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.ACC)
@@ -241,12 +241,12 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.flexray.send_VehModMngtGlbSafe1(vehmod)
 
         # TODO: Fix when HMI handles Status. Shall expect DE.DrvrSpprtFct.ACC instead of CC.
-        CC_button.touch()
+        CC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
 
-        ACC_button.touch()
+        ACC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
@@ -258,7 +258,7 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.flexray.send_AccSts(DE.AccSts1.Actv)
         self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Actv)
 
-        ACC_button.touch()
+        ACC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
@@ -270,6 +270,11 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("changecarconfig 23 3")
         self.dut.shell.one.Execute("changecarconfig 36 2")
 
+        # Clear database
+        self.dut.shell.one.Execute("stop settingstorage-hidl-server")
+        self.dut.shell.one.Execute("rm /data/vendor/vehiclesettings/vehiclesettings.db*")
+        self.dut.shell.one.Execute("start settingstorage-hidl-server")
+
         # Reboot device after changing carconfig
         self.deviceReboot()
 
@@ -279,13 +284,10 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
 
         # Get buttons
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
-        self.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], vHalCommon)
-        ACC_button = vc.findViewById(ACC_button_on)
-        CC_button = vc.findViewById(CC_button_on)
-        SL_button = vc.findViewById(SL_button_on)
+        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], device)
+        ACC_button = device(resourceId=ACC_button_on)
+        CC_button = device(resourceId=CC_button_on)
+        SL_button = device(resourceId=SL_button_on)
 
         # Compare result
         asserts.assertTrue(ACC_button.enabled, "ACC_button is not enabled")
@@ -307,12 +309,12 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
 
-        SL_button.touch()
+        SL_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
 
-        ACC_button.touch()
+        ACC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.ACC)
@@ -322,17 +324,17 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.flexray.send_VehModMngtGlbSafe1(vehmod)
 
         # TODO: Fix when HMI handles Status. Shall expect DE.DrvrSpprtFct.ACC instead of SL.
-        SL_button.touch()
+        SL_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
 
-        ACC_button.touch()
+        ACC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
 
-        CC_button.touch()
+        CC_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
@@ -344,33 +346,10 @@ class VtsDriverSupportComponentTest(base_test.BaseTestClass):
         self.flexray.send_AccSts(DE.AccSts1.Actv)
         self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Actv)
 
-        SL_button.touch()
+        SL_button.click()
         time.sleep(wait_after_button_click)
         vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
         asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
-
-    def findViewWithId(self, id, vhal_common, max_flings=5):
-        vc, device = vhal_common.getActiveViewClient()
-        print("Searching for view with id -> ") + str(id)
-        for n in range(max_flings):
-            vc.dump(-1)
-            v = vc.findViewById(id)
-            if v is not None:
-                # print("found view -> ") + str(v)
-                return v
-            print("iteration ") + str(n)
-            device.dragDip((100, 300), (100, 100), 300)
-        return v
-
-    def findAllViewWithIds(self, ids, vhal_common):
-        vc, device = vhal_common.getActiveViewClient()
-        # Scroll all buttons to be shown
-        for id in ids:
-            self.findViewWithId(id, vhal_common)
-        # Assert if all buttons are visible and found
-        for id in ids:
-            vc.findViewById(id)
-
 
 if __name__ == "__main__":
     test_runner.main()

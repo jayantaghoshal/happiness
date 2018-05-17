@@ -18,7 +18,9 @@ import com.volvocars.vehiclefunctions.R;
 public class FunctionViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTitleTextView;
 
-    public enum FunctionState {ERROR, ENABLED, DISABLED, INVISIBLE}
+    public enum FunctionState {
+        ERROR, ENABLED, DISABLED, INVISIBLE
+    }
 
     public FunctionViewHolder(View itemView) {
         super(itemView);
