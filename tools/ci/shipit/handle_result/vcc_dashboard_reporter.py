@@ -44,22 +44,24 @@ class vcc_dashboard_reporter(abstract_reporter):
     def plan_finished(self, test_results: List[ResultData]) -> None:
         pass
 
-    def module_started(self, test: IhuBaseTest) -> None:
+    def module_started(self, test: IhuBaseTest, testrun_uuid: str) -> None:
         if not self.continue_report:
             return
         try:
-            self.vccciproxy.testcase_started(store_result.get_module_name(test))
+            # TODO: Remove dependencies to store_result?
+            self.vccciproxy.testcase_started(store_result.get_module_name(test), testrun_uuid)
         except Exception as e:
             logger.error(str(traceback.format_exc()))
             logger.error(str(e))
             logger.error("Testcase started message to VCC CI failed")
 
-    def module_finished(self, test: IhuBaseTest, test_result: ResultData) -> None:
+    def module_finished(self, test: IhuBaseTest, test_result: ResultData, testrun_uuid: str) -> None:
         if not self.continue_report:
             return
         try:
+            #TODO: Remove dependencies to store_result?
             self.vccciproxy.testcase_finished(store_result.get_module_name(
-                test), store_result.get_result(test_result))
+                test), store_result.get_result(test_result), testrun_uuid)
         except Exception as e:
             logger.error(str(traceback.format_exc()))
             logger.error(str(e))

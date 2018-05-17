@@ -59,8 +59,8 @@ class console_reporter(abstract_reporter):
         else:
             print("All %d tests successful" % len(test_results))
 
-    def module_started(self, test: IhuBaseTest) -> None:
+    def module_started(self, test: IhuBaseTest, testrun_uuid: str) -> None:
         logger.info("Module started: {}".format(str(test)))
 
-    def module_finished(self, test: IhuBaseTest, test_result: ResultData) -> None:
+    def module_finished(self, test: IhuBaseTest, test_result: ResultData, testrun_uuid: str) -> None:
         logger.info("Module finished: {}, Result: {}".format(str(test), str(test_result)))

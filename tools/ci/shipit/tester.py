@@ -7,6 +7,7 @@ import logging
 import logging.config
 import os
 import sys
+import uuid
 from os.path import join as pathjoin
 from typing import List, Set
 from handle_result.abstract_reporter import abstract_reporter
@@ -36,15 +37,15 @@ class Tester:
         for r in self.reporter_list:
             r.plan_finished(test_results)
 
-    def _module_started(self, test):
+    def _module_started(self, test, testrun_uuid: str):
         self.logger.debug("Module started: {}".format(str(test)))
         for r in self.reporter_list:
-            r.module_started(test)
+            r.module_started(test, testrun_uuid)
 
-    def _module_finished(self, test, test_result):
+    def _module_finished(self, test, test_result, testrun_uuid: str):
         self.logger.debug("Module finished: {}, Result: {}".format(str(test), str(test_result)))
         for r in self.reporter_list:
-            r.module_finished(test, test_result)
+            r.module_finished(test, test_result, testrun_uuid)
 
     def _flash_started(self):
         self.logger.debug("Flashing started")
@@ -60,10 +61,11 @@ class Tester:
         test_results = []  # type: List[ResultData]
         self._plan_started()
         for t in tests_to_run:
-            self._module_started(t)
+            test_id = uuid.uuid4().hex
+            self._module_started(t, test_id)
             test_result = run_test(t, max_testtime_sec)
             test_results.append(test_result)
-            self._module_finished(t, test_result)
+            self._module_finished(t, test_result, test_id)
             if not test_result.passed and abort_on_first_failure:
                 break
         self._plan_finished(test_results)

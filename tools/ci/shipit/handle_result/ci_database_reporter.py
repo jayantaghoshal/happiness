@@ -109,7 +109,8 @@ class ci_database_reporter(abstract_reporter):
         except Exception as e:
             logger.error(str(e))
 
-    def module_started(self, test: IhuBaseTest) -> None:
+
+    def module_started(self, test: IhuBaseTest, testrun_uuid: str) -> None:
         if not self.continue_report:
             return
         self.started_at = datetime.datetime.utcnow()
@@ -121,11 +122,11 @@ class ci_database_reporter(abstract_reporter):
             logger.error("Cleaning old results failed")
             self.continue_report = False
 
-    def module_finished(self, test: IhuBaseTest, test_result: ResultData) -> None:
+    def module_finished(self, test: IhuBaseTest, test_result: ResultData, testrun_uuid: str) -> None:
         if not self.continue_report:
             return
         try:
-            store_result.load_test_results(test, test_result, self.started_at, datetime.datetime.utcnow())
+            store_result.load_test_results(test, test_result, self.started_at, datetime.datetime.utcnow(), testrun_uuid)
         except Exception as e:
             logger.error(str(traceback.format_exc()))
             logger.error(str(e))

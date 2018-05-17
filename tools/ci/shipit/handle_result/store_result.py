@@ -12,6 +12,7 @@ from shipit.test_runner.test_types import VTSTest, TradefedTest, IhuBaseTest, Di
 from shipit.test_runner import vts_test_runner as vts_test_run
 from shipit.test_runner.test_env import vcc_root, aosp_root, run_in_lunched_env
 from pymongo import MongoClient
+import bson
 from typing import Dict, Any
 import sys
 import logging
@@ -130,7 +131,11 @@ def truncate_to_fit_mongo(log_content: str):
         return log_content
 
 
-def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: datetime.datetime, finished_at: datetime.datetime):
+def load_test_results(test: IhuBaseTest,
+                      test_result: ResultData,
+                      started_at: datetime.datetime,
+                      finished_at: datetime.datetime,
+                      testrun_uuid: str):
     client = MongoClient(
         "mongodb://jenkins-icup_android:" + os.environ[
             "MONGODB_PASSWORD"] + "@gotsvl1416.got.volvocars.net:27017/admin?authMechanism=SCRAM-SHA-1")
@@ -141,6 +146,7 @@ def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: da
 
 
     common_identifiers = {}  # type: Dict[str, Any]
+    common_identifiers["testrun_id"] = testrun_uuid
     if isinstance(test, VTSTest):
         common_identifiers["test_dir_name"] = test.test_root_dir
     elif isinstance(test, TradefedTest):
@@ -156,8 +162,8 @@ def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: da
 
     test_detail = {}
     test_detail.update(common_identifiers)
-
-
+    del test_detail["testrun_id"]
+    test_detail["_id"] = bson.ObjectId(testrun_uuid)
 
 
     screenshot_dict = {}
@@ -176,7 +182,7 @@ def load_test_results(test: IhuBaseTest, test_result: ResultData, started_at: da
 
     test_detail["screenshots"] = screenshot_dict
     test_detail["job_name"] = os.environ["JOB_NAME"]
-    test_detail["capabilities"] = str(test.require_capabilities)
+    test_detail["capabilities"] = list(test.require_capabilities)
     test_detail["hostname"] = os.environ["HOST_HOSTNAME"]
     test_detail["started_at"] = started_at
     test_detail["finished_at"] = finished_at

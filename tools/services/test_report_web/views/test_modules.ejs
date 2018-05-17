@@ -2,6 +2,27 @@
     <%- include index.ejs %>
     <%- include navbar.ejs %>
     <%if (view=="list_tests_page") { %>
+
+    <%    function getCapabilitiesToHighlight(test_record) {
+        let capabilitiesToHighlight = [];
+        if (test_record["capabilities"])
+        {
+            if (test_record["capabilities"].indexOf("flexray") >= 0) {
+                capabilitiesToHighlight.push("flexray");
+            }
+            if (test_record["capabilities"].indexOf("apix") >= 0) {
+                capabilitiesToHighlight.push("apix");
+            }
+            if (test_record["capabilities"].indexOf("audio") >= 0) {
+                capabilitiesToHighlight.push("audio");
+            }
+            if (test_record["capabilities"].indexOf("cem") >= 0) {
+                capabilitiesToHighlight.push("cem");
+            }
+        }
+        return capabilitiesToHighlight;
+    };
+    %>        
     <div class="container">
             <% if (view=="list_tests_page") {%>
                 <div style="text-align:center; font-size:160%;"><h1>
@@ -28,17 +49,34 @@
                     <th>Test Modules</th>
                     <th>Type</th>
                     <th>Job Name</th>
+                    <th>Time(sec)</th>
+                    <th>Node</th>
                     <th>Result</th>
                 </tr>
             </thead>
             <tbody>
             <% for(var i=0; i < basic_test_detail.length; i++) { %>
             <tr>
-                <td><a href=<%= "/detailed_view?module_name="+basic_test_detail[i].module_name + "&job_name=" + basic_test_detail[i].job_name + "&build_number=" + basic_test_detail[i].test_job_build_number + "&test_dir_name=" + encodeURI(basic_test_detail[i].test_dir_name)  %> >
-                <%= basic_test_detail[i].module_name %></a></td>
+                <td>
+                    <a href=<%= "/detailed_view?id="+basic_test_detail[i]._id  %> >
+                        <%= basic_test_detail[i].module_name %>
+                    </a>
+                </td>
                 <td><%= basic_test_detail[i].test_type %></td>
-                <td><a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/view/Hourly_Daily_Pipeline/job/" + basic_test_detail[i].job_name + "/" + basic_test_detail[i].test_job_build_number %> target="_blank">
-                <%= basic_test_detail[i].job_name %></a></td>
+                <td>
+                    <a href=<%= "https://icup_android.jenkins.cm.volvocars.biz/view/Hourly_Daily_Pipeline/job/" + basic_test_detail[i].job_name + "/" + basic_test_detail[i].test_job_build_number %> target="_blank">
+                        <%= basic_test_detail[i].job_name %>
+                    </a>
+                </td>
+                <td>
+                        <%= Math.round(basic_test_detail[i]["runtime"] / 1000)%>
+                        
+                </td>
+                <td>
+                    <% getCapabilitiesToHighlight(basic_test_detail[i]).forEach((c) => { %> 
+                        <span class="badge badge-secondary"><%= c %></span>
+                    <% }); %>
+                </td>
                 <% if (basic_test_detail[i].result==true){ %>
                 <td><span class="badge badge-success">Success</span></td>
                 <% } %>

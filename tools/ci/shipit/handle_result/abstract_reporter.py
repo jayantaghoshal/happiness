@@ -20,11 +20,11 @@ class abstract_reporter(ABC):
         pass
 
     @abstractmethod
-    def module_started(self, test: IhuBaseTest) -> None:
+    def module_started(self, test: IhuBaseTest, testrun_uuid: str) -> None:
         pass
 
     @abstractmethod
-    def module_finished(self, test: IhuBaseTest, test_result: ResultData) -> None:
+    def module_finished(self, test: IhuBaseTest, test_result: ResultData, testrun_uuid: str) -> None:
         pass
 
     @abstractmethod

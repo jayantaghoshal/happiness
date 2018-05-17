@@ -30,12 +30,8 @@ class VCCCIProxy(object):
         self.url_template = "https://icup_android.jenkins.cm.volvocars.biz/job/"
         self.target = "VCC-CI"
 
-    def getLogURL(self, module_name: str):
-        log = "http://gotsvl1416.got.volvocars.net:3001/detailed_view?module_name=%s&job_name=%s&build_number=%s" % (
-            module_name,
-            self.testsuite_name,
-            self.test_job_build_number)
-        return log
+    def getLogURL(self, testrun_uuid: str):
+        return "https://reports-ihu-ci.cm.volvocars.biz//detailed_view?id=%s" % testrun_uuid
 
     def getUrl(self):
         return "https://icup_android.jenkins.cm.volvocars.biz/job/%s/%s" % (self.testsuite_name, self.test_job_build_number)
@@ -53,7 +49,7 @@ class VCCCIProxy(object):
             'Content-Type': 'application/json'
         }
 
-    def testcase_started(self, module_name: str):
+    def testcase_started(self, module_name: str, testrun_uuid: str):
 
         data = {
 
@@ -62,7 +58,7 @@ class VCCCIProxy(object):
             "activity": self.top_test_job_name,
             "testsuite_name": self.testsuite_name,
             "url": self.url_template + self.testsuite_name,
-            "logs": [self.getLogURL(module_name)],
+            "logs": [self.getLogURL(testrun_uuid)],
             "target": self.target
 
         }
@@ -74,7 +70,7 @@ class VCCCIProxy(object):
         logging.debug(str(r.status_code))
         logging.debug(r.text)
 
-    def testcase_finished(self, module_name: str, status: bool):
+    def testcase_finished(self, module_name: str, status: bool, testrun_uuid: str):
 
         data = {
             "chain_id": self.chain_id,
@@ -82,7 +78,7 @@ class VCCCIProxy(object):
             "activity": self.top_test_job_name,
             "testsuite_name": self.testsuite_name,
             "url": self.url_template + self.testsuite_name,
-            "logs": [self.getLogURL(module_name)],
+            "logs": [self.getLogURL(testrun_uuid)],
             "target": self.target,
             "status": "success" if status else "failure"
         }
