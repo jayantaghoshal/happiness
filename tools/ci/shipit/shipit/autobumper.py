@@ -198,7 +198,7 @@ def sync_repo(aosp_root_dir: str, repository: str):
 
     for manifest_file in vcc_manifest_files:
         logger.info("Manfiest = " + manifest_file)
-        revision = manifest.get_revision_from_git_name(manifest_file, repository)
+        revision = manifest.get_value_from_manifest_by_git_name(manifest_file, repository, "revision")
         if not revision :
             continue
         else:
@@ -214,7 +214,7 @@ def sync_repo(aosp_root_dir: str, repository: str):
 
     for manifest_file in vcc_manifest_files:
         logger.info("Manfiest = " + manifest_file)
-        path = manifest.get_repo_path_from_git_name(manifest_file, repository)
+        path = manifest.get_value_from_manifest_by_git_name(manifest_file, repository, "path")
         if not path:
             continue
         else:

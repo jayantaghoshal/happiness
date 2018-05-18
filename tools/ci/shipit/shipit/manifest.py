@@ -84,33 +84,21 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
 
     tree.write(output_path)
 
-def get_repo_path_from_git_name(template_path: str, git_repo: str):
-    parser = ET.XMLParser(target=CommentedTreeBuilder())
-    tree = ET.parse(template_path, parser)
-    root = tree.getroot()
 
-    for project in root.findall('project'):
-        name = project.get('name')
-        path = project.get('path')
-        if name == git_repo:
-            logger.info("The path = " + path)
-            return str(path)
+# This will get a value from the manifest based on the lookup value you send
+def get_value_from_manifest_by_git_name(template_path: str, git_repo: str, lookup: str = ""):
+    if lookup:
+        parser = ET.XMLParser(target=CommentedTreeBuilder())
+        tree = ET.parse(template_path, parser)
+        root = tree.getroot()
+        logger.info("lookup = " + lookup)
 
-    return None
-
-def get_revision_from_git_name(template_path: str, git_repo: str):
-    parser = ET.XMLParser(target=CommentedTreeBuilder())
-    tree = ET.parse(template_path, parser)
-    root = tree.getroot()
-
-    for project in root.findall('project'):
-        name = project.get('name')
-        path = project.get('path')
-        revision = project.get('revision')
-        if name == git_repo:
-            logger.info("The path = " + path)
-            logger.info("The revision = " + revision)
-            return str(revision)
+        for project in root.findall('project'):
+            name = project.get('name')
+            return_value =  project.get(lookup)
+            if name == git_repo:
+                logger.info("return_value = " + return_value)
+                return str(return_value)
 
     return None
 
@@ -123,21 +111,6 @@ def get_all_zuul_repos():
     repos_with_zuul_changes_set = set(repos_with_zuul_changes)
 
     return repos_with_zuul_changes_set
-
-
-def get_all_repos_with_zuul_commit_or_head(template_path: str):
-    parser = ET.XMLParser(target=CommentedTreeBuilder())
-    tree = ET.parse(template_path, parser)
-    root = tree.getroot()
-
-    for project in root.findall('project'):
-        name = project.get('name')
-        revision = project.get('revision')
-        zuul_repos = []
-        if revision == "ZUUL_COMMIT_OR_HEAD":
-            zuul_repos.append(name)
-            #logger.info("The path = " + path)
-    return zuul_repos
 
 
 def get_zuul_repos_map(template_path: str):
@@ -153,6 +126,7 @@ def get_zuul_repos_map(template_path: str):
         if revision == "ZUUL_COMMIT_OR_HEAD":
             zuul_repos[name] = path
             logger.info("The path = " + path)
+
     return zuul_repos
 
 
