@@ -1,0 +1,12 @@
+#define lifecyclectrl hal (Should probably be in Aptivs repo in some way)
+type hal_lifecyclectrl_hwservice, hwservice_manager_type;
+
+hal_attribute(lifecyclectrl)
+
+binder_call(hal_lifecyclectrl_client, hal_lifecyclectrl_server)
+binder_call(hal_lifecyclectrl_server, hal_lifecyclectrl_client)
+
+add_hwservice(hal_lifecyclectrl_server, hal_lifecyclectrl_hwservice)
+allow hal_lifecyclectrl_client hal_lifecyclectrl_hwservice:hwservice_manager find;
+
+allow system_app hal_lifecyclectrl_hwservice:hwservice_manager find;

@@ -1,5 +1,8 @@
 vendor.volvocars.hardware.uds::IDataCollector u:object_r:hal_uds_diagnostics_hwservice:s0
 vendor.volvocars.hardware.vehiclecom::IVehicleCom u:object_r:hal_vehiclecom_hwservice:s0
-vendor.volvocars.hardware.vehiclecom::IIplm u:object_r:hal_iplm_hwservice:s0
+vendor.volvocars.hardware.iplm::IIplm u:object_r:hal_iplm_hwservice:s0
 vendor.volvocars.hardware.remotectl::INativeRemoteAudioCtrl.hal u:object_r:hal_remotectl_hwservice:s0
 vendor.volvocars.hardware.remotectl::ISystemRemoteAudioCtrl.hal u:object_r:hal_remotectl_hwservice:s0
+vendor.volvocars.hardware.cloud::ICloudConnection u:object_r:hal_cloud_hwservice:s0
+vendor.volvocars.hardware.signals::ISignals u:object_r:hal_signals_hwservice:s0
+vendor.delphi.lifecyclecontrol::ILifecycleControl u:object_r:hal_lifecyclectrl_hwservice:s0

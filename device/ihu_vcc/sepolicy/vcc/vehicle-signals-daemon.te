@@ -9,6 +9,5 @@ allow vehicle-signals-daemon socket_device:sock_file { create read getattr write
 
 allow vehicle-signals-daemon vehicle_comm_device:chr_file rw_file_perms;
 
-# hwservicemanager accesses will probably be handled by hal_client/server() macros
-hwbinder_use(vehicle-signals-daemon)
-allow vehicle-signals-daemon hwservicemanager_prop:file r_file_perms;
+# Allow ISignals HAL client
+hal_client_domain(vehicle-signals-daemon, hal_signals)

@@ -1,0 +1,12 @@
+#define cloud hal
+type hal_cloud_hwservice, hwservice_manager_type;
+
+hal_attribute(cloud)
+
+binder_call(hal_cloud_client, hal_cloud_server)
+binder_call(hal_cloud_server, hal_cloud_client)
+
+add_hwservice(hal_cloud_server, hal_cloud_hwservice)
+allow hal_cloud_client hal_cloud_hwservice:hwservice_manager find;
+
+allow system_app hal_cloud_hwservice:hwservice_manager find;

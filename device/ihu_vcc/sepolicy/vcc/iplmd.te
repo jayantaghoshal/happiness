@@ -4,14 +4,14 @@ type iplmd_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(iplmd)
 
-allow iplmd system_file:dir r_dir_perms;
-allow iplmd system_file:file r_file_perms;
-
-hal_server_domain(iplmd, hal_vehiclecom)
+# Allow IIplm HAL server
 hal_server_domain(iplmd, hal_iplm)
 
-binder_call(iplmd, ipcbd)
-binder_call(iplmd, dataelements-hidl-server)
+# Allow IVehicleCom HAL client
+hal_client_domain(iplmd, hal_vehiclecom)
 
-hwbinder_use(iplmd)
+# Allow ISignals HAL client
+hal_client_domain(iplmd, hal_signals)
 
+# Allow ILifecycleControl HAL client
+hal_client_domain(iplmd, hal_lifecyclectrl)

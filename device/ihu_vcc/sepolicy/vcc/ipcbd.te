@@ -2,22 +2,12 @@
 type ipcbd, domain;
 type ipcbd_exec, exec_type, file_type, vendor_file_type;
 
+typeattribute ipcbd hal_automotive_socket_exemption;
+
 init_daemon_domain(ipcbd)
 
-allow ipcbd fwmarkd_socket:sock_file write;
-binder_call(ipcbd, iplmd)
+# Allow network
+net_domain(ipcbd)
 
-allow ipcbd self:udp_socket { read write create setopt bind };
-allow ipcbd self:tcp_socket { create connect setopt };
-#allow ipcbd self:capability { dac_override net_raw };
-allow ipcbd port:tcp_socket name_connect;
-
-# TODO Enable when binder/inet socket is fixed
-# hwservicemanager accesses will probably be handled by hal_client/server() macros
-# hwbinder_use(ipcbd)
-# allow ipcbd default_android_hwservice:hwservice_manager { add find };
-# allow ipcbd hidl_base_hwservice:hwservice_manager add;
-
-# NOTE: This might be the only line needed
-# Check if commented lines above can be removed
-# hal_server_domain(ipcbd, hal_vehiclecom)
+# Allow VehicleCom HAL server
+hal_server_domain(ipcbd, hal_vehiclecom)

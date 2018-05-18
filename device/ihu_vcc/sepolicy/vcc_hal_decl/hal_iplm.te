@@ -1,15 +1,12 @@
 #define iplm hal
 type hal_iplm_hwservice, hwservice_manager_type;
 
-# TODO use hal_attribute() when available in P
-attribute hal_iplm;
-expandattribute hal_iplm true;
-attribute hal_iplm_client;
-expandattribute hal_iplm_client true;
-attribute hal_iplm_server;
-expandattribute hal_iplm_server false;
-
+hal_attribute(iplm)
 
 binder_call(hal_iplm_client, hal_iplm_server)
+binder_call(hal_iplm_server, hal_iplm_client)
+
 add_hwservice(hal_iplm_server, hal_iplm_hwservice)
 allow hal_iplm_client hal_iplm_hwservice:hwservice_manager find;
+
+allow system_app hal_iplm_hwservice:hwservice_manager find;

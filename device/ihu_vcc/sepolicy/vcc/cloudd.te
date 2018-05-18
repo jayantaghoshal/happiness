@@ -1,13 +1,15 @@
 # cloudd service
 type cloudd, domain;
 type cloudd_exec, exec_type, file_type, vendor_file_type;
+
 init_daemon_domain(cloudd)
 
-net_domain(cloudd)
+typeattribute cloudd hal_automotive_socket_exemption;
 
 allow cloudd self:capability2 wake_alarm;
-#allow cloudd self:capability net_raw;
 
-# hwservicemanager accesses will probably be handled by hal_client/server() macros
-hwbinder_use(cloudd)
-allow cloudd hwservicemanager_prop:file { getattr open read };
+# Allow network
+net_domain(cloudd)
+
+#Allow Cloud HAL server
+hal_server_domain(cloudd, hal_cloud)

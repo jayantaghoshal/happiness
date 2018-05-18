@@ -4,6 +4,5 @@ type dimmanager_exec, exec_type, file_type, vendor_file_type;
 
 init_daemon_domain(dimmanager)
 
-# hwservicemanager accesses will probably be handled by hal_client/server() macros
-hwbinder_use(dimmanager)
-allow dimmanager hwservicemanager_prop:file { getattr open read };
+# Allow VehicleCom HAL client
+hal_client_domain(dimmanager, hal_vehiclecom)

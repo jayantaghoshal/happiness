@@ -6,6 +6,5 @@ allow dataelements-hidl-server carconfig-updater:binder call;
 
 init_daemon_domain(dataelements-hidl-server)
 
-# hwservicemanager accesses will probably be handled by hal_client/server() macros
-hwbinder_use(dataelements-hidl-server)
-allow dataelements-hidl-server hwservicemanager_prop:file { getattr open read };
+# Allow Signals HAL server
+hal_server_domain(dataelements-hidl-server, hal_signals)

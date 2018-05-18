@@ -1,0 +1,12 @@
+#define signals hal
+type hal_signals_hwservice, hwservice_manager_type;
+
+hal_attribute(signals)
+
+binder_call(hal_signals_client, hal_signals_server)
+binder_call(hal_signals_server, hal_signals_client)
+
+add_hwservice(hal_signals_server, hal_signals_hwservice)
+allow hal_signals_client hal_signals_hwservice:hwservice_manager find;
+
+#allow system_app hal_signals_hwservice:hwservice_manager find;
