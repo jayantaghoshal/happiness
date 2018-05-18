@@ -21,12 +21,12 @@ source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "$REPO_ROOT_DIR"/vendor/volvocars/tools/envsetup.sh
 
-# Pull out files uploaded to Artifactory in gate_build.sh.
+# Pull out files uploaded to artinfcm in gate_build.sh.
 OUT_ARCHIVE=out.tgz
 rm -rf out "${OUT_ARCHIVE}"
 
-artifactory pull ihu_gate_build "${ZUUL_COMMIT}" "${OUT_ARCHIVE}" \
-    || die "Could not pull out archive from Artifactory."
+time scp -o StrictHostKeyChecking=no jenkins@artinfcm.volvocars.net:/home/jenkins/archive/ihu_gate_build*/"${ZUUL_COMMIT}"/"${OUT_ARCHIVE}" . \
+    || die "Could not fetch archive from artinfcm."
 
 tar xvf "${OUT_ARCHIVE}" || die "Could not extract out archive."
 rm "${OUT_ARCHIVE}"
