@@ -1,5 +1,0 @@
-service mqttd /vendor/bin/mqttd
-    class vcc_net
-    user root
-    group root
-    seclabel u:r:mqttd:s0

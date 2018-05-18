@@ -14,8 +14,4 @@ interface ICloudConnectionEventListener
      */
     oneway enteredErrorState(string reason);
 
-    /**
-     * Placeholder for MQTT push notification
-     */
-    oneway shoulderTap(string tap);
 };

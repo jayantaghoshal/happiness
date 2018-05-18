@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -16,6 +16,7 @@ struct EntryPoint {
     std::string client_uri;
     std::string host;
     int port;
+    std::string signal_service_uri;
 };
 /*
  * Tries to parse out an EntryPoint from a XML document. Throws runtime error if it fails.

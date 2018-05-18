@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -102,10 +102,10 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
         service.enteredErrorState(reason);
     }
 
-    @Override
-    public void shoulderTap(String tap) {
-        // TODO: Place holder for MQTT
-    }
+    // @Override
+    // public void shoulderTap(String tap) {
+    //     // TODO: Place holder for MQTT
+    // }
 
     public class DownloadResponseCallback extends ICloudConnectionDownloadResponseCallback.Stub {
         @Override

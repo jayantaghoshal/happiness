@@ -10,18 +10,7 @@ cc_binary {
     vendor: true,
     cpp_std: "c++14",
 
-    srcs: [
-        "src/certificate_handler_interface.cpp",
-        "src/certificate_handler.cpp",
-        "src/cloud_request_handler_interface.cpp",
-        "src/cloud_request_handler.cpp",
-        "src/cloud_request.cpp",
-        "src/cloud_service.cpp",
-        "src/cloudd_local_config.cpp",
-        "src/entry_point_fetcher.cpp",
-        "src/entry_point_parser.cpp",
-        "src/main.cpp",
-    ],
+    srcs: ["src/*.cpp"],
 
     cppflags: [
         "-Wno-non-virtual-dtor",
@@ -41,6 +30,7 @@ cc_binary {
         "libutils",
         "libz",
         "libhwbinder",
+        "libpaho-mqttpp3",
         "android.hardware.gnss@1.0",
         "vendor.volvocars.hardware.cloud@1.0",
     ],

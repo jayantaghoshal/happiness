@@ -15,6 +15,7 @@
 #include "cloudd_local_config.h"
 #include "entry_point_fetcher.h"
 
+#include "mqtt_callbacks.h"
 using ::tarmac::eventloop::IDispatcher;
 using ::vendor::volvocars::hardware::cloud::V1_0::HttpHeaderField;
 using ::vendor::volvocars::hardware::cloud::V1_0::HttpHeaders;
@@ -91,10 +92,17 @@ class CloudService : public ICloudConnection {
     std::shared_ptr<CertHandlerInterface> cert_handler_;
     EntryPointFetcher entry_point_fetcher_;
 
+    // MQTT client handler
+    mqtt::async_client_ptr client_;
+    mqtt::connect_options connopts_;
+    MqttCallback mqtt_cb_;
+    void ConnectToMqttServer();
+
     std::shared_ptr<CloudRequest> download_request_;
 
     std::string cep_url_;
     int cep_port_;
+    std::string cep_mqtt_server_;
 };
 
 }  // namespace Connectivity

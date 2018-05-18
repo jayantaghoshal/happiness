@@ -26,7 +26,6 @@ CloudService::CloudService()
       entry_point_fetcher_{cert_handler_, cloud_request_handler_} {}
 
 bool CloudService::Initialize() {
-    // Subscribe to ipcbd
     android::status_t status = ICloudConnection::registerAsService();
     if (status != android::OK) {
         ALOGW("[Service] Failed to register Http binder service: %d", status);
@@ -57,12 +56,19 @@ bool CloudService::FetchEntryPoint() {
             protocol = "https://";
         }
 
-        cep_url_ = protocol + entry_point.host;
-        cep_port_ = entry_point.port;
+        if ((protocol == "https://") || (protocol == "http://")) {
+            cep_url_ = protocol + entry_point.host;
+            cep_port_ = entry_point.port;
+        }
+
+        cep_mqtt_server_ = entry_point.signal_service_uri;
 
         ALOGD("[Service] CEP URL: %s:%d", cep_url_.c_str(), cep_port_);
+        ALOGD("[Service] CEP MQTT server: %s", cep_mqtt_server_.c_str());
 
-        SetConnectionState(ConnectionState::CONNECTED);
+        state_ = ConnectionState::CONNECTED;
+        ConnectToMqttServer();
+
     });
 
     try {
@@ -118,7 +124,7 @@ void CloudService::SetConnectionState(const ConnectionState state) {
              /* increased inside loop */) {
             auto result = listener->get()->isConnected(state == ConnectionState::CONNECTED);
             if (!result.isOk()) {
-                ALOGE(LOG_TAG, "Listener no longer valid, removing from list");
+                ALOGE("Listener no longer valid, removing from list");
                 listener = listeners_.erase(listener);
             } else {
                 ++listener;
@@ -127,6 +133,33 @@ void CloudService::SetConnectionState(const ConnectionState state) {
     }
 }
 
+void CloudService::ConnectToMqttServer() {
+    client_ = std::make_shared<mqtt::async_client>(cep_mqtt_server_, CLIENT_ID);
+    connopts_.set_keep_alive_interval(KEEP_ALIVE_INTERVAL);
+    connopts_.set_clean_session(true);
+    connopts_.set_automatic_reconnect(2, 2);
+
+    mqtt_cb_.SetConnectionHandler([&]() { client_->subscribe(TOPIC, QOS, nullptr, mqtt_cb_.subListener_); });
+
+    mqtt_cb_.SetMessageHandler([&](mqtt::const_message_ptr msg) {
+        ALOGD("\ttopic: '%s'", msg->get_topic().c_str());
+        ALOGD("\tpayload: '%s", msg->to_string().c_str());
+    });
+    client_->set_callback(mqtt_cb_);
+
+    // Start the connection.
+    // When completed, the callback will subscribe to topic.
+
+    try {
+        ALOGD("Connect first attempt to the MQTT broker ...");
+        client_->connect(connopts_, nullptr, mqtt_cb_);
+        ALOGD("the server is: %s", client_->get_server_uri().c_str());
+    } catch (const mqtt::exception& exc) {
+        ALOGE("ERROR: %s", exc.what());
+        ALOGE("ERROR: Unable to connect to MQTT broker: %s''", cep_mqtt_server_.c_str());
+        return;
+    }
+}
 // Methods from ICloudConnection follow.
 Return<void> CloudService::registerCloudConnectionEventListener(
         const android::sp<ICloudConnectionEventListener>& listener) {
