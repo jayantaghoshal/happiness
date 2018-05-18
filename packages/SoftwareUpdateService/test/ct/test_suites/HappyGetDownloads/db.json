@@ -42,7 +42,7 @@
           "textblock": "An interesting and informative text describing the patch"
         },
         "size": "366.4",
-        "status": "COMMISSIONABLE",
+        "status": "NON-COMMISSIONABLE",
         "type": "SYSTEM",
         "commission_uri": "commission"
       },

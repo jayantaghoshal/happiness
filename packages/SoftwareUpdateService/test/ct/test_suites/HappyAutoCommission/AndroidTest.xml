@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration description="Software Management Test -- Tests Get Assignments and Commission Assignment">
-
     <target_preparer class="com.android.tradefed.targetprep.InstallBuildEnvApkSetup">
         <option name="apk-name" value="softwareupdateapp.apk" />
     </target_preparer>
-
     <target_preparer class="com.android.tradefed.targetprep.RunHostCommandTargetPreparer">
         <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyAutoCommission/prepare.sh" />
-
         <option name="host-setup-command" value="adb reverse tcp:3000 tcp:3000" />
-
         <option name="host-teardown-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/packages/SoftwareUpdateService/test/ct/cloudsim/teardown.sh" />
     </target_preparer>
-
     <target_preparer class="com.android.tradefed.targetprep.RunCommandTargetPreparer">
         <option name="run-command" value="settings put global package_verifier_enable 0" />
-        <option name="run-command" value="am force-stop com.volvocars.cloudservice" />
-        <option name="run-command" value="am force-stop com.volvocars.softwareupdate" />
-        <option name="run-command" value="am force-stop com.volvocars.softwareupdateapp" />
+        <option name="run-command" value="killall -9 com.volvocars.cloudservice" />
+        <option name="run-command" value="killall -9 com.volvocars.softwareupdate" />
+        <option name="run-command" value="killall -9 com.volvocars.softwareupdateapp" />
         <option name="run-command" value="stop cloudd" />
         <option name="run-command" value="killall -9 cloudd" />
         <option name="run-bg-command" value="VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig_cloud.json /vendor/bin/cloudd" />
     </target_preparer>
-
     <test class="com.android.tradefed.testtype.AndroidJUnitTest">
         <option name="package" value="com.volvocars.softwareupdateapp" />
         <option name="runtime-hint" value="40s" />
         <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyAutoCommissionAssignment" />
     </test>
-
     <result_reporter class="com.android.tradefed.result.ConsoleResultReporter" />
     <result_reporter class="com.android.tradefed.result.XmlResultReporter" />
 </configuration>
