@@ -25,7 +25,7 @@ source "$REPO_ROOT_DIR"/vendor/volvocars/tools/envsetup.sh
 OUT_ARCHIVE=out.tgz
 rm -rf out "${OUT_ARCHIVE}"
 
-time scp -o StrictHostKeyChecking=no jenkins@artinfcm.volvocars.net:/home/jenkins/archive/ihu_gate_build*/"${ZUUL_COMMIT}"/"${OUT_ARCHIVE}" . \
+time scp -o StrictHostKeyChecking=no jenkins@artinfcm.volvocars.net:/home/jenkins/archive/*/"${ZUUL_COMMIT}"/"${OUT_ARCHIVE}" . \
     || die "Could not fetch archive from artinfcm."
 
 tar xvf "${OUT_ARCHIVE}" || die "Could not extract out archive."
