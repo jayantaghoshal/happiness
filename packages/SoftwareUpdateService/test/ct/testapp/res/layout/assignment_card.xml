@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:text="Downloads: "
+                    android:text="Nr of files to download: "
                 />
                 <TextView
                 android:id="@+id/downloads"
@@ -118,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:text="Downloaded Resources: "
+                    android:text="Nr of downloaded resources: "
                 />
                 <TextView
                 android:id="@+id/downloadedResources"

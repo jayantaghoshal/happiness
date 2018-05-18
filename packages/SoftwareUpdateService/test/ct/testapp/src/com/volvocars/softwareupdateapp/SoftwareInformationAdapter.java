@@ -150,8 +150,8 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             holder.installationStatusLayout.setVisibility(View.INVISIBLE);
 
         String str = "";
-        for (String download : swInfo.downloadInfo.resourceUris) {
-            str += download + "\n";
+        if(!swInfo.downloadInfo.resourceUris.isEmpty()) {
+            str = Integer.toString(swInfo.downloadInfo.resourceUris.size());
         }
         holder.downloads.setText(str);
         if (holder.moreInfo && !swInfo.downloadInfo.resourceUris.isEmpty())
@@ -160,9 +160,10 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             holder.downloadsLayout.setVisibility(View.INVISIBLE);
 
         str = "";
-        for (String download : swInfo.downloadInfo.downloadedResources) {
-            str += download + "\n";
+        if(!swInfo.downloadInfo.downloadedResources.isEmpty()) {
+            str = Integer.toString(swInfo.downloadInfo.downloadedResources.size());
         }
+
         holder.downloadedResources.setText(str);
         if (holder.moreInfo && !swInfo.downloadInfo.downloadedResources.isEmpty())
             holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
