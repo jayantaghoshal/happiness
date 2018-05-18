@@ -47,6 +47,10 @@
 
   <remove-project name="aosp/platform/tools/tradefederation"/>
   <project name="aosp/platform/tools/tradefederation" path="tools/tradefederation/core" revision="68ba69290e3673b95766200b3076836936f61086" />
+
+  <remove-project name="aosp/platform/frameworks/opt/net/ethernet"/>
+  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="e2df01945be5807aaeb79010d66d38cf696a4ea5" />
+
   <!-- Aptiv Overrides -->
   <remove-project name="bsp/hardware/stmicroelectronics/SensorHAL-IIO_asm330lhh" />
   <remove-project name="vendor/delphi/android_patches" />
