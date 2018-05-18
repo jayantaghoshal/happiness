@@ -57,8 +57,7 @@ server.post('/commission', function (req, res, next) {
       var tmp = updates.value()[i];
 
       counter++;
-
-      addInstallationOrder(tmp, counter.toString());
+      addInstallationOrder(tmp, createInstallationOrderId(counter));
 
       for (i = 0; i < updates.value().length; i++) {
         if (updates.value()[i]['id'] != req.body.id) {
@@ -86,8 +85,7 @@ server.post('/commission', function (req, res, next) {
         var tmp = accessories.value()[i];
 
         counter++;
-
-        addInstallationOrder(tmp, counter.toString());
+        addInstallationOrder(tmp, createInstallationOrderId(counter));
 
         for (i = 0; i < accessories.value().length; i++) {
           if (accessories.value()[i]['id'] != req.body.id) {
@@ -115,7 +113,7 @@ server.post('/commission', function (req, res, next) {
       if (d.value()[j]['id'] == req.body.id) {
         var tmpObj = Object.assign({}, d.value()[j]);
         tmpObj['id'] = req.body.id;
-        tmpObj['installation_order_id'] = counter.toString();
+        tmpObj['installation_order_id'] = createInstallationOrderId(counter);
         db.get('downloads').push(tmpObj).write();
         break;
       }
@@ -125,6 +123,16 @@ server.post('/commission', function (req, res, next) {
   req.method = 'GET';
   next();
 });
+
+function createInstallationOrderId(counter) {
+  var counter_uuid_format_prefix = counter.toString(16);
+      while (counter_uuid_format_prefix.length < 8) {
+        counter_uuid_format_prefix = '0' + counter_uuid_format_prefix;
+      }
+      var id_suffix ="-caf6-4710-05a9-472200ad680c";
+      var counter_uuid_format = counter_uuid_format_prefix + id_suffix;
+      return counter_uuid_format;
+}
 
 function addInstallationOrder(obj, id) {
   var installation_order_data = {};
