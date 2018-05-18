@@ -9,9 +9,10 @@ import json
 import redis
 import os
 
+logger = logging.getLogger(__name__)
+
 VCC_CI_API_URL = "http://cimb.volvocars.biz/api/1.6.0"
 redis_con = redis.Redis("gotsvl1416.got.volvocars.net")
-
 
 class VCCCIProxy(object):
 
@@ -37,7 +38,7 @@ class VCCCIProxy(object):
         return "https://icup_android.jenkins.cm.volvocars.biz/job/%s/%s" % (self.testsuite_name, self.test_job_build_number)
 
     def print_json(self, data):
-        logging.info(json.dumps(data,
+        logger.debug(json.dumps(data,
                                 sort_keys=True,
                                 indent=4,
                                 separators=(',', ': ')))
@@ -64,11 +65,11 @@ class VCCCIProxy(object):
         }
 
         url = VCC_CI_API_URL + "/TestcaseStarted"
-        logging.info("POST request to VCC-CI - %s", url)
+        logger.info("POST request to VCC-CI - %s", url)
         self.print_json(data)
         r = requests.post(url, data=json.dumps(data), headers=self.headers())  # type: ignore
-        logging.debug(str(r.status_code))
-        logging.debug(r.text)
+        logger.debug(str(r.status_code))
+        logger.debug(r.text)
 
     def testcase_finished(self, module_name: str, status: bool, testrun_uuid: str):
 
@@ -84,8 +85,8 @@ class VCCCIProxy(object):
         }
 
         url = VCC_CI_API_URL + "/TestcaseFinished"
-        logging.info("POST request to VCC-CI - %s", url)
+        logger.info("POST request to VCC-CI - %s", url)
         self.print_json(data)
         r = requests.post(url, data=json.dumps(data), headers=self.headers())  # type: ignore
-        logging.debug(str(r.status_code))
-        logging.debug(r.text)
+        logger.debug(str(r.status_code))
+        logger.debug(r.text)

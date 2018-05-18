@@ -48,7 +48,7 @@ if [ "$(checkIfVtsPackageUpToDate "$VTS_REPO_HASH")" == "rebuilt" ];then
 else
     artifactory pull vts_build_package "$VTS_REPO_HASH" outVTS.tgz || die "Could not fetch out archive from Artifactory."
     mkdir -p -m 755 vtsPackage
-    tar xvf outVTS.tgz -C vtsPackage/
+    tar xf outVTS.tgz -C vtsPackage/
     cp -r -n -a vtsPackage/out/* out/
 fi
 

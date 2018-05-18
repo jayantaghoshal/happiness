@@ -50,8 +50,9 @@ class console_reporter(abstract_reporter):
                     if 'message' in result:
                         print("      Message: {}".format(result['message']))
                     if 'stacktrace' in result:
-                        print("      StackTrace:")
-                        _print_indented(result['stacktrace'], "      >> ")
+                        if not ('message' in result and result['stacktrace'] == result['message']):
+                            print("      StackTrace:")
+                            _print_indented(result['stacktrace'], "      >> ")
                 #if ntr.console:
                 #    print("   Console:")
                 #    _print_indented(ntr.console, "      >> ")
