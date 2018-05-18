@@ -290,7 +290,7 @@ RUN pip2 install \
     openpyxl==2.3.3
 
 RUN pip2 install \
-    SWAT==4.4.0 \
+    SWAT==4.5.0 \
     --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
 ##################################################

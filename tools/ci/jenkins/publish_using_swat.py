@@ -19,6 +19,8 @@ USER = "e9426001"  # case sensitive
 PROJECTS = ['519G', 'P319']
 SW_TAGS = ['SXBL', 'SWBL', 'SWL3', 'SWLM', 'SWP2', 'SWL2']
 HW_PART_NUMBERS = ['50877022000', '50902267000']
+SIGNAL_DATABASE = "SPA2610"
+ARCHITECTURE = "CMASPA"
 API_KEY = os.environ["ARTIFACTORY_API_KEY"]
 CHAIN_ID = redis_con.get(
     "icup_android.gerrit.commit_id." + os.environ["UPSTREAM_JOB_GIT_REVISION"] + ".change_id").decode("utf-8")
@@ -27,7 +29,11 @@ CHAIN_ID = redis_con.get(
 def create_ip():
     try:
         subprocess.check_call(
-            ['swat', 'create_ip', '--username='+USER, '--ecu='+ECU, '--ip='+IP])
+            ['swat',
+             'create_ip',
+             '--username='+USER,
+             '--ecu='+ECU,
+             '--ip='+IP])
 
     except subprocess.CalledProcessError as e:
         if e.returncode == 10:
@@ -40,7 +46,16 @@ def create_ip():
 def set_meta_data_in_ip():
     try:
         subprocess.check_call(
-            ['swat', 'set_meta_data_in_ip', '--username='+USER, '--ecu='+ECU, '--ip='+IP, '--projects'] + PROJECTS + ['--sw_tags'] + SW_TAGS + ['--hw_part_numbers'] + HW_PART_NUMBERS)
+            ['swat',
+             'set_meta_data_in_ip',
+             '--username='+USER,
+             '--ecu='+ECU,
+             '--ip='+IP,
+             '--projects'] + PROJECTS
+            + ['--sw_tags'] + SW_TAGS
+            + ['--hw_part_numbers'] + HW_PART_NUMBERS
+            + ['-sdb'] + SIGNAL_DATABASE
+            + ['-arc'] + ARCHITECTURE)
 
     except subprocess.CalledProcessError as e:
         logging.error(e)
@@ -49,8 +64,16 @@ def set_meta_data_in_ip():
 
 def add_file_to_ip(TAG, sw_tags_to_filename, file_path):
     try:
-        subprocess.check_call(['swat', 'add_file_to_ip', '--username='+USER, '--ecu='+ECU,
-                                        '--ip='+IP, '--file_path='+os.path.join(file_path, sw_tags_to_filename[TAG]), '--sw_tag='+TAG, '--sw_details=\"Chain-Id: '+CHAIN_ID+'\"', '--api_key_swf1='+API_KEY])
+        subprocess.check_call(
+            ['swat',
+             'add_file_to_ip',
+             '--username='+USER,
+             '--ecu='+ECU,
+             '--ip='+IP,
+             '--file_path='+os.path.join(file_path, sw_tags_to_filename[TAG]),
+             '--sw_tag='+TAG,
+             '--sw_details=\"Chain-Id: '+CHAIN_ID+'\"',
+             '--api_key_swf1='+API_KEY])
 
     except subprocess.CalledProcessError as e:
         logging.error(e)
@@ -60,7 +83,13 @@ def add_file_to_ip(TAG, sw_tags_to_filename, file_path):
 def publish_ip():
     try:
         subprocess.check_call(
-            ['swat', 'publish_ip', '--username='+USER, '--ecu='+ECU, '--ip='+IP, '--api_key_swf1='+API_KEY], stderr=subprocess.STDOUT)
+            ['swat',
+             'publish_ip',
+             '--username='+USER,
+             '--ecu='+ECU,
+             '--ip='+IP,
+             '--api_key_swf1='+API_KEY],
+             stderr=subprocess.STDOUT)
 
     except subprocess.CalledProcessError as e:
         logging.error(e)
