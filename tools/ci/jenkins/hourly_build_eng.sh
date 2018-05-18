@@ -69,7 +69,8 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 du -sh "$OUT_ARCHIVE"
 
 # Upload to Artifactory
-time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".mp_part_number "${MP_PART_NUMBER}" || die "redis-cli set failed"
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".commit "${GIT_COMMIT}" || die "redis-cli set failed"
 
 # Set this job to latest image build in Redis
