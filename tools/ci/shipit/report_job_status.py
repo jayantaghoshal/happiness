@@ -6,7 +6,10 @@ from shipit import reporter
 import os
 import json
 import logging.config
+import logging
 from jenkins import Jenkins
+
+logger = logging.getLogger(__name__)
 
 # Used to report hourly/daily test status from Jenkins
 
@@ -20,16 +23,25 @@ po_emails = {
 }
 
 
-def get_job_status(jenkins_job_name: str, jenkins_build_number: str):
-    jenkins = Jenkins('https://icup_android.jenkins.cm.volvocars.biz',
-            username=os.environ['JENKINS_USER'],
-            password=os.environ['JENKINS_API_PASSWORD'])
-    build_info = jenkins.get_build_info(jenkins_job_name, int(jenkins_build_number), depth=0)
-    status = 'pass'
-    for build in build_info['subBuilds']:
-        if not build['result'] == 'SUCCESS':
-            status = 'fail'
-    return status
+class JenkinsClient():
+
+    def __init__(self):
+        os.environ['HTTP_PROXY'] = ''
+        os.environ['HTTPS_PROXY'] = ''
+        os.environ['http_proxy'] = ''
+        os.environ['https_proxy'] = ''
+        os.environ['NO_PROXY'] = ''
+        self._jenkins = Jenkins('https://icup_android.jenkins.cm.volvocars.biz',
+                username=os.environ['JENKINS_USER'],
+                password=os.environ['JENKINS_API_PASSWORD'])
+
+    def get_job_status(self, jenkins_job_name: str, jenkins_build_number: int):
+        build_info = self._jenkins.get_build_info(jenkins_job_name, jenkins_build_number, depth=0)
+        status = 'pass'
+        for build in build_info['subBuilds']:
+            if not build['result'] == 'SUCCESS':
+                status = 'fail'
+        return status
 
 
 def main():
@@ -38,37 +50,44 @@ def main():
     logging.config.dictConfig(log_config)
 
     jenkins_job_name = sys.argv[1]
-    jenkins_build_number = sys.argv[2]
-    git_hash = sys.argv[3]
-
     try:
-        int(jenkins_build_number)
+        jenkins_build_number = int(sys.argv[2])
     except ValueError as e:
         raise Exception('Unknown value for jenkins build number')
+    git_hash = sys.argv[3]
 
-    status = get_job_status(jenkins_job_name, jenkins_build_number)
+    jenkins_client = JenkinsClient()
+    status = jenkins_client.get_job_status(jenkins_job_name, jenkins_build_number)
+    if jenkins_build_number > 0:
+        last_status = jenkins_client.get_job_status(jenkins_job_name, jenkins_build_number - 1)
+    else:
+        last_status = 'none'
 
     if jenkins_job_name == 'ihu_hourly':
         if status == 'pass':
             #reporter.set_gerrit_confidence_level(jenkins_job_name, jenkins_build_nr, status) #Not implemented
             pass
         elif status == 'fail':
-            reporter.email_committers_since_last(jenkins_job_name, jenkins_build_number, git_hash)
+            if last_status == 'pass':
+                logger.info("Emailing committers since last")
+                reporter.email_committers_since_last(jenkins_job_name, str(jenkins_build_number), git_hash)
+            else:
+                pass
         else:
             raise Exception('Unknown value for status parameter')
     elif jenkins_job_name == 'ihu_daily':
         if status == 'pass':
-            #reporter.set_gerrit_confidence_level(jenkins_job_name, jenkins_build_nr, status) #Not implemented
+            #reporter.set_gerrit_confidence_level(jenkins_job_name, str(jenkins_build_number), status) #Not implemented
             pass
         elif status == 'fail':
             pass #Skipped as daily still ain't stable enough
-            #reporter.email_list_of_users(po_emails, jenkins_job_name, jenkins_build_number, git_hash)
+            #reporter.email_list_of_users(po_emails, jenkins_job_name, str(jenkins_build_number), git_hash)
         else:
             raise Exception('Unknown value for status parameter')
     else:
         raise Exception('Unknown value for jenkins job name parameter')
 
-    reporter.update_manifest_branch(jenkins_job_name, status, git_hash)
+    reporter.update_manifest_branches(jenkins_job_name, status, git_hash)
 
 
 if __name__ == "__main__":

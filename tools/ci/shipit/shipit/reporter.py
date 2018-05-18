@@ -4,13 +4,13 @@
 import html
 from typing import Iterable, Set
 from xml.etree import cElementTree as ET
-
 import subprocess
-
 from shipit import process_tools, git, smtp, paths
 from collections import namedtuple
 import shlex
+import logging
 
+logger = logging.getLogger(__name__)
 
 SUCCESS_BRANCHES = {
     "ihu_image_build": "ci/last_successful_hourly_build",    #Not used
@@ -23,7 +23,7 @@ SUCCESS_BRANCHES = {
 }
 
 LAST_BRANCHES = {
-    "ihu_hourly": "ci/last_successful_hourly_build",#"ci/last_run_hourly",
+    "ihu_hourly": "ci/last_run_hourly",
     "ihu_daily": "ci/last_run_daily",
     "ihu_weekly": "ci/last_run_weekly", #Not used
 }
@@ -123,11 +123,17 @@ def _make_committer_list(from_branch: str, to_git_hash: str):
     return committer_list
 
 
-def update_manifest_branch(jenkins_job_name, status, git_hash: str="HEAD"):
+def update_manifest_branches(jenkins_job_name, status, git_hash: str="HEAD"):
     if status == 'pass':
         branch = SUCCESS_BRANCHES[jenkins_job_name]
-    else:
-        branch = LAST_BRANCHES[jenkins_job_name]
+        logger.info("Updating branch: {}".format(branch))
+        update_manifest_branch(branch, git_hash)
+    branch = LAST_BRANCHES[jenkins_job_name]
+    logger.info("Updating branch: {}".format(branch))
+    update_manifest_branch(branch, git_hash)
+
+
+def update_manifest_branch(branch: str, git_hash: str='HEAD'):
     manifest_repo = git.Repo(paths.manifest())
     manifest_repo.run_git(['fetch', '--all'])
     revMaster = manifest_repo.run_git(['rev-parse', git_hash]).strip()
