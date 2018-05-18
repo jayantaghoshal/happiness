@@ -74,10 +74,13 @@ time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
 du -sh "$BUILD_META_DATA"
 
 # Upload to Artifactory
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${OUT_ARCHIVE}"
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${DIST_ARCHIVE}"
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${IHU_UPDATE_ARCHIVE}"
-time artifactory push ihu_daily_build_vcc_eng "${BUILD_NUMBER}" "${BUILD_META_DATA}"
+time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${OUT_ARCHIVE}"
+time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${DIST_ARCHIVE}"
+time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${IHU_UPDATE_ARCHIVE}"
+time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${BUILD_META_DATA}"
+
+# Storing part number and build number in redis. It can be used as lookup table.
+redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".mp_part_number "${MP_PART_NUMBER}" || die "redis-cli set failed"
 
 # Cleanup
 rm "${OUT_ARCHIVE}"

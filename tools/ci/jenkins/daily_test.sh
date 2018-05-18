@@ -31,6 +31,9 @@ then
 fi
 export capability
 
+export MP_PART_NUMBER
+MP_PART_NUMBER=$(redis-cli get icup_android.jenkins."${UPSTREAM_JOB_JOBNAME}"."${UPSTREAM_JOB_NUMBER}".mp_part_number)
+
 set +e
 
 # Run Unit and Component tests for vendor/volvocars
@@ -40,7 +43,7 @@ time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/shipit/tester.py run \
     --vcc_dashboard_reporting \
     --report_results_to_ci_database \
     --update_ihu \
-    --download "${UPSTREAM_JOB_JOBNAME}"/"${UPSTREAM_JOB_NUMBER}"/out.tgz \
+    --download "${UPSTREAM_JOB_JOBNAME}"/"${UPSTREAM_JOB_NUMBER}"_"${MP_PART_NUMBER}"/out.tgz \
     -c ihu-generic adb mp-serial vip-serial flexray_or_carsim ${capability} \
     -o ${capability}
 status=$?
