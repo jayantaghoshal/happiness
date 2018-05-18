@@ -72,6 +72,8 @@ function storecimetrix() {
        buildFunc="mmma"
     elif [[ "$buildFunc" == *"artifactory"* ]]; then
        buildFunc="artifactorypush"
+    elif [[ "$buildFunc" == *"scp"* ]]; then
+       buildFunc="gateflowscp"
     fi
 
     set +e
