@@ -138,6 +138,14 @@ PRODUCT_PACKAGES += \
 endif
 
 ##############################################################
+# Configurations for engineering build only
+##############################################################
+ifneq (,$(filter eng, $(TARGET_BUILD_VARIANT)))
+PRODUCT_PACKAGES += \
+    execns
+endif
+
+##############################################################
 # Google Services
 ##############################################################
 
