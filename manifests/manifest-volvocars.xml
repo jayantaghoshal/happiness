@@ -30,6 +30,9 @@
   <project name="vendor/volvocars/external/paho.mqtt.cpp" path="vendor/volvocars/external/paho.mqtt.cpp" revision="a436f5d21dea33e3d28eb0885aff45d859d04b79"/>
 
   <!-- AOSP Overrides -->
+  <remove-project name="aosp/platform/system/sepolicy" />
+  <project name="aosp/platform/system/sepolicy" path="system/sepolicy" revision="66e033d86df24bf0ff9a192ef08e5a3abca035eb" />
+
   <remove-project name="aosp/platform/external/iproute2" />
   <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="f4b742bec30463b5c562d471f71552025e42949c" />
 
