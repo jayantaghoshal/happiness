@@ -38,6 +38,6 @@ function get_repos {
     fi
 }
 function clean_all {
-    find . -type f -delete && find . -type d -empty -delete
+    find . -type f -delete && find . -type l -delete && find . -type d -empty -delete
 }
 get_repos || (clean_all && get_repos)
