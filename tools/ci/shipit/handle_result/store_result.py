@@ -146,7 +146,7 @@ def load_test_results(test: IhuBaseTest,
 
 
     common_identifiers = {}  # type: Dict[str, Any]
-    common_identifiers["testrun_id"] = testrun_uuid
+    common_identifiers["testrun_id"] = bson.ObjectId(testrun_uuid)
     if isinstance(test, VTSTest):
         common_identifiers["test_dir_name"] = test.test_root_dir
     elif isinstance(test, TradefedTest):

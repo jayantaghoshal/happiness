@@ -18,7 +18,7 @@ from shipit.testscripts import get_test_set, assemble_plan, get_component, build
     detect_loose_test_cases, enforce_timeout_in_gate_tests
 from shipit.test_runner.test_types import ResultData
 from utilities import ihuhandler, artifact_handler
-
+import bson
 
 class Tester:
 
@@ -61,7 +61,7 @@ class Tester:
         test_results = []  # type: List[ResultData]
         self._plan_started()
         for t in tests_to_run:
-            test_id = uuid.uuid4().hex
+            test_id = str(bson.ObjectId())  #TODO: Quick hack to get valid objectid, should not have dependency to mongo bson?
             self._module_started(t, test_id)
             test_result = run_test(t, max_testtime_sec)
             test_results.append(test_result)
