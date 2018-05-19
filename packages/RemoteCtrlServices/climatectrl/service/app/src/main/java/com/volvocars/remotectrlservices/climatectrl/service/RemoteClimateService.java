@@ -5,32 +5,28 @@
 
 package com.volvocars.remotectrlservices.climatectrl.service;
 
-import android.support.annotation.Nullable;
-import android.content.Context;
-import android.content.ComponentName;
 import android.app.Service;
+import android.car.Car;
+import android.car.CarNotConnectedException;
+import android.car.hardware.CarPropertyValue;
+import android.car.hardware.hvac.CarHvacManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
-import android.os.IBinder.DeathRecipient;
-import android.os.RemoteException;
-import android.os.Bundle;
-import android.util.Log;
 import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
+
+import com.volvocars.remotectrl.interfaces.IRemoteCtrlPropertyResponseService;
+import com.volvocars.remotectrl.interfaces.IRemoteCtrlPropertyService;
+import com.volvocars.remotectrl.interfaces.RemoteCtrlPropertyValue;
+import com.volvocars.remotectrlservices.carproperty.CarPropertyUtils;
+import com.volvocars.remotectrlservices.climatectrl.service.task.GetCarPropertyAsyncTask;
+import com.volvocars.remotectrlservices.climatectrl.service.task.SetCarPropertyAsyncTask;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
-
-import android.car.Car;
-import android.car.CarNotConnectedException;
-import android.car.hardware.hvac.CarHvacManager;
-import android.car.hardware.CarPropertyValue;
-
-import com.volvocars.remotectrlservices.carproperty.CarPropertyUtils;
-import com.volvocars.remotectrlservices.climatectrl.IRemoteClimateResponseService;
-import com.volvocars.remotectrlservices.climatectrl.IRemoteClimateService;
-import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
-import com.volvocars.remotectrlservices.climatectrl.service.task.GetCarPropertyAsyncTask;
-import com.volvocars.remotectrlservices.climatectrl.service.task.SetCarPropertyAsyncTask;
 
 public class RemoteClimateService extends Service {
     private static final String TAG = "RemoteCtrl.ClimateCtrl.Service";
@@ -46,7 +42,7 @@ public class RemoteClimateService extends Service {
     private static final String REMOTE_CLIMATE_SERVICE_BIND_INTENT = ".RemoteClimateService.BIND";
 
     private boolean mIsRemoteClimateResponseServiceBound = false;
-    IRemoteClimateResponseService mIRemoteClimateResponseService = null;
+    IRemoteCtrlPropertyResponseService mIRemoteClimateResponseService = null;
 
     // TODO: Move these to support library for testing purposes Philip Werner (2018-04-23)
     private static AbstractList<Integer> mPropertiesListeningOn = new ArrayList<Integer>();
@@ -122,11 +118,10 @@ public class RemoteClimateService extends Service {
         if (bindService(bindServiceIntent, mRemoteClimateResponseServiceConnection,
                     Context.BIND_AUTO_CREATE)) {
             mIsRemoteClimateResponseServiceBound = true;
+            Log.v(TAG, "IRemoteClimateResponseService bound");
         } else {
             Log.e(TAG, "Failed to bind IRemoteClimateResponseService");
         }
-
-        Log.v(TAG, "IRemoteClimateResponseService bound");
     }
 
     private void unbindRemoteClimateResponseService() {
@@ -178,6 +173,7 @@ public class RemoteClimateService extends Service {
 
                         if (!isCommunicationHandshakeReady()) {
                             Log.v(TAG, "Communication handshake not completed. Ignoring callback.");
+                            return;
                         }
 
                         if (mPropertiesListeningOn.contains(value.getPropertyId())) {
@@ -195,8 +191,8 @@ public class RemoteClimateService extends Service {
                 }
             };
 
-    private final IRemoteClimateService.Stub mRemoteClimateServiceBinder =
-            new IRemoteClimateService.Stub() {
+    private final IRemoteCtrlPropertyService.Stub mRemoteClimateServiceBinder =
+            new IRemoteCtrlPropertyService.Stub() {
 
                 public void setProperty(int requestIdentifier, RemoteCtrlPropertyValue propValue) {
                     Log.v(TAG, "---------------setProperty------------");
@@ -223,7 +219,7 @@ public class RemoteClimateService extends Service {
                 Log.v(TAG, "IRemoteClimateResponseService connected.");
 
                 mIRemoteClimateResponseService =
-                        IRemoteClimateResponseService.Stub.asInterface(service);
+                        IRemoteCtrlPropertyResponseService.Stub.asInterface(service);
             }
         }
 

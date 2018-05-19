@@ -8,7 +8,7 @@ package com.volvocars.remotectrlservices.property;
 import android.car.hardware.CarPropertyValue;
 import android.car.hardware.hvac.CarHvacManager;
 
-import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
+import com.volvocars.remotectrl.interfaces.RemoteCtrlPropertyValue;
 
 import java.util.HashMap;
 import java.util.Map;

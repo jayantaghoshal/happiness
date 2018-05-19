@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-package com.volvocars.remotectrlservices.climatectrl.gateway;
+package com.volvocars.remotectrlservices.gateway;
 
 public interface ServiceNotificationInterface {
     void notifyServiceConnected();

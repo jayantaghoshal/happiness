@@ -7,7 +7,7 @@ package com.volvocars.remotectrlservices.property;
 
 import android.car.hardware.CarPropertyValue;
 
-import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
+import com.volvocars.remotectrl.interfaces.RemoteCtrlPropertyValue;
 
 import vendor.volvocars.hardware.remotectrl.V1_0.RemoteCtrlHalPropertyType;
 import vendor.volvocars.hardware.remotectrl.V1_0.RemoteCtrlHalPropertyValue;

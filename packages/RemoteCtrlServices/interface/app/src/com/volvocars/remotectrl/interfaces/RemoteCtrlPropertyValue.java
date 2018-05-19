@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-package com.volvocars.remotectrlservices.climatectrl;
+package com.volvocars.remotectrl.interfaces;
 
 import static java.lang.Integer.toHexString;
 

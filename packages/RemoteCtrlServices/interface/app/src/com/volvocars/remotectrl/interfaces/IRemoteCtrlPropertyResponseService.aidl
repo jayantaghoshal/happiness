@@ -1,11 +1,11 @@
-package com.volvocars.remotectrlservices.climatectrl;
+package com.volvocars.remotectrl.interfaces;
 
-import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
+import com.volvocars.remotectrl.interfaces.RemoteCtrlPropertyValue;
 
 /**
-* An interface to access RemoteClimateCtrl features
+* An interface to access IRemoteCtrlPropertyResponseService features
 */
-interface IRemoteClimateResponseService {
+interface IRemoteCtrlPropertyResponseService {
 
   /**
   * Report a response to pending set request

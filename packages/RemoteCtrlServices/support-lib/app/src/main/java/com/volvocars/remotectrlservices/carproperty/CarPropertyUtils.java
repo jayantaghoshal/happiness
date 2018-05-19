@@ -23,11 +23,11 @@ import vendor.volvocars.hardware.remotectrl.V1_0.RemoteCtrlHalProperty;
 import vendor.volvocars.hardware.remotectrl.V1_0.RemoteCtrlHalPropertyType;
 import vendor.volvocars.hardware.remotectrl.V1_0.RemoteCtrlHalPropertyStatus;
 
-import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
-
 import android.car.hardware.hvac.CarHvacManager;
 
 import android.util.Log;
+
+import com.volvocars.remotectrl.interfaces.RemoteCtrlPropertyValue;
 
 import java.util.Collections;
 import java.util.List;

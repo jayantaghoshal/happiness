@@ -12,10 +12,10 @@ import android.car.hardware.CarPropertyValue;
 import android.car.hardware.hvac.CarHvacManager;
 import android.util.Log;
 
+import com.volvocars.remotectrl.interfaces.IRemoteCtrlPropertyResponseService;
+import com.volvocars.remotectrl.interfaces.RemoteCtrlPropertyValue;
 import com.volvocars.remotectrlservices.carproperty.CarPropertyUtils;
 import com.volvocars.remotectrlservices.carproperty.CarHvacWrapper;
-import com.volvocars.remotectrlservices.climatectrl.IRemoteClimateResponseService;
-import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
 
 // TODO: See if this can be made more generic. (Philip Werner 2018-04-20)
 public class GetCarPropertyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -24,11 +24,11 @@ public class GetCarPropertyAsyncTask extends AsyncTask<Void, Void, Void> {
 
     int mRequestIdentifier;
     CarHvacManager mCarHvacManager = null;
-    IRemoteClimateResponseService mIRemoteClimateResponseService = null;
+    IRemoteCtrlPropertyResponseService mIRemoteClimateResponseService = null;
     RemoteCtrlPropertyValue mRemoteCtrlPropertyValue = null;
 
     protected GetCarPropertyAsyncTask(int requestIdentifier,
-            IRemoteClimateResponseService remoteCtrlPropertyResponseService,
+                                      IRemoteCtrlPropertyResponseService remoteCtrlPropertyResponseService,
             CarHvacManager carHvacManager,
                                       RemoteCtrlPropertyValue remoteCtrlPropertyValue) {
         mRequestIdentifier = requestIdentifier;
@@ -38,7 +38,7 @@ public class GetCarPropertyAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     public static GetCarPropertyAsyncTask create(int requestIdentifier,
-                                                 IRemoteClimateResponseService remoteClimateResponseService,
+                                                 IRemoteCtrlPropertyResponseService remoteClimateResponseService,
             CarHvacManager carHvacManager, RemoteCtrlPropertyValue propValue) {
         return new GetCarPropertyAsyncTask(
                 requestIdentifier, remoteClimateResponseService, carHvacManager, propValue);

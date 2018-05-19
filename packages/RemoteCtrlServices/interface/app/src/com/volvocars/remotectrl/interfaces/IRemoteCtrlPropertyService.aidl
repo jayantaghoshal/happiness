@@ -1,11 +1,11 @@
-package com.volvocars.remotectrlservices.climatectrl;
+package com.volvocars.remotectrl.interfaces;
 
-import com.volvocars.remotectrlservices.climatectrl.RemoteCtrlPropertyValue;
+import com.volvocars.remotectrl.interfaces.RemoteCtrlPropertyValue;
 
 /**
-* An interface to access RemoteClimateCtrl features
+* An interface to access RemoteCtrlPropertyService features
 */
-interface IRemoteClimateService {
+interface IRemoteCtrlPropertyService {
   /**
   * Request a set on the hvac property
   *
