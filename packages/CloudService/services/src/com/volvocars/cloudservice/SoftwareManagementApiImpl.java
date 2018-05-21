@@ -16,6 +16,11 @@ import java.io.InputStream;
 import java.io.IOException;
 import org.xmlpull.v1.XmlPullParserException;
 import com.volvocars.carconfig.*;
+import com.volvocars.cloudservice.parser.XmlParser;
+import com.volvocars.cloudservice.parser.softwaremanagement.DownloadInfoParser;
+import com.volvocars.cloudservice.parser.softwaremanagement.InstallNotificationParser;
+import com.volvocars.cloudservice.parser.softwaremanagement.SoftwareAssignmentParser;
+import com.volvocars.cloudservice.parser.softwaremanagement.SoftwareManagementParser;
 
 /**
  * Implementation of Foundation service API.
@@ -90,7 +95,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             Log.v(LOG_TAG, "Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
-            uris = XmlParser.ParseSoftwareManagementURIs(stream);
+            uris = SoftwareManagementParser.ParseSoftwareManagementURIs(stream);
             stream.close();
 
             Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_updates + "\n" + uris.available_accessories
@@ -153,7 +158,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             Log.v(LOG_TAG, "Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
-            software_list = XmlParser.ParseSoftwareAssignments(stream);
+            software_list = SoftwareAssignmentParser.ParseSoftwareAssignments(stream);
 
             swrsp.swlist = software_list;
             swrsp.code = response.httpResponse;
@@ -314,7 +319,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
 
-            downloadInfoResponse.downloadInfo = XmlParser.ParseDownloadInfo(stream);
+            downloadInfoResponse.downloadInfo = DownloadInfoParser.ParseDownloadInfo(stream);
             downloadInfoResponse.code = response.httpResponse;
 
         } catch (XmlPullParserException ex) {
@@ -468,7 +473,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
 
-            notificationResponse.notification = XmlParser.ParseInstallNotification(stream);
+            notificationResponse.notification = InstallNotificationParser.ParseInstallNotification(stream);
             notificationResponse.code = response.httpResponse;
 
         } catch (XmlPullParserException ex) {

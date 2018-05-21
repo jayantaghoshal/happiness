@@ -22,6 +22,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.os.SystemProperties;
 
 import vendor.volvocars.hardware.cloud.V1_0.*;
+import com.volvocars.cloudservice.parser.FeaturesParser;
 
 /**
  * Implementation of Foundation service API.
@@ -71,7 +72,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
             InputStream stream = new ByteArrayInputStream(bytesdata);
 
             //Parse XML data
-            features = XmlParser.parse(stream);
+            features = FeaturesParser.parse(stream);
 
             return true;
         } catch (XmlPullParserException ex) {
@@ -87,7 +88,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
 
     /**
     * Performs request against cloudd.
-    * Parses the response using xmlparser.
+    * Parses the response using features.
     * Searches for feature in arraylist structure.
     * @param feature string indicating which feature wanted.
     * @return boolean indicating if the feature exist.
