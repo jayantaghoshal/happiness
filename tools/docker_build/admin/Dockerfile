@@ -22,10 +22,7 @@ ENV http_proxy 'http://10.244.0.55:83/'
 ENV HTTP_PROXY 'http://10.244.0.55:83/'
 ENV https_proxy 'https://10.244.0.55:83/'
 ENV HTTPS_PROXY 'https://10.244.0.55:83/'
-ENV NO_PROXY '.got.volvocars.net'
-
-# Configure proxy for apt-get.
-RUN echo 'Acquire::http::Proxy "http://10.244.0.55:83/";' >> /etc/apt/apt.conf
+ENV NO_PROXY '.got.volvocars.net,.cm.volvocars.biz'
 
 
 ##################################################
