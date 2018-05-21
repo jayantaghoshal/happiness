@@ -3,13 +3,14 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
+import sys
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from vts.runners.host import asserts
 from vts.runners.host import base_test
 from vts.runners.host import test_runner
 from vts.runners.host import const
 from vts.utils.python.controllers import android_device
 import os
-import sys
 import re
 import logging
 import thread, threading
@@ -17,21 +18,14 @@ from subprocess import Popen, PIPE
 from time import sleep
 import time
 import csv
-sys.path.append('/usr/local/lib/python2.7/dist-packages')
-from generated.pyDataElements import \
-    FrSignalInterface, \
-    UsgModSts
 
-def sendCCParameters(self, event, good=True, sendAll=True):
-    VehCfgPrmBlk = self.flexray.VehCfgPrmBlk
-    VehCfgPrmVal1 = self.flexray.VehCfgPrmVal1
-    VehCfgPrmVal2 = self.flexray.VehCfgPrmVal2
-    VehCfgPrmVal3 = self.flexray.VehCfgPrmVal3
-    VehCfgPrmVal4 = self.flexray.VehCfgPrmVal4
-    VehCfgPrmVal5 = self.flexray.VehCfgPrmVal5
-    VehCfgPrmVal6 = self.flexray.VehCfgPrmVal6
-    VehCfgPrmVal7 = self.flexray.VehCfgPrmVal7
+import vehiclehalcommon
+from generated.datatypes import *
+from generated import datatypes as DE
 
+
+def sendCCParameters(self, event, fr, good=True, sendAll=True):
+    vehCfgPrm = VehCfgPrm()
     for aa in range (1, 600):
         cc_no_of_variables_per_block = 7
         cc_no_of_blocks = 72 #cc_no_of_variables / cc_no_of_variables_per_block
@@ -50,23 +44,23 @@ def sendCCParameters(self, event, good=True, sendAll=True):
                 if good == False:
                     data = 0
 
+                vehCfgPrm.BlkIDBytePosn1 = block
+
                 if param == 1:
-                    VehCfgPrmVal1.set(data)
+                    vehCfgPrm.CCPBytePosn2 = data
                 elif param == 2:
-                    VehCfgPrmVal2.set(data)
+                    vehCfgPrm.CCPBytePosn3 = data
                 elif param == 3:
-                    VehCfgPrmVal3.set(data)
+                    vehCfgPrm.CCPBytePosn4 = data
                 elif param == 4:
-                    VehCfgPrmVal4.set(data)
+                    vehCfgPrm.CCPBytePosn5 = data
                 elif param == 5:
-                    VehCfgPrmVal5.set(data)
+                    vehCfgPrm.CCPBytePosn6 = data
                 elif param == 6:
-                    VehCfgPrmVal6.set(data)
+                    vehCfgPrm.CCPBytePosn7 = data
                 else:
-                    VehCfgPrmVal7.set(data)
-                    VehCfgPrmBlk.send(block)
-                    time.sleep(0.1)
-                    VehCfgPrmBlk.send(block) #Send twice because sometimes the frames aren't actually sent.
+                    vehCfgPrm.CCPBytePosn8 = data
+                    fr.send_VehCfgPrm(vehCfgPrm)
                     time.sleep(0.1)
 
                     #Used for testing sending incomplete CC parameters.
@@ -81,19 +75,13 @@ def sendCCParameters(self, event, good=True, sendAll=True):
 class ComponentTest(base_test.BaseTestClass):
     def setUpClass(self):
         self.dut = self.registerController(android_device)[0]
+
+    def setUp(self):
         self.dut.shell.InvokeTerminal("one")
         self.shell = self.dut.shell.one
         self.dut.shell.one.Execute("setenforce 0")  # SELinux pereventmissive mode
-
-    def setUp(self):
+        self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
         self.dut.stopServices() #Important for startServices() to work further down
-
-        # Starting CANoe simulation might trigger a reboot,
-        # Set up required signals for unit to boot and ensure it is booted
-        self.flexray = FrSignalInterface()
-        self.flexray.UsgModSts.send(UsgModSts.map.UsgModDrvg)
-        self.flexray.FRNetworkStatus.send(1)
-        self.flexray.VehBattUSysU.send(12)
         self.dut.waitForBootCompletion()
 
         # After reboot VTS looses the connection to the shell, recreate it
@@ -146,7 +134,7 @@ class ComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("stop carconfig_updater;start carconfig_updater")
 
         event = threading.Event()
-        senderthread = threading.Thread(target=sendCCParameters, args=(self, event, sendOk, sendAll ))
+        senderthread = threading.Thread(target=sendCCParameters, args=(self, event, self.fr, sendOk, sendAll ))
         senderthread.start()
 
         end = time.time() + 60 #should be enough time to send parameters and for the ihu to reboot
