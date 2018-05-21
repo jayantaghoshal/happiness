@@ -13,12 +13,12 @@ namespace Connectivity {
 
 void DiagnosticsClient::SetInvalidData(const Message::Ecu ecu, const bool error) {
     switch (ecu) {
-        case Message::Ecu::TEM:
-            ALOGI("[DiagnosticsClient] TEM diag %d", error);
+        case Message::Ecu::TCAM:
+            ALOGI("[DiagnosticsClient] TCAM diag %d", error);
             break;
 
-        case Message::Ecu::VCM:
-            ALOGI("[DiagnosticsClient] VCM diag %d", error);
+        case Message::Ecu::VGM:
+            ALOGI("[DiagnosticsClient] VGM diag %d", error);
             break;
 
         default:

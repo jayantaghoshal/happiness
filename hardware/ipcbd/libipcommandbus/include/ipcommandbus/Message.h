@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -23,17 +23,9 @@ namespace Connectivity {
  * Also stores timeout data for acks/responses.
  */
 struct Message {
-    enum Ecu {
-        UNKNOWN = 0x00,
-        ALL = 0x01,
-        IHU = 0x02,
-        VCM = 0x03,
-        TEM = 0x04,
-        DIM = 0x05,
-        TCAM = 0x06,
-        VGM = 0x07,
-        ENUM_NR_OF_ECUs
-    };
+    // Numbers aligned with vendor.volvocars.hardware.common@1.0
+    // TODO: Avoid defining this in 2 locations
+    enum Ecu { UNKNOWN = 0x00, ALL = 0x01, IHU = 0x02, DIM = 0x05, TCAM = 0x06, VGM = 0x07, ENUM_NR_OF_ECUs };
 
     struct RetryInfo {
         bool override_default;

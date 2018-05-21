@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -14,10 +14,6 @@ const char* Message::EcuStr(Ecu ecu) {
             return "ALL";
         case IHU:
             return "IHU";
-        case VCM:
-            return "VCM";
-        case TEM:
-            return "TEM";
         case DIM:
             return "DIM";
         case TCAM:

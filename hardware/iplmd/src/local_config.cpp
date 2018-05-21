@@ -34,26 +34,17 @@ class Configuration {
 
     int getNofLSCs() { return nof_LSCs_; }
 
-    std::string getLocalIpAddress() { return ip_address_local_; }
-    std::string getBroadcastIpAddress() { return ip_address_broadcast_; }
-    std::string getVCMIpAddress() { return ip_address_vcm_; }
-    std::string getTEMIpAddress() { return ip_address_tem_; }
-
   private:
     int nof_nodes_in_RG1_;
     int nof_nodes_in_RG3_;
     int request_monitoring_tmo_;
     int nof_LSCs_;
-    std::string ip_address_local_;
-    std::string ip_address_broadcast_;
-    std::string ip_address_vcm_;
-    std::string ip_address_tem_;
 
     // Config ID strings
-    const std::string NodesInRG1_Id = "IIPS_LM_NofNodesRG1";
-    const std::string NodesInRG3_Id = "IIPS_LM_NofNodesRG3";
-    const std::string RequestMonitoringTmo_Id = "IIPS_LM_RequestMonitoringTimeout";
-    const std::string NofLSCs_Id = "IIPS_LM_NofLSCs";
+    const std::string NodesInRG1_Id = "IPCB_LM_NofNodesRG1";
+    const std::string NodesInRG3_Id = "IPCB_LM_NofNodesRG3";
+    const std::string RequestMonitoringTmo_Id = "IPCB_LM_RequestMonitoringTimeout";
+    const std::string NofLSCs_Id = "IPCB_LM_NofLSCs";
 
     const vcc::LocalConfigReaderInterface* const lcfg_;
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -34,16 +34,12 @@ class LocalconfigParameters {
 
     const std::string& getLocalIpAddress();
     const std::string& getBroadcastIpAddress();
-    const std::string& getVCMIpAddress();
-    const std::string& getTEMIpAddress();
     const std::string& getDIMIpAddress();
     const std::string& getVGMIpAddress();
     const std::string& getTCAMIpAddress();
 
     uint16_t getLocalPort();
     uint16_t getBroadcastPort();
-    uint16_t getVCMPort();
-    uint16_t getTEMPort();
     uint16_t getDIMPort();
     uint16_t getTCAMPort();
     uint16_t getVGMPort();
@@ -73,18 +69,14 @@ class LocalconfigParameters {
     uint32_t defaultRespNumRetries_ = 2;
     double defaultRespMultiplier_ = 2.0;
 
-    std::string ip_address_local_ = "198.18.34.1";
-    std::string ip_address_broadcast_ = "198.18.255.255";
-    std::string ip_address_vcm_ = "198.18.32.1";
-    std::string ip_address_tem_ = "198.18.48.17";
+    std::string ip_address_local_ = "198.19.101.66";
+    std::string ip_address_broadcast_ = "198.19.101.95";
     std::string ip_address_dim_ = "198.18.24.1";
-    std::string ip_address_tcam_ = "198.18.34.1";  // TODO add correct adress here
-    std::string ip_address_vgm_ = "198.18.34.1";   // TODO add correct adress here
+    std::string ip_address_tcam_ = "198.18.32.1";
+    std::string ip_address_vgm_ = "198.18.32.2";
 
     uint16_t port_local_ = 50000;
-    uint16_t port_broadcast_ = 50000;
-    uint16_t port_vcm_ = 50000;
-    uint16_t port_tem_ = 50000;
+    uint16_t port_broadcast_ = 50001;
     uint16_t port_dim_ = 50000;
     uint16_t port_tcam_ = 50000;
     uint16_t port_vgm_ = 50000;

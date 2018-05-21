@@ -48,7 +48,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
   public:
     /** Enumeration used to track remote ECU availability in resource group
      */
-    enum class EcuId { ECU_Tem, ECU_Vcm, ECU_Max };
+    enum class EcuId { ECU_Tcam, ECU_Vgm, ECU_Max };
 
     /*! \brief Prioritization. Encoding as per REQPROD 347120 */
     enum Prio {
@@ -142,7 +142,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
      */
     enum ResourceGroup {
         RG_Reserved = 0x00,  // reserved
-        RG_1 = 0x02,         // RG1 consists of IHU, VCM and TEM
+        RG_1 = 0x02,         // RG1 consists of IHU, VGM and TCAM
         RG_3 = 0x08          // same as RG1 with Infotainment Mode ON
     };
 
@@ -192,6 +192,7 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
     static const char* ToString(Prio p);
     static const char* ToString(XResourceGroup r);
     static const char* ToString(XResourceGroupPrio prio);
+    static const char* ToString(Ecu ecu);
 
     /*! \brief Sequence ID as defined by the IP Command Bus Protocol. */
     std::uint8_t sequenceId_ = 0;
@@ -201,8 +202,8 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
     tarmac::eventloop::IDispatcher::JobId activityTimer_;
 
     /*! \brief Resource Group Session Timer, one per ECU in RG. */
-    tarmac::eventloop::IDispatcher::JobId activityTEM_;
-    tarmac::eventloop::IDispatcher::JobId activityVCM_;
+    tarmac::eventloop::IDispatcher::JobId activityVGM_;
+    tarmac::eventloop::IDispatcher::JobId activityTCAM_;
 
     void CreateAndSendIpActivityMessage();
 
@@ -258,8 +259,8 @@ class IplmService : public IIplm, public IMessageCallback, public ::android::har
     ApplicationDataElement::DESender<autosar::NetHdActvt_info> senderWakeup_;
     tarmac::eventloop::IDispatcher::JobId senderWakeupTimer_;
 
-    void restartVcmActivityTimer();
-    void restartTemActivityTimer();
+    void restartVgmActivityTimer();
+    void restartTcamActivityTimer();
 
     std::vector<EcuAvailabilityNotification> node_availability_notifications_;
 };

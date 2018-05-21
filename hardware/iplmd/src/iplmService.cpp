@@ -109,25 +109,23 @@ void IplmService::HandleMessageRcvd(const Msg& msg) {
     if (OperationType::ERROR == msg.pdu.header.operationType) return;
 
     first_contact = true;
-    ALOGV("[Service] Got IP_Activity(%s,%s) from %d (VCM = %d, TEM = %d)",
+    ALOGV("[Service] Got IP_Activity(%s,%s) from %s",
           ToString(static_cast<Action>(msg.pdu.payload.data()[0])).c_str(),
           ToString(static_cast<Prio>(msg.pdu.payload.data()[1])),
-          (int)msg.ecu,
-          (int)Ecu::VCM,
-          (int)Ecu::TEM);
+          ToString(msg.ecu));
 
     if (iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE) {
-        if (msg.ecu == Ecu::VCM)
-            timeProvider_.Cancel(activityVCM_);
+        if (msg.ecu == Ecu::VGM)
+            timeProvider_.Cancel(activityVGM_);
         else
-            timeProvider_.Cancel(activityTEM_);
+            timeProvider_.Cancel(activityTCAM_);
     }
 
     iplm_data_.action_[(int)msg.ecu] = static_cast<Action>(msg.pdu.payload.data()[0]);
     iplm_data_.prio_[(int)msg.ecu] = static_cast<Prio>(msg.pdu.payload.data()[1]);
 
-    iplm_data_.rg1_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
-    iplm_data_.rg3_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VCM) ? EcuId::ECU_Vcm : EcuId::ECU_Tem));
+    iplm_data_.rg1_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VGM) ? EcuId::ECU_Vgm : EcuId::ECU_Tcam));
+    iplm_data_.rg3_availabilityStatus_.set(static_cast<int>((msg.ecu == Ecu::VGM) ? EcuId::ECU_Vgm : EcuId::ECU_Tcam));
 
     if (flexray_wakeup_attempted && iplm_data_.rg1_availabilityStatus_.all() &&
         iplm_data_.rg3_availabilityStatus_.all()) {
@@ -136,10 +134,10 @@ void IplmService::HandleMessageRcvd(const Msg& msg) {
     // Handle session state here?
 
     if (iplm_data_.action_[(int)Ecu::IHU] & ACTION_AVAILABLE) {
-        if (msg.ecu == Ecu::VCM)
-            restartVcmActivityTimer();
+        if (msg.ecu == Ecu::VGM)
+            restartVgmActivityTimer();
         else
-            restartTemActivityTimer();
+            restartTcamActivityTimer();
     }
 }
 
@@ -188,8 +186,8 @@ bool IplmService::Initialize() {
                                        VccIpCmd::OperationId::IpActivity,
                                        std::bind(&IpLmServiceStubImpl::CbLmBroadcast, this, std::placeholders::_1));
 */
-    restartTemActivityTimer();
-    restartVcmActivityTimer();
+    restartTcamActivityTimer();
+    restartVgmActivityTimer();
 
     // A recurrent timer used to send IHU's IP activity messages
     // Timeout as specified in REQPROD 347839
@@ -241,23 +239,23 @@ bool IplmService::SendFlexrayWakeup(ResourceGroup _rg, Prio _prio) {
     return true;
 }
 
-void IplmService::restartVcmActivityTimer() {
+void IplmService::restartVgmActivityTimer() {
     // RequestMonitoringTimeout is configurable through Local config as required by REQPROD 347880
-    activityVCM_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(LocalCfg::getRequestMonitoringTmo() + 100),
-                                                  [this]() { RequestMonitoringTimeout(EcuId::ECU_Vcm); });
+    activityVGM_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(LocalCfg::getRequestMonitoringTmo() + 100),
+                                                  [this]() { RequestMonitoringTimeout(EcuId::ECU_Vgm); });
 }
-void IplmService::restartTemActivityTimer() {
+void IplmService::restartTcamActivityTimer() {
     // RequestMonitoringTimeout is configurable through Local config as required by REQPROD 347880
-    activityTEM_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(LocalCfg::getRequestMonitoringTmo() + 100),
-                                                  [this]() { RequestMonitoringTimeout(EcuId::ECU_Tem); });
+    activityTCAM_ = timeProvider_.EnqueueWithDelay(std::chrono::milliseconds(LocalCfg::getRequestMonitoringTmo() + 100),
+                                                   [this]() { RequestMonitoringTimeout(EcuId::ECU_Tcam); });
 }
 
 void IplmService::ActivityTimeout() {
     ALOGV("[Service] + ActivityTimeout");
 
     bool broadcast_allowed = false;
-    bool tem_available = false;
-    bool vcm_available = false;
+    bool tcam_available = false;
+    bool vgm_available = false;
     auto rg1_status = XResourceGroupStatus::Available;
 
     broadcast_allowed =
@@ -267,8 +265,8 @@ void IplmService::ActivityTimeout() {
                          ? XResourceGroupStatus::Available
                          : iplm_data_.rg1_availabilityStatus_.any() ? XResourceGroupStatus::PartlyAvailable
                                                                     : XResourceGroupStatus::Unavailable;
-    tem_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Tem));
-    vcm_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Vcm));
+    tcam_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Tcam));
+    vgm_available = iplm_data_.rg1_availabilityStatus_.test(static_cast<int>(EcuId::ECU_Vgm));
 
     XResourceGroupPrio rg_prio = (GetExternalPrio(iplm_data_) ? XResourceGroupPrio::High : XResourceGroupPrio::Normal);
 
@@ -293,8 +291,8 @@ void IplmService::ActivityTimeout() {
         auto callback = regs.second;
         auto result1 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup1, rg1_status, rg_prio);
         auto result2 = callback->onResourceGroupStatus(XResourceGroup::ResourceGroup3, rg1_status, rg_prio);
-        auto result3 = callback->onNodeStatus(Ecu::TEM, tem_available);
-        auto result4 = callback->onNodeStatus(Ecu::VCM, vcm_available);
+        auto result3 = callback->onNodeStatus(Ecu::TCAM, tcam_available);
+        auto result4 = callback->onNodeStatus(Ecu::VGM, vgm_available);
         // We always have to call isOk() eventthough we don't need it
         // https://source.android.com/devices/architecture/hidl-cpp/functions
         result1.isOk();
@@ -308,12 +306,10 @@ void IplmService::ActivityTimeout() {
             unregisterService(regs.first);
         }
     }
-    // ALOGI("[Service] Tem available: %d",tem_available);
-    // ALOGI("[Service] Vcm available: %d",vcm_available);
 
     for (auto const& notifyAvailabilityToRegisteredService : node_availability_notifications_) {
-        notifyAvailabilityToRegisteredService(EcuId::ECU_Tem, tem_available);
-        notifyAvailabilityToRegisteredService(EcuId::ECU_Vcm, vcm_available);
+        notifyAvailabilityToRegisteredService(EcuId::ECU_Tcam, tcam_available);
+        notifyAvailabilityToRegisteredService(EcuId::ECU_Vgm, vgm_available);
     }
 
     // Restart activity timer
@@ -333,8 +329,8 @@ void IplmService::RequestMonitoringTimeout(EcuId ecu) {
     iplm_data_.rg3_availabilityStatus_.reset(static_cast<int>(ecu));
 
     // Node not available. Reset AVAILABLE bit in action_ corresponding to ECU
-    (ecu == EcuId::ECU_Vcm) ? (iplm_data_.action_[static_cast<int>((int)Ecu::VCM)] = 0)
-                            : (iplm_data_.action_[static_cast<int>((int)Ecu::TEM)] = 0);
+    (ecu == EcuId::ECU_Vgm) ? (iplm_data_.action_[static_cast<int>((int)Ecu::VGM)] = 0)
+                            : (iplm_data_.action_[static_cast<int>((int)Ecu::TCAM)] = 0);
 
     SendFlexrayWakeup(ResourceGroup::RG_1, iplm_data_.prio_[(int)Ecu::IHU]);
 }
@@ -408,11 +404,11 @@ bool IplmService::IsRequestedRGValid(XResourceGroup rg) {
 }
 
 bool IplmService::IsRgRequestedByExternalNode(const IplmData& iplm_data, const ResourceGroup rg) {
-    return (iplm_data.action_[(int)Ecu::TEM] & rg) || (iplm_data.action_[(int)Ecu::VCM] & rg);
+    return (iplm_data.action_[(int)Ecu::TCAM] & rg) || (iplm_data.action_[(int)Ecu::VGM] & rg);
 }
 
 bool IplmService::GetExternalPrio(const IplmData& iplm_data) {
-    return iplm_data.prio_[(int)Ecu::VCM] == PRIO_HIGH || iplm_data.prio_[(int)Ecu::TEM] == PRIO_HIGH;
+    return iplm_data.prio_[(int)Ecu::VGM] == PRIO_HIGH || iplm_data.prio_[(int)Ecu::TCAM] == PRIO_HIGH;
 }
 
 //
@@ -481,6 +477,24 @@ const char* IplmService::ToString(const XResourceGroupPrio prio) {
         default:
             ALOGW("[Service] ToString() called with unsupported Prio");
             return "";
+    }
+}
+
+const char* IplmService::ToString(const Ecu ecu) {
+    switch (ecu) {
+        case Ecu::ALL:
+            return "ALL";
+        case Ecu::IHU:
+            return "IHU";
+        case Ecu::DIM:
+            return "DIM";
+        case Ecu::TCAM:
+            return "TCAM";
+        case Ecu::VGM:
+            return "VGM";
+        default:
+            ALOGW("[Service] ToString() called with unsupported ECU");
+            return "UNKNOWN";
     }
 }
 
@@ -591,8 +605,8 @@ Return<bool> IplmService::registerService(const hidl_string& lscName, const sp<I
             iplm_data_.action_[(int)Ecu::IHU] |= ACTION_AVAILABLE;
 
             // As Local IPLinkManager is now available; we should start monitoring remote nodes for activity
-            restartVcmActivityTimer();
-            restartTemActivityTimer();
+            restartVgmActivityTimer();
+            restartTcamActivityTimer();
         }
     } else {
         ALOGW("[Service] registration request from already registered service (%s) ", lscName.c_str());
