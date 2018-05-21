@@ -14,7 +14,7 @@
 
   <!-- APPS -->
   <project name="vendor/volvocars/hmi/apps/Internal" path="vendor/volvocars/apps/Internal" revision="b00693d8f8b0bb05ab1316f8faabd6c45e8bbfae" />
-  <project name="vendor/volvocars/hmi/apps/mediacenter" path="vendor/volvocars/apps/mediacenter" revision="ec97bad7e111e7f783dcc391c6a9ed92c506ae1a" />
+  <project name="vendor/volvocars/hmi/apps/mediacenter" path="vendor/volvocars/apps/mediacenter" revision="e4d2991ca94a7e4dadd27140ce2ad51bf9c47ecc" />
   <project name="vendor/volvocars/hmi/apps/tunerbrowserservice" path="vendor/volvocars/apps/tunerbrowserservice" revision="ZUUL_COMMIT_OR_HEAD" />
   <project name="vendor/volvocars/hmi/Settings" path="vendor/volvocars/apps/Settings" revision="1fcde6a02c28240302cf51a926018d0ba39d58d3" />
 
