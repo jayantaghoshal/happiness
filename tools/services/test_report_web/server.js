@@ -110,7 +110,7 @@ app.get('/jobs', cors(), (req, res) => {
     }
 });
 
-app.get('/tests/', cors(), (req, res) => {    
+app.get('/tests/', cors(), (req, res) => {
     let query = {};
     let job_name = req.query.job_name;
     let name = ""
@@ -119,20 +119,19 @@ app.get('/tests/', cors(), (req, res) => {
             job_name = "ihu_gate_test"
             name = "ihu_gate"
             query["test_job_build_number"] = parseInt(req.query.build_number);
-        }
-        else {
+        } else {
             query["top_test_job_name"] = req.query.top_job_name;
             query["top_test_job_build_number"] = parseInt(req.query.build_number);
             name = req.query.top_job_name;
         }
-    }    
+    }
 
-    if (job_name) 
+    if (job_name)
         query["job_name"] = job_name;
-    
-    let projection = { 
+
+    let projection = {
         "top_test_job_build_number": 1,
-        "result": 1, 
+        "result": 1,
         "test_type": 1,
         "job_name": 1,
         "test_job_build_number": 1,
@@ -140,8 +139,8 @@ app.get('/tests/', cors(), (req, res) => {
         "test_dir_name": 1,
         "capabilities": 1,
         "runtime": 1,
-        "_id": 1 
-    };  
+        "_id": 1
+    };
     if (Object.keys(query).length === 0) {
         res.redirect('/');
         return;
@@ -150,24 +149,24 @@ app.get('/tests/', cors(), (req, res) => {
 
     db.collection('records').find(query)
         .project(projection)
-        .toArray(function(err, basic_test_detail) {           
-            res.render('test_modules.ejs', {                
-                 view: "list_tests_page",                 
-                 basic_test_detail: basic_test_detail, 
-                 build_numbers: [req.query.build_number],
-                 top_job_name: name,
-                });
-        });    
+        .toArray(function(err, basic_test_detail) {
+            res.render('test_modules.ejs', {
+                view: "list_tests_page",
+                basic_test_detail: basic_test_detail,
+                build_numbers: [req.query.build_number],
+                top_job_name: name,
+            });
+        });
 });
 
 app.get('/detailed_view', cors(), (req, res) => {
     var records = db.collection('records');
-    let detailQuery = records.findOne({ "_id": ObjectId(req.query.id) })    
-    
+    let detailQuery = records.findOne({ "_id": ObjectId(req.query.id) })
+
 
     let allTrends = detailQuery.then(function(record) {
         let trendQuery = function(additional_queries) {
-            let query =  {
+            let query = {
                 "job_name": record["job_name"],
                 "module_name": record["module_name"],
                 "test_dir_name": record["test_dir_name"]
@@ -177,9 +176,10 @@ app.get('/detailed_view', cors(), (req, res) => {
             });
             return records.find(query).project({
                 result: 1,
-                runtime : 1,
+                runtime: 1,
                 test_job_build_number: 1,
-                started_at: 1
+                started_at: 1,
+                _id: 1
             });
         };
 
@@ -188,12 +188,12 @@ app.get('/detailed_view', cors(), (req, res) => {
             .limit(15)
             .toArray();
 
-        var lastFail = trendQuery({"result": false})
+        var lastFail = trendQuery({ "result": false })
             .sort({ test_job_build_number: -1 })
             .limit(1)
             .toArray();
-        
-        var lastSuccess = trendQuery({"result": true})
+
+        var lastSuccess = trendQuery({ "result": true })
             .sort({ test_job_build_number: -1 })
             .limit(1)
             .toArray();
@@ -203,7 +203,7 @@ app.get('/detailed_view', cors(), (req, res) => {
                 "result": true,
             }
             if (lastFailResult.length > 0) {
-                filter["test_job_build_number"] = {"$lt": lastFailResult[0]["test_job_build_number"]};
+                filter["test_job_build_number"] = { "$lt": lastFailResult[0]["test_job_build_number"] };
             }
             return trendQuery(filter)
                 .sort({ test_job_build_number: -1 })
@@ -212,18 +212,18 @@ app.get('/detailed_view', cors(), (req, res) => {
         });
 
         var firstFailAfterSuccess = lastSuccessBeforeLastFail.then(function(lastSuccessBeforeLastFailResults) {
-            var filter =  {
+            var filter = {
                 "result": false,
             };
             if (lastSuccessBeforeLastFailResults.length > 0) {
-                filter["test_job_build_number"] = {"$gt": lastSuccessBeforeLastFailResults[0]["test_job_build_number"]};
+                filter["test_job_build_number"] = { "$gt": lastSuccessBeforeLastFailResults[0]["test_job_build_number"] };
             }
             return trendQuery(filter)
                 .sort({ test_job_build_number: 1 })
                 .limit(1)
                 .toArray();
         });
-        return Promise.all([trend, lastFail, lastSuccess, lastSuccessBeforeLastFail, firstFailAfterSuccess]); 
+        return Promise.all([trend, lastSuccess, firstFailAfterSuccess, lastFail, lastSuccessBeforeLastFail]);
     });
 
     Promise.all([detailQuery, allTrends]).then(
@@ -255,6 +255,7 @@ app.get('/detailed_view', cors(), (req, res) => {
             meta_test_record["screenshots"] = test_record["screenshots"];
             meta_test_record["description"] = test_record["description"];
             meta_test_record["logs"] = test_record["logs"];
+            meta_test_record["files"] = test_record["files"];
 
             if (typeof test_record["testcases"] !== 'undefined' && test_record["testcases"]) {
                 testcases_test_record = test_record["testcases"];
@@ -269,10 +270,10 @@ app.get('/detailed_view', cors(), (req, res) => {
                 testcases_test_record: testcases_test_record,
                 build_trend: trendResults.reverse(),
                 notable_events: [
-                    { name: "Last success", value: lastSuccessResult && lastSuccessResult[0]},
-                    { name: "Last fail",  value: lastFailResult && lastFailResult[0]},
-                    { name: "First fail after last success", value:  firstFailAfterSuccessResult && firstFailAfterSuccessResult[0]},
-                    { name: "Last success before last fail", value: lastSuccessBeforeLastFailResults && lastSuccessBeforeLastFailResults[0]}
+                    { name: "Last success", value: lastSuccessResult && lastSuccessResult[0] },
+                    { name: "Last fail", value: lastFailResult && lastFailResult[0] },
+                    { name: "First fail after last success", value: firstFailAfterSuccessResult && firstFailAfterSuccessResult[0] },
+                    { name: "Last success before last fail", value: lastSuccessBeforeLastFailResults && lastSuccessBeforeLastFailResults[0] }
                 ]
             });
         }

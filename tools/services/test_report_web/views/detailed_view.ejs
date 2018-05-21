@@ -149,7 +149,7 @@
                         <td style="font-weight:bold;color:white;background-color:#15317E;">Build ID:</td>
                         <% for (var i in build_trend) { %>
                         <td>
-                            <a href=<%= "/detailed_view?module_name=" + module_name +"&job_name=" + test_job_name + "&build_number=" + build_trend[i]["test_job_build_number"]  +"&test_dir_name=" + encodeURI(test_detail["Test Directory"])  %> >
+                            <a href=<%= "/detailed_view?id=" + build_trend[i]["_id"]  %> >
                                 <%=build_trend[i]["test_job_build_number"]%>
                             </a>
                         </td>
@@ -183,7 +183,7 @@
                         <td><%=trendEvent["name"] %></td>
                         <td>
                             <% if (trendEvent["value"]) { %>
-                            <a href="<%= "/detailed_view?module_name=" + module_name +"&job_name=" + test_job_name + "&build_number=" + trendEvent["value"]["test_job_build_number"]  +"&test_dir_name=" + encodeURI(test_detail["Test Directory"])  %>"" >
+                            <a href="<%= "/detailed_view?id=" + trendEvent["value"]["_id"]  %>"" >
                                 <%=trendEvent["value"]["test_job_build_number"] %> --- <%=trendEvent["value"]["started_at"] %>
                             </a>
                             <% } else { %>
@@ -212,6 +212,24 @@
 
                 </fieldset>
             <%}%>
+            <%if(typeof test_detail["files"] !== 'undefined' && Object.keys(test_detail["files"]).length){%>
+            <br>
+                <fieldset >    	
+                        <legend>Files</legend>
+                            <div class="list-group">
+                                <% Object.keys(test_detail["files"]).forEach(function(key) {%>
+                                    <% if(test_detail['files'][key]['location'] == "artifactory" ){%>
+                                        <a class="list-group-item list-group-item-action" href="<%= "https://swf1.artifactory.cm.volvocars.biz/artifactory/" + test_detail['files'][key]['uri'] %>">
+                                            <i class="fas fa-file-alt"></i>
+                                            <%= key +" "%>
+                                        </a>
+                                    <% } %>
+                                <% }); %>
+                            </div>
+
+                </fieldset>
+            <%}%>
+            <br>
             <%if(typeof test_detail["screenshots"] !== 'undefined' && Object.keys(test_detail["screenshots"]).length){%>
                 <fieldset >
                     <legend>Screenshots on test failure</legend>
