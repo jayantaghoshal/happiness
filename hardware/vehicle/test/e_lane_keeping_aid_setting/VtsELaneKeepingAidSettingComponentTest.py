@@ -19,7 +19,7 @@ from subprocess import call
 
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
-from com.dtmilano.android.viewclient import ViewClient
+sys.path.append('/tmp/ihu/.local/lib/python2.7/site-packages')
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
 import vehiclehalcommon
@@ -34,10 +34,11 @@ import logging.config
 import logging.handlers
 
 from vehiclehalcommon import VehicleHalCommon, wait_for_signal
+from uiautomator import device as device
 
 # Get button Ids for testing.
-elka_button_off           = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_off"
-elka_button_on            = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_on"
+elka_button_off = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_off"
+elka_button_on  = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_on"
 
 
 buttonWaitTimeSeconds = 1.5
@@ -72,16 +73,16 @@ class VtsELaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         self.dut.shell.InvokeTerminal("one")
         time.sleep(1)
         self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
-        time.sleep(1)
+        time.sleep(3)
 
 
 
 
-    # ----------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Test 1
     # Test Condition : Disable Car Config
     # Expected Result : ELKA buttons should not be visible
-    # ----------------------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def testELaneKeepingCCDisabled(self):
 
         print("----------- testELaneKeepingAidCCDisabled -----------")
@@ -95,14 +96,11 @@ class VtsELaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
         vHalCommon.setUpVehicleFunction()
 
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
-
         # Find buttons. They shall be disabled when CC is disabled.
         elka_button_off = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_off"
         elka_button_on = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_on"
-        buttonOff = vHalCommon.scrollAndFindViewById(elka_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewById(elka_button_on)
+        buttonOff = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_off, device)
+        buttonOn = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_on, device)
         print("buttonOff -> ") + str(buttonOff)
         print("buttonOn -> ") + str(buttonOn)
         asserts.assertEqual(None, buttonOff, "Expect no buttonOff")
@@ -110,7 +108,7 @@ class VtsELaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
 
         time.sleep(buttonWaitTimeSeconds)
 
-    # ----------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     # Test 2
     # Test Condition : Enabled Car Config
     # Steps: a) Enable Car Config and Reboot.
@@ -122,11 +120,11 @@ class VtsELaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
     #        g) Check the button status [expected: Disabled]
     #        h) Set UsgMod to Active
     #        i) Check the button status [expected: Enabled]
-    #        j) touch On Button
+    #        j) click On Button
     #        k) Check OnOff value [OnOff value true]
-    #        l) touch Off Button
+    #        l) click Off Button
     #        m) Check OnOff value [OnOff value false]
-    # ----------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def testELaneKeepingCCEnabled(self):
 
         print("----------- testELaneKeepingAidCCEnabled -----------")
@@ -158,9 +156,9 @@ class VtsELaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         vHalCommon.setUpVehicleFunction()
 
         EMERGENCY_LANE_KEEPING_AID_ON = vHalCommon.get_id('EMERGENCY_LANE_KEEPING_AID_ON')
+        EMERGENCY_LANE_KEEPING_AID_ON_STATUS = vHalCommon.get_id('EMERGENCY_LANE_KEEPING_AID_ON_STATUS')
 
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
+        print("ELKA introducing system error test")
 
         # Introducing Error conditions
         fr.send_LaneKeepAidSts(DE.FctSts2.SrvRqrd)
@@ -170,95 +168,96 @@ class VtsELaneKeepingAidSettingsComponentTest(base_test.BaseTestClass):
         # Find buttons. They shall be Visible when CC is enabled.
         elka_button_off = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_off"
         elka_button_on = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_on"
-        buttonOff = vHalCommon.scrollAndFindViewById(elka_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewById(elka_button_on)
+        buttonOff = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_off, device)
+        buttonOn = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_on, device)
 
-        print("buttonOff enabled -> ") + str(buttonOff.__getattr__('enabled')())
-        print("buttonOn  enabled -> ") + str(buttonOn.__getattr__('enabled')())
+        print("buttonOff enabled -> ") + str(buttonOff.enabled)
+        print("buttonOn  enabled -> ") + str(buttonOn.enabled)
 
         # Find buttons. but it should be disabled.
-        asserts.assertEqual(buttonOff.__getattr__('enabled')(),False, "Off button is enabled")
-        asserts.assertEqual(buttonOn.__getattr__('enabled')(),False, "On button is enabled")
+        asserts.assertEqual(buttonOff.enabled,False, "Off button is enabled")
+        asserts.assertEqual(buttonOn.enabled,False, "On button is enabled")
 
         vHalCommon.assert_prop_equals(EMERGENCY_LANE_KEEPING_AID_ON, False)
         asserts.assertEqual(fr.get_LaneKeepAidRoadEdgeActv().Sts, 0, "on/off shall be 0")
 
         time.sleep(buttonWaitTimeSeconds)
+
+        print("ELKA removing system error test")
 
         # Removing Error conditions
         fr.send_LaneKeepAidSts(DE.FctSts2.On)
         fr.send_VehModMngtGlbSafe1(vehmod)
         time.sleep(buttonWaitTimeSeconds)
 
-        vc.dump(window=-1)
-
         # Find buttons. They shall be Visible when CC is enabled.
         elka_button_off = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_off"
         elka_button_on = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_on"
-        buttonOff = vHalCommon.scrollAndFindViewById(elka_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewById(elka_button_on)
+        buttonOff = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_off, device)
+        buttonOn = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_on, device)
 
-        print("buttonOff enabled -> ") + str(buttonOff.__getattr__('enabled')())
-        print("buttonOn  enabled -> ") + str(buttonOn.__getattr__('enabled')())
+        print("buttonOff enabled -> ") + str(buttonOff.enabled)
+        print("buttonOn  enabled -> ") + str(buttonOn.enabled)
 
          # Find buttons. Buttons should be enabled.
-        asserts.assertEqual(buttonOff.__getattr__('enabled')(),True, "Off button is disabled")
-        asserts.assertEqual(buttonOn.__getattr__('enabled')(),True, "On button is disabled")
+        asserts.assertEqual(buttonOff.enabled,True, "Off button is disabled")
+        asserts.assertEqual(buttonOn.enabled,True, "On button is disabled")
 
         vHalCommon.assert_prop_equals(EMERGENCY_LANE_KEEPING_AID_ON, True)
         asserts.assertEqual(fr.get_LaneKeepAidRoadEdgeActv().Sts, 1, "on/off shall be 0")
 
         time.sleep(buttonWaitTimeSeconds)
 
+        print("ELKA UsgModSts  ---->  UsgModInActv")
+
         vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
         fr.send_VehModMngtGlbSafe1(vehmod)
 
         time.sleep(buttonWaitTimeSeconds)
 
-        # Find buttons. They shall be visible but disabled.
-
-        vc.dump(window=-1)
-
         # Find buttons. They shall be Visible when CC is enabled
         elka_button_off = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_off"
         elka_button_on = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_on"
-        buttonOff = vHalCommon.scrollAndFindViewById(elka_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewById(elka_button_on)
+        buttonOff = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_off, device)
+        buttonOn = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_on, device)
 
-        print("buttonOff enabled -> ") + str(buttonOff.__getattr__('enabled')())
-        print("buttonOn  enabled -> ") + str(buttonOn.__getattr__('enabled')())
-        asserts.assertEqual(buttonOff.__getattr__('enabled')(),False, "Off button is enabled")
-        asserts.assertEqual(buttonOn.__getattr__('enabled')(),False, "On button is enabled")
+        print("buttonOff enabled -> ") + str(buttonOff.enabled)
+        print("buttonOn  enabled -> ") + str(buttonOn.enabled)
+        asserts.assertEqual(buttonOff.enabled,False, "Off button is enabled")
+        asserts.assertEqual(buttonOn.enabled,False, "On button is enabled")
 
         vHalCommon.assert_prop_equals(EMERGENCY_LANE_KEEPING_AID_ON, False)
         asserts.assertEqual(fr.get_LaneKeepAidRoadEdgeActv().Sts, 0, "on/off shall be 0")
+
+        print("ELKA UsgModSts  ---->  UsgModActv")
 
         vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
         fr.send_VehModMngtGlbSafe1(vehmod)
 
         time.sleep(buttonWaitTimeSeconds)
-        vc.dump(window=-1)
 
         # Find buttons. They shall be Visible when CC is enabled
         elka_button_off = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_off"
         elka_button_on = VehicleHalCommon.app_context_vehiclefunctions + "emergency_lane_keeping_aid_button_on"
-        buttonOff = vHalCommon.scrollAndFindViewById(elka_button_off)
-        buttonOn = vHalCommon.scrollAndFindViewById(elka_button_on)
+        buttonOff = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_off, device)
+        buttonOn = vHalCommon.scrollDownAndFindViewByIdUiAutomator(elka_button_on, device)
 
-        print("buttonOff enabled -> ") + str(buttonOff.__getattr__('enabled')())
-        print("buttonOn  enabled -> ") + str(buttonOn.__getattr__('enabled')())
-        asserts.assertEqual(buttonOff.__getattr__('enabled')(),True, "Off button is disabled")
-        asserts.assertEqual(buttonOn.__getattr__('enabled')(),True, "On button is disabled")
+        print("buttonOff enabled -> ") + str(buttonOff.enabled)
+        print("buttonOn  enabled -> ") + str(buttonOn.enabled)
+        asserts.assertEqual(buttonOff.enabled,True, "Off button is disabled")
+        asserts.assertEqual(buttonOn.enabled,True, "On button is disabled")
 
-        buttonOff.touch()
-        vc.sleep(buttonWaitTimeSeconds)
+        print("ELKA button off click test")
+        buttonOff.click()
+        time.sleep(buttonWaitTimeSeconds)
 
         # Verify that On/Off is false after Off button click.
         vHalCommon.assert_prop_equals(EMERGENCY_LANE_KEEPING_AID_ON, False)
         asserts.assertEqual(fr.get_LaneKeepAidRoadEdgeActv().Sts, 0, "on/off shall be 0")
 
-        buttonOn.touch()
-        vc.sleep(buttonWaitTimeSeconds)
+        print("ELKA button on click test")
+        buttonOn.click()
+        time.sleep(buttonWaitTimeSeconds)
 
         #Verify that On/Off is true after On button click.
         vHalCommon.assert_prop_equals(EMERGENCY_LANE_KEEPING_AID_ON, True)
