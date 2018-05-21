@@ -231,14 +231,16 @@ def load_test_results(test: IhuBaseTest,
         zip_folder = '/tmp/saved_files_from_tests/zip_files'
         save_file_folder = '/tmp/saved_files_from_tests/files'
 
-        if not os.path.isdir(zip_folder):
-            os.makedirs(zip_folder)
-        for name in os.listdir(save_file_folder):
-            zip_path = name + '.zip'
-            zip_dir(os.path.join(save_file_folder, name), os.path.join(zip_folder, zip_path))
-            uri = "ICUP_ANDROID_CI/%s/%s/%s/%s" % (os.environ["JOB_NAME"], os.environ["BUILD_NUMBER"], test_detail["module_name"], zip_path)
-            Artifactory().deploy_artifact(uri, os.path.join(zip_folder, zip_path))
-            test_detail["files"][name] = {'location': 'artifactory', 'uri': uri}
+
+        if os.path.isdir(save_file_folder):
+            if not os.path.isdir(zip_folder):
+                os.makedirs(zip_folder)
+            for name in os.listdir(save_file_folder):
+                zip_path = name + '.zip'
+                zip_dir(os.path.join(save_file_folder, name), os.path.join(zip_folder, zip_path))
+                uri = "ICUP_ANDROID_CI/%s/%s/%s/%s" % (os.environ["JOB_NAME"], os.environ["BUILD_NUMBER"], test_detail["module_name"], zip_path)
+                Artifactory().deploy_artifact(uri, os.path.join(zip_folder, zip_path))
+                test_detail["files"][name] = {'location': 'artifactory', 'uri': uri}
 
 
         for filename in glob.iglob(log_dir + '**/*.gz', recursive=True):
