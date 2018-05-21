@@ -19,7 +19,7 @@ class ISignalHandler {
     virtual ~ISignalHandler() = default;
 
     virtual bool RequestWifiStationMode() = 0;
-    virtual bool RequestSetWifiStationMode(conman_hal_v1_0::WifiStationMode mode) = 0;
+    virtual bool RequestSetWifiStationMode(const conman_hal_v1_0::WifiStationMode& mode) = 0;
 };
 
 }  // namespace conman

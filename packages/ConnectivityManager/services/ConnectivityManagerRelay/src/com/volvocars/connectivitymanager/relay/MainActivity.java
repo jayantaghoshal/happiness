@@ -17,6 +17,7 @@ import android.content.ServiceConnection;
 
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import android.util.Log;
 
@@ -25,6 +26,7 @@ import android.widget.CompoundButton;
 
 import android.view.View;
 
+import com.volvocars.connectivitymanager.relay.IConnectivityManagerRelay;
 import com.volvocars.connectivitymanager.relay.IConnectivityManagerRelayCallback;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,18 +34,23 @@ public class MainActivity extends AppCompatActivity {
 
     private Switch wifiStationModeSwitch = null;
 
-    private ConnectivityManagerRelay conManRelayService = null;
+    private IConnectivityManagerRelay conManRelayService = null;
     private Boolean boundToService = false;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.v(LOG_TAG, "onServiceConnected " + name + " " + service);
-            conManRelayService = (ConnectivityManagerRelay) service;
-            conManRelayService.registerCallback(callback);
-            boundToService = true;
-
-            conManRelayService.getWifiStationMode();
+            conManRelayService = IConnectivityManagerRelay.Stub.asInterface(service);
+            try {
+                conManRelayService.registerCallback(callback);
+                boundToService = true;
+                conManRelayService.getWifiStationMode();
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "RemoteException: " + e);
+                conManRelayService = null;
+                boundToService = false;
+            }
         }
 
         @Override
@@ -65,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void notifyWifiStationMode(WifiStationModeAidl mode) {
-                    Log.v(LOG_TAG, "notifyWifiStationMode: " + mode);
+                    Log.v(LOG_TAG, "notifyWifiStationMode: " + mode.mode);
 
                     getMainExecutor().execute(new Runnable() {
                         @Override
                         public void run() {
                             boolean res = false;
-                            if (Mode.STATION_MODE == mode.mode) {
+                            if (Mode.STATION == mode.mode) {
                                 res = true;
                             }
 
@@ -92,29 +99,34 @@ public class MainActivity extends AppCompatActivity {
         boundToService = false;
 
         wifiStationModeSwitch = (Switch) findViewById(R.id.wifiStationSwitch);
-
-        // Should not be clickable until we know the state of the chip. And/or we dont have
-        // connection with tcam
-        wifiStationModeSwitch.setClickable(false);
-        wifiStationModeSwitch.setAlpha(.5f);
-
         wifiStationModeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View buttonView) {
-                Log.v(LOG_TAG, "clicked");
+                Log.v(LOG_TAG, "clicked " + wifiStationModeSwitch.isClickable());
+
+                if (!wifiStationModeSwitch.isClickable()) {
+                    return;
+                }
+
                 wifiStationModeSwitch.setClickable(false);
                 wifiStationModeSwitch.setAlpha(.5f);
                 WifiStationModeAidl wifiMode = new WifiStationModeAidl();
                 if (wifiStationModeSwitch.isChecked()) {
                     Log.v(LOG_TAG, "WifiStationMode On");
-                    wifiMode.mode = Mode.STATION_MODE;
+                    wifiMode.mode = Mode.STATION;
                 } else {
                     Log.v(LOG_TAG, "WifiStationMode Off");
-                    wifiMode.mode = Mode.AP_MODE;
+                    wifiMode.mode = Mode.OFF;
                 }
 
                 if (boundToService) {
-                    conManRelayService.setWifiStationMode(wifiMode);
+                    try {
+                        conManRelayService.setWifiStationMode(wifiMode);
+                    } catch (RemoteException e) {
+                        Log.e(LOG_TAG, "RemoteException: " + e);
+                        conManRelayService = null;
+                        boundToService = false;
+                    }
                 } else {
                     Log.v(LOG_TAG, "Service not bound, cannot send request..");
                 }
@@ -136,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ConnectivityManagerRelayService.class);
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         }
+
+        // Should not be clickable until we know the state of the chip. And/or we dont have
+        // connection with tcam
+        wifiStationModeSwitch.setClickable(false);
+        wifiStationModeSwitch.setAlpha(.5f);
     }
 
     @Override

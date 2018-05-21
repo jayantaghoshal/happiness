@@ -36,6 +36,10 @@ cc_binary {
         "libhwbinder",
         "libtarmac",
         "vendor.volvocars.hardware.connectivitymanager@1.0",
+        "vendor.volvocars.hardware.common@1.0",
+        "vendor.volvocars.hardware.vehiclecom@1.0",
+        "libinfotainmentbusasn",
+        "libipcommandbus",
     ],
 
     static_libs: [

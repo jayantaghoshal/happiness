@@ -32,43 +32,46 @@ import com.volvocars.connectivitymanager.relay.IConnectivityManagerRelayCallback
 public class ConnectivityManagerRelayService extends Service {
     private static final String LOG_TAG = "ConManRelay.Service";
 
+
+    // Handles to underlaying connection managers
     private com.volvocars.connectivitymanager.ConnectivityManager vccConnectivityManager = null;
     private android.net.ConnectivityManager androidConnectivityManager = null;
 
-    private final IBinder binder = new LocalBinder();
-
+    // Interface to Settings (and maybe other apps)
     private ConnectivityManagerRelay connectivityManagerRelay = null;
 
-	public class LocalBinder extends Binder {
-		public ConnectivityManagerRelayService getService() {
-			return ConnectivityManagerRelayService.this;
-		}
-	}
 
+    // private State state = NotActive;
+    private WifiStationModeAidl wifiStationMode;
+
+    // Callback given to VCC Connection Manager Gateway
     private IConnectivityManagerCallback connectionCallback = new IConnectivityManagerCallback() {
         @Override
         public void onServiceConnected() {
             Log.d(LOG_TAG, "Connected to Gateway");
-            if (!vccConnectivityManager.getWifiStationMode()) {
-                Log.d(LOG_TAG, "Couldn't request WifiStationMode... What do?");
-            }
+            vccConnectivityManager.getWifiStationMode();
+            //state = Active;
         }
 
         @Override
         public void onServiceDisconnected() {
             Log.d(LOG_TAG, "Disconnected");
+            vccConnectivityManager = null;
+            //state = NotActive;
         }
 
         @Override
         public void notifyWifiStationMode(WifiStationModeAidl mode) {
-            Log.d(LOG_TAG, "Wifi Station Mode Notification with value: " + mode);
+            Log.d(LOG_TAG, "Wifi Station Mode Notification with value: " + mode.mode);
 
             // Check some settings and then do something appropriate? Like setting the correct mode
             // and then act further on that.
+            wifiStationMode = mode;
             connectivityManagerRelay.notifyWifiStationMode(mode);
         }
     };
 
+    // Android Network Listener
     private android.net.ConnectivityManager.NetworkCallback networkActiveListener =
             new android.net.ConnectivityManager.NetworkCallback() {
 
@@ -141,13 +144,12 @@ public class ConnectivityManagerRelayService extends Service {
 
     public void setWifiStationMode(WifiStationModeAidl mode) {
         Log.v(LOG_TAG, "setWifiStationMode");
-
         vccConnectivityManager.setWifiStationMode(mode);
     }
 
     public void getWifiStationMode() {
         Log.v(LOG_TAG, "getWifiStationMode");
-
-        vccConnectivityManager.getWifiStationMode();
+        if(wifiStationMode != null)
+            connectivityManagerRelay.notifyWifiStationMode(wifiStationMode);
     }
 }

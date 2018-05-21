@@ -91,26 +91,39 @@ public class SystemConnectivityManager extends ISystemConnectivityManager.Stub {
 
     @Override
     public void updateWifiStationMode(byte mode) {
+        if (nativeConnectivityManager == null) {
+            Log.w(LOG_TAG, "No connection to Nativt side is established. Ignoring request...");
+            return;
+        }
         connectivityManagerGateway.notifyWifiStationModeChange(mode);
-        return;
     }
 
     public boolean getWifiStationMode() {
+        if (nativeConnectivityManager == null) {
+            Log.w(LOG_TAG, "No connection to Nativt side is established. Ignoring request...");
+            return false;
+        }
         boolean returnStatus = false;
         try {
             returnStatus = nativeConnectivityManager.requestWifiStationMode();
         } catch (RemoteException e) {
-            Log.w(LOG_TAG, "Remote exception when requesting current Wifi station mode. Exception: %s", e);
+            Log.w(LOG_TAG,
+                    "Remote exception when requesting current Wifi station mode. Exception: %s", e);
         }
         return returnStatus;
     }
 
     public boolean setWifiStationMode(byte mode) {
+        if (nativeConnectivityManager == null) {
+            Log.w(LOG_TAG, "No connection to Nativt side is established. Ignoring request...");
+            return false;
+        }
         boolean returnStatus = false;
         try {
             returnStatus = nativeConnectivityManager.requestWifiStationModeChange(mode);
         } catch (RemoteException e) {
-            Log.w(LOG_TAG, "Remote exception when changing current Wifi station mode. Exception: %s", e);
+            Log.w(LOG_TAG,
+                    "Remote exception when changing current Wifi station mode. Exception: %s", e);
         }
         return returnStatus;
     }

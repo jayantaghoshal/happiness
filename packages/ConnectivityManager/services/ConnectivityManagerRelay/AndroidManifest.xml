@@ -23,8 +23,8 @@
 
         <service
             android:exported="true"
-            android:singleUser="true"
-            android:name=".ConnectivityManagerRelayService">
+            android:name=".ConnectivityManagerRelayService"
+            android:singleUser="true">
         </service>
     </application>
 </manifest>

@@ -40,15 +40,18 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
 
         WifiStationModeAidl stationMode = new WifiStationModeAidl();
         switch (mode) {
-            case WifiStationMode.AP_MODE:
-                stationMode.mode = WifiStationModeAidl.Mode.AP_MODE;
+            case WifiStationMode.OFF:
+                stationMode.mode = WifiStationModeAidl.Mode.OFF;
                 break;
-            case WifiStationMode.STATION_MODE:
-                stationMode.mode = WifiStationModeAidl.Mode.STATION_MODE;
+            case WifiStationMode.STATION:
+                stationMode.mode = WifiStationModeAidl.Mode.STATION;
                 break;
-            case WifiStationMode.UNKNOWN:
-            default:
-                stationMode.mode = WifiStationModeAidl.Mode.UNKNOWN;
+            case WifiStationMode.AP:
+                stationMode.mode = WifiStationModeAidl.Mode.AP;
+                break;
+            case WifiStationMode.WORKSHOP:
+                stationMode.mode = WifiStationModeAidl.Mode.WORKSHOP;
+                break;
         }
 
         ListIterator<IConnectivityManager> it = subscribers.listIterator();
@@ -78,7 +81,10 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
      */
     @Override
     public boolean getWifiStationMode() {
-        return systemManager.getWifiStationMode();
+        if (systemManager != null) {
+            return systemManager.getWifiStationMode();
+        }
+        return false;
     }
 
     /**
@@ -88,18 +94,25 @@ public class ConnectivityManagerGateway extends IConnectivityManagerGateway.Stub
      */
     @Override
     public boolean setWifiStationMode(WifiStationModeAidl mode) {
-        byte hidlMode = WifiStationMode.UNKNOWN;
+        byte hidlMode = WifiStationMode.OFF;
         switch (mode.mode) {
-            case AP_MODE:
-                hidlMode = WifiStationMode.AP_MODE;
+            case OFF:
+                hidlMode = WifiStationMode.OFF;
                 break;
-            case STATION_MODE:
-                hidlMode = WifiStationMode.STATION_MODE;
+            case STATION:
+                hidlMode = WifiStationMode.STATION;
                 break;
-            case UNKNOWN:
-            default:
-                hidlMode = WifiStationMode.UNKNOWN;
+            case AP:
+                hidlMode = WifiStationMode.AP;
+                break;
+            case WORKSHOP:
+                hidlMode = WifiStationMode.WORKSHOP;
+                break;
         }
-        return systemManager.setWifiStationMode(hidlMode);
+        if (systemManager != null) {
+            return systemManager.setWifiStationMode(hidlMode);
+        }
+
+        return false;
     }
 }

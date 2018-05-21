@@ -106,11 +106,13 @@ int main() {
 
     InitSignals();
 
+    configureRpcThreadpool(1, true /*callerWillJoin*/);
+
     std::shared_ptr<ConnectivityManager> connectivity_manager = std::make_shared<ConnectivityManager>();
     std::shared_ptr<ISignalHandler> signal_handler = std::make_shared<SignalHandler>(connectivity_manager);
+
     connectivity_manager->Initialize(signal_handler);
 
-    configureRpcThreadpool(1, true /*callerWillJoin*/);
     joinRpcThreadpool();
 
     ALOGI("Exiting ...");

@@ -48,12 +48,12 @@ public class ConnectivityManagerRelay extends IConnectivityManagerRelay.Stub {
 
     @Override
     public void setWifiStationMode(WifiStationModeAidl mode) {
-        Log.v(LOG_TAG, "setWifiStationMode " + mode);
+        Log.v(LOG_TAG, "setWifiStationMode " + mode.mode);
         service.setWifiStationMode(mode);
     }
 
     public void notifyWifiStationMode(WifiStationModeAidl mode) {
-        Log.v(LOG_TAG, "notifyWifiStationMode " + mode);
+        Log.v(LOG_TAG, "notifyWifiStationMode " + mode.mode);
         if (null != callback) {
             try {
                 callback.notifyWifiStationMode(mode);

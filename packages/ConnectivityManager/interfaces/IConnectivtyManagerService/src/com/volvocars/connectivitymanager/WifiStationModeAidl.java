@@ -11,11 +11,12 @@ import android.os.Parcelable;
 public class WifiStationModeAidl implements Parcelable {
 
     public enum Mode {
-        UNKNOWN,
-        AP_MODE,
-        STATION_MODE
+        OFF,
+        STATION,
+        AP,
+        WORKSHOP
     }
-    public Mode mode = Mode.UNKNOWN;
+    public Mode mode = Mode.OFF;
 
     public static final Creator<WifiStationModeAidl> CREATOR = new Creator<WifiStationModeAidl>() {
         @Override
