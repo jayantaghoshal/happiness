@@ -69,8 +69,21 @@ mm
 
 ## Instructions on how to update the Docker image (Adminstrators only)
 
-Maybe you need to update the docker image, to add some new tool or change the environment. Please be aware that this image is used in production so be sure to
-invite the CI-team for code review.
+Maybe you need to update the docker image, to add some new tool or change the environment. Please be aware that this image is used in production so be sure to invite the CI-team for code review.
+
+### Order to tasks
+
+It is important to keep a certain order of tasks. Otherwise the provided scripts will complain about invalid Change-IDs and missing information.
+
+1. Apply changes to Dockerfile
+2. Create an Image using admin/create_docker_image.sh
+3. Verify your changes
+4. Commit your changes locally
+5. Update file image.ref with the change-ID
+6. Add the change and amend the latest commit
+7. Push the image to Artifactory
+8. Create a review in Gerrit by pushing your local commits
+
 
 ### How to build the docker image locally without pulling from artifactory
 
@@ -79,8 +92,7 @@ Update the image configuration and build it:
 vendor/volvocars/tools/docker_build/admin/create_docker_image.sh
 ```
 
-If it fails due to not connecting to https://registry-1.docker.io/v2/, your composer might not
-use proper proxy settings - for configuration see:
+If it fails due to not connecting to https://registry-1.docker.io/v2/, your composer might not use proper proxy settings - for configuration see:
 https://stackoverflow.com/questions/23111631/cannot-download-docker-images-behind-a-proxy
 
 and for proxy address refer above (especially when using VPN Linux Client).
