@@ -4,7 +4,6 @@
  */
 
 #include "lane_keeping_aid_module.h"
-#include <utils/SystemClock.h>
 #include <vhal_v2_0/VehicleUtils.h>
 #include "carconfig.h"
 #include "cc_parameterlist.h"
@@ -45,19 +44,19 @@ vhal20::VehiclePropConfig propconfig_lane_keeping_aid_mode() {
     return config;
 }
 
-LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
-                                           std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                                           android::sp<SettingsFramework::SettingsManagerHidl> manager)
+LaneKeepingAidModule::LaneKeepingAidModule(gsl::not_null<VFContext*> ctx)
     : PA_prop_lane_keeping_aid_on_(propconfig_lane_keeping_aid_on(),
                                    vccvhal10::VehicleProperty::LANE_KEEPING_AID_ON_STATUS,
-                                   dispatcher,
-                                   vehicleHal),
+                                   ctx->dispatcher,
+                                   &(ctx->vhal)),
       PA_prop_lane_keeping_aid_mode_(propconfig_lane_keeping_aid_mode(),
                                      vccvhal10::VehicleProperty::LANE_KEEPING_AID_MODE_STATUS,
-                                     dispatcher,
-                                     vehicleHal),
-      setting_lka_on_(SettingId::LaneKeepingAid_On, true, manager),
-      setting_lka_mode_(SettingId::LaneKeepingAid_Mode, 0, manager),
+                                     ctx->dispatcher,
+                                     &(ctx->vhal)),
+      setting_lka_on_(SettingId::LaneKeepingAid_On, true, ctx->settings),
+      setting_lka_mode_(SettingId::LaneKeepingAid_Mode, 0, ctx->settings),
+      vehmod_flexray_receiver_{ctx->dataelements},
+      lane_keep_aid_sts_receiver_{ctx->dataelements},
       is_error_(false),
       is_active_(true),
       lane_keeping_aid_on_(true),
@@ -68,7 +67,6 @@ LaneKeepingAidModule::LaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicl
     // Check if enabled.
     auto car_config_23 = carconfig::getValue<CC23_CruiseControlType>();
     auto car_config_150 = carconfig::getValue<CC150_LaneKeepingAidType>();
-
     const bool is_enabled_ =
             (car_config_23 > CC23_CruiseControlType::Cruise_control &&
              car_config_150 > CC150_LaneKeepingAidType::Without_Lane_Keeping_Aid_Lane_Departure_Warning);

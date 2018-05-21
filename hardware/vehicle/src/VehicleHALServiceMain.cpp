@@ -79,7 +79,6 @@ int main(int /* argc */, char* /* argv */ []) {
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
     auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
     auto speed_limit_adaptation_module = std::make_unique<SpeedLimitAdaptationModule>();
-    auto lane_keeping_aid_module = std::make_unique<LaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
     auto e_lane_keeping_aid_module = std::make_unique<ELaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
     auto traffic_sign_information_module =
             std::make_unique<TrafficSignInformationModule>(hal.get(), dispatcher, settings_manager);
@@ -88,6 +87,7 @@ int main(int /* argc */, char* /* argv */ []) {
     DriverSupportFunctionModule driver_support_function_module{&ctx};
     LaneDepartureWarningModule lane_departure_warning{&ctx};
     ConnectedSafetyModule connectedSafety{&ctx};
+    LaneKeepingAidModule laneKeepingAid{&ctx};
 
     auto vmsModule = std::make_unique<vmsHal>(hal.get());
     // Register modules
