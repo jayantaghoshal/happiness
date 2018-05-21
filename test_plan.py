@@ -89,6 +89,7 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/profiles/test/hmi_user",                     standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_distribution", standard_caps | {cp.flexray_or_carsim}), #Kirti Goel
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/max_defroster", standard_caps | {cp.flexray_or_carsim}), #Anders Hellman
 ]
 
 #This is for unstable tests that does not need to be run often
