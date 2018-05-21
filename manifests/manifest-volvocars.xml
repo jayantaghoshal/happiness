@@ -17,6 +17,7 @@
   <project name="vendor/volvocars/hmi/apps/mediacenter" path="vendor/volvocars/apps/mediacenter" revision="e4d2991ca94a7e4dadd27140ce2ad51bf9c47ecc" />
   <project name="vendor/volvocars/hmi/apps/tunerbrowserservice" path="vendor/volvocars/apps/tunerbrowserservice" revision="ZUUL_COMMIT_OR_HEAD" />
   <project name="vendor/volvocars/hmi/Settings" path="vendor/volvocars/apps/Settings" revision="1fcde6a02c28240302cf51a926018d0ba39d58d3" />
+  <project name="vendor/volvocars/apps/ci_test" path="vendor/volvocars/apps/ci_test" revision="ZUUL_COMMIT_OR_HEAD" />
 
   <!-- Volvo Cars partner apps -->
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a" />
