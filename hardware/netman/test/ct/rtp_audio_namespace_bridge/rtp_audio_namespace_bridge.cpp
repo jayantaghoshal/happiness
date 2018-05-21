@@ -51,25 +51,6 @@ TEST_F(RtpAudioNamespaceBridge, IptablesNatTableIsConfigured) {
 }
 
 /**
- * TEST: IptablesMangleTableIsConfigured
- * EXPECT:
- *   * checksum-fill for rtp_aud0 is added to mangle iptable
- */
-TEST_F(RtpAudioNamespaceBridge, IptablesMangleTableIsConfigured) {
-    if (checkAutonomousDrive()) {
-        const std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
-        const std::string cmd = vcc_netns +
-                                "/vendor/bin/iptables -t mangle -C POSTROUTING -d 10.0.0.0/24 -o rtp_aud0 -p udp -m "
-                                "udp --dport 68 -j CHECKSUM --checksum-fill";
-
-        int command_status = std::system(cmd.c_str());
-        EXPECT_TRUE(validateCommandStatus(command_status));
-    } else {
-        ALOGD("Nothing to test. Test not supported.");
-    }
-}
-
-/**
  * TEST: PingBetweenNamespaces
  * EXPECT:
  *   * successful pings between default and VCC network namespaces
