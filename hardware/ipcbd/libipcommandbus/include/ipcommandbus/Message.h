@@ -63,4 +63,4 @@ struct Message {
 
     RetryInfo retry_info = {false, 0, 0};
 };
-}
+}  // namespace Connectivity

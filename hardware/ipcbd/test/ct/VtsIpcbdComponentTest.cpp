@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 #include <sched.h>
 #include <unistd.h>
+#include <chrono>
 #include <future>
 #include <iostream>
 #include <thread>
@@ -14,64 +15,58 @@
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IResponseCallback.h>
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 
-#include "ipcb_simulator.h"
 #include "ipcommandbus/IpCmdTypes.h"
 #include "ipcommandbus/vcc_pdu_header.h"
+#include "src/packet_injector.h"
 
+#undef LOG_TAG
 #define LOG_TAG "VtsIpcbdComponentTest"
 #include <cutils/log.h>
 
-using ::android::hidl::base::V1_0::DebugInfo;
-using ::android::hidl::base::V1_0::IBase;
+using ::android::sp;
 using ::android::hardware::hidl_array;
 using ::android::hardware::hidl_memory;
 using ::android::hardware::hidl_string;
 using ::android::hardware::hidl_vec;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::sp;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::IMessageCallback;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::IResponseCallback;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::Msg;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::Error;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::SubscribeResult;
 using ::vendor::volvocars::hardware::common::V1_0::Ecu;
+
+namespace vehiclecom = ::vendor::volvocars::hardware::vehiclecom::V1_0;
+namespace ipcb_testing = vcc::ipcb::testing;
 
 using namespace ::testing;
 
-static int pid = 0;
+static pid_t pid = 0;
 static bool setupSuccessful = false;
 
 // Class implementing Methods from ::vendor::volvocars::hardware::vehiclecom::V1_0::IResponseCallback follow.
-class VehicleComClient : public IResponseCallback, public IMessageCallback {
-    Return<void> onMessageRcvd(const Msg& msg) override {
-        if (onMessageRcvdCallback != NULL) {
+class VehicleComClient : public vehiclecom::IResponseCallback, public vehiclecom::IMessageCallback {
+    Return<void> onMessageRcvd(const vehiclecom::Msg& msg) override {
+        if (onMessageRcvdCallback != nullptr) {
             onMessageRcvdCallback(msg);
         }
         return Void();
     }
 
-    Return<void> onResponseRcvd(const Msg& msg) override {
-        if (onResponseRcvdCallback != NULL) {
+    Return<void> onResponseRcvd(const vehiclecom::Msg& msg) override {
+        if (onResponseRcvdCallback != nullptr) {
             onResponseRcvdCallback(msg);
         }
         return Void();
     }
 
-    Return<void> onErrorRcvd(const Error& error) override {
-        if (onErrorRcvdCallback != NULL) {
+    Return<void> onErrorRcvd(const vehiclecom::Error& error) override {
+        if (onErrorRcvdCallback != nullptr) {
             onErrorRcvdCallback(error);
         }
         return Void();
     }
 
   public:
-    std::function<void(const Msg& msg)> onMessageRcvdCallback;
-    std::function<void(const Msg& msg)> onResponseRcvdCallback;
-    std::function<void(const Error& error)> onErrorRcvdCallback;
+    std::function<void(const vehiclecom::Msg& msg)> onMessageRcvdCallback;
+    std::function<void(const vehiclecom::Msg& msg)> onResponseRcvdCallback;
+    std::function<void(const vehiclecom::Error& error)> onErrorRcvdCallback;
 };
 
 class VtsIpcbdComponentTest : public ::Test {
@@ -83,29 +78,7 @@ class VtsIpcbdComponentTest : public ::Test {
         // For now, abort all tests manually
         ASSERT_TRUE(fileExists("/data/local/tmp/localconfig.json"));
 
-        // run a process and create a streambuf that reads its stdout and stderr
-        std::string pid_str = getCmdOut(
-                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json "
-                "/vendor/bin/ipcbd ipcb_test UDP & "
-                " echo $!");
-
-        uint8_t count = 0;
-        while (NULL == IVehicleCom::getService("ipcb_test").get()) {
-            usleep(100000);
-
-            if (!processExists(pid)) {
-                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
-            }
-
-            if (20 == ++count) {
-                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
-            }
-        }
-
-        std::string::size_type sz;  // alias of size_t
-        pid = std::stoi(pid_str, &sz);
-
-        ALOGD("\n Process int id: %d \n", pid);
+        system("ifconfig lo:0 127.0.0.2 up");
 
         setupSuccessful = true;
 
@@ -118,7 +91,7 @@ class VtsIpcbdComponentTest : public ::Test {
     }
 
     static bool fileExists(const std::string& name) {
-        if (FILE* file = fopen(name.c_str(), "r")) {
+        if (FILE* file = fopen(name.c_str(), "re")) {
             fclose(file);
             return true;
         } else {
@@ -134,7 +107,7 @@ class VtsIpcbdComponentTest : public ::Test {
             ALOGE("popen() FAILED");
         }
         while (!feof(pipe.get())) {
-            if (fgets(buffer.data(), 128, pipe.get()) != NULL) {
+            if (fgets(buffer.data(), 128, pipe.get()) != nullptr) {
                 result += buffer.data();
                 break;  // break it since we just interested to get process id
             }
@@ -143,22 +116,57 @@ class VtsIpcbdComponentTest : public ::Test {
     }
 
     static void TearDownTestCase() {
-        int result = -1;
-        if (pid != 0) {
-            result = kill(pid, SIGTERM);
-        }
+        ALOGD("+ TearDownTestCase");
 
-        ALOGD("- TearDownTestCase: %d \n", result);
+        system("ifconfig lo:0 down");
+
+        ALOGD("- TearDownTestCase");
     }
 
-    void SetUp() {
+    void SetUp() override {
         ALOGD("+ SetUp ");
+
+        // run a process and create a streambuf that reads its stdout and stderr
+        std::string pid_str = getCmdOut(
+                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json "
+                "/vendor/bin/ipcbd ipcb_test UDP & "
+                " echo $!");
+        std::string::size_type sz;  // alias of size_t
+        pid = std::stoi(pid_str, &sz);
+
+        uint8_t count = 0;
+        while (nullptr == vehiclecom::IVehicleCom::tryGetService("ipcb_test").get()) {
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1s);
+
+            if (!processExists(pid)) {
+                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
+            }
+
+            if (20 == ++count) {
+                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
+            }
+        }
+
+        ALOGD("Process int id: %u", pid);
 
         // Make sure Test Case Setup was executed correctly
         ASSERT_TRUE(setupSuccessful) << "Setup Test Case failed, failing test";
 
         // Make sure IpcbD is still running
         ASSERT_TRUE(processExists(pid)) << "IpcbD is not running anymore, did it crash?";
+
+        ALOGD("- SetUp ");
+    }
+
+    void TearDown() override {
+        ALOGD("+ TearDown");
+        int result = -1;
+        if (pid != 0) {
+            result = kill(pid, SIGTERM);
+            ALOGD("Result of killing process: %d", result);
+        }
+        ALOGD("- TearDown");
     }
 };
 
@@ -168,7 +176,7 @@ class VtsIpcbdComponentTest : public ::Test {
 TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     ALOGI("TestSubscribeUnsubscribeRequest, setting up");
 
-    IpcbSimulator tcam_sim("127.0.0.1", 70000, 50010, 0);
+    ipcb_testing::PacketInjector tcam_sim("127.0.0.2", 60000, "127.0.0.1", 50010, 0);
 
     sp<VehicleComClient> vehicle_com_client = new VehicleComClient();
 
@@ -177,15 +185,15 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
 
     // Connect to IpcbD service
     ALOGD("Connect to service!");
-    sp<IVehicleCom> ipcb_daemon_ = IVehicleCom::getService("ipcb_test");
-    ASSERT_TRUE(ipcb_daemon_ != NULL);
+    sp<vehiclecom::IVehicleCom> ipcb_daemon_ = vehiclecom::IVehicleCom::getService("ipcb_test");
+    ASSERT_TRUE(ipcb_daemon_ != nullptr);
 
     // ** Test add subscriber (REQUEST)  ** //
 
     ALOGI("TestSubscribeUnsubscribeRequest, starting test");
 
     // Setup a request PDU to send from Ipcb simulator to IpcbD
-    Pdu request;
+    Connectivity::Pdu request;
     request.header.service_id = 0x1;
     request.header.operation_id = 0x1;
     request.header.operation_type = Connectivity::IpCmdTypes::OperationType::REQUEST;
@@ -195,23 +203,27 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     request.header.length = Connectivity::VCCPDUHeader::DATA_SIZE - 8;
     request.header.protocol_version = 3;
 
-    std::promise<bool> p_msg_cb_triggered;
-    std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onMessageRcvdCallback = [&message_received, request, &p_msg_cb_triggered](const Msg& msg) {
-        ALOGD("Message received in client (%d, %d, %d)",
-              msg.pdu.header.serviceID,
-              msg.pdu.header.operationID,
-              msg.pdu.header.seqNbr);
-        if (msg.pdu.header.serviceID == request.header.service_id &&
-            msg.pdu.header.operationID == request.header.operation_id && msg.pdu.header.seqNbr == 0) {
-            ++message_received;
-            p_msg_cb_triggered.set_value(true);
-        }
-    };
+    std::promise<void> p_msg_cb_triggered;
+    std::future<void> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
+    vehicle_com_client->onMessageRcvdCallback =
+            [&message_received, request, &p_msg_cb_triggered](const vehiclecom::Msg& msg) {
+                ALOGD("Message received in client (%d, %d, %d)",
+                      msg.pdu.header.serviceID,
+                      msg.pdu.header.operationID,
+                      msg.pdu.header.seqNbr);
+                if (msg.pdu.header.serviceID == request.header.service_id &&
+                    msg.pdu.header.operationID == request.header.operation_id && msg.pdu.header.seqNbr == 0) {
+                    ++message_received;
+                    p_msg_cb_triggered.set_value();
+                }
+            };
 
-    SubscribeResult result;
-    ipcb_daemon_->subscribe(
-            0x1, 0x1, OperationType::REQUEST, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
+    vehiclecom::SubscribeResult result;
+    ipcb_daemon_->subscribe(0x1,
+                            0x1,
+                            vehiclecom::OperationType::REQUEST,
+                            vehicle_com_client,
+                            [&result](vehiclecom::SubscribeResult sr) { result = sr; });
 
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id = result.subscriberId;
@@ -219,9 +231,9 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     EXPECT_NE(subscriber_id, 0u);
 
     ALOGD("Send Request to IHU");
-    tcam_sim.SendPdu(request);
+    ASSERT_TRUE(tcam_sim.SendPdu(request));
 
-    std::future_status status = f_msg_cb_triggered.wait_for(std::chrono::seconds(1));
+    std::future_status status = f_msg_cb_triggered.wait_for(std::chrono::seconds(3));
     if (status == std::future_status::deferred || status == std::future_status::timeout) {
         ASSERT_TRUE(false) << "Message callback not triggered! (Timeout or deferred)";
     }
@@ -230,13 +242,13 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     EXPECT_EQ(message_received, 1);
 
     // Read PDU in Ipcb Simulator, expect that we got an ACK on our request
-    Pdu read_pdu;
-    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu));
+    Connectivity::Pdu read_pdu;
+    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu, 10));
     EXPECT_TRUE(read_pdu.header.operation_type == Connectivity::IpCmdTypes::OperationType::ACK);
 
     // Unsubscribe message handler
-    CommandResult cresult;
-    ipcb_daemon_->unsubscribe(subscriber_id, [&cresult](CommandResult cr) { cresult = cr; });
+    vehiclecom::CommandResult cresult;
+    ipcb_daemon_->unsubscribe(subscriber_id, [&cresult](vehiclecom::CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     // Update sequence number (lowest byte of sender_handle_id, so just inc by one)
@@ -246,13 +258,14 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
     tcam_sim.SendPdu(request);
 
     // Wait a little while for the Pdu to be sent, even though we do not expect to get it...
-    usleep(500000);
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(5s);
 
     // Check that message has NOT been received in "VehicleComClient"
     EXPECT_EQ(message_received, 1);
 
     // Check that we get an error since we are not handling the request
-    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu));
+    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu, 10));
     EXPECT_TRUE(read_pdu.header.operation_type == Connectivity::IpCmdTypes::OperationType::ERROR);
 
     ALOGI("TestSubscribeUnsubscribeRequest, test complete");
@@ -264,7 +277,7 @@ TEST_F(VtsIpcbdComponentTest, TestSubscribeUnsubscribeRequest) {
 TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
     ALOGI("TestMultipleSubscribeSuccess, setting up");
 
-    IpcbSimulator tcam_sim("127.0.0.1", 70000, 50010, 0);
+    ipcb_testing::PacketInjector tcam_sim("127.0.0.2", 60000, "127.0.0.1", 50010, 0);
 
     sp<VehicleComClient> vehicle_com_client = new VehicleComClient();
 
@@ -273,19 +286,19 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
 
     // Connect to IpcbD service
     ALOGD("Connect to service!");
-    sp<IVehicleCom> ipcb_daemon_ = IVehicleCom::getService("ipcb_test");
-    ASSERT_TRUE(ipcb_daemon_ != NULL);
+    sp<vehiclecom::IVehicleCom> ipcb_daemon_ = vehiclecom::IVehicleCom::getService("ipcb_test");
+    ASSERT_TRUE(ipcb_daemon_ != nullptr);
 
-    std::promise<bool> p_msg_cb_triggered;
-    std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg& msg) {
+    std::promise<void> p_msg_cb_triggered;
+    std::future<void> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
+    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const vehiclecom::Msg& msg) {
         ALOGD("Message received in client (%d, %d, %d)",
               msg.pdu.header.serviceID,
               msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         ++message_received;
         if (2 == message_received) {
-            p_msg_cb_triggered.set_value(true);
+            p_msg_cb_triggered.set_value();
         }
     };
 
@@ -293,19 +306,25 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
     ALOGI("TestMultipleSubscribeSuccess, starting test");
 
     // Register two subscribers
-    SubscribeResult result;
-    ipcb_daemon_->subscribe(
-            0x1, 0x1, OperationType::NOTIFICATION, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
+    vehiclecom::SubscribeResult result;
+    ipcb_daemon_->subscribe(0x1,
+                            0x1,
+                            vehiclecom::OperationType::NOTIFICATION,
+                            vehicle_com_client,
+                            [&result](vehiclecom::SubscribeResult sr) { result = sr; });
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id_1 = result.subscriberId;
 
-    ipcb_daemon_->subscribe(
-            0x1, 0x1, OperationType::NOTIFICATION, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
+    ipcb_daemon_->subscribe(0x1,
+                            0x1,
+                            vehiclecom::OperationType::NOTIFICATION,
+                            vehicle_com_client,
+                            [&result](vehiclecom::SubscribeResult sr) { result = sr; });
     EXPECT_TRUE(result.commandResult.success);
     uint64_t subscriber_id_2 = result.subscriberId;
 
     // Setup a notification PDU to send from Ipcb simulator to IpcbD
-    Pdu notification;
+    Connectivity::Pdu notification;
     notification.header.service_id = 0x1;
     notification.header.operation_id = 0x1;
     notification.header.operation_type = Connectivity::IpCmdTypes::OperationType::NOTIFICATION;
@@ -326,11 +345,11 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
     EXPECT_EQ(message_received, 2);
 
     // Unsubscribe message handler
-    CommandResult cresult;
-    ipcb_daemon_->unsubscribe(subscriber_id_1, [&cresult](CommandResult cr) { cresult = cr; });
+    vehiclecom::CommandResult cresult;
+    ipcb_daemon_->unsubscribe(subscriber_id_1, [&cresult](vehiclecom::CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
-    ipcb_daemon_->unsubscribe(subscriber_id_2, [&cresult](CommandResult cr) { cresult = cr; });
+    ipcb_daemon_->unsubscribe(subscriber_id_2, [&cresult](vehiclecom::CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     ALOGI("TestMultipleSubscribeSuccess, test complete");
@@ -342,7 +361,7 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeSuccess) {
 TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
     ALOGI("TestMultipleSubscribeFail, setting up");
 
-    IpcbSimulator tcam_sim("127.0.0.1", 70000, 50010, 0);
+    ipcb_testing::PacketInjector tcam_sim("127.0.0.2", 60000, "127.0.0.1", 50010, 0);
 
     sp<VehicleComClient> vehicle_com_client = new VehicleComClient();
 
@@ -351,36 +370,42 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
 
     // Connect to IpcbD service
     ALOGD("Connect to service!");
-    sp<IVehicleCom> ipcb_daemon_ = IVehicleCom::getService("ipcb_test");
-    ASSERT_TRUE(ipcb_daemon_ != NULL);
+    sp<vehiclecom::IVehicleCom> ipcb_daemon_ = vehiclecom::IVehicleCom::getService("ipcb_test");
+    ASSERT_TRUE(ipcb_daemon_ != nullptr);
 
-    std::promise<bool> p_msg_cb_triggered;
-    std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const Msg& msg) {
+    std::promise<void> p_msg_cb_triggered;
+    std::future<void> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
+    vehicle_com_client->onMessageRcvdCallback = [&message_received, &p_msg_cb_triggered](const vehiclecom::Msg& msg) {
         ALOGD("Message received in client (%d, %d, %d)",
               msg.pdu.header.serviceID,
               msg.pdu.header.operationID,
               msg.pdu.header.seqNbr);
         ++message_received;
-        p_msg_cb_triggered.set_value(true);
+        p_msg_cb_triggered.set_value();
     };
 
     // ** Test add subscriber (REQUEST)  ** //
     ALOGI("TestMultipleSubscribeFail, starting test");
 
     // Register two subscribers
-    SubscribeResult result;
-    ipcb_daemon_->subscribe(
-            0x1, 0x1, OperationType::REQUEST, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
-    EXPECT_TRUE(result.commandResult.success);
+    vehiclecom::SubscribeResult result;
+    ipcb_daemon_->subscribe(0x1,
+                            0x1,
+                            vehiclecom::OperationType::REQUEST,
+                            vehicle_com_client,
+                            [&result](vehiclecom::SubscribeResult sr) { result = sr; });
+    ASSERT_TRUE(result.commandResult.success);
     uint64_t subscriber_id = result.subscriberId;
 
-    ipcb_daemon_->subscribe(
-            0x1, 0x1, OperationType::REQUEST, vehicle_com_client, [&result](SubscribeResult sr) { result = sr; });
-    EXPECT_FALSE(result.commandResult.success);
+    ipcb_daemon_->subscribe(0x1,
+                            0x1,
+                            vehiclecom::OperationType::REQUEST,
+                            vehicle_com_client,
+                            [&result](vehiclecom::SubscribeResult sr) { result = sr; });
+    ASSERT_FALSE(result.commandResult.success);
 
     // Setup a request PDU to send from Ipcb simulator to IpcbD
-    Pdu request;
+    Connectivity::Pdu request;
     request.header.service_id = 0x1;
     request.header.operation_id = 0x1;
     request.header.operation_type = Connectivity::IpCmdTypes::OperationType::REQUEST;
@@ -401,8 +426,8 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
     EXPECT_EQ(message_received, 1);
 
     // Unsubscribe message handler
-    CommandResult cresult;
-    ipcb_daemon_->unsubscribe(subscriber_id, [&cresult](CommandResult cr) { cresult = cr; });
+    vehiclecom::CommandResult cresult;
+    ipcb_daemon_->unsubscribe(subscriber_id, [&cresult](vehiclecom::CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     ALOGI("TestMultipleSubscribeFail, test complete");
@@ -414,7 +439,7 @@ TEST_F(VtsIpcbdComponentTest, TestMultipleSubscribeFail) {
 TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
     ALOGI("TestRequestResponse, setting up");
 
-    IpcbSimulator tcam_sim("127.0.0.1", 70000, 50010, 0);
+    ipcb_testing::PacketInjector tcam_sim("127.0.0.2", 60000, "127.0.0.1", 50010, 0);
 
     sp<VehicleComClient> vehicle_com_client = new VehicleComClient();
 
@@ -422,36 +447,36 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
 
     // Connect to IpcbD service
     ALOGD("Connect to service!");
-    sp<IVehicleCom> ipcb_daemon_ = IVehicleCom::getService("ipcb_test");
-    ASSERT_TRUE(ipcb_daemon_ != NULL);
+    sp<vehiclecom::IVehicleCom> ipcb_daemon_ = vehiclecom::IVehicleCom::getService("ipcb_test");
+    ASSERT_TRUE(ipcb_daemon_ != nullptr);
 
     ALOGI("TestRequestResponse, starting test");
 
     // Prepare a message to send
-    Msg message;
+    vehiclecom::Msg message;
 
-    message.ecu = Ecu::VCM;
+    message.ecu = Ecu::TCAM;
 
     message.pdu.header.serviceID = 0x1;
     message.pdu.header.operationID = 0x1;
-    message.pdu.header.operationType = OperationType::SETREQUEST;
+    message.pdu.header.operationType = vehiclecom::OperationType::SETREQUEST;
 
     message.pdu.header.seqNbr = sequence_id++;
 
     // Send message from IpcbD
     ALOGI("TestRequestResponse, Send message");
-    CommandResult cresult;
+    vehiclecom::CommandResult cresult;
     ipcb_daemon_->sendRequest(
-            message, {false, 0, 0}, vehicle_com_client, [&cresult](CommandResult cr) { cresult = cr; });
+            message, {false, 0, 0}, vehicle_com_client, [&cresult](vehiclecom::CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     // Read PDU in Ipcb Simulator, expect that we got an ACK on our request
-    Pdu read_pdu;
-    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu));
+    Connectivity::Pdu read_pdu;
+    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu, 10));
     EXPECT_TRUE(read_pdu.header.operation_type == Connectivity::IpCmdTypes::OperationType::SETREQUEST);
 
     // Setup a response PDU to send from Ipcb simulator to IpcbD
-    Pdu response;
+    Connectivity::Pdu response;
     response.header.service_id = 0x1;
     response.header.operation_id = 0x1;
     response.header.operation_type = Connectivity::IpCmdTypes::OperationType::RESPONSE;
@@ -460,19 +485,20 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
     response.header.protocol_version = 3;
 
     uint8_t response_received = 0;
-    std::promise<bool> p_msg_cb_triggered;
-    std::future<bool> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
-    vehicle_com_client->onResponseRcvdCallback = [&response_received, response, &p_msg_cb_triggered](const Msg& msg) {
-        ALOGD("Response received in client (%d, %d, %d)",
-              msg.pdu.header.serviceID,
-              msg.pdu.header.operationID,
-              msg.pdu.header.seqNbr);
-        if (msg.pdu.header.serviceID == response.header.service_id &&
-            msg.pdu.header.operationID == response.header.operation_id && msg.pdu.header.seqNbr == 0) {
-            ++response_received;
-            p_msg_cb_triggered.set_value(true);
-        }
-    };
+    std::promise<void> p_msg_cb_triggered;
+    std::future<void> f_msg_cb_triggered = p_msg_cb_triggered.get_future();
+    vehicle_com_client->onResponseRcvdCallback =
+            [&response_received, response, &p_msg_cb_triggered](const vehiclecom::Msg& msg) {
+                ALOGD("Response received in client (%d, %d, %d)",
+                      msg.pdu.header.serviceID,
+                      msg.pdu.header.operationID,
+                      msg.pdu.header.seqNbr);
+                if (msg.pdu.header.serviceID == response.header.service_id &&
+                    msg.pdu.header.operationID == response.header.operation_id && msg.pdu.header.seqNbr == 0) {
+                    ++response_received;
+                    p_msg_cb_triggered.set_value();
+                }
+            };
 
     ALOGD("Send Response to IHU");
     tcam_sim.SendPdu(response);
@@ -485,7 +511,7 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
     // Check that response has been received in "VehicleComClient"
     EXPECT_EQ(response_received, 1);
 
-    ALOGI("TestSubscribeUnsubscribeRequest, test complete");
+    ALOGI("TestRequestResponse, test complete");
 }
 
 /**
@@ -494,23 +520,23 @@ TEST_F(VtsIpcbdComponentTest, TestRequestResponse) {
 TEST_F(VtsIpcbdComponentTest, TestNoAckRetry) {
     ALOGI("TestNoAckRetry, setting up");
 
-    IpcbSimulator tcam_sim("127.0.0.1", 70000, 50010, 0);
+    ipcb_testing::PacketInjector tcam_sim("127.0.0.2", 60000, "127.0.0.1", 50010, 0);
 
     sp<VehicleComClient> vehicle_com_client = new VehicleComClient();
 
-    std::promise<bool> p_error_cb_triggered;
-    std::future<bool> f_error_cb_triggered = p_error_cb_triggered.get_future();
+    std::promise<void> p_error_cb_triggered;
+    std::future<void> f_error_cb_triggered = p_error_cb_triggered.get_future();
     int error_received = 0;
-    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const Error& error) {
+    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const vehiclecom::Error& error) {
         (void)error;
         ++error_received;
-        p_error_cb_triggered.set_value(true);
+        p_error_cb_triggered.set_value();
     };
 
     // Connect to IpcbD service
     ALOGD("Connect to service!");
-    sp<IVehicleCom> ipcb_daemon_ = IVehicleCom::getService("ipcb_test");
-    ASSERT_TRUE(ipcb_daemon_ != NULL);
+    sp<vehiclecom::IVehicleCom> ipcb_daemon_ = vehiclecom::IVehicleCom::getService("ipcb_test");
+    ASSERT_TRUE(ipcb_daemon_ != nullptr);
 
     uint8_t sequenceId_ = 0;
 
@@ -518,23 +544,23 @@ TEST_F(VtsIpcbdComponentTest, TestNoAckRetry) {
     ALOGI("TestNoAckRetry, start test");
 
     // Prepare a message to send
-    Msg message;
+    vehiclecom::Msg message;
 
-    message.ecu = Ecu::VCM;
+    message.ecu = Ecu::TCAM;
 
     message.pdu.header.serviceID = 0x00AB;
     message.pdu.header.operationID = 0x0B05;
-    message.pdu.header.operationType = OperationType::SETREQUEST;
+    message.pdu.header.operationType = vehiclecom::OperationType::SETREQUEST;
 
     message.pdu.header.seqNbr = sequenceId_++;
 
-    CommandResult cresult;
+    vehiclecom::CommandResult cresult;
     ipcb_daemon_->sendRequest(
-            message, {false, 0, 0}, vehicle_com_client, [&cresult](CommandResult cr) { cresult = cr; });
+            message, {false, 0, 0}, vehicle_com_client, [&cresult](vehiclecom::CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
-    Pdu read_pdu;
-    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu));
+    Connectivity::Pdu read_pdu;
+    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu, 10));
 
     // Measure time until resend #1 is received
     {
@@ -602,23 +628,23 @@ TEST_F(VtsIpcbdComponentTest, TestNoAckRetry) {
 TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry) {
     ALOGI("TestNoResponseRetry, setting up");
 
-    IpcbSimulator tcam_sim("127.0.0.1", 70000, 50010, 0);
+    ipcb_testing::PacketInjector tcam_sim("127.0.0.2", 60000, "127.0.0.1", 50010, 0);
 
     sp<VehicleComClient> vehicle_com_client = new VehicleComClient();
 
-    std::promise<bool> p_error_cb_triggered;
-    std::future<bool> f_error_cb_triggered = p_error_cb_triggered.get_future();
+    std::promise<void> p_error_cb_triggered;
+    std::future<void> f_error_cb_triggered = p_error_cb_triggered.get_future();
     int error_received = 0;
-    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const Error& error) {
+    vehicle_com_client->onErrorRcvdCallback = [&error_received, &p_error_cb_triggered](const vehiclecom::Error& error) {
         (void)error;
         ++error_received;
-        p_error_cb_triggered.set_value(true);
+        p_error_cb_triggered.set_value();
     };
 
     // Connect to IpcbD service
     ALOGD("Connect to service!");
-    sp<IVehicleCom> ipcb_daemon_ = IVehicleCom::getService("ipcb_test");
-    ASSERT_TRUE(ipcb_daemon_ != NULL);
+    sp<vehiclecom::IVehicleCom> ipcb_daemon_ = vehiclecom::IVehicleCom::getService("ipcb_test");
+    ASSERT_TRUE(ipcb_daemon_ != nullptr);
 
     uint8_t sequenceId_ = 0;
 
@@ -626,33 +652,33 @@ TEST_F(VtsIpcbdComponentTest, TestNoResponseRetry) {
     ALOGI("TestNoResponseRetry, start test");
 
     // Prepare a message to send
-    Msg message;
+    vehiclecom::Msg message;
 
-    message.ecu = Ecu::VCM;
+    message.ecu = Ecu::TCAM;
 
     message.pdu.header.serviceID = 0x00AB;
     message.pdu.header.operationID = 0x0B05;
-    message.pdu.header.operationType = OperationType::SETREQUEST;
+    message.pdu.header.operationType = vehiclecom::OperationType::SETREQUEST;
 
     message.pdu.header.seqNbr = sequenceId_++;
 
     // Send message from IpcbD
     ALOGI("TestNoResponseRetry, Send message");
-    CommandResult cresult;
+    vehiclecom::CommandResult cresult;
     ipcb_daemon_->sendRequest(
-            message, {true, 2, 500}, vehicle_com_client, [&cresult](CommandResult cr) { cresult = cr; });
+            message, {true, 2, 500}, vehicle_com_client, [&cresult](vehiclecom::CommandResult cr) { cresult = cr; });
     EXPECT_TRUE(cresult.success);
 
     // Receive message from IpcbD
-    Pdu read_pdu;
-    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu));
+    Connectivity::Pdu read_pdu;
+    EXPECT_TRUE(tcam_sim.ReceivePdu(read_pdu, 10));
     ALOGI("TestNoResponseRetry, PDU #1 received in simulator");
 
     // Measure time until resend is received
     auto start = std::chrono::steady_clock::now();
 
     // Send ack, so that IpcbD expects response next
-    Pdu ack;
+    Connectivity::Pdu ack;
     ack.header.service_id = 0x00AB;
     ack.header.operation_id = 0x0B05;
     ack.header.operation_type = Connectivity::IpCmdTypes::OperationType::ACK;

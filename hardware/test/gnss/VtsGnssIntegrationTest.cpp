@@ -8,166 +8,196 @@
 #include <android/hardware/gnss/1.0/IGnssCallback.h>
 #include <android/hardware/gnss/1.0/types.h>
 #include <asn_codec.h>
-#include <cutils/log.h>
 #include <gtest/gtest.h>
 #include <ipcb_simulator.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <type_conversion_helpers.h>
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 #include <chrono>
+#include <cstdio>
+#include <cstdlib>
 #include <fstream>
 #include <future>
 #include <iostream>
+#include <string>
+#include <thread>
 
 // Note that the auto-generated ASN1 files are in C, not C++
 extern "C" {
 #include "infotainmentIpBus.h"
-}
-extern "C" {
 #include "pl/asn_base/asn_base.h"
 }
 
+#undef LOG_TAG
+#define LOG_TAG "VtsGnssIntegrationTest"
+#include <cutils/log.h>
+
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::IVehicleCom;
 
-using ::android::hardware::gnss::V1_0::IGnss;
-using ::android::hardware::gnss::V1_0::IGnssCallback;
-using ::android::hardware::gnss::V1_0::GnssLocation;
-using ::android::hidl::base::V1_0::DebugInfo;
-using ::android::hidl::base::V1_0::IBase;
+using ::android::sp;
 using ::android::hardware::hidl_string;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::android::sp;
+using ::android::hardware::gnss::V1_0::GnssLocation;
+using ::android::hardware::gnss::V1_0::IGnss;
+using ::android::hardware::gnss::V1_0::IGnssCallback;
+using ::android::hidl::base::V1_0::DebugInfo;
 
-#define LOG_TAG "VtsGnssIntegrationTest"
+namespace {
+
+constexpr auto TCAM_INTERFACE_NAME = "tcam0_ac:0";
+constexpr auto IHU_IP = "198.19.101.66";
+constexpr auto BROADCAST_IP = "198.19.101.95";
+constexpr auto TCAM_IP = "198.19.101.67";
+constexpr auto NETMASK = "255.255.255.224";
+constexpr uint16_t IHU_PORT = 50000;
+constexpr uint16_t IHU_BROADCAST_PORT = 50001;
+constexpr uint16_t TCAM_PORT = 50000;
+constexpr uint16_t TCAM_BROADCAST_PORT = 50002;
+
+std::vector<std::pair<Connectivity::Message::Ecu, Connectivity::ISocket::EcuAddress>> EcuMap() {
+    using namespace Connectivity;
+    return std::vector<std::pair<Message::Ecu, ISocket::EcuAddress>>{
+            std::make_pair(Message::Ecu::IHU, ISocket::EcuAddress{IHU_IP, IHU_PORT}),
+            std::make_pair(Message::Ecu::ALL, ISocket::EcuAddress{BROADCAST_IP, TCAM_BROADCAST_PORT}),
+            std::make_pair(Message::Ecu::TCAM, ISocket::EcuAddress{TCAM_IP, TCAM_PORT})};
+}
 
 struct GnssCallback : public IGnssCallback {
     // Methods from ::android::hardware::gnss::V1_0::IGnssCallback follow.
     Return<void> gnssLocationCb(const GnssLocation& location) override {
         ALOGD("GnssCallback invoked");
-        if (onLocationCallback != NULL) {
+        if (onLocationCallback != nullptr) {
             onLocationCallback(location);
         }
         return Void();
     };
-    Return<void> gnssStatusCb(IGnssCallback::GnssStatusValue status) override { return Void(); };
-    Return<void> gnssSvStatusCb(const IGnssCallback::GnssSvStatus& svInfo) override { return Void(); };
-    Return<void> gnssNmeaCb(int64_t timestamp, const hidl_string& nmea) override { return Void(); };
-    Return<void> gnssSetCapabilitesCb(uint32_t capabilities) override { return Void(); };
+    Return<void> gnssStatusCb(IGnssCallback::GnssStatusValue status) override {
+        (void)status;
+        return Void();
+    };
+    Return<void> gnssSvStatusCb(const IGnssCallback::GnssSvStatus& svInfo) override {
+        (void)svInfo;
+        return Void();
+    };
+    Return<void> gnssNmeaCb(int64_t timestamp, const hidl_string& nmea) override {
+        (void)timestamp;
+        (void)nmea;
+        return Void();
+    };
+    Return<void> gnssSetCapabilitesCb(uint32_t capabilities) override {
+        (void)capabilities;
+        return Void();
+    };
     Return<void> gnssAcquireWakelockCb() override { return Void(); };
     Return<void> gnssReleaseWakelockCb() override { return Void(); };
     Return<void> gnssRequestTimeCb() override { return Void(); };
-    Return<void> gnssSetSystemInfoCb(const IGnssCallback::GnssSystemInfo& info) override { return Void(); };
+    Return<void> gnssSetSystemInfoCb(const IGnssCallback::GnssSystemInfo& info) override {
+        (void)info;
+        return Void();
+    };
 
     std::function<void(const GnssLocation& location)> onLocationCallback;
     // Methods from ::android::hidl::base::V1_0::IBase follow.
 };
-
-static int new_ipcb_pid = -1;
-
-static bool setup_test_case_successful = false;
+}  // namespace
 
 class VtsGnssIntegrationTest : public ::testing::Test {
   protected:
     static void SetUpTestCase() {
-        ALOGD("+ SetUpTestCase ");
+        ALOGV("+ %s", __func__);
 
-        // Expected that all tests would be aborted here, but that is not the case.
-        // For now, abort all tests manually
-        ASSERT_TRUE(fileExists("/data/local/tmp/localconfig.json"));
+        // Move test case into namespace for network mocks to work
+        int file_descriptor;
+        const char* namespace_path = "/dev/vendor/netns/vcc";
 
-        // Kill conflicting IpcbD
-        int ipcb_pid = getProcIdByName("/vendor/bin/ipcbd ipcb UDP");
-        if (-1 != ipcb_pid) {
-            kill(ipcb_pid, SIGTERM);
+        file_descriptor = open(namespace_path, O_RDONLY | O_CLOEXEC);
+        if (file_descriptor > 0) {
+            if (setns(file_descriptor, CLONE_NEWNET) != 0) {
+                ASSERT_TRUE(false) << "Set NS failed!";
+            } else {
+                ALOGD("Namespace is: %s", namespace_path);
+            }
+        } else {
+            ASSERT_TRUE(false) << "Open NS filedescriptor failed!";
         }
+        close(file_descriptor);
 
         // Start IpcbD for test with mocked localconfig
-        std::string new_ipcb_pid_str = getCmdOut(
-                "VCC_LOCALCONFIG_PATH=/data/local/tmp/localconfig.json "
-                "/vendor/bin/ipcbd ipcb UDP "
-                "& echo $!");
-
-        std::string::size_type sz;  // alias of size_t
-        new_ipcb_pid = std::stoi(new_ipcb_pid_str, &sz);
+        getCmdOut("stop ipcbd-infotainment");
+        getCmdOut("start ipcbd-infotainment");
 
         // Wait for service to start
         uint8_t count = 0;
-        while (NULL == IVehicleCom::getService("ipcb").get()) {
-            usleep(100000);
-
-            if (!processExists(new_ipcb_pid)) {
-                ASSERT_TRUE(false) << "PID lost while waiting for service to be registered";
-            }
-
-            if (20 == ++count) {
-                ASSERT_TRUE(false) << "Timed out while waiting for service to be registered";
-            }
+        while (IVehicleCom::tryGetService("ipcb")) {
+            ASSERT_TRUE(20 == ++count) << "Timed out while waiting for service to be registered";
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1s);
         }
 
-        // Wait for GnssD to reconnect to new IpcbD
-        sleep(2);
+        // loopback interface is needed, bring it up.
+        getCmdOut("/vendor/bin/ifconfig lo up");
+        // Set up an alias for the TCAM simulation to bind to.
+        getCmdOut("/vendor/bin/ifconfig " + std::string(TCAM_INTERFACE_NAME) + " " + TCAM_IP + " netmask " +
+                  std::string(NETMASK) + " up");
+        // Mangle the packets to spoof TCAM sending broadcast packages.
+        getCmdOut("/vendor/bin/iptables -t nat -I POSTROUTING -s " + std::string(IHU_IP) + " -p udp --dport " +
+                  std::to_string(IHU_BROADCAST_PORT) + " -j SNAT --to-source " + std::string(TCAM_IP) + " -w");
 
-        setup_test_case_successful = true;
+        /*
+         * NATing is only used for the first packet in a connection. For UDP a connection is defined as established as
+         * long as the time out after the last received packet does not fire. Therefore, in order to enforce NATing on
+         * every packet we set this time out to 0, 30 is the default.
+         */
+        getCmdOut("sysctl -w net.netfilter.nf_conntrack_udp_timeout=0");
 
-        ALOGD("- SetUpTestCase ");
+        // Waiting for GNSS service is started and fully connected to ipcb.
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(2s);
+
+        ALOGV("- %s", __func__);
     }
 
-    static bool processExists(int pid) {
-        // Calling kill with signal 0 will just return 0 if prcess is running
-        return (0 == kill(pid, 0));
+    static void TearDownTestCase() {
+        ALOGV("+ %s", __func__);
+
+        // Clean up network configurations.
+        // Delete tcam alias
+        getCmdOut("/vendor/bin/ifconfig " + std::string(TCAM_INTERFACE_NAME) + " down");
+        // Delete mangle rules for spoofing TCAM sending broadcast packages.
+        getCmdOut("/vendor/bin/iptables -t nat -D POSTROUTING -s " + std::string(IHU_IP) + " -p udp --dport " +
+                  std::to_string(IHU_BROADCAST_PORT) + " -j SNAT --to-source " + std::string(TCAM_IP) + " -w");
+
+        // Restore UDP connection timeout
+        getCmdOut("sysctl -w net.netfilter.nf_conntrack_udp_timeout=30");
+
+        // Restart IpcbD service to restore state
+        getCmdOut("stop ipcbd-infotainment");
+        getCmdOut("start ipcbd-infotainment");
+
+        ALOGV("- %s", __func__);
     }
 
-    static bool fileExists(const std::string& name) {
-        if (FILE* file = fopen(name.c_str(), "r")) {
-            fclose(file);
-            return true;
-        } else {
-            return false;
-        }
+    void SetUp() override {
+        ALOGV("+ %s", __func__);
+        ALOGV("- %s", __func__);
     }
 
-    static int getProcIdByName(std::string procName) {
-        int pid = -1;
-
-        // Open the /proc directory
-        DIR* dp = opendir("/proc");
-        if (dp != NULL) {
-            // Enumerate all entries in directory until process found
-            struct dirent* dirp;
-            while (pid < 0 && (dirp = readdir(dp))) {
-                // Skip non-numeric entries
-                int id = atoi(dirp->d_name);
-                if (id > 0) {
-                    // Read contents of virtual /proc/{pid}/cmdline file
-                    std::string cmdPath = std::string("/proc/") + dirp->d_name + "/cmdline";
-                    std::ifstream cmdFile(cmdPath.c_str());
-                    std::string cmdLine;
-                    getline(cmdFile, cmdLine);
-                    replace(cmdLine.begin(), cmdLine.end(), '\0', ' ');
-                    if (!cmdLine.empty()) {
-                        cmdLine.erase(cmdLine.end() - 1);  // Remove the last character
-                        if (procName == cmdLine) pid = id;
-                    }
-                }
-            }
-        }
-
-        closedir(dp);
-
-        return pid;
+    void TearDown() override {
+        ALOGV("+ %s", __func__);
+        ALOGV("- %s", __func__);
     }
 
-    static std::string getCmdOut(const char* cmd) {
+    static std::string getCmdOut(const std::string& cmd) {
+        ALOGD("Running command: %s", cmd.c_str());
+
         std::array<char, 128> buffer;
         std::string result;
-        std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+        std::shared_ptr<FILE> pipe(popen(cmd.c_str(), "r"), pclose);
         if (!pipe) {
             ALOGE("popen() FAILED");
         }
-        while (!feof(pipe.get())) {
-            if (fgets(buffer.data(), 128, pipe.get()) != NULL) {
+        while (0 == feof(pipe.get())) {
+            if (fgets(buffer.data(), 128, pipe.get()) != nullptr) {
                 result += buffer.data();
                 break;  // break it since we just interested to get process id
             }
@@ -175,48 +205,19 @@ class VtsGnssIntegrationTest : public ::testing::Test {
         return result;
     }
 
-    static void TearDownTestCase() {
-        ALOGD("+ TearDownTestCase");
-
-        // Clean up, kill started processes
-        if (-1 != new_ipcb_pid) {
-            kill(new_ipcb_pid, SIGTERM);
-        }
-
-        // Start original IpcbD service to restore state
-        getCmdOut("start ipcbd-infotainment");
-
-        ALOGD("- TearDownTestCase");
-    }
-
-    void SetUp() {
-        ALOGD("+ SetUp ");
-
-        // Make sure Test Case Setup was executed correctly
-        ASSERT_TRUE(setup_test_case_successful) << "Setup Test Case failed, failing test";
-
-        // Make sure IpcbD is still running
-        ASSERT_TRUE(processExists(new_ipcb_pid)) << "IpcbD is not running anymore, did it crash?";
-    }
-
-    void TearDown() {
-        // code here will be called just after the test completes
-        // ok to through exceptions from here if need be
-    }
-
     sp<IGnss> gnssServer_;
 };
 
 TEST_F(VtsGnssIntegrationTest, recievedOk) {
     ALOGI("Starting test recievedOk!");
-    std::promise<int> promise;
-    std::future<int> future = promise.get_future();
+    std::promise<void> promise;
+    std::future<void> future = promise.get_future();
     std::vector<uint8_t> payload;
 
     sp<GnssCallback> callback = new GnssCallback();
     ALOGD("Connect to service!");
     gnssServer_ = IGnss::getService();
-    ASSERT_TRUE(gnssServer_ != NULL);
+    ASSERT_TRUE(gnssServer_ != nullptr);
     gnssServer_->setCallback(callback);
     callback->onLocationCallback = [&promise](const GnssLocation& location) {
         ALOGD("Lat: %f Long: %f, time %lu, altitudeMeters %f, speed %f, heading %f",
@@ -233,7 +234,7 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
         EXPECT_FLOAT_EQ(location.altitudeMeters, 2.1);
         EXPECT_FLOAT_EQ(location.speedMetersPerSec, 9);
         EXPECT_FLOAT_EQ(location.bearingDegrees, 2.34);
-        promise.set_value(1);
+        promise.set_value();
     };
     gnssServer_->start();
 
@@ -242,12 +243,13 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
     ASN_Session m_session = ASN_Session_Create(m_session_buffer_send, sizeof(m_session_buffer_send));
     Icb_OpGNSSPositionData_Response msg = Icb_OpGNSSPositionData_Response_Create(m_session);
 
-    Pdu temp_pdu;
-    temp_pdu.createHeader((IpCmdTypes::ServiceId)Connectivity::VccIpCmd::ServiceId::Positioning,
-                          (IpCmdTypes::OperationId)Connectivity::VccIpCmd::OperationId::GNSSPositionData,
-                          Connectivity::IpCmdTypes::OperationType::NOTIFICATION,
-                          Connectivity::IpCmdTypes::DataType::ENCODED,
-                          1);
+    Connectivity::Pdu temp_pdu;
+    temp_pdu.createHeader(
+            static_cast<Connectivity::IpCmdTypes::ServiceId>(Connectivity::VccIpCmd::ServiceId::Positioning),
+            static_cast<Connectivity::IpCmdTypes::OperationId>(Connectivity::VccIpCmd::OperationId::GNSSPositionData),
+            Connectivity::IpCmdTypes::OperationType::NOTIFICATION,
+            Connectivity::IpCmdTypes::DataType::ENCODED,
+            1);
     temp_pdu.header.protocol_version = 3;
     msg->gnssPositionData->utcTime->year = 2017;
     msg->gnssPositionData->utcTime->month = 10;
@@ -262,25 +264,32 @@ TEST_F(VtsGnssIntegrationTest, recievedOk) {
     msg->gnssPositionData->heading = 234;
     msg->gnssPositionData->positioningStatus->fixType = e_Icb_GnssFixType_fix3D;
 
+    std::vector<uint8_t> buffer;
+    temp_pdu.toData(buffer);
+
     ALOGD("Encode message!");
     InfotainmentIpBus::Utils::encodeMessage(
             msg, Icb_OpGNSSPositionData_Response_Encode, Icb_OpGNSSPositionData_Response_EncodedSize, &payload);
     temp_pdu.setPayload(std::move(payload));
-    IpcbSimulator CyclicInjector("127.0.0.1", 60012, 60001, 0);
-    CyclicInjector.SendPdu(temp_pdu);
+
+    Connectivity::Message message;
+    message.pdu = temp_pdu;
+    message.ecu = Connectivity::Message::Ecu::IHU;
+
+    vcc::ipcb::testing::IpcbSimulator simulator(EcuMap());
+    simulator.Initialize(Connectivity::Message::Ecu::TCAM, "UDP");
+
+    simulator.SendMessage(std::move(message));
     ALOGD("Message sent!");
 
-    // promise to keep thread alive
-    std::future_status status = future.wait_for(std::chrono::milliseconds(2000));
-    if (status == std::future_status::deferred) {
-        ALOGD("Promise deferred exiting");
-        FAIL();
-    } else if (status == std::future_status::timeout) {
-        ALOGD("Timeout:Didn't recive any gnss message within timelimit. Exiting");
-        FAIL();
-    } else if (status == std::future_status::ready) {
-        ALOGD("Promise completed");
-    }
+    using namespace std::chrono_literals;
+    std::future_status status = future.wait_for(3s);
+
+    ASSERT_NE(std::future_status::deferred, status) << "Promise deferred exiting";
+    ASSERT_NE(std::future_status::timeout, status)
+            << "Timeout: Didn't recive any gnss message within timelimit. Exiting";
+    ASSERT_EQ(std::future_status::ready, status) << "Unsuccessful";
+
     gnssServer_->stop();
     ALOGI("Exiting test done!");
 }

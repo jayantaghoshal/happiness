@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -38,4 +38,4 @@ void TimeoutInfo::reset(void) {
     timeoutValue_ = baseTimeout_;
 }
 
-}  // Connectivity
+}  // namespace Connectivity

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -56,4 +56,4 @@ class Socket : public ISocket {
     std::function<void(void)> read_ready_cb_ = nullptr;
     std::chrono::milliseconds backoff_timeout_;
 };
-}
+}  // namespace Connectivity

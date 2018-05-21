@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -24,4 +24,4 @@ void NetSerializer::write_uint32(std::uint32_t value) {
     write_uint8((value & 0x0000ff00) >> 8);
     write_uint8(value & 0x000000ff);
 }
-}
+}  // namespace Connectivity

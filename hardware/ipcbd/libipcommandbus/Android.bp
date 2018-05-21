@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -7,7 +7,10 @@ cc_defaults {
     name: "libipcommandbus_defaults",
     compile_multilib: "64",
     export_include_dirs: ["include"],
-    cflags: ["-fexceptions"],
+    defaults: [
+        "volvocars_cc_defaults",
+    ],
+
     shared_libs: [
         "liblog",
         "liblocalconfig",

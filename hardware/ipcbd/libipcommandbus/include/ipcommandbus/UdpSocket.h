@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -15,8 +15,8 @@ namespace Connectivity {
  */
 class UdpSocket final : public Socket {
   public:
-    UdpSocket(tarmac::eventloop::IDispatcher& dispatcher, EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
-    ~UdpSocket();
+    explicit UdpSocket(tarmac::eventloop::IDispatcher& dispatcher, EcuIpMap ecu_ip_map = Socket::defaultEcuMap());
+    ~UdpSocket() = default;
 
     void setup(const Message::Ecu& ecu) override;
     void read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) override;
@@ -32,4 +32,4 @@ class UdpSocket final : public Socket {
     Message::Ecu ecu_;
 };
 
-}  // Connectivity
+}  // namespace Connectivity

@@ -9,7 +9,6 @@ LOCAL_MODULE := iplmd
 
 LOCAL_INIT_RC := iplmd.rc
 
-
 LOCAL_SRC_FILES := \
     src/main.cpp \
     src/iplmService.cpp \

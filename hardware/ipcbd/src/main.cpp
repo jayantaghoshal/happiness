@@ -4,7 +4,7 @@
  */
 
 #include <IDispatcher.h>
-#include <cutils/log.h>
+
 #include <hidl/HidlTransportSupport.h>
 #include <ipcommandbus/MessageDispatcher.h>
 #include <ipcommandbus/TcpSocket.h>
@@ -12,12 +12,14 @@
 #include <ipcommandbus/UdpSocket.h>
 #include <ipcommandbus/isocket.h>
 #include <sys/signalfd.h>
+#include <chrono>
 #include <cstdint>
 #include <functional>
 #include <future>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <thread>
 #include <utility>
 
 #include "diagnostics_client.h"
@@ -25,6 +27,7 @@
 
 #undef LOG_TAG
 #define LOG_TAG "IpcbD"
+#include <cutils/log.h>
 
 using namespace Connectivity;
 using namespace IpCmdTypes;
@@ -37,23 +40,24 @@ using namespace android::hardware;
 
 // #define LOOPBACK_ADDRESS "127.0.0.1"
 // Configure sockets
-void setupSocket(std::shared_ptr<Connectivity::Socket> sock, Message::Ecu ecu) {
-    const std::uint32_t sleep_time = 100000;  // sleep 100 ms
-
+void setupSocket(const std::shared_ptr<Connectivity::Socket>& sock, Message::Ecu ecu) {
     // Wait for-ever, no need to stop since service is dependent on this to work
-    std::string previousError;
-    ALOGI("[Main] Setup socket for ecu %u", ecu);
+    std::error_code previous_error;
+    ALOGI("[Main] Setup socket for ecu %s", Message::EcuStr(ecu));
     do {
         try {
             sock->setup(ecu);
-            ALOGV("[Main] Setup socket for Ecu %u successfully", ecu);
+            ALOGV("[Main] Setup socket for Ecu %s successfully", Message::EcuStr(ecu));
             return;
         } catch (const SocketException& e) {
-            if (e.what() != previousError) {
-                previousError = e.what();
-                ALOGE("[Main] Can not setup socket for Ecu %u, error %s, continue trying...", ecu, e.what());
+            if (e.code() != previous_error) {
+                previous_error = e.code();
+                ALOGE("[Main] Can not setup socket for Ecu %s, error %s, continue trying...",
+                      Message::EcuStr(ecu),
+                      e.what());
             }
-            usleep(sleep_time);
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(100ms);
         }
     } while (true);
 }

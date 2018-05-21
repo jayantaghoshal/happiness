@@ -1,15 +1,22 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 cc_test {
     name: "VtsIpcbdComponentTest",
 
-    srcs: ["VtsIpcbdComponentTest.cpp"],
+    defaults: [
+        "volvocars_cc_defaults",
+    ],
 
     cppflags: [
-        "-fexceptions",
+        "-DLOG_NDEBUG=0",
+    ],
+
+    srcs: [
+        "VtsIpcbdComponentTest.cpp",
+        "src/packet_injector.cpp",
     ],
 
     shared_libs: [
@@ -21,10 +28,11 @@ cc_test {
         "libhidltransport",
         "libhwbinder",
         "vendor.volvocars.hardware.vehiclecom@1.0",
+        "liblocalconfig",
     ],
 
     static_libs: [
-        "libipcb_simulator_static",
+        "libgmock",
     ],
 
     test_suites: ["vts"],

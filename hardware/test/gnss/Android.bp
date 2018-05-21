@@ -5,11 +5,10 @@
 
 cc_test {
 
-    name: "VtsIplmdTestCases",
+    name: "VtsGnssIntegrationTest",
 
     srcs: [
-        "iplmd_ct_test.cpp",
-        "src/LscMocker.cpp",
+        "VtsGnssIntegrationTest.cpp",
     ],
 
     defaults: [
@@ -21,7 +20,6 @@ cc_test {
     ],
 
     shared_libs: [
-        "libdataelements",
         "liblog",
         "liblocalconfig",
         "libtarmac",
@@ -29,13 +27,15 @@ cc_test {
         "libhidlbase",
         "libhidltransport",
         "libipcommandbus",
-        "vendor.volvocars.hardware.iplm@1.0",
+        "libhwbinder",
+        "android.hardware.gnss@1.0",
         "vendor.volvocars.hardware.vehiclecom@1.0",
     ],
 
     static_libs: [
         "libgmock",
         "libipcb_simulator_static",
+        "libinfotainmentbusasn_static",
     ],
 
     // Tag this module as a vts test artifact

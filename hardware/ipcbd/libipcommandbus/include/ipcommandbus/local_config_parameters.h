@@ -91,4 +91,4 @@ class LocalconfigParameters {
     const vcc::LocalConfigReaderInterface* const lcfg_;
 };
 
-}  // Connectivity
+}  // namespace Connectivity

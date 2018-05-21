@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -91,4 +91,4 @@ class ISocket {
     virtual void read(std::vector<uint8_t>& buffer, Message::Ecu& ecu) = 0;
     virtual void writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& ecu) = 0;
 };
-}
+}  // namespace Connectivity

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -35,4 +35,4 @@ std::uint16_t NetDeserializer::read_uint16() {
 std::uint32_t NetDeserializer::read_uint32() {
     return (read_uint8() << 24) | (read_uint8() << 16) | (read_uint8() << 8) | read_uint8();
 }
-}
+}  // namespace Connectivity

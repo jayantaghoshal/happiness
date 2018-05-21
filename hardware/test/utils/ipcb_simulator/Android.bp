@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -9,23 +9,18 @@
 cc_library_static {
     name: "libipcb_simulator_static",
 
-    srcs: ["src/ipcb_simulator.cpp"],
+    defaults: [
+        "volvocars_cc_defaults",
+    ],
+
+    srcs: ["src/*"],
 
     shared_libs: [
         "libipcommandbus",
-        "libtarmac",
         "liblog",
         "libutils",
-        "libhidlbase",
-        "libhidltransport",
-        "libhwbinder",
-    ],
-
-    cppflags: [
-        "-Wno-non-virtual-dtor",
-        "-fexceptions",
-        "-Wno-unused-parameter",
-        "-Wno-macro-redefined",
+        "libtarmac",
+        "liblocalconfig",
     ],
 
     local_include_dirs: ["include"],
@@ -34,5 +29,3 @@ cc_library_static {
 
     compile_multilib: "64",
 }
-
-subdirs = ["test"]

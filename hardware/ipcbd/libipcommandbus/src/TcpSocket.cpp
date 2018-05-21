@@ -206,4 +206,4 @@ void TcpSocket::reconnect() {
         dispatcher_.EnqueueWithDelay(backoffGet(), [this] { reconnect(); });
     }
 }
-}
+}  // namespace Connectivity

@@ -10,9 +10,9 @@
 #define LOG_TAG "IplmD"
 #include <cutils/log.h>
 
+using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::OperationType;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::RetryInfo;
-using ::vendor::volvocars::hardware::vehiclecom::V1_0::CommandResult;
 using ::vendor::volvocars::hardware::vehiclecom::V1_0::SubscribeResult;
 
 using ::vendor::delphi::lifecyclecontrol::V1_0::MPKeepAliveReason;
@@ -22,9 +22,6 @@ using ::vendor::delphi::lifecyclecontrol::V1_0::MPRestartReason;
 namespace LocalCfg = Iplmd::LocalConfig;
 
 namespace {
-// Ref:: https://delphisweden.atlassian.net/wiki/display/VI/NSM+-+Session+-+IPLM+Resource+Groups
-const char* kIPLMSessionName = "IPLM_ResourceGroups";
-const char* kIPLMSessionOwner = "IPLM";
 
 // This variable is used as a gatekeeper before updates are made towards NSM. It is important that after IPLM
 // initialization, IPLM shall wait for RemoteMonitoringTmo period or activity message from remote nodes, before
@@ -34,12 +31,17 @@ bool first_contact = false;
 // NOTE: Outside requirement document. Verbal agreement/discussion with Karl Ronqvist (VCC).
 // Flexray wakeup shall be attempted only once per InfotainmentMode change cycle i.e. IM_OFF --> IM_ON --> IM_OFF
 bool flexray_wakeup_attempted = false;
-}
+}  // namespace
 
 IplmService::IplmService(std::string vehicleservicehal) : timeProvider_{IDispatcher::GetDefaultDispatcher()} {
     Iplmd::LocalConfig::loadLocalConfig();
 
-    IIplm::registerAsService(vehicleservicehal);  // register as handler of the IIplm hidl interface
+    const auto status = IIplm::registerAsService(vehicleservicehal);  // register as handler of the IIplm hidl interface
+
+    if (status != android::OK) {
+        ALOGE("Couldn't register service as instance %s", vehicleservicehal.c_str());
+        exit(EXIT_FAILURE);
+    }
 }
 
 void IplmService::SubscribeVehicleCom(std::string vehicleservicehal) {
@@ -368,9 +370,10 @@ void IplmService::CreateAndSendIpActivityMessage() {
 }
 
 bool IplmService::IsRgRequestedLocally(const IplmData& iplm_data, const ResourceGroup rg, const Prio prio) {
+    (void)rg;
     return std::any_of(iplm_data.registered_LSCs_.cbegin(),
                        iplm_data.registered_LSCs_.cend(),
-                       [rg, prio](const ServicePrioMap::value_type& item) {
+                       [prio](const ServicePrioMap::value_type& item) {
                            if (item.second.rg_ & ResourceGroup::RG_1) {
                                return item.second.prio_rg1_ == prio;
                            } else if (item.second.rg_ & ResourceGroup::RG_3) {
@@ -679,6 +682,10 @@ void IplmService::PreventShutdownReason() {
     state = state | MPKeepAliveReason::IP_LINK_MANAGER_ACTIVE;
 
     // Call method on service
+    if (!lifecyclecontrol_) {
+        ALOGW("[Service] LifeCycleControl not available. Cannot send Keep Alive Reason.");
+        return;
+    }
     lifecyclecontrol_->SetKeepAliveReason(state,
                                           MPKeepAliveReasonValidity::INTERNAL_RG1_ACTIVE_VALID |
                                                   MPKeepAliveReasonValidity::EXTERNAL_RG1_ACTIVE_VALID |

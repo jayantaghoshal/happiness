@@ -78,4 +78,4 @@ std::string Pdu::toString(const Pdu& pdu) {
     return ss.str();
 }
 
-}  // Connectivity
+}  // namespace Connectivity

@@ -33,4 +33,4 @@ Message::Message(Pdu&& p) {
     pdu = p;
 }
 
-}  // Connectivity
+}  // namespace Connectivity

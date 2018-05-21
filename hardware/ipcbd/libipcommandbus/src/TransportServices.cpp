@@ -246,7 +246,7 @@ void TransportServices::sendPdu(Message::Ecu destination, const Pdu& pdu) {
             m_pSocket->writeTo(buffer, destination);
         }
     } catch (const SocketException& e) {
-        ALOGE("[TransportServices] %s . Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
+        ALOGE("[TransportServices] %s. Code (%s : %i)", e.what(), e.code().category().name(), e.code().value());
     }
 }
 void TransportServices::sendAck(Message::Ecu destination, const Pdu& pdu) {
@@ -344,12 +344,12 @@ void TransportServices::handleInData(ISocket* socket) {
         return;
     }
 
+    ALOGV("[TransportServices] Received data from %s", Message::EcuStr(sourceEcu));
+
     if (sourceEcu == selfEcu) {
         // Ignore broadcasts from this unit
         return;
     }
-
-    ALOGV("[TransportServices] Received data from %s", Message::EcuStr(sourceEcu));
 
     while (buffer.size() > 0) {
         // Extract PDUs from the data
@@ -674,8 +674,6 @@ void TransportServices::handleIncomingError(const Pdu& pdu) {
 }
 
 void TransportServices::messageTimeout(TrackMessage& tm, IpCmdTypes::SenderHandleId id) {
-    ALOGI("[TransportServices] MessageTimeout: senderid: %d", id);
-
     ALOGV("[TransportServices] Timeout on message 0x%08X, state: 0x%02X", tm.msg.pdu.header.sender_handle_id, tm.state);
 
     switch (tm.state) {

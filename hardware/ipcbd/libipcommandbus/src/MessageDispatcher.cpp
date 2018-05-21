@@ -243,7 +243,6 @@ void MessageDispatcher::Appthread_cbIncomingNotification(Message& msg) {
     ALOGD("[MessageDispatcher] Incoming notification %s from %s",
           Pdu::toString(msg.pdu).c_str(),
           Message::EcuStr(msg.ecu));
-
     {  // Mutex scope
         std::lock_guard<std::mutex> lock(m_registeredReceiversMutex);
 
@@ -407,4 +406,4 @@ void MessageDispatcher::DecodeGenericError(Message& msg, Icb_OpGeneric_Error_t& 
           msg.pdu.payload[0]);
 }
 
-}  // Connectivity
+}  // namespace Connectivity

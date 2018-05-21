@@ -5,10 +5,10 @@
 
 #include "ipcommandbus/UdpSocket.h"
 
-#include <string.h>
 #include <unistd.h>
 #include <algorithm>
 #include <cassert>
+#include <cstring>
 #include <string>
 
 #define LOG_TAG "libipcb"
@@ -19,60 +19,49 @@ using namespace tarmac::eventloop;
 namespace Connectivity {
 
 UdpSocket::UdpSocket(IDispatcher& dispatcher, EcuIpMap ecu_ip_map)
-    : Socket(dispatcher, AF_INET, SOCK_DGRAM, IPPROTO_UDP, ecu_ip_map) {
+    : Socket(dispatcher, AF_INET, SOCK_DGRAM, IPPROTO_UDP, std::move(ecu_ip_map)) {
     setHandler([this] { readEventHandler(); });
-}
-
-UdpSocket::~UdpSocket() {
-    // flush buffers as well
 }
 
 void UdpSocket::setup(const Message::Ecu& ecu) {
     // NOTE! Unlike TCP, the ecu provided here is used to setup the local port.
-    // Therefore it is only allowed to use ALL (for broadcast socket) and IHU (for
-    // normal socket)
 
-    if ((Message::Ecu::ALL == ecu) || (Message::Ecu::IHU == ecu)) {
-        // Look up IHU info from ECU map
-        auto it = std::find_if(ecu_ip_map_.begin(),
-                               ecu_ip_map_.end(),
-                               [&ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
+    // Look up IHU info from ECU map
+    auto it = std::find_if(ecu_ip_map_.begin(),
+                           ecu_ip_map_.end(),
+                           [&ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
 
-        if (it == ecu_ip_map_.end()) {
-            ALOGW("[UdpSocket] Socket config for ECU: %s not found in ECU map!", Message::EcuStr(ecu));
-            return;
-        }
-
-        std::string local_ip = it->second.ip;
-        uint16_t local_port = it->second.port;
-
-        // If we are setting up a broadcast socket
-        if (Message::Ecu::ALL == ecu) {
-            set_option(SOL_SOCKET, SO_BROADCAST, true);
-        }
-
-        struct sockaddr_in sa;
-        sa.sin_family = AF_INET;
-        sa.sin_port = htons(local_port);
-
-        ALOGD("[UdpSocket] UdpSocket setup %s:%d - ecu %d", local_ip.c_str(), local_port, ecu);
-
-        if (1 != inet_pton(AF_INET, local_ip.c_str(), &sa.sin_addr)) {
-            throw SocketException(errno, "Address not in correct format");
-        }
-
-        const int bindStatus =
-                bind(socket_fd_, reinterpret_cast<struct sockaddr*>(&sa), static_cast<socklen_t>(sizeof(sa)));
-        if (0 != bindStatus) {
-            throw SocketException(errno, "Failed to bind to socket");
-        }
-
-        ecu_ = ecu;
-    } else {
-        ALOGE("[UdpSocket] Only allowed to setup UDP socket with ecu = ALL or IHU! (rejected : "
-              "%d)",
-              ecu);
+    if (it == ecu_ip_map_.end()) {
+        ALOGW("[UdpSocket] Socket config for ECU: %s not found in ECU map!", Message::EcuStr(ecu));
+        return;
     }
+
+    std::string local_ip = it->second.ip;
+    uint16_t local_port = it->second.port;
+
+    // If we are setting up a broadcast socket
+    if (Message::Ecu::ALL == ecu) {
+        ALOGD("[UdpSocket] Setting broadcast settings to socket");
+        set_option(SOL_SOCKET, SO_BROADCAST, 1);
+    }
+
+    struct sockaddr_in sa;
+    sa.sin_family = AF_INET;
+    sa.sin_port = htons(local_port);
+
+    ALOGD("[UdpSocket] UdpSocket setup %s:%d - ecu %s", local_ip.c_str(), local_port, Message::EcuStr(ecu));
+
+    if (1 != inet_pton(AF_INET, local_ip.c_str(), &sa.sin_addr)) {
+        throw SocketException(errno, "Address not in correct format");
+    }
+
+    const int bindStatus =
+            bind(socket_fd_, reinterpret_cast<struct sockaddr*>(&sa), static_cast<socklen_t>(sizeof(sa)));
+    if (0 != bindStatus) {
+        throw SocketException(errno, "Failed to bind to socket");
+    }
+
+    ecu_ = ecu;
 }
 
 void UdpSocket::registerReadReadyCb(std::function<void(void)> readReadyCb) {
@@ -94,12 +83,6 @@ void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& 
     // Protect from trying to send to a bad ECU
     if (Message::Ecu::UNKNOWN == ecu) {
         ALOGE("[UdpSocket] Can not send to UNKNOWN socket!");
-        return;
-    }
-
-    // Protect from trying to send to self
-    if (Message::Ecu::IHU == ecu) {
-        ALOGE("[UdpSocket] Can not send to self!");
         return;
     }
 
@@ -144,6 +127,8 @@ void UdpSocket::writeTo(const std::vector<uint8_t>& buffer, const Message::Ecu& 
 
     auto remaining_bytes = buffer.size();
     int sent_bytes = 0;
+
+    ALOGV("[UdpSocket] Sending data to %s:%u (%s)", it->second.ip.c_str(), it->second.port, Message::EcuStr(ecu));
 
     while (remaining_bytes > 0) {
         int ret = -1;
@@ -208,15 +193,14 @@ void UdpSocket::readEventHandler() {
     }
 
     const std::string fromIp = std::string(buf);
-    const auto fromPort = ntohs(sa_out.sin_port);
 
-    auto it = std::find_if(ecu_ip_map_.begin(),
-                           ecu_ip_map_.end(),
-                           [&fromIp, fromPort](const std::pair<Message::Ecu, EcuAddress>& pair) {
-                               return (pair.second.ip == fromIp);
-                           });
+    auto it = std::find_if(
+            ecu_ip_map_.begin(), ecu_ip_map_.end(), [&fromIp](const std::pair<Message::Ecu, EcuAddress>& pair) {
+                return (pair.second.ip == fromIp);
+            });
 
     auto ecu = (it != ecu_ip_map_.end()) ? it->first : Message::Ecu::UNKNOWN;
+
     read_frame_buffer_.emplace(std::make_pair(buffer, ecu));
 
     if (read_cb_ && !read_frame_buffer_.empty()) {
@@ -234,4 +218,4 @@ void UdpSocket::resetup() {
         dispatcher_.EnqueueWithDelay(backoffGet(), [this] { resetup(); });
     }
 }
-}
+}  // namespace Connectivity

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -187,4 +187,4 @@ class MessageDispatcher {
     void AppThread_cbIncomingError(Message& msg, ITransportServices::ErrorType eType);
 };
 
-}  // Connectivity
+}  // namespace Connectivity

@@ -1,45 +1,52 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
 #pragma once
 
-#include <IDispatcher.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include "ipcommandbus/Pdu.h"
+#include <ipcommandbus/Message.h>
+#include <ipcommandbus/MessageDispatcher.h>
+#include <ipcommandbus/TransportServices.h>
+#include <ipcommandbus/socket.h>
+#include <memory>
+#include <vector>
 
-using namespace Connectivity;
+#include "diagnostics_client.h"
+
+namespace vcc {
+namespace ipcb {
+namespace testing {
+
+using EcuIpMap = std::vector<std::pair<Connectivity::Message::Ecu, Connectivity::ISocket::EcuAddress>>;
 
 class IpcbSimulator {
   public:
-    IpcbSimulator(std::string local_ip, uint32_t local_port, uint32_t remote_port, int bcast_enable);
-    ~IpcbSimulator();
+    explicit IpcbSimulator(const EcuIpMap& ecu_map);
+    ~IpcbSimulator() = default;
 
-    bool SendPdu(Pdu pdu);
-    bool ReceivePdu(Pdu& pdu, const uint32_t timeout_sec = 0);
-    void CreateAndSendIpActivityMessage();  // TODO: Consider removing, this is per implementation specific code
-    void CloseSocket();
+    uint64_t RegisterMessageCallback(const Connectivity::IpCmdTypes::ServiceId& serviceId,
+                                     const Connectivity::IpCmdTypes::OperationId& operationId,
+                                     const Connectivity::IpCmdTypes::OperationType& operationType,
+                                     Connectivity::MessageDispatcher::MessageCallback messageCb);
+
+    bool UnregisterCallback(const uint64_t& registeredReceiverId);
+    void SendMessage(Connectivity::Message&& msg,
+                     std::shared_ptr<Connectivity::MessageDispatcher::CallerData> pCallerData = nullptr);
+
+    void Initialize(const Connectivity::Message::Ecu& ecu, const std::string& protocol);
 
   private:
-    void Setup();
-    void Read();
-    void StartActivityMessageTimer();  // TODO: Consider removing, this is per implementation specific code
-    void StopActivityMessageTimer();   // TODO: Consider removing, this is per implementation specific code
+    void SetupSocket(const Connectivity::Message::Ecu& ecu);
 
-    std::string local_ip_;
-    uint32_t local_port_;   // The default port from which to send data
-    uint32_t remote_port_;  // Port to which to send data
-    int broadcastEnable_;
-    int local_socket_;
-    std::uint8_t sequenceId_ = 0;
-    std::vector<uint8_t> buffer_;
+    std::unique_ptr<Connectivity::TransportServices> transport_services_;
+    std::unique_ptr<Connectivity::MessageDispatcher> message_dispatcher_;
+    std::unique_ptr<DiagnosticsClient> diagnostics_client_;
 
-    struct sockaddr_in remote_addr_;
-    struct sockaddr_in local_addr_;
-    socklen_t addrlen_;
+    std::shared_ptr<Connectivity::Socket> sock_;
 
-    tarmac::eventloop::IDispatcher& timer_;
-    tarmac::eventloop::IDispatcher::JobId activityPacketInjectorId_;
+    EcuIpMap ecu_map_;
 };
+}  // namespace testing
+}  // namespace ipcb
+}  // namespace vcc

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -68,5 +68,5 @@ const char* toString(OperationType ot);
  */
 const char* toString(DataType dt);
 
-}  // IpCmdTypes
-}  // Connectivity
+}  // namespace IpCmdTypes
+}  // namespace Connectivity

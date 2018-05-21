@@ -5,26 +5,30 @@
 
 #include "LscMocker.h"
 
+#include <chrono>
+#include <thread>
+
+#undef LOG_TAG
 #define LOG_TAG "LscMocker"
 #include <cutils/log.h>
 
 LscMocker::LscMocker() {
     ALOGD("IIplm getService!");
-    iplmservice = IIplm::getService();
-
-    if (nullptr == iplmservice.get()) {
-        ALOGE("Couldn't find interface to IplmD service");
+    unsigned int attempts = 0;
+    while (iplmservice == nullptr && attempts < 5) {
+        attempts++;
+        iplmservice = IIplm::tryGetService();
+        if (iplmservice == nullptr) {
+            using namespace std::chrono_literals;
+            std::this_thread::sleep_for(1s);
+        }
     }
 }
 
-LscMocker::~LscMocker() {
-    ALOGD("~LscMocker");
-}
-
-void LscMocker::RegisterLSC(std::string LSCName) {
+void LscMocker::RegisterLSC(const std::string& LSCName) {
     if (iplmservice != nullptr) iplmservice->registerService(LSCName, this);
 }
-void LscMocker::UnregisterLSC(std::string LSCName) {
+void LscMocker::UnregisterLSC(const std::string& LSCName) {
     if (iplmservice != nullptr) iplmservice->unregisterService(LSCName);
 }
 void LscMocker::ReleaseResourceGroup(const hidl_string& lscName, ResourceGroup _rg) {
@@ -38,6 +42,7 @@ void LscMocker::RequestResourceGroup(const hidl_string& lscName, ResourceGroup _
 Return<void> LscMocker::onResourceGroupStatus(ResourceGroup resourceGroup,
                                               ResourceGroupStatus resourceGroupStatus,
                                               ResourceGroupPrio resourceGroupPrio) {
+    (void)resourceGroupPrio;
     if (onResourceGroupStatusCallback != nullptr) onResourceGroupStatusCallback(resourceGroup, resourceGroupStatus);
     return Void();
 }

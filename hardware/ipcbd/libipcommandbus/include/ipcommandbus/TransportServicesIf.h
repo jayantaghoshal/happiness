@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -106,4 +106,4 @@ class ITransportServices {
     virtual void sendError(Message::Ecu destination, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo = 0) = 0;
 };
 
-}  // Connectivity
+}  // namespace Connectivity

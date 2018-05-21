@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -57,4 +57,4 @@ void VCCPDUHeader::to_data(std::vector<std::uint8_t>& data) const {
     serializer.write_uint8(static_cast<uint8_t>(data_type));
     serializer.write_uint8(process_flag_and_reserved);
 }
-}
+}  // namespace Connectivity

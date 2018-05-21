@@ -7,7 +7,6 @@
 
 #include <vendor/volvocars/hardware/iplm/1.0/IIplmCallback.h>
 
-#include <cutils/log.h>
 #include <hidl/MQDescriptor.h>
 #include <hidl/Status.h>
 #include <vendor/volvocars/hardware/iplm/1.0/IIplm.h>
@@ -31,9 +30,9 @@ using ::android::sp;
 class LscMocker : public IIplmCallback {
   public:
     LscMocker();
-    ~LscMocker();
-    void RegisterLSC(std::string LSCName);
-    void UnregisterLSC(std::string LSCName);
+    ~LscMocker() = default;
+    void RegisterLSC(const std::string& LSCName);
+    void UnregisterLSC(const std::string& LSCName);
     void ReleaseResourceGroup(const hidl_string& lscName, ResourceGroup _rg);
     void RequestResourceGroup(const hidl_string& lscName, ResourceGroup _rg, ResourceGroupPrio _prio);
 

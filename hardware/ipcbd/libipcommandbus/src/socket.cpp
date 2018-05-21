@@ -139,4 +139,4 @@ std::chrono::milliseconds Socket::backoffGet() {
     backoff_timeout_ = std::min(2 * backoff_timeout_, std::chrono::milliseconds(2000));
     return result;
 }
-}
+}  // namespace Connectivity
