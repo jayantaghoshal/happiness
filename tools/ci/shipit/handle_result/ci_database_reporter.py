@@ -48,6 +48,7 @@ class ci_database_reporter(abstract_reporter):
             'failing_testcases' : len(failing_testcases),
             'total_testcases' : len(test_results),
         }
+
         tags = {
             "jobType": "ihu_test",
         }
@@ -57,6 +58,30 @@ class ci_database_reporter(abstract_reporter):
             insert_influx_data(str(os.environ["JOB_NAME"]), data, tags)
         except Exception as e:
             logger.error(str(e))
+
+        kpidata = {
+            'build_number' : os.environ["BUILD_NUMBER"],
+            'build_host' : os.environ["HOST_HOSTNAME"],
+            'top_job_name': top_job_jobname,
+            'top_job_build_number' : top_job_build_number,
+        }
+
+        for r in test_results:
+            if r.name != 'VtsCiSmokeTest':
+                continue
+            for kpi in r.test_kpis:
+                kpidata[kpi] = r.test_kpis[kpi]
+
+        kpitags = {
+            "jobType": "ihu_test_kpi",
+        }
+
+        logger.debug("Storing: {}".format(data))
+        try:
+            insert_influx_data(str(os.environ["JOB_NAME"]) + "_kpi", kpidata, kpitags)
+        except Exception as e:
+            logger.error(str(e))
+
 
         # create overview measurement for hourly and daily, since they are currently divided in seperated sections
         self.regroup_data(passing_testcases, len(failing_testcases), len(test_results), top_job_jobname, top_job_build_number, top_job_jobname + "_overview")
