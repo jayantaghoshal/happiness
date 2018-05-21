@@ -121,6 +121,8 @@ test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/apps/Internal/SystemUITest/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/packages/SettingsStorageService/test/ut/services", standard_caps), #Matilda Bengtsson
 
+    TradefedTest("vendor/volvocars/hardware/connectivitymanagerd/test/it", standard_caps), # Patrik Ingmarsson
+
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
     # If your test relies on the screen to power off, either put it before this test or set
     # screen-always-on to OFF in your AndroidTest.xml. N.B., resetting of this flag will trigger
