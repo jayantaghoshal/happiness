@@ -127,11 +127,14 @@ def on_commit(aosp_root_dir: str, sync: bool, repository: str):
                                         "--detach",
                                         "--current-branch"], cwd=aosp_root_dir)
 
+    repos_in_gate = manifest.get_zuul_repos_in_gate()
     # Use zuul-cloner to downlad the repos that was removed from the manifest
     for repo_name, repo_path in zuul_repos.items():
         # Do not download vendor/volvocars again, it is already downloaded by zuul by bootstrap
-        if repo_name != "vendor/volvocars":
+        if repo_name != "vendor/volvocars" and (repo_name in repos_in_gate):
             clone_zuul_repo_to_manifest_path(aosp_root_dir, repo_path, repo_name)
+        elif repo_name != "vendor/volvocars":
+            git.Repo.repo_sync_repo(repo_name, aosp_root_dir)
 
         # Check that the commit from Gerrit is actually downloaded
         if repo_name == os.environ['ZUUL_PROJECT']:

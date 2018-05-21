@@ -52,7 +52,7 @@ def update_file(project_root: str, template_path: str, output_path: str, reposit
     repos_with_zuul_changes_set = set() # type: typing.Set[str]
 
     if using_zuul:
-        repos_with_zuul_changes_set = get_all_zuul_repos()
+        repos_with_zuul_changes_set = get_zuul_repos_in_gate()
 
     project_to_remove = []
     for project in root.iter('project'):
@@ -103,7 +103,7 @@ def get_value_from_manifest_by_git_name(template_path: str, git_repo: str, looku
     return None
 
 
-def get_all_zuul_repos():
+def get_zuul_repos_in_gate():
     # The Zuul Changes states the changes in the Gate and the corresponding repos
     zuul_changes = os.environ['ZUUL_CHANGES']
     logger.info("zuul_changes = " + zuul_changes)
@@ -133,7 +133,7 @@ def get_zuul_repos_map(template_path: str):
 def use_zuul_commit_or_head(repo_with_commit: str, current_repo_in_tmp_manifest: str, using_zuul: bool):
     repos_with_zuul_changes_set = set() # type: typing.Set[str]
     if using_zuul:
-        repos_with_zuul_changes_set = get_all_zuul_repos()
+        repos_with_zuul_changes_set = get_zuul_repos_in_gate()
         base_dir = os.getcwd()
         full_path = os.path.join(base_dir, current_repo_in_tmp_manifest)
     # This will get the revision for the repo that have revision "ZUUL_COMMIT_OR_HEAD" but not currently tested in the gate
