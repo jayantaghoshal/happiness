@@ -170,7 +170,7 @@ def clone_zuul_repo_to_manifest_path(aosp_root_dir: str, repo_path: str, repo_na
 
 
 def repo_have_zuul_change(repo_path: str, aosp_root_dir: str):
-    logger.info("Check if the repo have zuul change")
+    logger.info("Check if the repo have zuul change: " + repo_path)
     full_path = os.path.join(aosp_root_dir, repo_path)
     git_head = process_tools.check_output_logged(["git", "rev-parse",
                             "HEAD"], cwd=full_path)
