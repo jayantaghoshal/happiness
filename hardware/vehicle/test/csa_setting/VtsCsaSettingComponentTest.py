@@ -18,7 +18,7 @@ from vts.utils.python.precondition import precondition_utils
 from subprocess import call
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
-from com.dtmilano.android.viewclient import ViewClient
+
 from fdx import fdx_client
 from fdx import fdx_description_file_parser
 import vehiclehalcommon
@@ -33,14 +33,10 @@ from generated import datatypes as DE
 import logging.config
 import logging.handlers
 
-class PAStatus:
-    NotAvailable=0
-    Disabled=1
-    Active=2
-    SystemError=3
+from uiautomator import device as device
 
 # export VECTOR_FDX_IP=198.18.34.2
-from vehiclehalcommon import VehicleHalCommon, wait_for_signal
+from vehiclehalcommon import VehicleHalCommon, wait_for_signal, PAStatus
 csa_button_off = VehicleHalCommon.app_context_vehiclefunctions + "curve_speed_adaption_off"
 csa_button_on = VehicleHalCommon.app_context_vehiclefunctions + "curve_speed_adaption_on"
 
@@ -99,8 +95,6 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         self.deviceReboot()
         vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
         vHalCommon.setUpVehicleFunction()
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
         vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
 
         self.CURVE_SPEED_ADAPTION_ON = vHalCommon.get_id('CURVE_SPEED_ADAPTION_ON')
@@ -113,11 +107,11 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         vehmod.UsgModSts =  DE.UsgModSts1.UsgModDrvg
         self.fr.send_VehModMngtGlbSafe1(vehmod)
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
-        csa_off = vHalCommon.scrollAndFindViewById(csa_button_off, number_of_scrolling)
-        csa_on = vHalCommon.scrollAndFindViewById(csa_button_on, number_of_scrolling)
+        csa_off = vHalCommon.scrollDownAndFindViewByIdUiAutomator(csa_button_off, device)
+        csa_on = vHalCommon.scrollDownAndFindViewByIdUiAutomator(csa_button_on, device)
 
         asserts.assertEqual(None, csa_off, "Expect no csa_off")
         asserts.assertEqual(None, csa_on, "Expect no csa_on")
@@ -139,8 +133,6 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         self.deviceReboot()
         vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
         vHalCommon.setUpVehicleFunction()
-        vc, device = vHalCommon.getActiveViewClient()
-        vc.dump(window=-1)
         vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
 
         self.CURVE_SPEED_ADAPTION_ON = vHalCommon.get_id('CURVE_SPEED_ADAPTION_ON')
@@ -153,15 +145,17 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         vehmod.UsgModSts =  DE.UsgModSts1.UsgModDrvg
         self.fr.send_VehModMngtGlbSafe1(vehmod)
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
+        csa_off = device(resourceId=csa_button_off)
+        csa_on = device(resourceId=csa_button_on)
 
         logging.info("EVALUATE")
         # Get buttons (If buttons are found, assert is deemed as true.)
-        csa_off = vHalCommon.scrollAndFindViewByIdOrRaise(csa_button_off, number_of_scrolling)
-        csa_on = vHalCommon.scrollAndFindViewByIdOrRaise(csa_button_on, number_of_scrolling)
-        csa_off.touch()
-        csa_on.touch() #####<- This or some other means to put function in known mode
-        vc.sleep(self.delay)
+        vHalCommon.scrollDownAndFindViewByIdUiAutomator(csa_button_off, device)
+        vHalCommon.scrollDownAndFindViewByIdUiAutomator(csa_button_on, device)
+        csa_off.click()
+        csa_on.click() #####<- This or some other means to put function in known mode
+        time.sleep(self.delay)
 
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 1, "CURVE_SPEED_ADAPTION_ON (function PRESENT using CarConfig)")
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.On, "AccAdprTurnSpdActv (function PRESENT using CarConfig)")
@@ -176,7 +170,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         vehmod.UsgModSts =  DE.UsgModSts1.UsgModAbdnd
         self.fr.send_VehModMngtGlbSafe1(vehmod)
 
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (IN-ACTIVE using UsgMod)")
@@ -184,8 +178,8 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (IN-ACTIVE using UsgMod)")
 
         logging.info("ACTION")
-        csa_on.touch() # Stress the function as this button shouldnt change the output ####################
-        vc.sleep(self.delay)
+        csa_on.click() # Stress the function as this button shouldnt change the output ####################
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (No Change on Touch in IN-ACTIVE State)")
@@ -199,7 +193,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         logging.info("ACTION")
         vehmod.UsgModSts =  DE.UsgModSts1.UsgModDrvg
         self.fr.send_VehModMngtGlbSafe1(vehmod)
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 1, "CURVE_SPEED_ADAPTION_ON (Active using UsgMod)")
@@ -207,8 +201,8 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.On, "AccAdprTurnSpdActv (ACTIVE using UsgMod)")
 
         logging.info("ACTION")
-        csa_off.touch()
-        vc.sleep(self.delay)
+        csa_off.click()
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (Change on Touch in ACTIVE MODE)")
@@ -216,8 +210,8 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (Change on Touch in ACTIVE MODE)")
 
         logging.info("ACTION")
-        csa_on.touch()
-        vc.sleep(self.delay)
+        csa_on.click()
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 1, "CURVE_SPEED_ADAPTION_ON (Change on Touch in ACTIVE State)")
@@ -231,9 +225,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         logging.info("ACTION")
         self.fr.send_CrvtSpdAdpvSts(DE.OffOnNotAvlSrvRqrd.SrvRqrd)#false
-        vc.sleep(self.delay)
-        #csa_on.touch() # Touch this button shouldnt change the output
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (function SYSTEM-ERROR using CrvtSpdAdpvSts)")
@@ -241,8 +233,8 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         asserts.assertEqual(self.fr.get_AccAdprTurnSpdActv().Sts, DE.OnOff1.Off, "AccAdprTurnSpdActv (function SYSTEM-ERROR using CrvtSpdAdpvSts)")
 
         logging.info("ACTION")
-        csa_on.touch() # Stress the function as this button shouldnt change the output ####################
-        vc.sleep(self.delay)
+        csa_on.click() # Stress the function as this button shouldnt change the output ####################
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (No Change on Touch in Error State)")
@@ -256,7 +248,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         logging.info("ACTION")
         self.fr.send_CrvtSpdAdpvSts(DE.OffOnNotAvlSrvRqrd.On)#false
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
         #csa_on.touch() # Touch this button shouldnt change the output
         #vc.sleep(self.delay)
 
@@ -273,7 +265,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         logging.info("ACTION")
         self.fr.stop_CrvtSpdWarnSts()#false
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
         #csa_on.touch() # Touch this button shouldnt change the output
         #vc.sleep(self.delay)
 
@@ -289,7 +281,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         logging.info("ACTION")
         self.fr.send_CrvtSpdWarnSts(DE.FctSts2.On)#true
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
         # csa_on.touch() # Touch this button shouldnt change the output
         # vc.sleep(self.delay)
 
@@ -304,8 +296,8 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         logging.info("----------------------------------------------------------------------------------------------------------")
 
         logging.info("ACTION")
-        csa_off.touch()
-        vc.sleep(self.delay)
+        csa_off.click()
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (set function OFF)")
@@ -318,8 +310,8 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         logging.info("----------------------------------------------------------------------------------------------------------")
 
         logging.info("ACTION")
-        csa_on.touch()
-        vc.sleep(self.delay)
+        csa_on.click()
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 1, "CURVE_SPEED_ADAPTION_ON (set function ON)")
@@ -332,8 +324,8 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
         logging.info("----------------------------------------------------------------------------------------------------------")
 
         logging.info("ACTION")
-        csa_off.touch()
-        vc.sleep(self.delay)
+        csa_off.click()
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (set function OFF)")
@@ -347,7 +339,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         logging.info("ACTION")
         self.fr.send_ProfPenSts1(DE.IdPen.Prof3)
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 1, "CURVE_SPEED_ADAPTION_ON (set new User for default value)")
@@ -362,7 +354,7 @@ class VtsCsaSettingsComponentTest(base_test.BaseTestClass):
 
         logging.info("ACTION")
         self.fr.send_ProfPenSts1(DE.IdPen.ProfUkwn)
-        vc.sleep(self.delay)
+        time.sleep(self.delay)
 
         logging.info("EVALUATE")
         vHalCommon.assert_prop_equals(self.CURVE_SPEED_ADAPTION_ON, 0, "CURVE_SPEED_ADAPTION_ON (set new User for default value)")
