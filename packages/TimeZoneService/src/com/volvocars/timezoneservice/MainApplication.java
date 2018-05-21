@@ -11,15 +11,16 @@ import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
+import android.os.RemoteException;
+import android.util.Log;
+import android.os.IHwBinder.DeathRecipient;
 
 import java.io.File;
 
@@ -31,9 +32,13 @@ import jsqlite.Callback;
 import jsqlite.Database;
 import jsqlite.Exception;
 
+import vendor.volvocars.hardware.gps.V1_0.ILocationCallback;
+import vendor.volvocars.hardware.gps.V1_0.GnssTimeLocinfo;
+import vendor.volvocars.hardware.gps.V1_0.ILocationUpdate;
 
 
-public class MainApplication extends Application implements LocationListener, Callback {
+
+public class MainApplication extends Application implements Callback {
     private BroadcastReceiver receiver;
 
     private Handler mHandler;
@@ -49,117 +54,88 @@ public class MainApplication extends Application implements LocationListener, Ca
 
     private static AlarmManager am;
     private static  Database db;
-    private static LocationManager mLocationManager = null;
+    private GnssCallback mGnssCallback;
+    private ILocationUpdate mGnsshal = null;
+
+    private final TimeZoneDeathRecipient mTimeZoneDeathRecipient = new TimeZoneDeathRecipient();
+
     private static final String LOG_TAG = "TimeZoneService";
 
 
-    /**
-     * Return the current state of the permissions need
-     * @return true if all permissions are matched false if any one check fails
-    */
-    private boolean checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(LOG_TAG, "Incorrect 'uses-permission', requires 'ACCESS_FINE_LOCATION'");
-            return false;
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(LOG_TAG, "Incorrect 'uses-permission', requires 'ACCESS_COARSE_LOCATION'");
-            return false;
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SET_TIME_ZONE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(LOG_TAG, "Incorrect 'uses-permission', requires 'SET_TIME_ZONE'");
-            return false;
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(LOG_TAG, "Incorrect 'uses-permission', requires 'READ_EXTERNAL_STORAGE'");
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Implement virtual methods of the Location Listener to extract time from GPS
-     * @param location, last received location.
-     * @return None
-     */
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        if(isAutomaticTimeZoneRequested()) {
-            double Latitude = location.getLatitude();
-            double Longitude = location.getLongitude();
-            String Query = queryBuilder(Latitude, Longitude);
-            try {
-                db.exec(Query, this);
-                String systemTimeZone = TimeZone.getDefault().getID();
-
-                /**
-                 * The TimeZone will be checked every 30 seconds and if
-                 * the new timezone is consistent over 3 tries (90 secs)
-                 * System timezone will be updated.
-                 */
-
-                if (timeZoneStringFromDatabase.equals(prevTzFromDb) &&
-                        !systemTimeZone.equals(timeZoneStringFromDatabase)) {
-                    timeZoneChangeCounter++;
-                    if(timeZoneChangeCounter == noOfChangesDetected) {
-                        am.setTimeZone(timeZoneStringFromDatabase);
-                        timeZoneChangeCounter = 0;
-                    }
-                } else {
-                    timeZoneChangeCounter=0;
-                }
-                prevTzFromDb = timeZoneStringFromDatabase;
-
-            } catch (Exception e) {
-                Log.e(LOG_TAG, "Query Failed: " + e.getMessage());
-
-            }
-        }
-
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        Log.e(LOG_TAG, "onProviderDisabled: " + provider);
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        Log.e(LOG_TAG, "onProviderEnabled: " + provider);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.e(LOG_TAG, "onStatusChanged: " + provider);
-    }
-
     private void startLocationUpdates() {
-        try {
-            List<String> providers = mLocationManager.getAllProviders();
-            Log.i(LOG_TAG, "providers: " + providers);
-        } catch (java.lang.SecurityException ex) {
-            Log.e(LOG_TAG, "fail to get location, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.e(LOG_TAG, "get gps provider does not exist " + ex.getMessage());
+        int retry = 0;
+        boolean IsLocServiceOk = false;
+        try
+        {
+            while(retry <= 10) {
+                mGnsshal = ILocationUpdate.getService();
+                if (mGnsshal == null) {
+                    Log.i(LOG_TAG, "GPS-HAL ILocationUpdate::getService: failed !!");
+                    retry++;
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        Log.e(LOG_TAG, "Sleep was interrupted: " + e.getMessage());
+                        ExitServiceApp(); // terminate ourself to get re-spawne
+                    }
+                    continue;
+                } else {
+                    IsLocServiceOk = true;
+                    break;
+                }
+            }
+            if (!IsLocServiceOk) {
+                ExitServiceApp(); // terminate ourself to get re-spawne
+            }
+            mGnsshal.linkToDeath(mTimeZoneDeathRecipient, 1221 /* dummy cookie */);
+            mGnssCallback = new GnssCallback(this);
+            // Register GNSS Location update
+            mGnsshal.requestGNSSLocationUpdates(mGnssCallback);
+        } catch (RemoteException ex) {
+            Log.e(LOG_TAG, "GNSS Location HAL failure: " + ex.getMessage());
+            ExitServiceApp(); // terminate ourself to get re-spawne
         }
+    }
 
-        try {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_INTERVAL,
-                    LOCATION_DISTANCE, this);
-        } catch (java.lang.SecurityException ex) {
-            Log.e(LOG_TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.e(LOG_TAG, "gps provider does not exist " + ex.getMessage());
+    private class GnssCallback extends ILocationCallback.Stub {
+
+        private MainApplication minstance;
+
+        public GnssCallback(MainApplication instance) {
+            minstance = instance;
+        }
+        @Override
+        public void OnGnssLocationUpdate(GnssTimeLocinfo location) {
+            if(isAutomaticTimeZoneRequested()) {
+                double Latitude = location.latitude;
+                double Longitude = location.longitude;
+                String Query = queryBuilder(Latitude, Longitude);
+                try {
+                    db.exec(Query, minstance);
+                    String systemTimeZone = TimeZone.getDefault().getID();
+
+                    /**
+                    * The TimeZone will be checked every 30 seconds and if
+                    * the new timezone is consistent over 3 tries (90 secs)
+                    * System timezone will be updated.
+                    */
+
+                    if (timeZoneStringFromDatabase.equals(prevTzFromDb) &&
+                            !systemTimeZone.equals(timeZoneStringFromDatabase)) {
+                        timeZoneChangeCounter++;
+                        if(timeZoneChangeCounter == noOfChangesDetected) {
+                            am.setTimeZone(timeZoneStringFromDatabase);
+                            timeZoneChangeCounter = 0;
+                        }
+                    } else {
+                        timeZoneChangeCounter=0;
+                    }
+                    prevTzFromDb = timeZoneStringFromDatabase;
+
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Query Failed: " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -193,20 +169,9 @@ public class MainApplication extends Application implements LocationListener, Ca
             Log.e(LOG_TAG, "onCreate OutOfMemory: " + me.getMessage());
         }
 
-
-        //Register for gps location Updates
         mHandler = new Handler();
-        mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-        if (!checkPermissions()) {
-            Log.e(LOG_TAG, "Incorrect Permissions!");
-            System.runFinalizersOnExit(true);
-            System.exit(0);
-        } else {
-            startLocationUpdates();
-        }
-
-
+        // Register for gps location Updates
+        startLocationUpdates();
     }
 
 
@@ -232,5 +197,26 @@ public class MainApplication extends Application implements LocationListener, Ca
 
     public boolean isAutomaticTimeZoneRequested() {
         return Settings.Global.getInt(this.getContentResolver(), Settings.Global.AUTO_TIME_ZONE, 0) != 0;
+    }
+
+    private class TimeZoneDeathRecipient implements DeathRecipient {
+
+        @Override
+        public void serviceDied(long cookie) {
+
+            try {
+                Log.w(LOG_TAG, "GPS HAL died.");
+                mGnsshal.unlinkToDeath(this);
+                mGnsshal = null;
+                ExitServiceApp();
+            } catch (RemoteException e) {
+                Log.e(LOG_TAG, "Failed to unlinkToDeath", e);
+                ExitServiceApp();
+            }
+        }
+    }
+
+    private void ExitServiceApp() {
+        System.exit(0);
     }
 }

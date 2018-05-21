@@ -1,0 +1,11 @@
+package vendor.volvocars.hardware.gps@1.0;
+
+interface ILocationCallback
+{
+    /**
+     * Non-blocking Callback function that get called upon Location update
+     * @param location Location received from GNSS HAL service.
+     */
+    oneway OnGnssLocationUpdate(GnssTimeLocinfo location);
+};
+

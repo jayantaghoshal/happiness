@@ -16,6 +16,7 @@ import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 
 import android.database.ContentObserver;
+import android.os.IHwBinder.DeathRecipient;
 
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -29,10 +30,6 @@ import android.util.Log;
 import android.support.v4.content.ContextCompat;
 
 import android.provider.Settings;
-
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 
 import java.lang.ref.WeakReference;
 
@@ -48,10 +45,14 @@ import android.hardware.automotive.vehicle.V2_0.StatusCode;
 import android.hardware.automotive.vehicle.V2_0.SubscribeOptions;
 import android.hardware.automotive.vehicle.V2_0.SubscribeFlags;
 
-import android.os.HwBinder;
+import vendor.volvocars.hardware.gps.V1_0.ILocationCallback;
+import vendor.volvocars.hardware.gps.V1_0.GnssTimeLocinfo;
+import vendor.volvocars.hardware.gps.V1_0.ILocationUpdate;
+
+
 import java.util.NoSuchElementException;
 
-public class MainApplication extends Application implements LocationListener, HwBinder.DeathRecipient {
+public class MainApplication extends Application {
     private BroadcastReceiver receiver;
     private SettingsObserver mSettingsObserver;
     private Handler mHandler;
@@ -63,19 +64,18 @@ public class MainApplication extends Application implements LocationListener, Hw
     private static final Boolean MANUAL_MODE = false;
     private static final Boolean AUTO_MODE = true;
 
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-    private static final int LOCATION_INTERVAL = 1000;  //30000;
-    private static final float LOCATION_DISTANCE = 0f;
+
+    private static final int VHAL_COOKIE = 1010;  //Dummy cookie for VHAL
+    private static final int GPSHAL_COOKIE = 1020;  //Dummy cookie for GPS HAL
 
     private static long gpsTimeMilis;
     private static long gpsTimeOffset;
     private static long cemTime;
 
     private IVehicle mVehicle = null;
+    private ILocationUpdate mGnsshal = null;
     private VehicleCallback mInternalCallback;
-
-
-    private LocationManager mLocationManager = null;
+    private GnssCallback mGnssCallback;
 
     private static int locationCounter = 0;
     private static int unixTimeCounter = 0;
@@ -84,99 +84,43 @@ public class MainApplication extends Application implements LocationListener, Hw
     private final static long maxDiffinCem = 2000L;
     private final static long maxDiffinIhu = 5000L;
 
-    /**
-     * Return the current state of the permissions need
-     * @param None
-     * @return true if all permissions are matched false if any one check fails
-    */
-    private boolean checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TimeUpdateLog.SERVICE_TAG, "Incorrect 'uses-permission', requires 'ACCESS_FINE_LOCATION'");
-            return false;
-        }
+    private final TimeUpdateDeathRecipient mTimeUpdateDeathRecipient = new TimeUpdateDeathRecipient();
 
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TimeUpdateLog.SERVICE_TAG, "Incorrect 'uses-permission', requires 'ACCESS_COARSE_LOCATION'");
-            return false;
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.SET_TIME) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TimeUpdateLog.SERVICE_TAG, "Incorrect 'uses-permission', requires 'SET_TIME'");
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Implement virtual methods of the Location Listener to extract time from GPS
-     * @param Location, last received location.
-     * @return None
-     */
-
-    @Override
-    public void onLocationChanged(Location location) {
-        gpsTimeMilis = location.getTime();
-        long ihuTime = getIHUTime();
-        long storedOffset = getUserTimeOffset();
-        if (storedOffset == Long.MAX_VALUE) {
-            setUserTimeOffset(ihuTime - gpsTimeMilis);
-            locationCounter = 0;
-        } else {
-
-                if (Math.abs((ihuTime - gpsTimeMilis) - storedOffset) > maxDiffinIhu) {
-                    locationCounter++;
-                    if(locationCounter == 2){
-                        setIHUTime(gpsTimeMilis + storedOffset);
-                        if(setCemTime(gpsTimeMilis + storedOffset)) {
-                            Log.i(TimeUpdateLog.SERVICE_TAG, "CEM time successfully set on GPS update");
-                        } else {
-                            Log.e(TimeUpdateLog.SERVICE_TAG, "Failed to set CEM time on GPS location update");
-                        }
-                    }
-                }else{
-                    locationCounter = 0;
-                }
-        }
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        Log.e(TimeUpdateLog.SERVICE_TAG, "onProviderDisabled: " + provider);
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        Log.e(TimeUpdateLog.SERVICE_TAG, "onProviderEnabled: " + provider);
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.e(TimeUpdateLog.SERVICE_TAG, "onStatusChanged: " + provider);
-    }
 
     private void startLocationUpdates() {
-        try {
-            List<String> providers = mLocationManager.getAllProviders();
-            Log.i(TimeUpdateLog.SERVICE_TAG, "providers: " + providers);
-        } catch (java.lang.SecurityException ex) {
-            Log.e(TimeUpdateLog.SERVICE_TAG, "fail to get location, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.e(TimeUpdateLog.SERVICE_TAG, "get gps provider does not exist " + ex.getMessage());
+        int retry = 0;
+        boolean IsLocServiceOk = false;
+        try
+        {
+            while(retry <= 10) {
+                mGnsshal = ILocationUpdate.getService();
+                if (mGnsshal == null) {
+                    Log.i(TimeUpdateLog.SERVICE_TAG, "GPS-HAL ILocationUpdate::getService: failed !!");
+                    retry++;
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        Log.e(TimeUpdateLog.SERVICE_TAG, "Sleep was interrupted: " + e.getMessage());
+                        ExitServiceApp(); // terminate ourself to get re-spawne
+                    }
+                    continue;
+                } else {
+                    IsLocServiceOk = true;
+                    break;
+                }
+            }
+            if (!IsLocServiceOk) {
+               ExitServiceApp(); // terminate ourself to get re-spawne
+            }
+            mGnsshal.linkToDeath(mTimeUpdateDeathRecipient, GPSHAL_COOKIE /* dummy cookie */);
+            mGnssCallback = new GnssCallback();
+            // Register GNSS Location update
+            mGnsshal.requestGNSSLocationUpdates(mGnssCallback);
+        } catch (RemoteException ex) {
+            Log.e(TimeUpdateLog.SERVICE_TAG, "GNSS Location HAL failure: " + ex.getMessage());
+            ExitServiceApp(); // terminate ourself to get re-spawne
         }
 
-        try {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-                    this);
-        } catch (java.lang.SecurityException ex) {
-            Log.e(TimeUpdateLog.SERVICE_TAG, "fail to request location update, ignore", ex);
-        } catch (IllegalArgumentException ex) {
-            Log.e(TimeUpdateLog.SERVICE_TAG, "gps provider does not exist " + ex.getMessage());
-        }
     }
 
     /**
@@ -196,24 +140,17 @@ public class MainApplication extends Application implements LocationListener, Hw
         Log.i(TimeUpdateLog.SERVICE_TAG, "On Boot offset is: " + gpsTimeOffset);
 
         mHandler = new Handler();
-        mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
-        if (!checkPermissions()) {
-            Log.i(TimeUpdateLog.SERVICE_TAG, "Incorrect Permissions!");
-            System.runFinalizersOnExit(true);
-            System.exit(0);
-        } else {
-            startLocationUpdates();
-        }
+        startLocationUpdates();
 
         // Vehicle HAL properties
         try {
             mVehicle = IVehicle.getService();
             if (mVehicle==null) {
                 Log.e(TimeUpdateLog.SERVICE_TAG, "IVehicle.getService returned null");
-                System.exit(0); // terminate ourself to get re-spawned
+                ExitServiceApp(); // terminate ourself to get re-spawned
             }
-            mVehicle.linkToDeath(this, 1010 /* dummy cookie */);
+            mVehicle.linkToDeath(mTimeUpdateDeathRecipient, VHAL_COOKIE /* dummy cookie */);
             mInternalCallback = new VehicleCallback();
             ArrayList<SubscribeOptions> options = new ArrayList<>();
             SubscribeOptions opts = new SubscribeOptions();
@@ -226,10 +163,10 @@ public class MainApplication extends Application implements LocationListener, Hw
             }
         } catch(RemoteException ex) {
             Log.e(TimeUpdateLog.SERVICE_TAG, "VHAL failure: " + ex.getMessage());
-            System.exit(0); // terminate ourself to get re-spawned
+            ExitServiceApp(); // terminate ourself to get re-spawned
         } catch(NoSuchElementException ex) {
             Log.e(TimeUpdateLog.SERVICE_TAG, "IVehicle not found: " + ex.getMessage());
-            System.exit(0); // terminate ourself to get re-spawned
+            ExitServiceApp(); // terminate ourself to get re-spawned
         }
 
         mSettingsObserver = new SettingsObserver(mHandler, EVENT_AUTO_TIME_CHANGED, this);
@@ -248,12 +185,6 @@ public class MainApplication extends Application implements LocationListener, Hw
         };
 
         this.registerReceiver(receiver, filter);
-    }
-
-    @Override
-    public void serviceDied(long cookie) {
-        Log.i(TimeUpdateLog.SERVICE_TAG, "Lost Connection to VHAL, re-spawning myself");
-        System.exit(0); // terminate ourself to get re-spawned
     }
 
     /**
@@ -296,6 +227,35 @@ public class MainApplication extends Application implements LocationListener, Hw
         } catch (RemoteException re) {
             Log.e(TimeUpdateLog.SERVICE_TAG, re.getMessage());
             return false;
+        }
+    }
+
+    private class GnssCallback extends ILocationCallback.Stub {
+
+        @Override
+        public void OnGnssLocationUpdate(GnssTimeLocinfo location) {
+            gpsTimeMilis = location.utctime;
+            long ihuTime = getIHUTime();
+            long storedOffset = getUserTimeOffset();
+            if (storedOffset == Long.MAX_VALUE) {
+                setUserTimeOffset(ihuTime - gpsTimeMilis);
+                locationCounter = 0;
+            } else {
+
+                if (Math.abs((ihuTime - gpsTimeMilis) - storedOffset) > maxDiffinIhu) {
+                    locationCounter++;
+                    if(locationCounter == 2){
+                        setIHUTime(gpsTimeMilis + storedOffset);
+                        if(setCemTime(gpsTimeMilis + storedOffset)) {
+                            Log.i(TimeUpdateLog.SERVICE_TAG, "CEM time successfully set on GPS update");
+                        } else {
+                            Log.e(TimeUpdateLog.SERVICE_TAG, "Failed to set CEM time on GPS location update");
+                        }
+                    }
+                }else{
+                    locationCounter = 0;
+                }
+            }
         }
     }
 
@@ -357,6 +317,36 @@ public class MainApplication extends Application implements LocationListener, Hw
         }
 
         return true;
+    }
+
+    private class TimeUpdateDeathRecipient implements DeathRecipient {
+
+        @Override
+        public void serviceDied(long cookie) {
+
+            try {
+                    if (cookie == VHAL_COOKIE ) {
+                        Log.w(TimeUpdateLog.SERVICE_TAG, "Vehicle HAL died.");
+                        mVehicle.unlinkToDeath(this);
+                        mVehicle = null;
+                    }
+
+                    if(cookie == GPSHAL_COOKIE ) {
+                         Log.w(TimeUpdateLog.SERVICE_TAG, "GPS HAL died.");
+                         mGnsshal.unlinkToDeath(this);
+                         mGnsshal = null;
+                    }
+                    ExitServiceApp();
+
+                } catch (RemoteException e) {
+                    Log.e(TimeUpdateLog.SERVICE_TAG, "Failed to unlinkToDeath", e);
+                    ExitServiceApp();
+                }
+        }
+    }
+
+    private void ExitServiceApp() {
+        System.exit(0);
     }
 
 }

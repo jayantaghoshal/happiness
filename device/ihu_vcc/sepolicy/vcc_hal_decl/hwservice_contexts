@@ -6,3 +6,6 @@ vendor.volvocars.hardware.remotectl::ISystemRemoteAudioCtrl.hal u:object_r:hal_r
 vendor.volvocars.hardware.cloud::ICloudConnection u:object_r:hal_cloud_hwservice:s0
 vendor.volvocars.hardware.signals::ISignals u:object_r:hal_signals_hwservice:s0
 vendor.delphi.lifecyclecontrol::ILifecycleControl u:object_r:hal_lifecyclectrl_hwservice:s0
+vendor.volvocars.hardware.gps::ILocationUpdate u:object_r:hal_gps_hwservice:s0
+
+

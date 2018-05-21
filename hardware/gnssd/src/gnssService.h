@@ -14,6 +14,7 @@ extern "C" {
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IMessageCallback.h>
 #include <vendor/volvocars/hardware/vehiclecom/1.0/IVehicleCom.h>
 #include "binderimpl/gnss/Gnss.h"
+#include "gnssTimeLocService.h"
 
 using ::android::hidl::base::V1_0::DebugInfo;
 using ::android::hidl::base::V1_0::IBase;
@@ -40,7 +41,8 @@ using namespace android::hardware::gnss::V1_0;
 // Only refcounting and public methods should be visible externally
 class GnssService : public virtual RefBase, private IMessageCallback, private hidl_death_recipient {
   public:
-    GnssService();
+    explicit GnssService(const android::sp<GnssTimeLocService>&);
+    // GnssService();
     ~GnssService() = default;
 
     void StartSubscribe();
@@ -78,4 +80,6 @@ class GnssService : public virtual RefBase, private IMessageCallback, private hi
     ASN_BYTE m_session_buffer_msgd[ASN_SESSION_SIZE + 2048];
     ASN_Session m_session_msgd;
     bool connectionError = false;
+    GnssTimeLocinfo gnssloc_;
+    android::sp<GnssTimeLocService> mptrGnsstimeloc;
 };

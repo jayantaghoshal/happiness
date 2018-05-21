@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -16,6 +16,7 @@
 #include <utility>
 
 #include "gnssService.h"
+#include "gnssTimeLocService.h"
 
 #undef LOG_TAG  // workaround for <hidl/HidlTransportSupport.h>
 #define LOG_TAG "gnssd.main"
@@ -53,8 +54,6 @@ void SigIntHandler(int fd) {
 }
 
 bool InitSignals() {
-    int ret_val;
-
     sigset_t signal_set_term;
     sigset_t signal_set_hup;
     sigset_t signal_set_int;
@@ -98,11 +97,14 @@ bool InitSignals() {
 int main(void) {
     InitSignals();
 
-    sp<GnssService> gnssService = new GnssService();
+    sp<GnssTimeLocService> gnssTimeLoc = new GnssTimeLocService();
+    if (!gnssTimeLoc->StartService()) {
+        ALOGE("Failed to RegisterService for GnssTimeLocService !!!");
+    }
+    sp<GnssService> gnssService = new GnssService(gnssTimeLoc);
     gnssService->Initialize();
 
     configureRpcThreadpool(1, true /*callerWillJoin*/);
-
     joinRpcThreadpool();
 
     ALOGI("exiting ...");

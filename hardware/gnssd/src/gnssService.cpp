@@ -20,8 +20,9 @@ using ::vendor::volvocars::hardware::common::V1_0::Ecu;
 
 using namespace Connectivity;
 using namespace InfotainmentIpBus::Utils;
-
-GnssService::GnssService() : timeProvider_{IDispatcher::GetDefaultDispatcher()} {
+GnssService::GnssService(const android::sp<GnssTimeLocService>& gnssloc)
+    : timeProvider_{IDispatcher::GetDefaultDispatcher()}, mptrGnsstimeloc{gnssloc} {
+    //   : timeProvider_{IDispatcher::GetDefaultDispatcher()} {
     //// Init for IpService base class.
     //// Fix me: Update IpService constructor with arguments and do work there. Avoid fiddling with details here and in
     /// other services...
@@ -208,14 +209,13 @@ bool GnssService::Initialize() {
     //// Fix me: Update IpService::Init() with arguments and do work there. Avoid fiddling with details here and in
     /// other services...
     // IpService::setDispatcher(IDispatcher::GetDefaultDispatcher());
-
     // Subscribe to ipcbd
     android::status_t status = gnss_.registerAsService();
     if (status != android::OK) {
         ALOGE("Failed to register Gnss binder service: %d", status);
         return false;
     } else {
-        ALOGV("Gnss binder service register ok");
+        ALOGD("Gnss binder service register ok");
     }
 
     return true;
@@ -289,6 +289,13 @@ void GnssService::GNSSPositionDataNotificationHandler(const Msg& msg) {
                 location_.altitudeMeters = p->gnssPositionData->position->altitude / 10.0;  // dm -> meters
             }
             ALOGD("lat=%.4lf , long=%.4lf", location_.latitudeDegrees, location_.longitudeDegrees);
+            gnssloc_.utctime = location_.timestamp;
+            gnssloc_.latitude = location_.latitudeDegrees;
+            gnssloc_.longitude = location_.longitudeDegrees;
+            // Perform VCC custom GNSS callback with time and location info
+            if (mptrGnsstimeloc != nullptr) {
+                mptrGnsstimeloc->PerformGnssTimeLocCb(gnssloc_);
+            }
         } else {
             location_.timestamp = 0;  // Indicate invalid timestamp due to no-fix
         }

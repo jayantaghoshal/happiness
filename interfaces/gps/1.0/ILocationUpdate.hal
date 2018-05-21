@@ -1,0 +1,18 @@
+package vendor.volvocars.hardware.gps@1.0;
+
+import ILocationCallback;
+
+interface ILocationUpdate
+{
+    /**
+     * Requests for GNSS location updates
+     *
+     * Use this to register to receive GNSS Time,Date and location(latitude,longitude) updates directly from VCC GNSS HAL service
+     * Location updates are received irrespective of GPS System settings or User profile
+     * Independent/decoupled from Android Framework Location Manager Service
+     *
+     * @param callbackHandler Instance handling callbacks for requested Location updates
+     * @return status as Success(true) or Fail(false)
+     */
+    requestGNSSLocationUpdates(ILocationCallback callbackHandler) generates (bool status);
+};

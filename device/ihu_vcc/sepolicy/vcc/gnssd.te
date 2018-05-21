@@ -9,3 +9,6 @@ hal_server_domain(gnssd, hal_gnss)
 
 #Allow IVehicleCom HAL client
 hal_client_domain(gnssd, hal_vehiclecom)
+
+#Allow ILocationUpdate HAL server
+hal_server_domain(gnssd, hal_gps)

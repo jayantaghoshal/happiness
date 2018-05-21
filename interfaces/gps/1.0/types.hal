@@ -1,0 +1,8 @@
+package vendor.volvocars.hardware.gps@1.0;
+
+struct GnssTimeLocinfo
+{
+   int64_t utctime;
+   double latitude;
+   double longitude;
+};

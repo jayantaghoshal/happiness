@@ -22,7 +22,8 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_STATIC_JAVA_LIBRARIES := \
         android-support-v4 \
         vendor.volvocars.hardware.vehiclehal-V1.0-java \
-        android.hardware.automotive.vehicle-V2.0-java
+        android.hardware.automotive.vehicle-V2.0-java \
+        vendor.volvocars.hardware.gps-V1.0-java
 
 LOCAL_MULTILIB := 64
 include $(BUILD_PACKAGE)

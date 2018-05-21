@@ -1,0 +1,67 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_binary {
+
+    name: "gnssd",
+    init_rc: ["gnssd.rc"],
+    vendor: true,
+    cpp_std: "c++14",
+
+    srcs: [
+        "src/main.cpp",
+        "src/gnssService.cpp",
+        "src/gnssTimeLocService.cpp",
+        "src/binderimpl/gnss/AGnssCallback.cpp",
+        "src/binderimpl/gnss/AGnss.cpp",
+        "src/binderimpl/gnss/AGnssRilCallback.cpp",
+        "src/binderimpl/gnss/AGnssRil.cpp",
+        "src/binderimpl/gnss/GnssBatchingCallback.cpp",
+        "src/binderimpl/gnss/GnssBatching.cpp",
+        "src/binderimpl/gnss/GnssCallback.cpp",
+        "src/binderimpl/gnss/GnssConfiguration.cpp",
+        "src/binderimpl/gnss/Gnss.cpp",
+        "src/binderimpl/gnss/GnssDebug.cpp",
+        "src/binderimpl/gnss/GnssGeofenceCallback.cpp",
+        "src/binderimpl/gnss/GnssGeofencing.cpp",
+        "src/binderimpl/gnss/GnssMeasurementCallback.cpp",
+        "src/binderimpl/gnss/GnssMeasurement.cpp",
+        "src/binderimpl/gnss/GnssNavigationMessageCallback.cpp",
+        "src/binderimpl/gnss/GnssNavigationMessage.cpp",
+        "src/binderimpl/gnss/GnssNiCallback.cpp",
+        "src/binderimpl/gnss/GnssNi.cpp",
+        "src/binderimpl/gnss/GnssXtraCallback.cpp",
+        "src/binderimpl/gnss/GnssXtra.cpp",
+    ],
+
+    cppflags: [
+        "-Wno-non-virtual-dtor",
+        "-fexceptions",
+        "-Wno-unused-parameter",
+        "-Wno-macro-redefined",
+    ],
+    shared_libs: [
+        "liblog",
+        "liblocalconfig",
+        "libtarmac",
+        "libdataelements",
+        "libutils",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libinfotainmentbusasn",
+        "android.hardware.gnss@1.0",
+        "vendor.volvocars.hardware.common@1.0",
+        "vendor.volvocars.hardware.vehiclecom@1.0",
+        "vendor.volvocars.hardware.gps@1.0",
+    ],
+
+    local_include_dirs: [
+        "src",
+        "src/binderimpl/gnss",
+    ],
+
+    compile_multilib: "64",
+}

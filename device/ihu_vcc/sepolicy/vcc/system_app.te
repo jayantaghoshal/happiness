@@ -7,3 +7,6 @@ hal_client_domain(system_app, hal_remotectl)
 
 # Allow IIplm HAL client
 hal_client_domain(system_app, hal_iplm)
+
+# Allow ILocationUpdate HAL client
+hal_client_domain(system_app, hal_gps)

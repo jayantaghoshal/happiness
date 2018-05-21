@@ -1,0 +1,12 @@
+#define gps hal
+type hal_gps_hwservice, hwservice_manager_type;
+
+hal_attribute(gps)
+
+binder_call(hal_gps_client, hal_gps_server)
+binder_call(hal_gps_server, hal_gps_client)
+
+add_hwservice(hal_gps_server, hal_gps_hwservice)
+allow hal_gps_client hal_gps_hwservice:hwservice_manager find;
+
+allow system_app hal_gps_hwservice:hwservice_manager find;
