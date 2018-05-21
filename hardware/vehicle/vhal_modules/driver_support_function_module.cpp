@@ -7,7 +7,6 @@
 #include <utils/SystemClock.h>
 #include <vhal_v2_0/VehicleUtils.h>
 #include "carconfig.h"
-#include "i_vehicle_hal_impl.h"
 #include "interface_mapping.h"
 
 #include <cutils/log.h>
@@ -18,7 +17,6 @@
 #define LOG_TAG "DriverSupportFunction"
 
 using namespace android::hardware::automotive::vehicle::V2_0;
-using namespace vendor::volvocars::hardware::vehiclehal::V1_0::impl;
 using namespace std::placeholders;
 using namespace android;
 using namespace ApplicationDataElement;

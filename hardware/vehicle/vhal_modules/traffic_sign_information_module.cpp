@@ -14,22 +14,22 @@ namespace {
 // Create propconfig function for TSI
 vhal20::VehiclePropConfig propconfig_tsi_setting_on() {
     auto prop = vccvhal10::VehicleProperty::TSI_RSI_ON;
-    return BoolConfig(prop);
+    return PaPropHandlerHelper::BoolConfig(prop);
 }
 
 vhal20::VehiclePropConfig propconfig_tsi_speed_visual_warn_on() {
     auto prop = vccvhal10::VehicleProperty::TSI_SPEED_VISUAL_WARN_ON;
-    return BoolConfig(prop);
+    return PaPropHandlerHelper::BoolConfig(prop);
 }
 
 vhal20::VehiclePropConfig propconfig_tsi_speed_audio_warn_on() {
     auto prop = vccvhal10::VehicleProperty::TSI_SPEED_AUDIO_WARN_ON;
-    return BoolConfig(prop);
+    return PaPropHandlerHelper::BoolConfig(prop);
 }
 
 vhal20::VehiclePropConfig propconfig_tsi_speedcam_audio_warn_on() {
     auto prop = vccvhal10::VehicleProperty::TSI_SPEEDCAM_AUDIO_WARN_ON;
-    return BoolConfig(prop);
+    return PaPropHandlerHelper::BoolConfig(prop);
 }
 
 vhal20::VehiclePropConfig propconfig_tsi_speed_warn_offset() {

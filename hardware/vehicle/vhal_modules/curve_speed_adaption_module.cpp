@@ -8,7 +8,6 @@
 #include <vhal_v2_0/VehicleUtils.h>
 #include "carconfig.h"
 #include "cc_parameterlist.h"
-#include "i_vehicle_hal_impl.h"
 #include "interface_mapping.h"
 
 #include <cutils/log.h>
@@ -19,7 +18,6 @@
 #define LOG_TAG "CurveSpeedAdaption"
 
 using namespace android::hardware::automotive::vehicle::V2_0;
-using namespace vendor::volvocars::hardware::vehiclehal::V1_0::impl;
 using namespace std::placeholders;
 using namespace android;
 using namespace ApplicationDataElement;
@@ -28,7 +26,7 @@ using namespace CarConfigParams;
 
 vhal20::VehiclePropConfig propconfig_curve_speed_adaption_on() {
     auto prop = vccvhal10::VehicleProperty::CURVE_SPEED_ADAPTION_ON;
-    return BoolConfig(prop);
+    return PaPropHandlerHelper::BoolConfig(prop);
 }
 
 CurveSpeedAdaptionModule::CurveSpeedAdaptionModule(gsl::not_null<VFContext*> ctx)

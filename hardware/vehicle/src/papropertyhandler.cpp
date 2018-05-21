@@ -4,3 +4,9 @@
  */
 
 #include "papropertyhandler.h"
+
+namespace PaPropHandlerHelper {
+vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property) {
+    return VhalPropertyHandlerHelper::BoolConfig(property);
+}
+}  // namespace PaPropHandlerHelper

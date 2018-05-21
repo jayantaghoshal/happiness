@@ -7,14 +7,12 @@
 #include "carconfig.h"
 #include "cc_parameterlist.h"
 #include "interface_mapping.h"
-#include "modulepropertyhandler.h"
 #include "vcc/localconfig.h"
 
 #undef LOG_TAG
 #define LOG_TAG "ELaneKeepingAidModule"
 
 using namespace android::hardware::automotive::vehicle::V2_0;
-using namespace vendor::volvocars::hardware::vehiclehal::V1_0::impl;
 using namespace ApplicationDataElement;
 using namespace autosar;
 using namespace CarConfigParams;
@@ -22,7 +20,7 @@ using namespace ApplicationDataElement;
 
 vhal20::VehiclePropConfig propconfig_elane_keeping_aid_on() {
     auto prop = vccvhal10::VehicleProperty::EMERGENCY_LANE_KEEPING_AID_ON;
-    return BoolConfig(prop);
+    return PaPropHandlerHelper::BoolConfig(prop);
 }
 
 ELaneKeepingAidModule::ELaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicleHal,

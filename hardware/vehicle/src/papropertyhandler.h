@@ -45,27 +45,42 @@ inline vhal20::VehiclePropertyStatus toVhalStatus(vccvhal10::PAStatus status) {
             return vhal20::VehiclePropertyStatus::ERROR;
     }
 }
-
 }  // namespace
+
+namespace PaPropHandlerHelper {
+const vccvhal10::VehicleProperty notUsedStatusID{vccvhal10::VehicleProperty::INVALID};
+
+vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property);
+}  // namespace PaPropHandlerHelper
 
 template <typename T>
 class PAPropHandler {
   public:
-    static constexpr int32_t notUsedStatusID = -1;
     PAPropHandler(vhal20::VehiclePropConfig valueConfig,
                   vccvhal10::VehicleProperty statusID,
                   std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
                   vhal20::impl::IVehicleHalImpl* vehicleHal)
         : valueProp_{valueConfig, dispatcher, vehicleHal},
           statusProp_{createStatusConfig(valueConfig, statusID), dispatcher, vehicleHal},
-          use_vendor_status_{static_cast<int32_t>(statusID) != notUsedStatusID} {}
+          use_vendor_status_{statusID != PaPropHandlerHelper::notUsedStatusID} {}
 
     void PushProp(T value, vccvhal10::PAStatus status, int32_t zone = 0) {
-        PAPropHandler::setValue(value, zone, status);
+        valueProp_.PushProp(value, toVhalStatus(status), zone);
+
         if (use_vendor_status_) {
-            PAPropHandler::setStatus(status, zone);
+            statusProp_.PushProp(static_cast<int32_t>(status), vhal20::VehiclePropertyStatus::AVAILABLE, zone);
         }
     }
+
+    void PushValue(T value, int32_t zone = 0) { valueProp_.PushValue(value, zone); }
+
+    void PushStatus(vccvhal10::PAStatus status, int32_t zone = 0) {
+        valueProp_.PushStatus(toVhalStatus(status), zone);
+        if (use_vendor_status_) {
+            statusProp_.PushProp(static_cast<int32_t>(status), vhal20::VehiclePropertyStatus::AVAILABLE, zone);
+        }
+    }
+
     void subscribe_set_prop(std::function<void(T value, int32_t zone)> func) { valueProp_.subscribe_set_prop(func); }
 
     void registerToVehicleHal() {
@@ -76,19 +91,10 @@ class PAPropHandler {
     }
 
   private:
-    void setValue(T value, int32_t zone, vccvhal10::PAStatus status) {
-        valueProp_.PushProp(value, toVhalStatus(status), zone);
-    }
-
-    // This function should only be used when vendor extension PAStatus is used, i.e. when use_vendor_status_ == true
-    void setStatus(vccvhal10::PAStatus status, int32_t zone) {
-        statusProp_.PushProp(static_cast<int32_t>(status), vhal20::VehiclePropertyStatus::AVAILABLE, zone);
-    }
-
     VhalPropertyHandler<T> valueProp_;
     VhalPropertyHandler<int32_t> statusProp_;
+
     // use_vendor_status_ is used to indicate if separate status of a property shall be used. Oterwise only the
-    // VehiclePropertyStatus
-    // in the VehiclePropertyValue is used
+    // VehiclePropertyStatus in the VehiclePropertyValue is used
     const bool use_vendor_status_;
 };

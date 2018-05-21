@@ -10,10 +10,7 @@
 #include "libsettings/settingidentifiers.h"
 #include "libsettings/settingsmanagerhidl.h"
 
-#include "modulepropertyhandler.h"
-#include "notifiable_property.h"
 #include "papropertyhandler.h"
-#include "propertyhandler.h"
 
 #include <gsl/gsl>
 #include "Application_dataelement_synchronous.h"

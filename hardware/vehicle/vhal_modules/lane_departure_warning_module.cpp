@@ -13,7 +13,7 @@ using namespace autosar;
 
 vhal20::VehiclePropConfig propconfig_lane_departure_warning_on() {
     auto prop = vccvhal10::VehicleProperty::LANE_DEPARTURE_WARNING_ON;
-    return BoolConfig(prop);
+    return PaPropHandlerHelper::BoolConfig(prop);
 }
 
 LaneDepartureWarningModule::LaneDepartureWarningModule(gsl::not_null<VFContext*> ctx)

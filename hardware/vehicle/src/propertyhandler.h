@@ -8,6 +8,7 @@
 #include <vhal_v2_0/VehicleUtils.h>
 #include <functional>
 #include <map>
+#include <vector>
 #include "IDispatcher.h"
 #include "ModuleBase.h"
 #include "i_vehicle_hal_impl.h"
@@ -17,27 +18,41 @@
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 
+namespace VhalPropertyHandlerHelper {
+vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property, std::vector<int> areaIds = {});
+}
+
 template <typename T>
 class VhalPropertyHandler : public vhal20::impl::ModuleBase {
   public:
-    VhalPropertyHandler(vhal20::VehiclePropConfig config,
-                        std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                        vhal20::impl::IVehicleHalImpl* vehicleHal)
+    // This ctor is deprecated and is replaced by ctor that requires a defaultValue for the property
+    explicit VhalPropertyHandler(vhal20::VehiclePropConfig config,
+                                 std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
+                                 vhal20::impl::IVehicleHalImpl* vehicleHal)
+        : VhalPropertyHandler(config, T{}, dispatcher, vehicleHal) {}
+
+    explicit VhalPropertyHandler(vhal20::VehiclePropConfig config,
+                                 T defaultValue,
+                                 std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
+                                 vhal20::impl::IVehicleHalImpl* vehicleHal)
         : vhal20::impl::ModuleBase{vehicleHal}, config_{config}, dispatcher_{dispatcher} {
         if (IsGlobal()) {
             vhal20::VehiclePropValue property_value{};
             property_value.areaId = 0;
             property_value.prop = config.prop;
+            setDefaultValue(property_value, defaultValue);
             values_.emplace(property_value.areaId, property_value);
         } else {
             for (const auto& area : config.areaConfigs) {
                 vhal20::VehiclePropValue property_value{};
                 property_value.areaId = area.areaId;
                 property_value.prop = config.prop;
+                setDefaultValue(property_value, defaultValue);
                 values_.emplace(area.areaId, property_value);
             }
         }
     }
+
     std::unique_ptr<vhal20::VehiclePropValue> getProp(const vhal20::VehiclePropValue& requestedPropValue,
                                                       vhal20::impl::Status& status) override {
         if (requestedPropValue.prop != config_.prop) {
@@ -74,6 +89,23 @@ class VhalPropertyHandler : public vhal20::impl::ModuleBase {
     }
 
     void PushProp(T value, vhal20::VehiclePropertyStatus status, int32_t zone = 0);
+
+    void PushStatus(vhal20::VehiclePropertyStatus status, int32_t zone = 0) {
+        if (IsGlobal()) zone = 0;  // Need better solution?
+
+        auto it = values_.find(zone);
+        if (it == values_.end()) {
+            return;
+        }
+
+        it->second.status = status;
+        if (registeredWithVhal) {
+            pushProp(it->second);
+        }
+    }
+
+    void PushValue(T value, int32_t zone = 0);
+
     void subscribe_set_prop(std::function<void(T value, int32_t zone)> func) { request_set_prop_ = func; };
 
   protected:
@@ -87,6 +119,11 @@ class VhalPropertyHandler : public vhal20::impl::ModuleBase {
         auto vehicle_area = static_cast<vhal20::VehicleArea>(config_.prop & vhal20::VehicleArea::MASK);
         return (vehicle_area == vhal20::VehicleArea::GLOBAL);
     }
-};
 
-vhal20::VehiclePropConfig BoolConfig(vccvhal10::VehicleProperty property);
+  private:
+    void setDefaultValue(vhal20::VehiclePropValue& property_value, int32_t defaultValue);
+
+    void setDefaultValue(vhal20::VehiclePropValue& property_value, float defaultValue);
+
+    void setDefaultValue(vhal20::VehiclePropValue& property_value, bool defaultValue);
+};

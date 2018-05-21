@@ -10,8 +10,6 @@
 #include "libsettings/settingidentifiers.h"
 #include "libsettings/settingsmanagerhidl.h"
 
-#include "modulepropertyhandler.h"
-#include "notifiable_property.h"
 #include "papropertyhandler.h"
 #include "utils/vf_context.h"
 

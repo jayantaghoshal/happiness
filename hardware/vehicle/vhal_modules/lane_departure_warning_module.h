@@ -14,12 +14,8 @@
 #include <vhal_v2_0/VehicleUtils.h>
 #include "carconfig.h"
 #include "cc_parameterlist.h"
-#include "i_vehicle_hal_impl.h"
 #include "interface_mapping.h"
-#include "modulepropertyhandler.h"
-#include "notifiable_property.h"
 #include "papropertyhandler.h"
-#include "propertyhandler.h"
 
 #include <gsl/gsl>
 #include "Application_dataelement_synchronous.h"
