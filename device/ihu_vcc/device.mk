@@ -91,6 +91,17 @@ PRODUCT_PACKAGES += \
     SystemDialog
 
 ##############################################################
+# Volvo system fonts
+##############################################################
+PRODUCT_PACKAGES += \
+    instrument205.otf \
+    volvosansloballight.ttf \
+    volvosansglobalmedium.ttf \
+    volvosansgloballight.ttf
+
+ADDITIONAL_FONTS_FILE := vendor/volvocars/hmi/ComponentLibrary/uxlibrary/system_fonts
+
+##############################################################
 # Internal Apps UI
 ##############################################################
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
