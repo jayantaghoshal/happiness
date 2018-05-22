@@ -119,7 +119,7 @@ class VehicleHalCommon():
     app_context_halmodulesink = "com.volvocars.halmodulesink:id/"
 
     # ClimatePane buttons
-    fan_off = "com.volvocars.launcher:id/fan_off"
+    fan_off = "com.volvocars.launcher:id/fan_off_button"
     fan_level_1 = "com.volvocars.launcher:id/fan_one"
     fan_level_2 = "com.volvocars.launcher:id/fan_two"
     fan_level_3 = "com.volvocars.launcher:id/fan_three"
@@ -130,10 +130,8 @@ class VehicleHalCommon():
     temperature_controller_right = "com.volvocars.launcher:id/temperature_controller_passenger"
     temperature_plus_button = "com.volvocars.launcher:id/plus_button"
     temperature_minus_button = "com.volvocars.launcher:id/minus_button"
-    ac_controller = "com.volvocars.launcher:id/climate_ctrl_ac"
-    ac_button = "com.volvocars.launcher:id/circular_climate_ctrl_btn"
-    defrost_controller = "com.volvocars.launcher:id/climate_ctrl_max_defrost"
-    defrost_button = "com.volvocars.launcher:id/circular_climate_ctrl_btn"
+    ac_button = "com.volvocars.launcher:id/climate_ctrl_ac"
+    defrost_button = "com.volvocars.launcher:id/climate_ctrl_max_defrost"
 
     # ViewClient
     active_view_client = None

@@ -31,7 +31,7 @@ from generated.datatypes import \
     TwliBriSts1, \
     IdPen
 from generated import datatypes as DE
-
+from uiautomator import device as device
 wait_time_seconds = 1
 
 class VtsAirConditionComponentTest(base_test.BaseTestClass):
@@ -47,29 +47,24 @@ class VtsAirConditionComponentTest(base_test.BaseTestClass):
         #To move to Main Screen
         self.dut.shell.one.Execute("input keyevent 3")
 
+        # Open climate view
+        self.dut.adb.shell("input tap 384 988")
+
         self.fr = get_dataelements_connection(self.dut.adb)
         self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        self.vc, self.device = self.vHalCommon.getViewClient()
 
         # To avoid setting illumination to night mode which will dim the CSD
         self.fr.send_TwliBriSts(TwliBriSts1.Day)
-        self.fr.send_ProfPenSts1(IdPen.Prof13)
-
-        # Open climate view and dump the view
-        self.device.touchDip(388.0, 948.0, 0)
-        self.vc.dump()
 
         #Get fan buttons
-        self.fan_off = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_off)
-        self.fan_level_2 = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_level_2)
+        self.fan_off = device(resourceId=self.vHalCommon.fan_off)
+        self.fan_level_2 = device(resourceId=self.vHalCommon.fan_level_2)
 
         #Get AC button
-        self.ac_controller = self.vc.findViewByIdOrRaise(self.vHalCommon.ac_controller)
-        self.ac_button = self.vc.findViewByIdOrRaise(self.vHalCommon.ac_button,self.ac_controller)
+        self.ac_button = device(resourceId=self.vHalCommon.ac_button)
 
         #Get Max Defrost button
-        self.defrost_controller = self.vc.findViewByIdOrRaise(self.vHalCommon.defrost_controller)
-        self.defrost_button = self.vc.findViewByIdOrRaise(self.vHalCommon.defrost_button,self.defrost_controller)
+        self.defrost_button = device(resourceId=self.vHalCommon.defrost_button)
 
         #get properties and zones
         self.prop_fan = self.vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED
@@ -97,16 +92,18 @@ class VtsAirConditionComponentTest(base_test.BaseTestClass):
         except:
             pass
 
+    # This function is to verify the UI value, property value and Flexray value for Air Condition.
     def assertAirCondition(self,expected_value):
+        wait_for(lambda : self.ac_button.selected, expected_value, wait_time_seconds, "ERROR : Air Condition UI Value mismatch.")
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_ac, self.zone_center)['value']['int32Values'], [expected_value], \
-             wait_time_seconds, "ERROR : Air Condition Property value.")
-        wait_for(lambda : self.fr.get_HmiCmptmtCoolgReq(), expected_value, wait_time_seconds, "ERROR : Air Condition Value mismatch.")
+             wait_time_seconds, "ERROR : Air Condition Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiCmptmtCoolgReq(), expected_value, wait_time_seconds, "ERROR : Air Condition FR Value mismatch.")
 
     # ----------------------------------------------------------------------------------------------------------
     # Test Air Condition Active Cases - When AC is OFF previously
     # ----------------------------------------------------------------------------------------------------------
 
-    def testairConditionOFF(self):
+    def testairConditionActive_OFF(self):
         fr = self.fr
         vHalCommon = self.vHalCommon
 
@@ -120,28 +117,28 @@ class VtsAirConditionComponentTest(base_test.BaseTestClass):
         self.assertAirCondition(0)
 
         #Set fan to OFF - AC must be OFF
-        self.fan_off.touch()
+        self.fan_off.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [0], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
         self.assertAirCondition(0)
 
         #Set fan to Level 2 - AC remains to OFF
-        self.fan_level_2.touch()
+        self.fan_level_2.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [2], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
         self.assertAirCondition(0)
 
         # Set max defrost to ON - AC must be ON with FAN Level-5
-        self.defrost_button.touch()
+        self.defrost_button.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [5], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlusPlus, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
         self.assertAirCondition(1)
 
         #Set max defrost to OFF - Reset AC to prev state
-        self.defrost_button.touch()
+        self.defrost_button.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [2], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
@@ -150,7 +147,7 @@ class VtsAirConditionComponentTest(base_test.BaseTestClass):
     # ----------------------------------------------------------------------------------------------------------
     # Test Air Condition Active Cases - When AC is ON previously
     # ----------------------------------------------------------------------------------------------------------
-    def testairConditionON(self):
+    def testairConditionActive_ON(self):
         fr = self.fr
         vHalCommon = self.vHalCommon
 
@@ -164,38 +161,36 @@ class VtsAirConditionComponentTest(base_test.BaseTestClass):
         self.assertAirCondition(1)
 
         # Set ac to OFF
-        #ac.button.touch()  " Not working right now"
-        #self.ac_button.touch("adbclient.UP",400,220) " Not working right now"
-        self.device.touchDip(400,240,0)   # Alternative for ac.button.touch()
+        self.ac_button.click()
         self.assertAirCondition(0)
 
         # Again Set ac to ON (Auto)
-        self.device.touchDip(400,240,0)
+        self.ac_button.click()
         self.assertAirCondition(1)
 
         #Set fan to OFF - AC must be OFF
-        self.fan_off.touch()
+        self.fan_off.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [0], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
         self.assertAirCondition(0)
 
         # Set fan to Level 2 - AC should set to last state
-        self.fan_level_2.touch()
+        self.fan_level_2.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [2], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
         self.assertAirCondition(1)
 
         # Set max defrost to ON - AC must be ON with FAN Level-5
-        self.defrost_button.touch()
+        self.defrost_button.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [5], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlusPlus, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
         self.assertAirCondition(1)
 
         #Set max defrost to OFF - Reset AC to prev state
-        self.defrost_button.touch()
+        self.defrost_button.click()
         wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [2], \
             wait_time_seconds, "ERROR : Fan Property value.")
         wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus, wait_time_seconds, "ERROR : Fan Level Value mismatch.")
@@ -224,8 +219,7 @@ class VtsAirConditionComponentTest(base_test.BaseTestClass):
         fr.send_ClimaActv(DE.OnOff1.Off)
 
         #Try To Set the AC ON - Should not work
-        #self.ac_button.touch("adbclient.UP",440,220)
-        self.device.touchDip(400,240,0)
+        self.ac_button.click()
         self.assertAirCondition(0)
 
     # ----------------------------------------------------------------------------------------------------------
