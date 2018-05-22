@@ -144,35 +144,36 @@
 
             <fieldset style="min-width: -webkit-min-content;">
             <legend>Build trend</legend>
+                <b><%=test_detail["Test Job"] %> </b>
                 <table class="table table-hover table-striped table-bordered display table-sm">
                     <tr>
                         <td style="font-weight:bold;color:white;background-color:#15317E;">Build ID:</td>
-                        <% for (var i in build_trend) { %>
+                        <% build_trend.forEach(item => { %>
                         <td>
-                            <a href=<%= "/detailed_view?id=" + build_trend[i]["_id"]  %> >
-                                <%=build_trend[i]["test_job_build_number"]%>
+                            <a href=<%= "/detailed_view?id=" + item["_id"]  %> >
+                                <%=item["test_job_build_number"]%>
                             </a>
                         </td>
-                        <% } %>
+                        <% }); %>
                     </tr>
                     <tr>
                         <td style="font-weight:bold;color:white;background-color:#15317E;">Status:</td>
-                        <% for (var i in build_trend) { %>
+                        <% build_trend.forEach(item => { %>
                         <td>
-                            <% if (build_trend[i]["result"]){ %>
+                            <% if (item["result"]){ %>
                                         <span class="badge badge-success">PASS</span>
                             <% }else{ %>
                                         <span class="badge badge-danger">FAIL</span>
                             <% } %>
                         </td>
 
-                        <% } %>
+                        <% }); %>
                     </tr>
                     <tr>
                         <td style="font-weight:bold;color:white;background-color:#15317E;">Test time (sec): </td>
-                        <% for (var i in build_trend) { %>
-                        <td><%=Math.round(build_trend[i]["runtime"] / 1000)%></td>
-                        <% } %>
+                        <% build_trend.forEach(function(item) { %>
+                        <td><%=Math.round(item["runtime"] / 1000)%></td>
+                        <% }); %>
                     </tr>
                 </table>
                 <table>
@@ -195,6 +196,39 @@
                     }
                     %>
                 </table>
+                <hr />
+                <h3> Other test jobs where this test has run </h3>
+                    <% sibling_trends.forEach(function(sibling) {  %>
+                        <% if (sibling.results && sibling.results.length > 0) {  %>
+                        <b><%= sibling.name%></b>
+                        <table>
+                            <tr>
+                                <td style="font-weight:bold;color:white;background-color:#15317E;">Build ID:</td>
+                                <% sibling.results.forEach(function(item) {%>
+                                <td>
+                                    <a href=<%= "/detailed_view?id=" + item["_id"]  %> >
+                                        <%=item["test_job_build_number"]%>
+                                    </a>
+                                </td>
+                                <% }); %>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;color:white;background-color:#15317E;">Status:</td>
+                                <% sibling.results.forEach(function(item) { %>
+                                <td>
+                                    <% if (item["result"]){ %>
+                                                <span class="badge badge-success">PASS</span>
+                                    <% }else{ %>
+                                                <span class="badge badge-danger">FAIL</span>
+                                    <% } %>
+                                </td>
+
+                                <% }); %>
+                            </tr>
+                        </table>
+
+                        <% } %>
+                    <% }); %>
             </fieldset>
             <br>
             <%if(typeof test_detail["logs"] !== 'undefined' && Object.keys(test_detail["logs"]).length){%>

@@ -25,6 +25,9 @@ function compare(a, b) {
     return a - b;
 }
 
+const MONGO_SORT_ASCENDING = 1;
+const MONGO_SORT_DESCENDING = -1;
+
 var db;
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
@@ -226,10 +229,37 @@ app.get('/detailed_view', cors(), (req, res) => {
         return Promise.all([trend, lastSuccess, firstFailAfterSuccess, lastFail, lastSuccessBeforeLastFail]);
     });
 
-    Promise.all([detailQuery, allTrends]).then(
+    var all_job_names_query = records.distinct("job_name");
+
+    // Find the results of the same test case when run in another job
+    var sibling_tests_query = Promise.all([detailQuery, all_job_names_query]).then(function(promiseResults) {
+        let record = promiseResults[0];
+        let all_job_names = promiseResults[1];
+        return Promise.all(all_job_names.map(job_name =>
+            records.find(
+            {
+                "job_name": job_name,
+                "module_name": record["module_name"],
+                "test_dir_name": record["test_dir_name"]
+            })
+            .project({result: 1,
+                runtime: 1,
+                test_job_build_number: 1,
+                started_at: 1,
+                _id: 1})
+            .sort({test_job_build_number: MONGO_SORT_DESCENDING })
+            .limit(5)
+            .toArray()
+            .then(result => ({ "name": job_name, "results": result.reverse()}))
+            ));
+    });
+
+
+    Promise.all([detailQuery, allTrends, sibling_tests_query]).then(
         function(promiseResults) {
             var test_record = promiseResults[0];
             let allTrendResults = promiseResults[1];
+            let sibling_tests_results = promiseResults[2];
 
             var trendResults = allTrendResults[0];
             var lastSuccessResult = allTrendResults[1];
@@ -274,7 +304,8 @@ app.get('/detailed_view', cors(), (req, res) => {
                     { name: "Last fail", value: lastFailResult && lastFailResult[0] },
                     { name: "First fail after last success", value: firstFailAfterSuccessResult && firstFailAfterSuccessResult[0] },
                     { name: "Last success before last fail", value: lastSuccessBeforeLastFailResults && lastSuccessBeforeLastFailResults[0] }
-                ]
+                ],
+                sibling_trends: sibling_tests_results
             });
         }
     );
