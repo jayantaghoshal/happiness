@@ -14,14 +14,16 @@
 #include "libsettings/settingsmanagerhidl.h"
 #include "papropertyhandler.h"
 
+#include <gsl/gsl>
+#include "Application_dataelement_synchronous.h"
+#include "utils/vf_context.h"
+
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 
 class TrafficSignInformationModule {
   public:
-    TrafficSignInformationModule(vhal20::impl::IVehicleHalImpl*,
-                                 std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                                 android::sp<SettingsFramework::SettingsManagerHidl> manager);
+    TrafficSignInformationModule(gsl::not_null<VFContext*> ctx);
 
   private:
     // Functions
@@ -51,8 +53,8 @@ class TrafficSignInformationModule {
             spdcam_info_seld_roadsgn_flexray_sender_;
     ApplicationDataElement::DESender<autosar::SpdAlrmActvForRoadSgnInfo_info> spd_alrm_actv_road_sgn_flexray_sender_;
     ApplicationDataElement::DESender<autosar::OffsForSpdWarnSetg_info> offs_spd_warn_flexray_sender_;
-    ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> vehmod_flexray_receiver_;
-    ApplicationDataElement::DEReceiver<autosar::RoadSgnInfoSts_info> road_sgn_info_sts_flexray_receiver_;
+    ApplicationDataElement::DESynchronousReceiver<autosar::VehModMngtGlbSafe1_info> vehmod_flexray_receiver_;
+    ApplicationDataElement::DESynchronousReceiver<autosar::RoadSgnInfoSts_info> road_sgn_info_sts_flexray_receiver_;
 
     // Carconfigs
     CarConfigParams::CC1_VehicleTypeType car_config_1;
