@@ -123,6 +123,25 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
         }
     }
 
+    public void showInstallationPopup(SoftwareAssignment assignment) {
+        Log.v(LOG_TAG, "ShowInstallationPopup: NOTE: This is a temporary solution!!!");
+        ArrayList<ISoftwareUpdateManagerCallback> deadSwUpdClients = new ArrayList();
+
+        for (ISoftwareUpdateManagerCallback c : swUpdClients) {
+            try {
+                c.showInstallationPopup(assignment);
+            } catch (Exception e) {
+                deadSwUpdClients.add(c);
+            }
+        }
+
+        if (deadSwUpdClients.size() > 0) {
+            Log.v(LOG_TAG, "Removing " + deadSwUpdClients.size() + " dead client(s)");
+            swUpdClients.removeAll(deadSwUpdClients);
+        }
+
+    }
+
     @Override
     public void RegisterSwUpdClient(ISoftwareUpdateManagerCallback callback) {
         Log.v(LOG_TAG, "Register SwUpd client (" + callback + ")");
@@ -198,12 +217,16 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void ShowInstallationPopup(String installationOrderId) throws RemoteException {
-        service.showInstallationPopup(installationOrderId);
-    }
-
-    @Override
     public void SetSetting(String key, boolean value) throws RemoteException {
         service.SetSetting(key, value);
+    }
+
+    /**
+    * Send result of installation pop-up
+    * Note: this is only used for test, remove once proper handling of system popups are in place
+    */
+    @Override
+    public void OnInstallationPopup(InstallOption option, String uuid) {
+        service.OnInstallationPopup(option, uuid);
     }
 }

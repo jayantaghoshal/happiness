@@ -375,14 +375,6 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         } else {
             Log.v(LOG_TAG, "Downloading next file...");
 
-            try {
-                softwareManagementApiCallback.DownloadData(200, currentDownloadInfo);
-            } catch (RemoteException ex) {
-                // Something went bananas with binder.. What do?
-                Log.e(LOG_TAG,
-                        "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
-            }
-
             FetchDownloadData();
         }
     }
@@ -532,7 +524,17 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query, type);
         Log.d(LOG_TAG, "GetSoftwareAssignment: list size: " + swrsp.swlist.size());
 
-        callback.SoftwareAssignmentList(swrsp.code, type, swrsp.swlist);
+        if (query.id.isEmpty() && query.installationOrderId.isEmpty()) {
+            callback.SoftwareAssignmentList(swrsp.code, type, swrsp.swlist);
+        }
+        else {
+            if (swrsp.swlist.size() > 1) {
+                Log.w(LOG_TAG,
+                        "Size of returned list is >1, which should not happen since request was called with query containing id. What to do?");
+            } else {
+                callback.SoftwareAssignment(swrsp.code, query, type, swrsp.swlist.get(0));
+            }
+        }
     }
 
     /**

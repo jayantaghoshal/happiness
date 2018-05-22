@@ -8,5 +8,4 @@ package com.volvocars.softwareupdateapp;
 public interface ISoftwareUpdateApp {
     public abstract void commissionAssignment(String uuid);
     public abstract void getInstallNotification(String installationOrderId);
-    public abstract void showInstallationPopup(String installationOrderId);
 }

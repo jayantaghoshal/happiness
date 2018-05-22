@@ -110,15 +110,19 @@ public class SoftwareUpdateManager implements ServiceConnection {
         }
     }
 
-    public void ShowInstallationPopup(String installationOrderId) throws RemoteException {
-        if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.ShowInstallationPopup(installationOrderId);
-        }
-    }
-
     public void SetSetting(String key, boolean value) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
             softwareUpdateManager.SetSetting(key, value);
+        }
+    }
+
+    /**
+    * Send result of installation pop-up
+    * Note: this is only used for test, remove once proper handling of system popups are in place
+    */
+    public void OnInstallationPopup(InstallOption option, String uuid) throws RemoteException{
+        if (softwareUpdateManager != null && serviceBound) {
+            softwareUpdateManager.OnInstallationPopup(option, uuid);
         }
     }
 }

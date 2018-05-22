@@ -9,6 +9,7 @@ import android.os.RemoteException;
 
 import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.InstallationOrder;
+import com.volvocars.cloudservice.Query;
 import com.volvocars.cloudservice.InstallNotification;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.Status;
@@ -45,8 +46,8 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
 
     @Override
     public void SoftwareAssignmentList(int code, AssignmentType type, List<SoftwareAssignment> software_list) {
-        Log.v(LOG_TAG,
-                "Got result of getting software assingment list (type: " + type + ") [size of list: " + software_list.size() + "]: " + code);
+        Log.v(LOG_TAG, "Got result of getting software assingment list (type: " + type + ") [size of list: "
+                + software_list.size() + "]: " + code);
         if (code == 200) {
             service.onNewSoftwareAssignmentList(software_list, type);
         } else {
@@ -56,37 +57,52 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     }
 
     @Override
+    public void SoftwareAssignment(int code, Query query, AssignmentType type, SoftwareAssignment softwareAssignment) {
+        Log.v(LOG_TAG, "Got result of getting software assingment list (type: " + type + "software: "
+                + softwareAssignment.id + ") " + code);
+        if (200 == code) {
+            service.onNewSoftwareAssignment(softwareAssignment, type);
+        } else {
+            Log.w(LOG_TAG, "SoftwareAssignmentList for assignment of type: " + type + "failed with code: " + code);
+        }
+    }
+
+    @Override
     public void DownloadInfo(int code, DownloadInfo info) {
         Log.v(LOG_TAG, "Got result of getting download information [" + info.id + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(info);
             Log.v(LOG_TAG, "Received download information, ask service to download according to information");
             service.download(info);
-        }
-        else {
+        } else {
             Log.w(LOG_TAG, "DownloadInfo for uuid: " + info.id + "failed with code: " + code);
         }
     }
 
     /**
-    * Return the result of GetDownloadData
-    * @param code         The latest HTTP code when downloading
-    * @param downloadInfo The latest information regaring the download
-    */
+     * Return the result of GetDownloadData
+     *
+     * @param code         The latest HTTP code when downloading
+     * @param downloadInfo The latest information regaring the download
+     */
     @Override
     public void DownloadData(int code, DownloadInfo downloadInfo) {
         Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.id + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(downloadInfo);
-        }
-        else {
+            Log.v(LOG_TAG, "Downloading completed");
+            service.onDownloadedAssignment(downloadInfo);
+        } else
+
+        {
             Log.w(LOG_TAG, "DownloadData for uuid: " + downloadInfo.id + "failed with code: " + code);
         }
     }
 
     /**
      * Return the result of PostInstallationReport
-     * @param code The HTTP code of the response
+     *
+     * @param code                The HTTP code of the response
      * @param installationOrderId UUID of the posted Installation Report
      */
     public void InstallationReportStatus(int code, String installationOrderId) {
@@ -94,10 +110,11 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     }
 
     /**
-    * Return the result of PostInstallNotification
-    * @param code The HTTP code of the response
-    * @param installationOrderId installation order Id
-    */
+     * Return the result of PostInstallNotification
+     *
+     * @param code                The HTTP code of the response
+     * @param installationOrderId installation order Id
+     */
     public void InstallNotificationStatus(int code, String installationOrderId) {
         Log.v(LOG_TAG, "Got result of posting Installation Notification [" + installationOrderId + "]: " + code);
         if (200 == code)
@@ -105,10 +122,11 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     }
 
     /**
-    * Return the InstallNotification
-    * @param code The HTTP code of the response
-    * @param notification The InstallNotification
-    */
+     * Return the InstallNotification
+     *
+     * @param code         The HTTP code of the response
+     * @param notification The InstallNotification
+     */
     public void InstallNotification(int code, InstallNotification notification) {
         Log.v(LOG_TAG,
                 "Got result of getting Installation Notification [" + notification.installationOrderId + "]: " + code);

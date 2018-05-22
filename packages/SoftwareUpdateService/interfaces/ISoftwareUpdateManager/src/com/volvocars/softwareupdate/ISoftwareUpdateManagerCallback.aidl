@@ -30,4 +30,10 @@ oneway interface ISoftwareUpdateManagerCallback {
      * Notify client of Error
      */
     void ProvideErrorMessage(in int code, in String message);
+
+    /**
+    * Notify client to show installation popup
+    * NOTE: this is a temporary solution, remove once proper handling of system popups is implemented
+    */
+    void showInstallationPopup(in SoftwareAssignment software);
 }

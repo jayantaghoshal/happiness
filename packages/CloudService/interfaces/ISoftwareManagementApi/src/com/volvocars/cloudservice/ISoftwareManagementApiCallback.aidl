@@ -5,6 +5,7 @@ import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.SoftwareAssignment;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.InstallNotification;
+import com.volvocars.cloudservice.Query;
 
 /**
  * A callback interface to enable non-blocking request calls
@@ -24,6 +25,8 @@ oneway interface ISoftwareManagementApiCallback {
      * @param software_list The list of SoftwareAssignments
      */
     void SoftwareAssignmentList(in int code, in AssignmentType type, in List<SoftwareAssignment> software_list);
+
+    void SoftwareAssignment(in int code, in Query query, in AssignmentType type, in SoftwareAssignment softwareAssignment);
 
     /**
      * Return the result for GetDownloadInfo

@@ -5,6 +5,11 @@
 
 package com.volvocars.softwareupdateapp;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -76,9 +81,10 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             for (SoftwareInformation si : software_list) {
                 Log.v(LOG_TAG, "" + si.toString() + "\n" + si.softwareState.name());
                 swInfos.add(si);
-                /*if (si.softwareAssignment.status = SoftwareAssignment.Status.COMMISSIONABLE) {
-                    createNotification();
-                }*/
+                /*
+                 * if (si.softwareAssignment.status = SoftwareAssignment.Status.COMMISSIONABLE)
+                 * { createNotification(); }
+                 */
             }
 
             updateAdapter();
@@ -103,6 +109,20 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void ProvideErrorMessage(int code, String message) {
             Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
+        }
+
+        /**
+         * Notify client to show installation popup NOTE: this is a temporary solution,
+         * remove once proper handling of system popups is implemented
+         */
+        @Override
+        public void showInstallationPopup(SoftwareAssignment software) {
+            if (!registered) {
+                Log.v(LOG_TAG, "showInstallationPopUp: Not registered, returning");
+                return;
+            } else {
+                runOnUiThread(() -> showInstallationDialog(software.name, software.installationOrder.id));
+            }
         }
 
         public boolean registered = false;
@@ -163,23 +183,21 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             case R.id.getUpdatesItem:
                 try {
                     Log.v(LOG_TAG, "Sending GetSoftwareUpdates");
-                    //Intent intent = new Intent(context, AvailableAssignmentsActivity.class);
-                    //startActivity(intent);
                     Query query = new Query();
                     softwareUpdateManager.GetSoftwareAssignment(query, AssignmentType.UPDATE);
-                    Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareUpdates" , Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareUpdates", Snackbar.LENGTH_SHORT)
+                            .show();
                     return true;
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "GetSoftwareAssignments failed, remote exception");
                 }
-                case R.id.getAccessoriesItem:
+            case R.id.getAccessoriesItem:
                 try {
                     Log.v(LOG_TAG, "Sending GetSoftwareAccessories");
-                    //Intent intent = new Intent(context, AvailableAssignmentsActivity.class);
-                    //startActivity(intent);
                     Query query = new Query();
                     softwareUpdateManager.GetSoftwareAssignment(query, AssignmentType.ACCESSORY);
-                    Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareAccessories" , Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareAccessories",
+                            Snackbar.LENGTH_SHORT).show();
                     return true;
                 } catch (Exception e) {
                     Log.e(LOG_TAG, "GetSoftwareAssignments failed, remote exception");
@@ -188,6 +206,67 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             }
             return false;
         }
+    }
+
+    private void showInstallationDialog(String name, String id) {
+        Log.v(LOG_TAG, "showInstallationDialog");
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle("SoftwareUpdate");
+
+        // Setting Dialog Message
+        alertDialog.setMessage(name + " is ready to be installed. Install now?");
+
+        // Setting Icon to Dialog
+        alertDialog.setIcon(R.drawable.ic_get_app_36dp);
+
+        // Setting OK Button
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Install", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    Snackbar.make(findViewById(R.id.rootLayout),
+                            "Calling OnInstallationPopup(INSTALL, " + id + ")",
+                            Snackbar.LENGTH_SHORT).show();
+                    softwareUpdateManager.OnInstallationPopup(InstallOption.INSTALL,
+                            id);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+            }
+        });
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    Snackbar.make(findViewById(R.id.rootLayout),
+                            "Calling OnInstallationPopup(CANCEL, " + id + ")",
+                            Snackbar.LENGTH_SHORT).show();
+                    softwareUpdateManager.OnInstallationPopup(InstallOption.CANCEL,
+                            id);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+            }
+        });
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Postpone ", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    Snackbar.make(findViewById(R.id.rootLayout),
+                            "Calling OnInstallationPopup(POSTPONE, " + id + ")",
+                            Snackbar.LENGTH_SHORT).show();
+                    softwareUpdateManager.OnInstallationPopup(InstallOption.POSTPONE,
+                            id);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +308,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         softwareUpdateManager.disconnect();
     }
 
-    //Create actionbar with settings icon
+    // Create actionbar with settings icon
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -238,7 +317,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         return true;
     }
 
-    //React on actionbar icon clicked (settings)
+    // React on actionbar icon clicked (settings)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -274,29 +353,32 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     private void createNotification() {
         NotificationManager mgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        //Create a notification channel (does the id need to be unique for the package?)
+        // Create a notification channel (does the id need to be unique for the
+        // package?)
         NotificationChannel notificationChannel = new NotificationChannel("12345", "softwareupdate",
                 NotificationManager.IMPORTANCE_HIGH);
         mgr.createNotificationChannel(notificationChannel);
 
-        //Build the notification
+        // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "12345");
 
-        builder.setSmallIcon(R.drawable.ic_cloud_white_18dp); //mandatory setting
-        builder.setContentTitle("Software updates"); //mandatory setting
-        builder.setContentText("A new software update can be downloaded"); //mandatory setting
+        builder.setSmallIcon(R.drawable.ic_cloud_white_18dp); // mandatory setting
+        builder.setContentTitle("Software updates"); // mandatory setting
+        builder.setContentText("A new software update can be downloaded"); // mandatory setting
 
-        //Cancel notification on tap
+        // Cancel notification on tap
         builder.setAutoCancel(true);
 
         int notificationId = 1111;
-        //Start main activity when the notification is tapped
+        // Start main activity when the notification is tapped
         Intent intent = new Intent(this, SoftwareUpdateApp.class);
-        //Cancel any pending intent that have already been fired when the user taps the notification
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        // Cancel any pending intent that have already been fired when the user taps the
+        // notification
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationId, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
         builder.setContentIntent(pendingIntent);
-        //Notify NotficationManager about the notification
+        // Notify NotficationManager about the notification
         Notification notification = builder.build();
 
         mgr.notify(notificationId, notification);
@@ -306,6 +388,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     protected void onStart() {
         super.onStart();
         Log.v(LOG_TAG, "OnStart");
+        // showInstallationDialog();
     }
 
     @Override
@@ -323,7 +406,8 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public void commissionAssignment(String uuid) {
         try {
-            Snackbar.make(findViewById(R.id.rootLayout), "Calling CommissionAssignment(" + uuid + ")", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.rootLayout), "Calling CommissionAssignment(" + uuid + ")",
+                    Snackbar.LENGTH_SHORT).show();
             softwareUpdateManager.CommissionAssignment(uuid);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
@@ -333,18 +417,9 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     public void getInstallNotification(String installationOrderId) {
         try {
-            Snackbar.make(findViewById(R.id.rootLayout), "Calling GetInstallNotification(" + installationOrderId + ")", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.rootLayout), "Calling GetInstallNotification(" + installationOrderId + ")",
+                    Snackbar.LENGTH_SHORT).show();
             softwareUpdateManager.GetInstallNotification(installationOrderId);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, e.getMessage());
-        }
-    }
-
-    @Override
-    public void showInstallationPopup(String installationOrderId) {
-        try {
-            Snackbar.make(findViewById(R.id.rootLayout), "Calling ShowInstallationPopup(" + installationOrderId + ")", Snackbar.LENGTH_SHORT).show();
-            softwareUpdateManager.ShowInstallationPopup(installationOrderId);
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
         }

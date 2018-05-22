@@ -80,10 +80,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             popup.getMenu().findItem(R.id.commission).setVisible(false);
         if (holder.state.getText().equals("INSTALL PENDING"))
             holder.showInstallNotifcationItem = true;
-        if (holder.state.getText().equals("DOWNLOADED"))
-            popup.getMenu().findItem(R.id.showPopup).setVisible(true);
-        else
-            popup.getMenu().findItem(R.id.showPopup).setVisible(false);
 
         popup.getMenu().findItem(R.id.installNotification).setVisible(holder.showInstallNotifcationItem);
         popup.show();
@@ -109,9 +105,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                 return true;
             case R.id.installNotification:
                 softwareUpdateApp.getInstallNotification(swInfo.softwareAssignment.installationOrder.id);
-                return true;
-            case R.id.showPopup:
-                softwareUpdateApp.showInstallationPopup(swInfo.softwareAssignment.installationOrder.id);
                 return true;
             default:
             }

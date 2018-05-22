@@ -48,7 +48,7 @@ import com.volvocars.cloudservice.FoundationServicesApi;
 import com.volvocars.cloudservice.FoundationServicesApiConnectionCallback;
 import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.InstallationReport;
-import com.volvocars.softwareupdate.InstallationPopup.InstallOption;
+import com.volvocars.softwareupdate.InstallOption;
 import com.volvocars.softwareupdate.SoftwareInformation.SoftwareState;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 import com.volvocars.cloudservice.InstallNotification;
@@ -57,6 +57,7 @@ import com.volvocars.cloudservice.SoftwareManagementApi;
 import com.volvocars.cloudservice.SoftwareManagementApiConnectionCallback;
 import com.volvocars.cloudservice.Status;
 import com.volvocars.cloudservice.CommissionElement.Reason;
+import com.volvocars.cloudservice.SoftwareAssignment.DeliverableType;
 import com.volvocars.cloudservice.Query;
 import com.volvocars.settingsstorageservice.SettingsStorageManager;
 import com.volvocars.settingsstorageservice.SettingsStorageManagerConnectionCallback;
@@ -86,8 +87,6 @@ public class SoftwareUpdateService extends Service {
 
     private Map<String, Boolean> settings;
     private SoftwareManagementApiCallback swapiCallback;
-
-    private static Handler messageHandler = new MessageHandler();
 
     private Car car = null;
     private CarSensorManager carSensorManager = null;
@@ -222,7 +221,41 @@ public class SoftwareUpdateService extends Service {
                 CommissionAssignment(software.id, CommissionElement.Reason.AUTOMATIC_UPDATE);
             }
         }
+    }
 
+    public void onNewSoftwareAssignment(SoftwareAssignment assignment, AssignmentType type) {
+        for (SoftwareInformation swInfo : ((AssignmentType.UPDATE == type) ? softwareInformationListUpdates
+                : softwareInformationListAccessory)) {
+            if ((SoftwareState.DOWNLOADED == swInfo.softwareState)
+                    && swInfo.softwareAssignment.id.equals(assignment.id)) {
+                softwareUpdateManager.showInstallationPopup(assignment);
+                break;
+            }
+        }
+    }
+
+    public void onDownloadedAssignment(DownloadInfo info) {
+        Query query = new Query();
+        query.installationOrderId = info.installationOrderId;
+        Log.d(LOG_TAG, "id " + info.id);
+
+        boolean found = false;
+        for (SoftwareInformation software : mergedSoftwareInformationList) {
+            if (software.softwareAssignment.id.equals(info.id)) {
+                found = true;
+                if (DeliverableType.NEW == software.softwareAssignment.deliverableType) {
+                    GetSoftwareAssignment(query, AssignmentType.ACCESSORY);
+                } else if (DeliverableType.UPDATE == software.softwareAssignment.deliverableType) {
+                    GetSoftwareAssignment(query, AssignmentType.UPDATE);
+                } else {
+                    Log.w(LOG_TAG, "Unknown deliverable type of software " + info.id);
+                }
+            }
+        }
+
+        if (!found) {
+            Log.w(LOG_TAG, "Software " + info.id + "was not found in any list... what to do?");
+        }
     }
 
     public void clearStorageOnRemovedSoftwareAssignment(List<SoftwareAssignment> software_list) {
@@ -250,7 +283,6 @@ public class SoftwareUpdateService extends Service {
 
             }
         }
-
     }
 
     private void delete(File file) throws IOException {
@@ -291,7 +323,6 @@ public class SoftwareUpdateService extends Service {
                         }
                     }
                 }
-
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "CommissionAssignment failed: RemoteException [" + e.getMessage() + "]");
             }
@@ -433,6 +464,21 @@ public class SoftwareUpdateService extends Service {
         }
     }
 
+    public void OnInstallationPopup(InstallOption option, String uuid) {
+        switch (option) {
+        case INSTALL:
+            Log.v(LOG_TAG, "OnInstallationPopup: [option: INSTALL, uuid: " + uuid + "]");
+            installationMaster.assignInstallation(uuid);
+            break;
+        case CANCEL:
+            Log.v(LOG_TAG, "OnInstallationPopup: [option: CANCEL, uuid: " + uuid + "] (Option not implemented)");
+            break;
+        case POSTPONE:
+            Log.v(LOG_TAG, "OnInstallationPopup: [option: POSTPONE, uuid: " + uuid + "] (Option not implemented)");
+            break;
+        }
+    }
+
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments, AssignmentType type) {
         Log.v(LOG_TAG, "UpdateSoftwareList of type " + type);
         if (AssignmentType.UPDATE == type) {
@@ -510,42 +556,6 @@ public class SoftwareUpdateService extends Service {
             softwareUpdateManager.UpdateSettings(settings);
         } else {
             Log.w(LOG_TAG, "Setting: " + setting + "is empty, what to do?");
-        }
-    }
-
-    public void showInstallationPopup(String installationOrderId) {
-        Log.v(LOG_TAG, "showInstallationPopup,  Note: Temporary solution until framework for popups is in place!");
-
-        for (SoftwareInformation information : mergedSoftwareInformationList) {
-            if (installationOrderId.equals(information.softwareAssignment.installationOrder.id)) {
-                Intent intent = new Intent(this, InstallationPopup.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(InstallationPopup.NAME, information.softwareAssignment.name);
-                intent.putExtra(InstallationPopup.UUID, information.softwareAssignment.installationOrder.id);
-                intent.putExtra("MESSENGER", new Messenger(messageHandler));
-                startActivity(intent);
-            }
-        }
-    }
-
-    public static class MessageHandler extends Handler {
-        @Override
-        public void handleMessage(Message message) {
-            Bundle bundle = message.getData();
-            InstallOption option = (InstallOption) bundle.get(InstallationPopup.OPTION);
-            String uuid = (String) bundle.get(InstallationPopup.UUID);
-            switch (option) {
-            case INSTALL:
-                Log.v(LOG_TAG, "handleMessage: [option: INSTALL, uuid: " + uuid + "]");
-                installationMaster.assignInstallation(uuid);
-                break;
-            case CANCEL:
-                Log.v(LOG_TAG, "handleMessage: [option: CANCEL, uuid: " + uuid + "]");
-                break;
-            case POSTPONE:
-                Log.v(LOG_TAG, "handleMessage: [option: POSTPONE, uuid: " + uuid + "]");
-                break;
-            }
         }
     }
 

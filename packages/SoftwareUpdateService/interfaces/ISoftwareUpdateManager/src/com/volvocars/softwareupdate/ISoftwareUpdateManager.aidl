@@ -2,6 +2,7 @@ package com.volvocars.softwareupdate;
 
 import com.volvocars.softwareupdate.ISoftwareUpdateManagerCallback;
 import com.volvocars.softwareupdate.ISoftwareUpdateSettingsCallback;
+import com.volvocars.softwareupdate.InstallOption;
 
 import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.Query;
@@ -49,12 +50,15 @@ oneway interface ISoftwareUpdateManager {
      */
      void GetInstallNotification(in String installationOrderId);
 
-     void ShowInstallationPopup(in String installationOrderId);
-
     /**
     * Set (OTA) setting
     * @param setting Setting to be set
     */
      void SetSetting(in String key, in boolean value);
 
+    /**
+    * Send result of installation pop-up
+    * Note: this is only used for test, remove once proper handling of system popups are in place
+    */
+    void OnInstallationPopup(in InstallOption option, in String uuid);
 }
