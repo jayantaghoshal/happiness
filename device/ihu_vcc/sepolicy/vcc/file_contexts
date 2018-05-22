@@ -79,8 +79,17 @@
 
 /mnt/iptables\.rules u:object_r:iptables_data_file:s0
 
-# remote control
-/vendor/bin/remotectrl_routerd u:object_r:remotectl_exec:s0
+# remotectrl config file
+/vendor/etc/vsomeip/vsomeip_convapi.json u:object_r:remotectrl_data_file:s0
+
+# remotectrl_routerd
+/vendor/bin/remotectrl_routerd u:object_r:remotectrl_router_exec:s0
+
+# remotectrl_audioctrld
+/vendor/bin/remotectrl_audioctrld u:object_r:remotectrl_audioctrl_exec:s0
+
+# remotectrl_climatectrld
+/vendor/bin/remotectrl_climatectrld u:object_r:remotectrl_climatectrl_exec:s0
 
 # PAC
 /vendor/bin/hw/android.hardware.automotive.evs.vcc@1.0-hardware   u:object_r:evs_hardware_exec:s0

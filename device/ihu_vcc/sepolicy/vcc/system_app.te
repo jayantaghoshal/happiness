@@ -2,11 +2,11 @@
 allow system_app carconfig_prop:file { getattr open read };
 #hwbinder_use(system_app)
 
-# Allow I*RemoteAudioControl HAL server
-hal_client_domain(system_app, hal_remotectl)
-
 # Allow IIplm HAL client
 hal_client_domain(system_app, hal_iplm)
 
 # Allow ILocationUpdate HAL client
 hal_client_domain(system_app, hal_gps)
+
+# Allow IRemoteCtrlPropertyResponse HAL client
+hal_client_domain(system_app, hal_remotectrl)

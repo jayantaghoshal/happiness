@@ -1,5 +1,0 @@
-# remotectl service
-type remotectl, domain;
-type remotectl_exec, exec_type, file_type, vendor_file_type;
-
-hal_server_domain(remotectl, hal_remotectl)

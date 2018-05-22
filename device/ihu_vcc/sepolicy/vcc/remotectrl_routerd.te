@@ -1,0 +1,13 @@
+# remotectrl_router service
+type remotectrl_router, domain;
+type remotectrl_router_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(remotectrl_router)
+
+set_prop(remotectrl_router, remotectrl_router_prop)
+net_domain(remotectrl_router)
+
+allow remotectrl_router device:sock_file write;
+allow remotectrl_router remotectrl_data_file:file { getattr open read };
+allow remotectrl_router vendor_shell_exec:file execute_no_trans;
+

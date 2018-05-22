@@ -2,4 +2,6 @@
 type netboyd_prop, property_type;
 type netmand_prop, property_type;
 
+type remotectrl_router_prop, property_type;
+
 type carconfig_prop, property_type;

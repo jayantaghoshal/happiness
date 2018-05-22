@@ -1,0 +1,10 @@
+#define remotectrl hal
+type hal_remotectrl_hwservice, hwservice_manager_type;
+
+hal_attribute(remotectrl)
+
+binder_call(hal_remotectrl_client, hal_remotectrl_server)
+binder_call(hal_remotectrl_server, hal_remotectrl_client)
+
+add_hwservice(hal_remotectrl_server, hal_remotectrl_hwservice)
+allow system_app hal_remotectrl_hwservice:hwservice_manager find;

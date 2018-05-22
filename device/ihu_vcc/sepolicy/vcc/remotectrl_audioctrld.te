@@ -1,0 +1,10 @@
+# remotectrl_audioctrl service
+type remotectrl_audioctrl, domain;
+type remotectrl_audioctrl_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(remotectrl_audioctrl)
+
+allow remotectrl_audioctrl remotectrl_data_file:file { getattr open read };
+allow remotectrl_audioctrl device:sock_file write;
+
+hal_server_domain(remotectrl_audioctrl, hal_remotectrl)
