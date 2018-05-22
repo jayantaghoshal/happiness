@@ -7,14 +7,18 @@
 
 #include "Application_dataelement.h"
 
+#include <gsl/gsl>
+#include "Application_dataelement_synchronous.h"
+#include "utils/vf_context.h"
+
 using namespace ApplicationDataElement;
 
 class SpeedLimitAdaptationModule {
   public:
-    SpeedLimitAdaptationModule();
+    SpeedLimitAdaptationModule(gsl::not_null<VFContext*> ctx);
 
     // Receiver port
-    DEReceiver<autosar::DrvrHmiSpdLimAdpnSts_info> drvrhmi_spdlimadpn_sts_flexray_receiver_;
+    DESynchronousReceiver<autosar::DrvrHmiSpdLimAdpnSts_info> drvrhmi_spdlimadpn_sts_flexray_receiver_;
 
     // Sender port
     DESender<autosar::AccAdprSpdLimActv_info> accadpr_spdlim_actv_flexray_sender_;

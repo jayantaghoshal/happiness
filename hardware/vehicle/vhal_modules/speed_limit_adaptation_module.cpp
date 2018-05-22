@@ -15,7 +15,8 @@
 using namespace autosar;
 using namespace CarConfigParams;
 
-SpeedLimitAdaptationModule::SpeedLimitAdaptationModule() {
+SpeedLimitAdaptationModule::SpeedLimitAdaptationModule(gsl::not_null<VFContext*> ctx)
+    : drvrhmi_spdlimadpn_sts_flexray_receiver_{ctx->dataelements} {
     auto car_config_23 = carconfig::getValue<CC23_CruiseControlType>();
     auto car_config_36 = carconfig::getValue<CC36_AdjustableSpeedLimiterType>();
     auto car_config_149 = carconfig::getValue<CC149_RoadSignInformationType>();
