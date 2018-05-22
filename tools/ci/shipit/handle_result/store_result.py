@@ -256,8 +256,9 @@ def load_test_results(test: IhuBaseTest,
         except Exception:
             test_detail["kpis"] = ""
 
-        store_log("result_xml", test_detail['file-result_xml'])
-        del test_detail['file-result_xml']
+        if 'file-result_xml' in test_detail:
+            store_log("result_xml", test_detail['file-result_xml'])
+            del test_detail['file-result_xml']
 
     elif isinstance(test, TradefedTest):
 

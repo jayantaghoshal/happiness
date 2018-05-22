@@ -89,11 +89,16 @@ def vts_tradefed_run_module(module_name: str,
     except concurrent.futures.TimeoutError as te:
         info = "Test time out, maximum test time: %d sec" % max_test_time_sec
         success = False
-        logger.error(output)
+        logger.error(info)
     except Exception as e:
         info = str(e)
         success = False
         logger.error("Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
+
+    lines = output.splitlines()
+    if len(lines) < 10: # Arbitrarily choosen limit
+        for line in lines:
+            logger.info("Console: " + str(line))
 
     if success:
         success, info = _check_output_for_failure(output, nr_tests)
@@ -121,18 +126,16 @@ def vts_tradefed_run_module(module_name: str,
 def _parse_xml(output: str):
     result_match = re.search(r"I\/ResultReporter:\s+Test Result:\s+(\S+)", output)
     if not result_match:
+        logger.warning("Could not find test results")
         return []
     result_path = os.path.dirname(os.path.abspath(result_match.group(1)))
-
     tree = ET.parse(os.path.join(result_path, 'test_result.xml'))
     root = tree.getroot()
-    #module = root.find('Module')
     results = []
     for test in root.iter('Test'):
         result = {'name': test.attrib['name'], 'result': test.attrib['result']}
         failure = test.find('Failure')
         if failure:
-            #print("FAILURE: {}".format(failure.text))
             try:
                 result['message'] = failure.attrib['message']
             except Exception:
@@ -159,7 +162,7 @@ def _check_output_for_logs(test_result: str) -> typing.Mapping[str, str]:
     logdict = dict()
     if log_dir_match:
         log_dir = os.path.abspath(log_dir_match.group(1))
-        logger.info("Log dir is %s" % log_dir)
+        logger.debug("Log dir is %s" % log_dir)
         assert("out/host/linux-x86/vts/android-vts/logs" in log_dir)
 
         def read(name, pattern):
@@ -184,12 +187,14 @@ def _check_output_for_failure(test_result: str, nr_tests: int) -> typing.Tuple[b
     fail_pattern1 = "fail:|PASSED: 0"
     if re.search(fail_pattern1, test_result):
         info = "Test failed! This pattern in not allowed in the output: \"%s\"" % fail_pattern1
+        logger.warning(info)
         return False, info
 
     pass_pattern = "I\/ResultReporter:\s*Invocation finished in.*PASSED:\s*(\d*),\s*FAILED:\s*(\d*)"
     pass_match = re.search(pass_pattern, test_result)
     if pass_match is None:
         info = "Test failed, did not find nr of PASSED/FAILED in resultreporter output"
+        logger.warning(info)
         return False, info
 
     nr_of_pass = int(pass_match.group(1))
@@ -197,14 +202,17 @@ def _check_output_for_failure(test_result: str, nr_tests: int) -> typing.Tuple[b
 
     if nr_of_fail != 0:
         info = "Test failed, Number of FAILED != 0"
+        logger.warning(info)
         return False, info
 
     if nr_of_pass == 0:
         info = "Test failed, Number of PASSED == 0"
+        logger.warning(info)
         return False, info
 
     if nr_tests and nr_of_pass != nr_tests:
         info = "Test failed, Number of PASSED not equal to number of requested test cases."
+        logger.warning(info)
         return False, info
 
     return True, ""
