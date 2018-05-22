@@ -69,7 +69,8 @@ test_plan_nightly = test_plan_hourly + [
 test_plan_staging_hourly = [
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetAssignments",          standard_caps), #Patrik Ingmarsson
     TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyGetDownloads",            standard_caps), #Matilda Bengtsson
-    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyAutoCommission",            standard_caps), #Matilda Bengtsson
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyAutoCommission",          standard_caps), #Matilda Bengtsson
+    TradefedTest("vendor/volvocars/packages/SoftwareUpdateService/test/ct/test_suites/HappyAssignInstallation",      standard_caps), #Matilda Bengtsson
     VTSTest("vendor/volvocars/packages/BrightnessService/test/ct/ScreenCleaning",   standard_caps), #Tobias Ohrstrom
     VTSTest("vendor/volvocars/hardware/carconfig/test/ct",                          standard_caps | {cp.flexray}), #Joel Gustafsson
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray},
