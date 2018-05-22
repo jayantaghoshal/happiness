@@ -1,0 +1,66 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+#pragma once
+
+#include <cstdint>
+#include "exceptions.h"
+
+#include <vsomeip/vsomeip.hpp>
+
+namespace vcc {
+namespace remotectrl {
+
+// namespace hidl_remotectrl = ::vendor::volvocars::hardware::remotectrl::V1_0;
+
+constexpr uint8_t VCC_SOMEIP_PROTOCOL_VERSION = 0x01U;
+constexpr uint8_t VCC_SOMEIP_INTERFACE_VERSION = 0x01U;
+constexpr uint8_t VCC_CLIENT_ID = 0x00U;
+
+// Currently using dummy values here
+// RemoteCtrl_AudioCtrl Service
+constexpr uint16_t REMOTECTRL_AUDIOCTRL_SERVICE_ID = 0x1100U;
+constexpr uint16_t REMOTECTRL_AUDIOCTRL_SERVICE_INSTANCE_ID = 0x1101U;
+constexpr uint16_t REMOTECTRL_AUDIOCTRL_EVENTGROUP_ID = 0x1150U;
+constexpr uint16_t REMOTECTRL_AUDIOCTRL_METHOD_ID_GETVOLUME = 0x1133U;
+constexpr uint16_t REMOTECTRL_AUDIOCTRL_METHOD_ID_SETVOLUME = 0x1144U;
+constexpr uint16_t REMOTECTRL_AUDIOCTRL_EVENT_ID_VOLUMESTATUS = 0x1122U;
+
+// RemoteCtrl_ClimateCtrl
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_SERVICE_ID = 0x1200U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_SERVICE_INSTANCE_ID = 0x1201U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENTGROUP_ID = 0x1202U;
+
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GETFANLEVEL = 0x1220U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SETFANLEVEL = 0x1221U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_FANLEVELCHANGED = 0x1222U;
+
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GETTEMPERATURE = 0x1270U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SETTEMPERATURE = 0x1271U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_TEMPERATURECHANGED = 0x1210U;
+
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_MAX_DEFROSTER_STATE = 0x1223U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_MAX_DEFROSTER_STATE = 0x1224U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_MAX_DEFROSTER_STATECHANGED = 0x1225U;
+
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AC_STATE = 0x1226U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AC_STATE = 0x1227U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AC_STATECHANGED = 0x1228U;
+
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_GET_AIR_DISTRIBUTION = 0x1229U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_METHOD_ID_SET_AIR_DISTRIBUTION = 0x1230U;
+constexpr uint16_t REMOTECTRL_CLIMATECTRL_EVENT_ID_AIR_DISTRIBUTIONCHANGED = 0x1231U;
+
+// RemoteCtrl_MediaCtrl
+constexpr uint16_t REMOTECTRL_MEDIACTRL_SERVICE_ID = 0x1400U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_SERVICE_INSTANCE_ID = 0x1401U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_EVENTGROUP_ID = 0x1402U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_METHOD_ID_SETMEDIAPLAYERPLAYBACK = 0x1411U;
+constexpr uint16_t REMOTECTRL_MEDIACTRL_EVENT_ID_MEDIAPLAYERPLAYBACKSTATUS = 0x1422U;
+
+// TODO (Abhi) Populate this file with all helpers and struct definitions needed for readable code until autogeneated
+// header files from SDB extract are in place
+}
+}

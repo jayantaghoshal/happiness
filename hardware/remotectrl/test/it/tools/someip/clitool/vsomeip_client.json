@@ -1,5 +1,5 @@
 {
-    "unicast" : "198.21.1.2",
+    "unicast" : "198.19.101.65",
     "logging" :
     {
         "level" : "trace",
@@ -16,6 +16,10 @@
         {
             "name" : "AudioCtrlSim",
             "id" : "0x4445"
+        },
+        {
+            "name" : "MediaCtrlSim",
+            "id" : "0x3333"
         }
     ],
 

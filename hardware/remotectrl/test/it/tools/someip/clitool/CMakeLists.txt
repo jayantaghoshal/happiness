@@ -20,7 +20,10 @@ include_directories(${VSOMEIP_INCLUDE_DIRS})
 
 set(SOURCES
 ../../../test_base/src/remotectrl_client_base.cpp
-main.cpp
+src/remotectrl_client_mediactrl.cpp
+src/remotectrl_client_audioctrl.cpp
+src/remotectrl_client_climatectrl.cpp
+src/main.cpp
 )
 
 # create the lib
