@@ -156,8 +156,12 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
                          + " Used: " + str(disk_load[str(disk)]['usage'][1])
                          + " Available: " + str(disk_load[str(disk)]['usage'][2])
                          + " Usage: " + str(disk_load[str(disk)]['usage'][3]))
+            disk_usage_output = str(disk_load[str(disk)]['usage'][3])
+            if disk_usage_output[-1] == "%":
+                disk_usage_output = disk_usage_output[:-1]
 
-            self.write_kpi("disk_usage" + str(disk_load[str(disk)]['usage'][4]), str(disk_load[str(disk)]['usage'][3]), "%")
+
+            self.write_kpi("disk_usage" + str(disk_load[str(disk)]['usage'][4]), disk_usage_output, "%")
 
             if (float(disk_load[str(disk)]['usage'][3].strip('%'))) > requirement:
                asserts.assertLess(float(disk_load[str(disk)]['usage'][3].strip('%')), requirement, "The disk usage is over " + str(requirement) + "%")
