@@ -11,6 +11,9 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 cd "${REPO_ROOT_DIR}"
 
+export MP_PART_NUMBER
+MP_PART_NUMBER=$(redis-cli get icup_android.jenkins."${UPSTREAM_JOB_JOBNAME}"."${UPSTREAM_JOB_NUMBER}".mp_part_number)
+
 plan=""
 download=""
 if [ "${JOB_NAME}" = "ihu_daily_staging_test-generic" ] ||
@@ -19,7 +22,7 @@ if [ "${JOB_NAME}" = "ihu_daily_staging_test-generic" ] ||
    [ "${JOB_NAME}" = "ihu_daily_staging_test-apix" ]
 then
     plan="staging_daily"
-    download="--download ${UPSTREAM_JOB_JOBNAME}/${UPSTREAM_JOB_NUMBER}/out.tgz"
+    download="--download ${UPSTREAM_JOB_JOBNAME}/${UPSTREAM_JOB_NUMBER}_${MP_PART_NUMBER}/out.tgz"
 elif [ "${JOB_NAME}" = "ihu_hourly_staging_test-generic" ] ||
      [ "${JOB_NAME}" = "ihu_hourly_staging_test-flexray" ] ||
      [ "${JOB_NAME}" = "ihu_hourly_staging_test-audio" ] ||

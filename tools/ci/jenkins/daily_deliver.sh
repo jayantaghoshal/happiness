@@ -11,8 +11,11 @@ REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
 
 cd "${REPO_ROOT_DIR}"
 
+export MP_PART_NUMBER
+MP_PART_NUMBER=$(redis-cli get icup_android.jenkins."${UPSTREAM_JOB_JOBNAME}"."${UPSTREAM_JOB_NUMBER}".mp_part_number)
+
 # Download from Artifactory
-artifactory pull "${UPSTREAM_JOB_JOBNAME}" "${UPSTREAM_JOB_NUMBER}" dist.zip || die "artifactory pull failed"
+artifactory pull "${UPSTREAM_JOB_JOBNAME}" "${UPSTREAM_JOB_NUMBER}"_"${MP_PART_NUMBER}" dist.zip || die "artifactory pull failed"
 
 # unzip only the MP vbf file
 unzip -j dist.zip "dist/mp-android*.VBF" -d "${REPO_ROOT_DIR}"/out

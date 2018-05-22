@@ -15,8 +15,11 @@ source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
 source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 
+export MP_PART_NUMBER
+MP_PART_NUMBER=$(redis-cli get icup_android.jenkins."${UPSTREAM_JOB_JOBNAME}"."${UPSTREAM_JOB_NUMBER}".mp_part_number)
+
 # Download from Artifactory
-artifactory pull ihu_daily_build_vcc_eng "${UPSTREAM_JOB_NUMBER}" out.tgz || die "artifactory pull failed"
+artifactory pull "${UPSTREAM_JOB_JOBNAME}" "${UPSTREAM_JOB_NUMBER}"_"${MP_PART_NUMBER}" out.tgz || die "artifactory pull failed"
 
 # Unpack out.tgz
 tar xfz out.tgz || die "Unpack out.tgz failed"
