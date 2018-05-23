@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration description="Config for flexray VMS ADASIS component test case">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="push-group" value="HostDrivenTest.push"/>
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="cleanup" value="true" />
+        <option name="push" value="flexray_test->/data/local/tmp/flexray_test" />
+    </target_preparer>
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="VtsAdasisComponentTest"/>
+        <option name="test-case-path" value="volvocars/hardware/test/adasis/VtsAdasisComponentTest"/>
+        <option name="test-timeout" value="5m"/>
+    </test>
+</configuration>
