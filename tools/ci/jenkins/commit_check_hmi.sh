@@ -4,7 +4,7 @@
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
-
+GIT_SSH="$HOME"/zuul_ssh_wrapper.sh zuul-cloner -v "${ZUUL_URL}" "${ZUUL_PROJECT}"
 # Download the Android SDK Command Line Tools
 # Version reference: https://developer.android.com/studio/
 if [ -d "android-sdk-linux" ]; then
