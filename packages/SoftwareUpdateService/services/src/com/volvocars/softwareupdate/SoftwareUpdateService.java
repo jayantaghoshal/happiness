@@ -9,6 +9,8 @@ import android.app.Service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +29,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
-import com.volvocars.cloudservice.AssignmentType;;
+// Car related...
+import android.car.Car;
+import android.car.CarNotConnectedException;
+import android.car.hardware.CarSensorManager;
+import android.car.hardware.CarSensorEvent;
+import android.car.hardware.CarSensorManager.OnSensorChangedListener;
+
+import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.DownloadSummary;
 import com.volvocars.cloudservice.InstallationSummary;
@@ -79,6 +88,10 @@ public class SoftwareUpdateService extends Service {
     private SoftwareManagementApiCallback swapiCallback;
 
     private static Handler messageHandler = new MessageHandler();
+
+    private Car car = null;
+    private CarSensorManager carSensorManager = null;
+    private int ignitionState = CarSensorEvent.IGNITION_STATE_UNDEFINED;
 
     private SoftwareManagementApiConnectionCallback swapiConnectionCallback = new SoftwareManagementApiConnectionCallback() {
         @Override
@@ -143,6 +156,11 @@ public class SoftwareUpdateService extends Service {
 
         // Provide SUSApi
         softwareUpdateManager = new SoftwareUpdateManagerImpl(this);
+
+        Log.v(LOG_TAG, "Creating car");
+        car = Car.createCar(this, carServiceConnection);
+        Log.v(LOG_TAG, "Connecting to car");
+        car.connect();
     }
 
     public IBinder onBind(Intent intent) {
@@ -530,4 +548,48 @@ public class SoftwareUpdateService extends Service {
             }
         }
     }
+
+    private final OnSensorChangedListener ignitionStateChangeHandler = new OnSensorChangedListener() {
+
+        @Override
+        public void onSensorChanged(final CarSensorEvent event) {
+            if (ignitionState != event.intValues[0]) {
+                ignitionState = event.intValues[0];
+                Log.i(LOG_TAG, "Drive state changed");
+            }
+        }
+    };
+
+    private final ServiceConnection carServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            synchronized (this) {
+                try {
+                    Log.v(LOG_TAG, "Car service connected");
+
+                    carSensorManager = (CarSensorManager) car.getCarManager(Car.SENSOR_SERVICE);
+
+                    ignitionState = carSensorManager.getLatestSensorEvent(CarSensorManager.SENSOR_TYPE_IGNITION_STATE).intValues[0];
+
+                    carSensorManager.registerListener(ignitionStateChangeHandler, CarSensorManager.SENSOR_TYPE_IGNITION_STATE, CarSensorManager.SENSOR_RATE_UI);
+                } catch (CarNotConnectedException ex) {
+                    Log.e(LOG_TAG, "Exception thrown: " + ex);
+                }
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            synchronized (this) {
+                Log.v(LOG_TAG, "Car service disconnected");
+
+                carSensorManager.unregisterListener(ignitionStateChangeHandler);
+
+                carSensorManager = null;
+
+                ignitionState = CarSensorEvent.IGNITION_STATE_UNDEFINED;
+            }
+        }
+    };
 }

@@ -19,6 +19,7 @@ LOCAL_STATIC_JAVA_LIBRARIES += \
             com.volvocars.SettingsStorageLib \
             com.volvocars.softwareupdate.ISoftwareUpdateManager \
             vendor.volvocars.hardware.installationmaster-V1.0-java \
+            android.car \
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_MULTILIB := 64
