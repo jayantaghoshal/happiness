@@ -58,10 +58,12 @@ def main():
 
     jenkins_client = JenkinsClient()
     status = jenkins_client.get_job_status(jenkins_job_name, jenkins_build_number)
+    logger.info("Job status: {}".format(status))
     if jenkins_build_number > 0:
         last_status = jenkins_client.get_job_status(jenkins_job_name, jenkins_build_number - 1)
     else:
         last_status = 'none'
+    logger.info("Last job status: {}".format(last_status))
 
     if jenkins_job_name == 'ihu_hourly':
         if status == 'pass':

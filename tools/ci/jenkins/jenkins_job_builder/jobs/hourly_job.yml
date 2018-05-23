@@ -113,7 +113,7 @@
         - timestamps
         - credentials-binding:
             - username-password-separated:
-                credential-id: 30ab25b0-6dda-4a6e-8bae-777a1b516af9
+                credential-id: 50aa7e90-b0b6-40e6-bcb5-6189eb0bf574
                 username: JENKINS_USER
                 password: JENKINS_API_PASSWORD
     builders:
