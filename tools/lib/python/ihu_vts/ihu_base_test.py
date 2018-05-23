@@ -59,6 +59,8 @@ class IhuBaseTestClass(base_test.BaseTestClass):
         all_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
         new_tombstones = list(set(all_tombstones) - set(self.old_tombstones))
 
+        self.write_kpi('number_of_new_tombstones', len(new_tombstones))
+
         for new_tombstone in new_tombstones:
             self.saveFiles(os.path.join('/data/tombstones/', new_tombstone), 'tombstones')
 
