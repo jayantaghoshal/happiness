@@ -27,9 +27,9 @@ yes | "$ANDROID_HOME"/tools/bin/sdkmanager --licenses
 yes | "$ANDROID_HOME"/tools/bin/sdkmanager --licenses
 
 # Set the SDK dir for Gradle
-if ! grep -q "sdk.dir=$ANDROID_HOME" "$ZUUL_PROJECT/local.properties"; then
-  echo sdk.dir="$ANDROID_HOME" >> "$ZUUL_PROJECT/local.properties"
-fi
+#if ! grep -q "sdk.dir=$ANDROID_HOME" "$ZUUL_PROJECT/local.properties"; then
+#  echo sdk.dir="$ANDROID_HOME" >> "$ZUUL_PROJECT/local.properties"
+#fi
 
 # TODO: Run in sandbox and verify the output folder location and archive/result storage
 "$ZUUL_PROJECT"/gradlew clean assemble check -p "$ZUUL_PROJECT"
