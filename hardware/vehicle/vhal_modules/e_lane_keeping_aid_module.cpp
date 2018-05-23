@@ -23,14 +23,14 @@ vhal20::VehiclePropConfig propconfig_elane_keeping_aid_on() {
     return PaPropHandlerHelper::BoolConfig(prop);
 }
 
-ELaneKeepingAidModule::ELaneKeepingAidModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
-                                             std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                                             android::sp<SettingsFramework::SettingsManagerHidl> manager)
+ELaneKeepingAidModule::ELaneKeepingAidModule(gsl::not_null<VFContext*> ctx)
     : PA_prop_elane_keeping_aid_(propconfig_elane_keeping_aid_on(),
                                  vccvhal10::VehicleProperty::EMERGENCY_LANE_KEEPING_AID_STATUS,
-                                 dispatcher,
-                                 vehicleHal),
-      setting_(SettingId::EmergencyLaneKeepingAid_On, true, manager),
+                                 ctx->dispatcher,
+                                 &(ctx->vhal)),
+      setting_(SettingId::EmergencyLaneKeepingAid_On, true, ctx->settings),
+      vehmod_flexray_receiver_{ctx->dataelements},
+      lanekeepingaid_flexray_receiver_{ctx->dataelements},
       is_error_(false),
       is_active_(true),
       is_usgMod_Drvg_(false),

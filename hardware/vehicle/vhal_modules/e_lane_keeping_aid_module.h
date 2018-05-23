@@ -9,16 +9,22 @@
 #include "libsettings/setting.h"
 #include "libsettings/settingidentifiers.h"
 #include "libsettings/settingsmanagerhidl.h"
+
+#include "modulepropertyhandler.h"
+#include "notifiable_property.h"
 #include "papropertyhandler.h"
+#include "utils/vf_context.h"
+
+#include <gsl/gsl>
+#include "Application_dataelement_synchronous.h"
+#include "utils/vf_context.h"
 
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
 namespace vccvhal10 = ::vendor::volvocars::hardware::vehiclehal::V1_0;
 
 class ELaneKeepingAidModule {
   public:
-    ELaneKeepingAidModule(vhal20::impl::IVehicleHalImpl*,
-                          std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher,
-                          android::sp<SettingsFramework::SettingsManagerHidl> manager);
+    ELaneKeepingAidModule(gsl::not_null<VFContext*> ctx);
 
   private:
     PAPropHandler<bool> PA_prop_elane_keeping_aid_;
@@ -30,8 +36,8 @@ class ELaneKeepingAidModule {
     ApplicationDataElement::DESender<autosar::LaneKeepAidRoadEdgeActv_info> lanekeepingaid_flexray_sender_;
 
     // Receives flexray signals
-    ApplicationDataElement::DEReceiver<autosar::VehModMngtGlbSafe1_info> vehmod_flexray_receiver_;
-    ApplicationDataElement::DEReceiver<autosar::LaneKeepAidSts_info> lanekeepingaid_flexray_receiver_;
+    ApplicationDataElement::DESynchronousReceiver<autosar::VehModMngtGlbSafe1_info> vehmod_flexray_receiver_;
+    ApplicationDataElement::DESynchronousReceiver<autosar::LaneKeepAidSts_info> lanekeepingaid_flexray_receiver_;
 
     // "States"
     bool is_error_;

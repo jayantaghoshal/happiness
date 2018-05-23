@@ -77,7 +77,6 @@ int main(int /* argc */, char* /* argv */ []) {
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
     auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
-    auto e_lane_keeping_aid_module = std::make_unique<ELaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
 
     CurveSpeedAdaptionModule curveSpeedAdaption{&ctx};
     DriverSupportFunctionModule driver_support_function_module{&ctx};
@@ -87,6 +86,7 @@ int main(int /* argc */, char* /* argv */ []) {
     SpeedLimitAdaptationModule speedLimitAdaptation{&ctx};
     TrafficSignInformationModule trafficSignInformation{&ctx};
     ActiveSafetyModule activeSafetyModule{&ctx};
+    ELaneKeepingAidModule e_lane_keeping_aid_module{&ctx};
 
     auto vmsModule = std::make_unique<vmsHal>(hal.get());
     // Register modules
