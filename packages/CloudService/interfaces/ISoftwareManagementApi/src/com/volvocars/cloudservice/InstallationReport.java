@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -24,6 +24,9 @@ public class InstallationReport implements Parcelable {
 
     public DownloadSummary downloadSummary = new DownloadSummary();
     public InstallationSummary installationSummary = new InstallationSummary();
+
+     //Installation report uri, this is retrieved from the software assignment
+     public String uri = "";
 
     public static final Creator<InstallationReport> CREATOR = new Creator<InstallationReport>() {
         @Override
@@ -51,6 +54,7 @@ public class InstallationReport implements Parcelable {
         dest.writeString(reportReason.toString());
         dest.writeTypedObject(downloadSummary, 0);
         dest.writeTypedObject(installationSummary, 0);
+        dest.writeString(uri);
     }
 
     @Override
@@ -66,6 +70,7 @@ public class InstallationReport implements Parcelable {
 
         downloadSummary = in.readTypedObject(DownloadSummary.CREATOR);
         installationSummary = in.readTypedObject(InstallationSummary.CREATOR);
+        uri = in.readString();
     }
 
     @Override

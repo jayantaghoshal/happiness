@@ -141,7 +141,7 @@ function addInstallationOrder(obj, id) {
   installation_order_data['created_by'] = "1FTKR1EDXBPB10452";
   installation_order_data['created'] = "2002-05-30T09:00:00";
   installation_order_data['downloads_uri'] = "/downloads/";
-  installation_order_data['install_notifications_uri'] = "installnotifications";
+  installation_order_data['install_notifications_uri'] = "/installnotifications";
   installation_order_data['installation_report_uri'] = "/installationreport";
 
   obj['installation_order'] = installation_order_data
@@ -203,8 +203,6 @@ server.post('/installNotification', function (req, res, next) {
   next();
 })
 
-
-//BROKEN! NEEDS TO BE FIXED
 server.get('/installNotification', function (req, res, next) {
   var d = db.get('installNotification');
   for (j = 0; j < d.value().length; j++) {

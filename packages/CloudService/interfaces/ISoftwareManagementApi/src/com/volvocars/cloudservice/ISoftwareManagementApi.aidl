@@ -60,7 +60,8 @@ oneway interface ISoftwareManagementApi {
     /**
     * Get InstallNotification
     * @param installationOrderId Installation order id
+    * @param uri Install notification uri
     * @param callback            Callback to be called
     */
-    void GetInstallNotification(in String installationOrderId, in ISoftwareManagementApiCallback callback);
+    void GetInstallNotification(in String installationOrderId, in String uri, in ISoftwareManagementApiCallback callback);
 }

@@ -81,7 +81,8 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-     * Used to bind to Cloud Service, can be used by client if service unbinds unexpectedly
+     * Used to bind to Cloud Service, can be used by client if service unbinds
+     * unexpectedly
      */
     public void connect() {
         Intent intent = new Intent();
@@ -92,22 +93,26 @@ public class SoftwareManagementApi implements ServiceConnection {
 
     /**
      * Get available assignments with specified query parameters
-     * @param query Query
+     *
+     * @param query    Query
      * @param callback
      */
-    public void GetSoftwareAssignment(Query query, AssignmentType type, ISoftwareManagementApiCallback callback) throws RemoteException{
+    public void GetSoftwareAssignment(Query query, AssignmentType type, ISoftwareManagementApiCallback callback)
+            throws RemoteException {
         if (software_management != null && service_bound) {
             software_management.GetSoftwareAssignment(query, type, callback);
         }
     }
 
-     /**
+    /**
      * Issue a commission of an SoftwareAssignment.
-     * @param commissionElement commission element containing id of the assignment to fetch
+     *
+     * @param commissionElement commission element containing id of the assignment
+     *                          to fetch
      * @param callback
      */
-    public void CommissionSoftwareAssignment(CommissionElement commissionElement, ISoftwareManagementApiCallback callback)
-            throws RemoteException {
+    public void CommissionSoftwareAssignment(CommissionElement commissionElement,
+            ISoftwareManagementApiCallback callback) throws RemoteException {
         if (software_management != null && service_bound) {
             software_management.CommissionSoftwareAssignment(commissionElement, callback);
         }
@@ -116,6 +121,7 @@ public class SoftwareManagementApi implements ServiceConnection {
 
     /**
      * Return the result for GetDownloadInfo
+     *
      * @param code          The HTTP cose of the response
      * @param download_info The download information of the installation order.
      */
@@ -127,8 +133,10 @@ public class SoftwareManagementApi implements ServiceConnection {
 
     /**
      * Get Download data
+     *
      * @param downloadInfo Contains information of what to be downloaded
-     * @param callback     Callback to be called when the status of the download changes
+     * @param callback     Callback to be called when the status of the download
+     *                     changes
      */
     public void GetDownloadData(DownloadInfo downloadInfo, ISoftwareManagementApiCallback callback)
             throws RemoteException {
@@ -139,8 +147,10 @@ public class SoftwareManagementApi implements ServiceConnection {
 
     /**
      * Post InstallationReport
+     *
      * @param installationReport Report to be posted
-     * @param callback           Callback to be called when the status of the download changes
+     * @param callback           Callback to be called when the status of the
+     *                           download changes
      */
     public void PostInstallationReport(InstallationReport installationReport, ISoftwareManagementApiCallback callback)
             throws RemoteException {
@@ -150,10 +160,11 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-    * Post InstallNotification
-    * @param notification InstallNotification to be posted
-    * @param callback     Callback to be called
-    */
+     * Post InstallNotification
+     *
+     * @param notification InstallNotification to be posted
+     * @param callback     Callback to be called
+     */
     public void PostInstallNotification(InstallNotification notification, ISoftwareManagementApiCallback callback)
             throws RemoteException {
         Log.v(LOG_TAG, "PostInstallNotification: " + notification.installationOrderId);
@@ -163,14 +174,16 @@ public class SoftwareManagementApi implements ServiceConnection {
     }
 
     /**
-    * Get InstallNotification
-    * @param installationOrderId Installation order id
-    * @param callback            Callback to be called
-    */
-    public void GetInstallNotification(String installationOrderId, ISoftwareManagementApiCallback callback)
+     * Get InstallNotification
+     *
+     * @param installationOrderId Installation order id
+     * @param uri                 Install notification uri
+     * @param callback            Callback to be called
+     */
+    public void GetInstallNotification(String installationOrderId, String uri, ISoftwareManagementApiCallback callback)
             throws RemoteException {
         if (software_management != null && service_bound) {
-            software_management.GetInstallNotification(installationOrderId, callback);
+            software_management.GetInstallNotification(installationOrderId, uri, callback);
         }
     }
 }

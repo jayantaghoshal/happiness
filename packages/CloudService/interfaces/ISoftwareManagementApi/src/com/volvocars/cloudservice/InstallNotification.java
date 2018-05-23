@@ -15,6 +15,9 @@ public class InstallNotification implements Parcelable {
     public String installationOrderId = "";
     public Notification notification = new Notification();
 
+    //Install notification uri, this is retrieved from the software assignment
+    public String uri = "";
+
     public static final Creator<InstallNotification> CREATOR = new Creator<InstallNotification>() {
         @Override
         public InstallNotification createFromParcel(Parcel in) {
@@ -39,6 +42,7 @@ public class InstallNotification implements Parcelable {
         dest.writeString(softwareId);
         dest.writeString(installationOrderId);
         dest.writeTypedObject(notification, 0);
+        dest.writeString(uri);
     }
 
     @Override
@@ -51,6 +55,7 @@ public class InstallNotification implements Parcelable {
         softwareId = in.readString();
         installationOrderId = in.readString();
         notification = in.readTypedObject(Notification.CREATOR);
+        uri = in.readString();
     }
 
     @Override

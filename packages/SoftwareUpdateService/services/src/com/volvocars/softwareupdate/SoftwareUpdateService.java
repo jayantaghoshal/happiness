@@ -115,7 +115,6 @@ public class SoftwareUpdateService extends Service {
             }
         }
     };
-
     @Override
     public void onCreate() {
         Log.v(LOG_TAG, "onCreate");
@@ -333,6 +332,16 @@ public class SoftwareUpdateService extends Service {
         Log.w(LOG_TAG,
                 "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
         InstallNotification installNotification = new InstallNotification();
+
+        for (SoftwareInformation softwareInformation : mergedSoftwareInformationList) {
+            if (softwareInformation.softwareAssignment.installationOrder.id.equals(uuid)) {
+                installNotification.uri = softwareInformation.softwareAssignment.installationOrder.installNotificationsUri;
+            } else {
+                Log.w(LOG_TAG, "InstallationOrder " + uuid
+                        + " was not found in list! Couldn't set installation notification uri!");
+            }
+        }
+
         if (notification.equals("INSTALLATION_STARTED"))
             installNotification.notification.status.statusCode = Status.StatusCode.IN_PROGRESS;
         else if (notification.equals("INSTALLATION_COMPLETE"))
@@ -352,6 +361,16 @@ public class SoftwareUpdateService extends Service {
         Log.w(LOG_TAG,
                 "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
         InstallationReport installationReport = new InstallationReport();
+
+        for (SoftwareInformation softwareInformation : mergedSoftwareInformationList) {
+            if (softwareInformation.softwareAssignment.installationOrder.id.equals(installationOrder)) {
+                installationReport.uri = softwareInformation.softwareAssignment.installationOrder.installationReportUri;
+            } else {
+                Log.w(LOG_TAG, "InstallationOrder " + installationOrder
+                        + " was not found in list! Couldn't set installation notification uri!");
+            }
+        }
+
         installationReport.installationOrderId = installationOrder;
         installationReport.reportReason = InstallationReport.ReportReason.OK;
         installationReport.timestamp = "2018-05-08T10:00:00";
@@ -369,7 +388,16 @@ public class SoftwareUpdateService extends Service {
         if (swapi != null) {
             try {
                 Log.v(LOG_TAG, "GetInstallNotification [installationOrderId: " + installationOrderId + "]");
-                swapi.GetInstallNotification(installationOrderId, swapiCallback);
+                for (SoftwareInformation softwareInformation : mergedSoftwareInformationList) {
+                    if (softwareInformation.softwareAssignment.installationOrder.id.equals(installationOrderId)) {
+                        swapi.GetInstallNotification(installationOrderId,
+                                softwareInformation.softwareAssignment.installationOrder.installNotificationsUri,
+                                swapiCallback);
+                    } else {
+                        Log.w(LOG_TAG, "installationorder " + installationOrderId
+                                + "was not found in list! No uri to install notification => GetInstallNotification not sent!");
+                    }
+                }
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");
             }

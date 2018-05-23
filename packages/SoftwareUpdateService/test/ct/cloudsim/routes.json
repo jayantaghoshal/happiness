@@ -8,7 +8,7 @@
     "/softwaremanagement-1/downloads?id=:id": "/downloads?id=:id",
     "/softwaremanagement-1/deleteNotification": "/deleteNotification",
     "/softwaremanagement-1/commission": "/commission",
-    "/softwaremanagement-1/installNotification": "/installNotification",
-    "/softwaremanagement-1/installNotification?installation_order_id=:installation_order_id": "/installNotification?installation_order_id=:installation_order_id",
+    "/softwaremanagement-1/installnotifications": "/installNotification",
+    "/softwaremanagement-1/installnotifications?installation_order_id=:installation_order_id": "/installNotification?installation_order_id=:installation_order_id",
     "/softwaremanagement-1/installationreport": "/installationReport"
 }
