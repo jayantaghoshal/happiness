@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    coreApp="true"
+    package="com.volvocars.remotectrlservices.mediactrl.service"
+    android:exported="true"
+    android:sharedUserId="android.uid.system">
+
+    <original-package android:name="com.volvocars.remotectrlservices.mediactrl.service" />
+    <uses-sdk android:minSdkVersion="14" />
+    <permission
+        android:name="android.volvocars.permission.REMOTE_CTRL"
+        android:protectionLevel="system|signature" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.volvocars.permission.REMOTE_CTRL" />
+
+    <application
+        android:exported="true"
+        android:label="RemoteMediaCtrl.Service">
+
+        <receiver
+            android:name=".StartOnBoot"
+            android:enabled="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".RemoteMediaStreamingService"
+            android:enabled="true"
+            android:exported="true"
+            android:persistent="true"
+            android:singleUser="true">
+            <intent-filter>
+                <action android:name=".RemoteMediaStreamingService.BIND" />
+                <action android:name=".RemoteMediaStreamingService.BIND_MediaPlayerService" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".player.MediaPlayerService"
+            android:enabled="true"
+            android:exported="true"
+            android:persistent="true"
+            android:singleUser="true">
+            <intent-filter>
+                <action android:name=".MediaPlayerService.BIND" />
+            </intent-filter>
+        </service>
+
+
+    </application>
+
+</manifest>

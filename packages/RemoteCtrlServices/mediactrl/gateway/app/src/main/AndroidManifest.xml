@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.volvocars.remotectrlservices.mediactrl.gateway"
+          android:sharedUserId="android.uid.system"
+          android:exported="true"
+          coreApp="true">
+  <original-package android:name="com.volvocars.remotectrlservices.mediactrl.gateway" />
+  <permission
+    android:name="android.volvocars.permission.REMOTE_CTRL"
+    android:protectionLevel="system|signature"/>
+
+
+  <application
+        android:label="RemoteMediaCtrl.Gateway"
+        android:exported="true">
+
+       <service
+            android:name=".RemoteMediaGateway"
+            android:enabled="true"
+            android:exported="true"
+            android:persistent="true"
+            android:singleUser="true">
+           <intent-filter >
+               <action android:name=".RemoteMediaGateway.BIND"/>
+           </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>

@@ -59,6 +59,8 @@ PRODUCT_PACKAGES += \
     RemoteAudioCtrlAppService \
     RemoteClimateGateway \
     RemoteClimateService \
+    RemoteMediaCtrlGateway \
+    RemoteMediaCtrlService \
 
 
 ##############################################################

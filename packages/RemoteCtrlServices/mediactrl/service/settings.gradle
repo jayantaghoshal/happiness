@@ -1,0 +1,3 @@
+include ':support-lib'
+project(':support-lib').projectDir=new File(settingsDir, '../support-lib')
+include ':app'
