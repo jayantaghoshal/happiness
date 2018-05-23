@@ -4,4 +4,4 @@
 # This file is covered by LICENSE file in the root of this project
 
 # TODO, build and do host tests
-echo "TODO"
+"$ZUUL_PROEJCT"/gradlew artifactoryPublish

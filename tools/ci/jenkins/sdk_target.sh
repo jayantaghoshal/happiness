@@ -16,4 +16,4 @@
 
 #ihu_update --profile --profile=ci-machinery || die "failed to flash "
 
-"$ZUUL_PROEJCT"/gradlew artifactoryPublish
+echo "TODO"
