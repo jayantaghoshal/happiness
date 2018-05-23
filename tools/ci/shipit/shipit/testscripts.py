@@ -50,10 +50,12 @@ def build_testcases(tests_to_run: List[test_types.IhuBaseTest]):
         logger.debug(str(test_modules_to_build))
         test_modules_space_separated = " ".join((shlex.quote(t) for t in test_modules_to_build))
         try:
+            #NOTE: --verbose is important for this command to work in CI, see https://partnerissuetracker.corp.google.com/u/1/issues/79129588
             run_in_lunched_env(("atest " +
                                 "--rebuild-module-info "
                                 "--build " +
                                 "--install " +
+                                "--verbose " +
                                 test_modules_space_separated), cwd=aosp_root)
         except subprocess.CalledProcessError as cpe:
             logger.error(cpe.output.decode())
