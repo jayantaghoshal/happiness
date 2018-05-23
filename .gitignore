@@ -24,19 +24,21 @@ cloudsim.log
 db.json.run
 
 # eclipse
-.settings/language.settings.xml
-.settings/org.eclipse.cdt.core.prefs
+**/.settings
 .project
 .cproject
 ## Plugins
 .pydevproject
-
+.classpath
 
 # Meld mergetool
 *.orig
 
 #PyCharm / Android Studio / Jetbrains Tools
+*.iml
 .idea
+.externalNativeBuild
+.DS_Store
 
 #Java
 .class
@@ -48,3 +50,7 @@ db.json.run
 #External library repositories
 external/paho.mqtt.c/
 external/paho.mqtt.cpp/
+
+#Gradle
+.gradle
+local.properties
