@@ -14,11 +14,10 @@ else
   (cd android-sdk-linux)
   wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
   unzip sdk-tools-linux-3859397.zip
-  cd ..
 fi
 
 # Download the Android SDK
-export ANDROID_HOME="$WORKSPACE_ROOT/android-sdk-linux"
+export ANDROID_HOME="$PWD/android-sdk-linux"
 export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
 
 cd "$ANDROID_HOME"
