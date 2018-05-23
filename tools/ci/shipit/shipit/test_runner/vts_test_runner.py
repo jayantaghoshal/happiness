@@ -95,10 +95,7 @@ def vts_tradefed_run_module(module_name: str,
         success = False
         logger.error("Could not run test, maybe you forgot to issue lunch before to setup environment? Reason: %r" % e)
 
-    lines = output.splitlines()
-    if len(lines) < 10: # Arbitrarily choosen limit
-        for line in lines:
-            logger.info("Console: " + str(line))
+    _log_output(output=output, max_lines=10)
 
     if success:
         success, info = _check_output_for_failure(output, nr_tests)
@@ -122,6 +119,12 @@ def vts_tradefed_run_module(module_name: str,
                       logs=logdict,
                       screenshot_paths=screenshots)
 
+def _log_output(output: str, max_lines: int=10):
+    lines = output.splitlines()
+    if len(lines) > max_lines:
+        logger.info("Console output long, printing last {} lines".format(max_lines))
+    for line in lines[-max_lines:]:
+        logger.info("Console: " + str(line))
 
 def _parse_xml(output: str):
     result_match = re.search(r"I\/ResultReporter:\s+Test Result:\s+(\S+)", output)
