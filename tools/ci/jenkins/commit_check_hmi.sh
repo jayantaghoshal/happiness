@@ -10,10 +10,8 @@ set -ex
 if [ -d "android-sdk-linux" ]; then
   echo "SDK already downloaded."
 else
-  mkdir android-sdk-linux
-  (cd android-sdk-linux)
   wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-  unzip sdk-tools-linux-3859397.zip
+  unzip sdk-tools-linux-3859397.zip -d android-sdk-linux
 fi
 
 # Download the Android SDK
