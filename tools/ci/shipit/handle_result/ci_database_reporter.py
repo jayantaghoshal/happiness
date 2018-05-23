@@ -208,6 +208,21 @@ class ci_database_reporter(abstract_reporter):
         else:
             mongo_data["top_test_job_name"] = ""
             mongo_data["top_test_job_build_number"] = 0
+
+        logs = {}
+
+        with open(os.path.join(os.environ["REPO_ROOT_DIR"], "ihu_update.log")) as f:
+            log_entry = {}
+            log_entry["name"] = f.name
+            log_entry["contents"] = store_result.truncate_to_fit_mongo(f.read())
+            log_insertion_result = mongodb_wrapper.insert_data(log_entry, "logs")
+            logs[store_result.clean_mongo_key(f.name)] = {
+                "id": log_insertion_result,
+                "size": len(f.read())
+            }
+
+        mongo_data["logs"] = logs
+
         logger.debug("Mongo data: {}".format(mongo_data))
 
         return mongo_data
