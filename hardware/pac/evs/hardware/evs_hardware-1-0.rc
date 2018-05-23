@@ -1,4 +1,7 @@
-service evs_hardware-1-0 /vendor/bin/hw/android.hardware.automotive.evs.vcc@1.0-hardware
-    class hal
-    user root
-    group root
+service vcc_evs_hardware /vendor/bin/hw/android.hardware.automotive.evs.vcc@1.0-hardware
+    interface android.hardware.automotive.evs@1.0::IEvsEnumerator hardware
+    class early_hal
+    priority -20
+    user automotive_evs
+    group automotive_evs graphics camera
+    onrestart restart vcc_evs_manager

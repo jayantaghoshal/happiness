@@ -1,6 +1,6 @@
-on property:init.svc.evs_manager-1-0=running
-    start pac_early_app
+service vcc_pac_early_app /vendor/bin/pac_early_app
+    class early_hal
+    user automotive_evs
+    group automotive_evs
+    disabled
 
-service pac_early_app /vendor/bin/pac_early_app
-    user root
-    group root
