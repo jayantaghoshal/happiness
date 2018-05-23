@@ -288,7 +288,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
     }
 
-    private DownloadInfoResponse FetchDownloadInfo(Query query) {
+    private DownloadInfoResponse FetchDownloadInfo(InstallationOrder installationOrder) {
         Log.v(LOG_TAG, "FetchDownloadInfo");
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -303,8 +303,8 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uris.downloads + query.buildQuery());
-            Response response = cloudConnection.doGetRequest(uris.downloads + query.buildQuery(), headers, timeout);
+            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + softwareManagementUri + installationOrder.downloadsUri);
+            Response response = cloudConnection.doGetRequest(softwareManagementUri + installationOrder.downloadsUri, headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
                 Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
@@ -554,21 +554,17 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         callback.CommissionStatus(commissionElement.id, CommissionSoftwareAssignment(commissionElement));
     }
 
-    /**
+     /**
      * Get Download Info for an installation order
-     *
-     * @param uuid     installation order id
+     * @param installationOrder installation order
      * @param callback
      */
-    @Override
-    public void GetDownloadInfo(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
+    public void GetDownloadInfo(InstallationOrder installationOrder, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (!softwareManagementAvailable) {
             callback.DownloadInfo(-1, null);
         }
 
-        Query query = new Query();
-        query.id = uuid;
-        DownloadInfoResponse downloadInfoResponse = FetchDownloadInfo(query);
+        DownloadInfoResponse downloadInfoResponse = FetchDownloadInfo(installationOrder);
         callback.DownloadInfo(downloadInfoResponse.code, downloadInfoResponse.downloadInfo);
     }
 

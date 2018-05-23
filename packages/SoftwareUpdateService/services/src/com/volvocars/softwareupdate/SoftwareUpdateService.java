@@ -332,14 +332,14 @@ public class SoftwareUpdateService extends Service {
     }
 
     public void doGetDownloadInfo(InstallationOrder installationOrder) {
-        GetDownloadInfo(installationOrder.id);
+        GetDownloadInfo(installationOrder);
     }
 
-    public void GetDownloadInfo(String uuid) {
+    public void GetDownloadInfo(InstallationOrder installationOrder) {
         if (swapi != null) {
             try {
-                Log.v(LOG_TAG, "Get download information for assignment with uuid: " + uuid);
-                swapi.GetDownloadInfo(uuid, swapiCallback);
+                Log.v(LOG_TAG, "Get download information for assignment with installationOrderId: " + installationOrder.id);
+                swapi.GetDownloadInfo(installationOrder, swapiCallback);
             } catch (RemoteException e) {
                 Log.e(LOG_TAG, "GetDownloadInfo failed: RemoteException [" + e.getMessage() + "]");
             }

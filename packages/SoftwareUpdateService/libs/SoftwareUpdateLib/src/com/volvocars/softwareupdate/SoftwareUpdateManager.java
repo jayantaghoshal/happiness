@@ -98,12 +98,6 @@ public class SoftwareUpdateManager implements ServiceConnection {
         }
     }
 
-    public void GetDownloadInfo(String uuid) throws RemoteException {
-        if (softwareUpdateManager != null && serviceBound) {
-            softwareUpdateManager.GetDownloadInfo(uuid);
-        }
-    }
-
     public void GetInstallNotification(String installationOrderId) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
             softwareUpdateManager.GetInstallNotification(installationOrderId);

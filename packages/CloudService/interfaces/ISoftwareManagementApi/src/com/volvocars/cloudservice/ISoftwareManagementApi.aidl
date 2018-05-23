@@ -4,6 +4,7 @@ import com.volvocars.cloudservice.AssignmentType;
 import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 import com.volvocars.cloudservice.SoftwareAssignment;
+import com.volvocars.cloudservice.InstallationOrder;
 import com.volvocars.cloudservice.InstallationReport;
 import com.volvocars.cloudservice.InstallNotification;
 import com.volvocars.cloudservice.Query;
@@ -31,10 +32,10 @@ oneway interface ISoftwareManagementApi {
 
     /**
      * Get Download Info for an installation order
-     * @param uuid installation order id
+     * @param installationOrder installation order
      * @param callback
      */
-    void GetDownloadInfo(in String uuid, in ISoftwareManagementApiCallback callback);
+    void GetDownloadInfo(in InstallationOrder installationOrder, in ISoftwareManagementApiCallback callback);
 
     /**
      * Get Download data

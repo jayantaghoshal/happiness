@@ -8,7 +8,7 @@
     "/softwaremanagement-1/availableAccessories?installation_order_id=:installation_order_id": "/availableAccessories?installation_order_id=:installation_order_id",
     "/softwaremanagement-1/availableAccessories?id=:id&installation_order_id=:installation_order_id": "/availableAccessories?id=:id&installation_order_id=:installation_order_id",
     "/softwaremanagement-1/mapUpdates": "/mapUpdates",
-    "/softwaremanagement-1/downloads?id=:id": "/downloads?id=:id",
+    "/softwaremanagement-1/downloads/:id": "/downloads?id=:id",
     "/softwaremanagement-1/deleteNotification": "/deleteNotification",
     "/softwaremanagement-1/commission": "/commission",
     "/softwaremanagement-1/installnotifications": "/installNotification",

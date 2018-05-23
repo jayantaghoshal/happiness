@@ -207,11 +207,6 @@ public class SoftwareUpdateManagerImpl extends ISoftwareUpdateManager.Stub {
     }
 
     @Override
-    public void GetDownloadInfo(String uuid) throws RemoteException {
-        service.GetDownloadInfo(uuid);
-    }
-
-    @Override
     public void GetInstallNotification(String installationOrderId) throws RemoteException {
         service.GetInstallNotification(installationOrderId);
     }

@@ -81,6 +81,7 @@ function addInstallationOrder(obj, id) {
   installation_order_data['downloads_uri'] = "/downloads";
   installation_order_data['install_notifications_uri'] = "/installnotifications";
   installation_order_data['installation_report_uri'] = "/installationreport";
+  installation_order_data['downloads_uri'] = "/downloads/" + id;
 
   obj['installation_order'] = installation_order_data
   obj['status'] = "COMMISSIONED";

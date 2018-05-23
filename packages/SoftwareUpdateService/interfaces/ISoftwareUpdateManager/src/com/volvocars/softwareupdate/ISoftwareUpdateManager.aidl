@@ -38,12 +38,6 @@ oneway interface ISoftwareUpdateManager {
      */
     void CommissionAssignment(in String uuid);
 
-    /**
-    * Get Download Info for an installation order
-    * @param uuid installation order id
-    */
-     void GetDownloadInfo(in String uuid);
-
      /**
      * Get InstallNotification for an installation order
      * @param installionOrderId installationOrderId

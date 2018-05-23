@@ -119,15 +119,14 @@ public class SoftwareManagementApi implements ServiceConnection {
 
     }
 
-    /**
-     * Return the result for GetDownloadInfo
-     *
-     * @param code          The HTTP cose of the response
-     * @param download_info The download information of the installation order.
+     /**
+     * Get Download Info for an installation order
+     * @param installationOrder installation order
+     * @param callback
      */
-    public void GetDownloadInfo(String uuid, ISoftwareManagementApiCallback callback) throws RemoteException {
+    public void GetDownloadInfo(InstallationOrder installationOrder, ISoftwareManagementApiCallback callback) throws RemoteException {
         if (software_management != null && service_bound) {
-            software_management.GetDownloadInfo(uuid, callback);
+            software_management.GetDownloadInfo(installationOrder, callback);
         }
     }
 
