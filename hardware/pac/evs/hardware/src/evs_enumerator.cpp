@@ -22,12 +22,11 @@ Return<sp<IEvsCamera>> EvsEnumerator::openCamera(const hidl_string& /* camera_id
 Return<void> EvsEnumerator::closeCamera(const sp<IEvsCamera>& /* car_camera */) { return Return<void>(); }
 
 Return<sp<IEvsDisplay>> EvsEnumerator::openDisplay() {
-    // Only one caller may have access to the display at any given time. Therefore, if there is already
-    // an active display it needs to be closed before exclusive access can be given to the new caller.
     sp<IEvsDisplay> current_active_display = active_display_.promote();
+    // Only one caller may have access to the display at any given time.
     if (current_active_display != nullptr) {
-        dbgW("Killing active display due to new caller");
-        closeDisplay(current_active_display);
+        dbgD("Display is busy");
+        return nullptr;
     }
 
     current_active_display = new EvsDrmDisplay();

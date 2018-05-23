@@ -29,10 +29,13 @@ class EvsEnumerator : public IEvsEnumerator {
 
     FRIEND_TEST(EvsEnumeratorTest, ConstructObject);
 
-    FRIEND_TEST(EvsEnumeratorDisplayTest, CloseDisplayNullPtr);
-    FRIEND_TEST(EvsEnumeratorDisplayTest, CloseDisplaySuccess);
-    FRIEND_TEST(EvsEnumeratorDisplayTest, CloseDisplayUnknownDisplay);
-    FRIEND_TEST(EvsEnumeratorDisplayTest, OpenDisplay);
+    FRIEND_TEST(EvsEnumeratorInitializedTest, CloseDisplayNullPtr);
+    FRIEND_TEST(EvsEnumeratorInitializedTest, CloseDisplaySuccess);
+    FRIEND_TEST(EvsEnumeratorInitializedTest, CloseDisplayUnknownDisplay);
+    FRIEND_TEST(EvsEnumeratorInitializedTest, OpenDisplaySuccess);
+
+    FRIEND_TEST(EvsEnumeratorDisplayTest, OpenDisplayExclusive);
+    FRIEND_TEST(EvsEnumeratorDisplayTest, OpenNewDisplayAfterClose);
 };
 
 }  // namespace vcc_implementation

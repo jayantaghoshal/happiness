@@ -15,13 +15,28 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-class EvsEnumeratorDisplayTest : public ::testing::Test {
+class EvsEnumeratorInitializedTest : public ::testing::Test {
   public:
     void SetUp() override { enumerator_ = new EvsEnumerator(); }
 
     void TearDown() override { enumerator_.clear(); }
 
     sp<EvsEnumerator> enumerator_;
+};
+
+class EvsEnumeratorDisplayTest : public EvsEnumeratorInitializedTest {
+  public:
+    void SetUp() override {
+        EvsEnumeratorInitializedTest::SetUp();
+        display_ = enumerator_->openDisplay();
+    }
+
+    void TearDown() override {
+        display_.clear();
+        EvsEnumeratorInitializedTest::TearDown();
+    }
+
+    sp<IEvsDisplay> display_;
 };
 
 TEST(EvsEnumeratorTest, ConstructObject) {
@@ -38,20 +53,38 @@ TEST(EvsEnumeratorTest, DeleteObject) {
     EXPECT_EQ(enumerator, (EvsEnumerator*)nullptr);
 }
 
-TEST_F(EvsEnumeratorDisplayTest, OpenDisplay) {
+TEST_F(EvsEnumeratorInitializedTest, OpenDisplaySuccess) {
     // Open new display and verify that its the new active display
     sp<IEvsDisplay> display = enumerator_->openDisplay();
     EXPECT_NE(display, nullptr);
     EXPECT_EQ(enumerator_->active_display_, display);
-
-    // Open a new display again and verify that the new one is now the active display
-    sp<IEvsDisplay> second_display = enumerator_->openDisplay();
-    EXPECT_NE(second_display, nullptr);
-    EXPECT_NE(display, second_display);
-    EXPECT_EQ(enumerator_->active_display_, second_display);
 }
 
-TEST_F(EvsEnumeratorDisplayTest, CloseDisplayNullPtr) {
+TEST_F(EvsEnumeratorDisplayTest, OpenDisplayExclusive) {
+    // Verify that there is an active display
+    EXPECT_EQ(enumerator_->active_display_, display_);
+
+    // Verify that nullptr is returned when openDisplay is called when there already is an active display
+    sp<IEvsDisplay> display = enumerator_->openDisplay();
+    EXPECT_EQ(display, nullptr);
+    EXPECT_EQ(enumerator_->active_display_, display_);
+}
+
+TEST_F(EvsEnumeratorDisplayTest, OpenNewDisplayAfterClose) {
+    // Verify that there is an active display
+    EXPECT_EQ(enumerator_->active_display_, display_);
+
+    // Close the active display
+    enumerator_->closeDisplay(display_);
+    EXPECT_EQ(enumerator_->active_display_, nullptr);
+
+    // Verify that its possible to open a new display after closing the old one
+    sp<IEvsDisplay> display = enumerator_->openDisplay();
+    EXPECT_NE(display, nullptr);
+    EXPECT_EQ(enumerator_->active_display_, display);
+}
+
+TEST_F(EvsEnumeratorInitializedTest, CloseDisplayNullPtr) {
     sp<IEvsDisplay> display = new EvsDrmDisplay();
     enumerator_->active_display_ = display;
 
@@ -60,7 +93,7 @@ TEST_F(EvsEnumeratorDisplayTest, CloseDisplayNullPtr) {
     EXPECT_EQ(enumerator_->active_display_, display);
 }
 
-TEST_F(EvsEnumeratorDisplayTest, CloseDisplayUnknownDisplay) {
+TEST_F(EvsEnumeratorInitializedTest, CloseDisplayUnknownDisplay) {
     sp<IEvsDisplay> display = new EvsDrmDisplay();
     enumerator_->active_display_ = display;
 
@@ -70,7 +103,7 @@ TEST_F(EvsEnumeratorDisplayTest, CloseDisplayUnknownDisplay) {
     EXPECT_EQ(enumerator_->active_display_, display);
 }
 
-TEST_F(EvsEnumeratorDisplayTest, CloseDisplaySuccess) {
+TEST_F(EvsEnumeratorInitializedTest, CloseDisplaySuccess) {
     sp<IEvsDisplay> display = new EvsDrmDisplay();
     enumerator_->active_display_ = display;
 
@@ -79,12 +112,12 @@ TEST_F(EvsEnumeratorDisplayTest, CloseDisplaySuccess) {
     EXPECT_EQ(enumerator_->active_display_, nullptr);
 }
 
-TEST_F(EvsEnumeratorDisplayTest, GetDisplayStateNoActiveDisplay) {
+TEST_F(EvsEnumeratorInitializedTest, GetDisplayStateNoActiveDisplay) {
     // Verify that NOT_OPEN is returned if there is no active display
     EXPECT_EQ(enumerator_->getDisplayState(), DisplayState::NOT_OPEN);
 }
 
-TEST_F(EvsEnumeratorDisplayTest, GetDisplayStateOK) {
+TEST_F(EvsEnumeratorInitializedTest, GetDisplayStateOK) {
     sp<IEvsDisplay> display = enumerator_->openDisplay();
     // EvsDrmDisplay is currently hardcoded to return DEAD
     EXPECT_EQ(enumerator_->getDisplayState(), DisplayState::DEAD);
