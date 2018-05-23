@@ -111,21 +111,16 @@ public class UserSwitchService extends Service {
      */
     public void switchUser(int androidUserId) {
         Log.d(TAG, "switchUser is called with androidUserId: " + androidUserId);
-        if (androidUserId == -1) {
+        if (androidUserId == VolvoUser.NOT_DEFINED) {
             Log.d(TAG, "unknown user received, switching to guest user");
             androidUserId = defaultGuest.id;
-
-            //TODO: Temp disabled automatic user switch on unpaired user-profiles
-            //      This happens instantly on startup and many services and apps today do
-            //      not handle user switching properly causing many issues.
-            return;
         }
 
         final boolean switchStatus = activityManager.switchUser(androidUserId);
         Log.d(TAG, "Current user: " + userManager.getUserName());
         Log.d(TAG, "Switch user status: " + switchStatus);
 
-        // CEM changed but android user not, therefore fallack to guest
+        // CEM changed but android user not, therefore fallback to guest
         if (!switchStatus) {
             // TODO (Torbjörn Sandsgård) Add falut handling if this happens.
             // Possibly we could retry a couple of times. We could also update the
@@ -187,15 +182,6 @@ public class UserSwitchService extends Service {
         return IServiceManager.getService().registerForNotifications(
                 ICarProfileManager.kInterfaceName, "", serviceNotification);
     }
-
-    //    private void linkToDeath(ICarProfileManager carProfileManager,
-    //            IHwBinder.DeathRecipient recipient) {
-    //        try {
-    //            carProfileManager.linkToDeath(recipient, 0);
-    //        } catch (RemoteException e) {
-    //            throw new IllegalStateException("Failed to linkToDeath ProfileManager");
-    //        }
-    //    }
 
     private void connectToProfileManager() {
         synchronized (mLock) {

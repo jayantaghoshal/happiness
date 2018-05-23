@@ -28,6 +28,7 @@ public class VolvoUser implements Parcelable {
     public static final int FLAG_INITIALIZED = 16;
     public static final int FLAG_MANAGED_PROFILE = 32;
     public static final int FLAG_DISABLED = 64;
+    public static final int NOT_DEFINED = -1;
 
 
     public static final Creator<VolvoUser> CREATOR = new Creator<VolvoUser>() {
@@ -41,7 +42,11 @@ public class VolvoUser implements Parcelable {
     };
 
     public VolvoUser(int id) {
-        this(id, "", 0);
+        this(id, "", NOT_DEFINED);
+    }
+
+    public VolvoUser(String name) {
+        this(NOT_DEFINED, name, FLAG_ADMIN);
     }
 
     public VolvoUser(int id, String name, int flags) {

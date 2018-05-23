@@ -38,6 +38,7 @@ from generated.datatypes import \
     OnOffPen
 
 from generated import datatypes as DE
+from uiautomator import device as device_default
 
 PydataElementsSenderType = typing.Union[BaseEnumSender, BaseBoolSender, BaseFloatSender, BaseIntegerSender]
 T = typing.TypeVar('T')
@@ -203,21 +204,17 @@ class VehicleHalCommon():
         vendorExtension = vc.findViewWithTextOrRaise("VendorExtension")
         vendorExtension.touch()
 
-    def setUpVehicleFunction(self):
+    def setUpVehicleFunction(self, device=device_default):
         # Enable it after default user is enabled
-        # waitUntilUserNotOwner()
+        self.waitUntilUserNotOwner()
 
         self.dut.adb.shell('input keyevent 3')
         self.dut.adb.shell('am start -n \"com.volvocars.vehiclefunctions/com.volvocars.vehiclefunctions.VehicleFunctionsActivity\" -a \"android.intent.action.MAIN\" -c \"android.intent.category.LAUNCHER\"')
-        vc, device = self.getActiveViewClient()
-        self.waitUntilViewAvailable(vc, "com.volvocars.vehiclefunctions:id/assistance_item")
+        self.waitUntilViewAvailable("com.volvocars.vehiclefunctions:id/assistance_item")
 
         # Open menu drawer button
-        vc.dump(window=-1)
-        drive_assistant = vc.findViewByIdOrRaise("com.volvocars.vehiclefunctions:id/assistance_item")
-        drive_assistant.touch()
-        _s = 0.5
-        vc.sleep(_s)
+        drive_assistant = device(resourceId="com.volvocars.vehiclefunctions:id/assistance_item")
+        drive_assistant.click()
 
     def deviceReboot(self):
         self.dut.shell.one.Execute("reboot")
@@ -226,49 +223,47 @@ class VehicleHalCommon():
         self.dut.startServices()
         self.dut.shell.InvokeTerminal("one")
 
-
-    def waitUntilViewNotAvailable(self, vc, view_name, timeout_seconds=15):
+    def waitUntilViewNotAvailable(self, view_name, timeout_seconds=15, device = device_default):
         logging.info("Waiting until view " + view_name + " is closed")
         start_time = time.time()
         while time.time() - start_time <= timeout_seconds:
-            try:
-                vc.dump(window=-1)
-                vc.findViewByIdOrRaise(view_name);
-                logging.info("Waiting...%d", str(time.time() - start_time))
-            except ViewNotFoundException:
-                logging.info("View is not available anymore")
+            view = device(resourceId=view_name)
+            if view.exists:
+                logging.info("Waiting...%s", str(time.time() - start_time))
+            else:
+                logging.info("View is not available: " + view_name)
                 return
             time.sleep(2)
         asserts.assertTrue(False, "Time out! View is still visible: " + view_name)
 
-
-    def waitUntilViewAvailable(self, vc, view_name, timeout_seconds=15):
+    def waitUntilViewAvailable(self, view_name, timeout_seconds=15, device = device_default):
         logging.info("Waiting until view " + view_name + " is available")
         start_time = time.time()
         while time.time() - start_time <= timeout_seconds:
-            try:
-                vc.dump(window=-1)
-                vc.findViewByIdOrRaise(view_name);
-                logging.info("View is available")
+            view = device(resourceId=view_name)
+            if view.exists:
+                logging.info("View is found: " + view_name)
                 return
-            except ViewNotFoundException:
-                logging.info("Waiting...%d", str(time.time() - start_time))
+            else:
+                logging.info("Waiting...%s", str(time.time() - start_time))
             time.sleep(2)
         asserts.assertTrue(False, "Time out! View is still not visible: " + view_name)
 
-
-
-    def waitUntilUserNotOwner(self, timeout_seconds=30):
+    def waitUntilUserNotOwner(self, timeout_seconds=45):
         logging.info("Waiting until user not owner")
 
         start_time = time.time()
         while time.time() - start_time <= timeout_seconds:
-            result = self.dut.shell.one.Execute("dumpsys activity | grep mUserLru")
-            lastUserStr = result['stdouts'][0]
-            lastUser = re.findall(r'\d+',lastUserStr)[-1]
-            if lastUser != '0':
-                return
-            logging.info("Waiting...%d", str(time.time() - start_time))
+            try:
+                result = self.dut.shell.one.Execute("dumpsys activity | grep mUserLru")
+                lastUserStr = result['stdouts'][0]
+                lastUser = re.findall(r'\d+',lastUserStr)[-1]
+                if lastUser != '0':
+                    return
+            except:
+                print "Exception while using adb shell"
+
+            logging.info("Waiting...%s", str(time.time() - start_time))
             time.sleep(2)
         asserts.assertTrue(False, "Time out! User didn't switch")
 
