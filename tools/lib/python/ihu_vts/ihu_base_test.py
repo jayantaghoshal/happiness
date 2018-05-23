@@ -8,6 +8,7 @@ import json
 import sys
 from vts.runners.host import test_runner, base_test, const
 import subprocess
+import logging
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from typing import Union, List, Dict#, Optional
 
@@ -43,12 +44,25 @@ class IhuBaseTestClass(base_test.BaseTestClass):
         except Exception:
             print("*** Unable to patch test_runner.TestRunner._writeResultsJsonString ***")
 
-    def setUpClass(self):
+    def _setUpClass(self):
         self.dut = self.android_devices[0]
         self.dut.shell.InvokeTerminal("IhuBaseShell")
         self.old_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
 
-    def tearDownClass(self):
+        return super(IhuBaseTestClass, self)._setUpClass()
+
+    def _tearDownClass(self):
+
+        try:
+            all_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
+            new_tombstones = list(set(all_tombstones) - set(self.old_tombstones))
+            self.write_kpi('number_of_new_tombstones', len(new_tombstones))
+            for new_tombstone in new_tombstones:
+                self.saveFiles(os.path.join('/data/tombstones/', new_tombstone), 'tombstones')
+        except Exception as e:
+            # Catch exception so that the rest of BaseTestClass _tearDownClass is executed
+            logging.exception("ERROR in _tearDownClass: Couldn't save tombstones. %r" % e)
+
         try:
             if len(self.vcc_kpis) > 0:
                 with open("/tmp/test_run_kpis.json", "w") as f:
@@ -56,15 +70,7 @@ class IhuBaseTestClass(base_test.BaseTestClass):
         except:
             pass
 
-        all_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
-        new_tombstones = list(set(all_tombstones) - set(self.old_tombstones))
-
-        self.write_kpi('number_of_new_tombstones', len(new_tombstones))
-
-        for new_tombstone in new_tombstones:
-            self.saveFiles(os.path.join('/data/tombstones/', new_tombstone), 'tombstones')
-
-        super(IhuBaseTestClass, self).tearDownClass()
+        return super(IhuBaseTestClass, self)._tearDownClass()
 
     def executeInShell(self, command):
         return self.dut.shell.IhuBaseShell.Execute(command)
