@@ -22,10 +22,8 @@ using namespace std::placeholders;
 
 using namespace android;
 
-ActiveSafetyModule::ActiveSafetyModule(
-        ::android::hardware::automotive::vehicle::V2_0::impl::IVehicleHalImpl* vehicleHal,
-        android::sp<SettingsFramework::SettingsManagerHidl> settings_manager)
-    : ModulePropertyHandler(vehicleHal), m_DAISettingImpl(settings_manager) {
+ActiveSafetyModule::ActiveSafetyModule(gsl::not_null<VFContext*> ctx)
+    : ModulePropertyHandler(&(ctx->vhal)), m_DAISettingImpl(ctx) {
     {  // DAI_Setting
         if (isDriveAwayInfoEnabledInCarConfig()) {
             PropertyAndConfig DAI_Setting_property;

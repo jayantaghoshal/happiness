@@ -77,7 +77,6 @@ int main(int /* argc */, char* /* argv */ []) {
     auto illuminationModule = std::make_unique<vccvhal_10::impl::IlluminationHal>(hal.get());
     auto carTimeModule = std::make_unique<CarTimeHal>(hal.get());
     auto sensorModule = std::make_unique<SensorModule>(hal.get());
-    auto activeSafetyModule = std::make_unique<ActiveSafetyModule>(hal.get(), settings_manager);
     auto e_lane_keeping_aid_module = std::make_unique<ELaneKeepingAidModule>(hal.get(), dispatcher, settings_manager);
 
     CurveSpeedAdaptionModule curveSpeedAdaption{&ctx};
@@ -87,6 +86,7 @@ int main(int /* argc */, char* /* argv */ []) {
     LaneKeepingAidModule laneKeepingAid{&ctx};
     SpeedLimitAdaptationModule speedLimitAdaptation{&ctx};
     TrafficSignInformationModule trafficSignInformation{&ctx};
+    ActiveSafetyModule activeSafetyModule{&ctx};
 
     auto vmsModule = std::make_unique<vmsHal>(hal.get());
     // Register modules
@@ -98,7 +98,7 @@ int main(int /* argc */, char* /* argv */ []) {
     illuminationModule->registerToVehicleHal();
     carTimeModule->registerToVehicleHal();
     sensorModule->registerToVehicleHal();
-    activeSafetyModule->registerToVehicleHal();
+    activeSafetyModule.registerToVehicleHal();
     vmsModule->registerToVehicleHal();
     ::android::sp<vhal_20::VehicleHalManager> service = new vhal_20::VehicleHalManager{hal.get()};
 

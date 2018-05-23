@@ -35,15 +35,16 @@ bool isDriveAwayInfoEnabledInCarConfig() {
     return false;
 }
 
-DAISettingImpl::DAISettingImpl(android::sp<SettingsFramework::SettingsManagerHidl> settings_manager)
+DAISettingImpl::DAISettingImpl(gsl::not_null<VFContext*> ctx)
     : sDAISetting_(SettingId::DriveAwayInfoSetting,
                    isDriveAwayInfoEnabledInCarConfig() ? DAISettingType::VISUAL_AND_SOUND : DAISettingType::NOTHING,
-                   settings_manager) {
+                   ctx->settings),
+      vehmod_flexray_receiver_{ctx->dataelements} {
     auto* lcfg = vcc::LocalConfigDefault();
     const bool lcfg_DAI_enabled = lcfg->GetBool("vehiclefunctions.adas.LCFG_DAI_Enabled");
 
     // SYSTEM_OK
-    if ((isDriveAwayInfoEnabledInCarConfig()) && lcfg_DAI_enabled == true) {
+    if ((isDriveAwayInfoEnabledInCarConfig()) && lcfg_DAI_enabled) {
         sDAISetting_.setCallback([&](const auto& value) {
             auto settings_value = value.value;
 
@@ -72,8 +73,8 @@ DAISettingImpl::DAISettingImpl(android::sp<SettingsFramework::SettingsManagerHid
             daiSetting_.set(static_cast<int32_t>(settings_value));
         });
 
-        vehModMngtGlbSafe1_.subscribe([&]() {
-            auto vehModMngtGlbSafe1_signal = vehModMngtGlbSafe1_.get();
+        vehmod_flexray_receiver_.subscribe([&]() {
+            auto vehModMngtGlbSafe1_signal = vehmod_flexray_receiver_.get();
             if (vehModMngtGlbSafe1_signal.isOk()) {
                 auto frame = vehModMngtGlbSafe1_signal.value();
                 if (isActiveUsgMode(frame.UsgModSts)) {
@@ -99,7 +100,7 @@ DAISettingImpl::DAISettingImpl(android::sp<SettingsFramework::SettingsManagerHid
 ReadOnlyNotifiableProperty<int32_t>* DAISettingImpl::DAISetting() { return &daiSetting_; }
 
 void DAISettingImpl::setDAISetting(int settings_value) {
-    auto vehModMngtGlbSafe1_signal = vehModMngtGlbSafe1_.get();
+    auto vehModMngtGlbSafe1_signal = vehmod_flexray_receiver_.get();
     if (vehModMngtGlbSafe1_signal.isOk()) {
         auto frame = vehModMngtGlbSafe1_signal.value();
         // ACTIVE
