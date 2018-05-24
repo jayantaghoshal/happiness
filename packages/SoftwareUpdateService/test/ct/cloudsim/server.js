@@ -166,6 +166,7 @@ server.post('/commission', function (req, res, next) {
       if (updates.value()[i]['id'] != req.body.id) {
         assignment = updates.value()[i];
         assignment['status'] = "NON-COMMISSIONABLE";
+        delete assignment.commission_uri;
       }
     }
     //For all other assignments: set status to NON-COMMISSIONABLE
@@ -173,6 +174,7 @@ server.post('/commission', function (req, res, next) {
       if (accessories.value()[i]['id'] != req.body.id) {
         assignment = accessories.value()[i];
         assignment['status'] = "NON-COMMISSIONABLE";
+        delete assignment.commission_uri;
       }
     }
 
@@ -369,6 +371,7 @@ server.post('/installationReport', function (req, res, next) {
   for (i = 0; i < updates.value().length; i++) {
     var assignment = updates.value()[i];
     assignment['status'] = "COMMISSIONABLE";
+    assignment['commission_uri'] = "commission";
   }
 
   db.get('availableUpdates').get('software').write();
@@ -389,6 +392,7 @@ server.post('/installationReport', function (req, res, next) {
   for (i = 0; i < accessories.value().length; i++) {
     var assignment = accessories.value()[i];
     assignment['status'] = "COMMISSIONABLE";
+    assignment['commission_uri'] = "commission";
   }
 
   db.get('availableAccessories').get('software').write();
@@ -448,7 +452,7 @@ server.get('/availableAccessories', function (req, res, next) {
 
   else if (req.query.installation_order_id) {
     for (i = 0; i < accessories.value().length; i++) {
-      if ((d.value()[i]['installation_order']) && (accessories.value()[i]['installation_order']['id'] == req.query.installation_order_id)) {
+      if ((accessories.value()[i]['installation_order']) && (accessories.value()[i]['installation_order']['id'] == req.query.installation_order_id)) {
         assignment['software'] = accessories.value()[i];
       }
     }
