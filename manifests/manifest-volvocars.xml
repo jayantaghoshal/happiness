@@ -7,7 +7,7 @@
   <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
 
   <!-- HMI -->
-  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="294307c48169663b3e8963058c36b5cef2707ce1" />
+  <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="7d0ac4cd94be4d7a1dd477b0c16defeaecdb3c40" />
   <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="2077406c3c82e202d1a3dbe84bee1a6284e5f81e" />
   <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="17a0818d087c23c38e8e15a807d062cc7a94d0d2" />
   <project name="vendor/volvocars/hmi/SystemDialog" path="vendor/volvocars/hmi/SystemDialog" revision="77aec6767ac2eef6dc570c0addbfd0ca2be19e72" />
