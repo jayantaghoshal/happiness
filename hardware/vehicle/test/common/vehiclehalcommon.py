@@ -138,26 +138,27 @@ class VehicleHalCommon():
     active_view_client = None
     active_view_device = None
 
-    def __init__(self, dut, system_uid, with_flexray_legacy=True):
+    def __init__(self, dut, system_uid, with_flexray_legacy=True, support_library=False):
+        if not support_library :
+            try:
+                dut.hal.InitHidlHal(
+                    target_type="vehicle",
+                    target_basepaths=dut.libPaths,
+                    target_version=2.0,
+                    target_package="android.hardware.automotive.vehicle",
+                    target_component_name="IVehicle")
+            except:
+                e = str(sys.exc_info()[0])
+                asserts.assertTrue(False, "VHAL init fail with error: " + str(e) + " Is VHAL up and running?")
+                raise
 
-        try:
-            dut.hal.InitHidlHal(
-                target_type="vehicle",
-                target_basepaths=dut.libPaths,
-                target_version=2.0,
-                target_package="android.hardware.automotive.vehicle",
-                target_component_name="IVehicle")
-        except:
-            e = str(sys.exc_info()[0])
-            asserts.assertTrue(False, "VHAL init fail with error: " + str(e) + " Is VHAL up and running?")
-            raise
-
-        self.vehicle = dut.hal.vehicle
-        self.vehicle.SetCallerUid(system_uid)
-        self.vtypes = dut.hal.vehicle.GetHidlTypeInterface("types")
-        if with_flexray_legacy:
-            self.flexray = FrSignalInterface()
+            self.vehicle = dut.hal.vehicle
+            self.vehicle.SetCallerUid(system_uid)
+            self.vtypes = dut.hal.vehicle.GetHidlTypeInterface("types")
+            if with_flexray_legacy:
+                self.flexray = FrSignalInterface()
         self.dut = dut
+        self.addIngoredPopUpWatchers()
 
     def get_id(self, property):
         for prop in property_list:
@@ -565,6 +566,10 @@ class VehicleHalCommon():
         vehmod.PwrLvlElecSubtyp = 0
         vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
         return vehmod
+
+    def addIngoredPopUpWatchers(self, device = device_default):
+        device.watcher("SetupWizard").when(textContains="Setup Wizard").click(text="OK")
+        device.watcher("FullScreen").when(textContains="full screen").click(textContains="GOT")
 
 
 def get_dataelements_connection(adb, mode=None):

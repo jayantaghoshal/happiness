@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration description="User profiler handling for VTS componentTest cases
+                            Checks for the basic user creation and switching
+                            In order to test, CEM should be present in the testing environment
+                            This cases shall be done on the existing HMI
+                            ARTINFO-3175">
+    <target_preparer class="com.android.compatibility.common.tradefed.targetprep.VtsFilePusher">
+        <option name="abort-on-push-failure" value="true"/>
+        <option name="push-group" value="HalHidlHostTest.push"/>
+        <option name="cleanup" value="true"/>
+
+    </target_preparer>
+    <multi_target_preparer class="com.android.tradefed.targetprep.VtsPythonVirtualenvPreparer" />
+    <test class="com.android.tradefed.testtype.VtsMultiDeviceTest">
+        <option name="test-module-name" value="VtsHmiUserComponentTest"/>
+        <option name="test-case-path" value="VtsHmiUserComponentTest"/>
+        <option name="precondition-lshal" value="vendor.volvocars.hardware.profiles@1.0-impl"/>
+        <option name="test-timeout" value="2m"/>
+    </test>
+</configuration>

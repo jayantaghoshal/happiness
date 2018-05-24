@@ -48,7 +48,6 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/most_interface",              standard_caps | {cp.audio}), #Robin Touche
     VTSTest("vendor/volvocars/hardware/netman/test/ct/uds_diagnostics_test",        standard_caps), #Uguudei
     VTSTest("vendor/volvocars/hardware/tarmac/common/test/ct",                      standard_caps), #Torbjorn Sandsgard
-    VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/soundnotifications/test/ut",                 standard_caps), #Johan Olsson
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/audioctrl_tests",         standard_caps | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray_or_carsim}),# Torbjörn Sandsgård
@@ -87,6 +86,8 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray_or_carsim}), #Raju Yadav
     VTSTest("vendor/volvocars/hardware/vehicle/test/traffic_sign_information",      standard_caps | {cp.flexray_or_carsim}), #Vivek Kumaar
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
+    VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
+    VTSTest("vendor/volvocars/hardware/profiles/test/hmi_user",                     standard_caps | {cp.cem}), #Uguudei
 ]
 
 #This is for unstable tests that does not need to be run often
