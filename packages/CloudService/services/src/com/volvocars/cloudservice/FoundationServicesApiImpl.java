@@ -37,12 +37,15 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+    private String clientUri = "";
+
     public FoundationServicesApiImpl() {
 
     }
 
-    public void init(CloudConnection server) {
+    public void init(CloudConnection server, String clientUri) {
         this.server = server;
+        this.clientUri = clientUri;
         foundation_services_is_available = true;
     }
 
@@ -53,11 +56,10 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
         field.name = "Accept";
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
         headers.add(field);
-        String uri = "features-1";
         int timeout = 20000;
         //DoRequest
         try {
-            Response response = server.doGetRequest(uri, headers, timeout);
+            Response response = server.doGetRequest(clientUri, headers, timeout);
             byte[] bytesdata = new byte[response.responseData.size()];
 
             if (!HandleHttpResponseCode(response.httpResponse)) {

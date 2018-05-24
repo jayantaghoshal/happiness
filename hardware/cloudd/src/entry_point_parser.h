@@ -23,6 +23,6 @@ struct EntryPoint {
  * @parm data XML data containing the EntryPoint
  * @return An EntryPoint populated with the data contained within the XML data.
  */
-EntryPoint parse(const char* const data) throw(std::runtime_error);
+EntryPoint parse(const char* const data);
 }
 }  // namespace Connectivity

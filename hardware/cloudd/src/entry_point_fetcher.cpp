@@ -32,29 +32,36 @@ EntryPointFetcher::EntryPointFetcher(std::shared_ptr<CertHandlerInterface> cert_
 void EntryPointFetcher::RequestCallbackHandler(std::int32_t http_response_code,
                                                const std::string& data,
                                                const std::string& header) throw(std::runtime_error) {
+    // TODO: Handle retry times in a nicer way? (abengt34)
     using namespace std::chrono_literals;
     const std::array<std::chrono::milliseconds, 1> retry_times = {{1000ms}};
+    retry_index_ = std::min(retry_index_ + 1, retry_times.size() - 1);
+    auto rt = retry_times[retry_index_];
+    std::chrono::milliseconds t = std::chrono::duration_cast<std::chrono::milliseconds>(rt);
 
     if (http_response_code < 200 || http_response_code > 299) {
         ALOGD("[EpFetcher] Failed to get entry point (%s), response code %d",
               entry_point_url_.c_str(),
               http_response_code);
-        retry_index_ = std::min(retry_index_ + 1, retry_times.size() - 1);
-        auto rt = retry_times[retry_index_];
-        std::chrono::milliseconds t = std::chrono::duration_cast<std::chrono::milliseconds>(rt);
         retry_timer_handle_ = IDispatcher::GetDefaultDispatcher().EnqueueWithDelay((std::chrono::microseconds)t,
                                                                                    [this]() { GetEntryPoint(); });
     } else {
         ALOGD("[EpFetcher] Successfully received entry point");
-        EntryPointParser::EntryPoint ep;
-        try {
-            ep = EntryPointParser::parse(data.c_str());
-        } catch (const std::exception& e) {
-            ALOGW("[EpFetcher] Failed while parsing Entry Point Request: %s", e.what());
-        }
-        if (when_result_available_callback_) when_result_available_callback_(ep);
+        EntryPointParser::EntryPoint ep = EntryPointParser::parse(data.c_str());
 
-        cloud_request_ = nullptr;
+        // If any of the "mandatory" fields are missing, issue a new request
+        if (ep.host == "" || ep.client_uri == "" || ep.port == -1) {
+            ALOGD("[EpFetcher] Entry point data is incomplete, retry fetch entry point");
+            retry_timer_handle_ = IDispatcher::GetDefaultDispatcher().EnqueueWithDelay((std::chrono::microseconds)t,
+                                                                                       [this]() { GetEntryPoint(); });
+        } else {  // All "mandatory" fields exist, we are done!
+            ALOGD("[EpFetcher] Entry point data is complete, done fetching entry point");
+            if (when_result_available_callback_) {
+                when_result_available_callback_(ep);
+            }
+
+            cloud_request_ = nullptr;
+        }
     }
 }
 

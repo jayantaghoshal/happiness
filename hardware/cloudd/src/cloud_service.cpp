@@ -61,13 +61,25 @@ bool CloudService::FetchEntryPoint() {
             cep_port_ = entry_point.port;
         }
 
+        // Remove trailing "/" if there is one and copy everything from the previous "/" :
+        // "http://cep.eu.vcctest.ericssoncvc.com/features-1/" -> "features-1"
+        client_uri_ = entry_point.client_uri;
+        if (client_uri_.at(client_uri_.length() - 1) == '/') {
+            client_uri_.erase(client_uri_.end() - 1);
+        }
+        client_uri_ = client_uri_.substr(client_uri_.rfind("/") + 1);
+
         cep_mqtt_server_ = entry_point.signal_service_uri;
 
         ALOGD("[Service] CEP URL: %s:%d", cep_url_.c_str(), cep_port_);
         ALOGD("[Service] CEP MQTT server: %s", cep_mqtt_server_.c_str());
 
-        state_ = ConnectionState::CONNECTED;
-        ConnectToMqttServer();
+        SetConnectionState(ConnectionState::CONNECTED);
+
+        // Connect to MQTT if we have cep to MQTT in entry point data
+        if (cep_mqtt_server_ != "") {
+            ConnectToMqttServer();
+        }
 
     });
 
@@ -122,7 +134,7 @@ void CloudService::SetConnectionState(const ConnectionState state) {
         for (std::vector<android::sp<ICloudConnectionEventListener>>::iterator listener = listeners_.begin();
              listener != listeners_.end();
              /* increased inside loop */) {
-            auto result = listener->get()->isConnected(state == ConnectionState::CONNECTED);
+            auto result = listener->get()->isConnected(state == ConnectionState::CONNECTED, client_uri_);
             if (!result.isOk()) {
                 ALOGE("Listener no longer valid, removing from list");
                 listener = listeners_.erase(listener);
@@ -166,7 +178,7 @@ Return<void> CloudService::registerCloudConnectionEventListener(
     listeners_.push_back(listener);
 
     IDispatcher::EnqueueOnDefaultDispatcher(
-            [&, listener]() { listener->isConnected(state_ == ConnectionState::CONNECTED); });
+            [&, listener]() { listener->isConnected(state_ == ConnectionState::CONNECTED, client_uri_); });
 
     return Void();
 }

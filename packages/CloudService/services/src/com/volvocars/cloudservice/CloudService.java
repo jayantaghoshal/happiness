@@ -102,14 +102,14 @@ public class CloudService extends Service {
         }
     }
 
-    public void isConnected(boolean connected) {
+    public void isConnected(boolean connected, String clientUri) {
         Log.v(LOG_TAG, "isConnected: " + connected);
         if (!connected) {
             return;
         }
 
         try {
-            foundation_services_api.init(cloud_connection);
+            foundation_services_api.init(cloud_connection, clientUri);
 
             Log.v(LOG_TAG, "Calling fsapi.GetFeatureAvailable(SoftwareManagement)");
             foundation_services_api.isFeatureAvailable("SoftwareManagement", new SoftwareManagementFeatureCallbackImpl());

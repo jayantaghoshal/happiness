@@ -102,6 +102,7 @@ class CloudService : public ICloudConnection {
 
     std::string cep_url_;
     int cep_port_;
+    std::string client_uri_;
     std::string cep_mqtt_server_;
 };
 

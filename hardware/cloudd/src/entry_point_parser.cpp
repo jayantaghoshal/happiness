@@ -9,31 +9,53 @@
 #include <utility>
 #include <vector>
 
+#define LOG_TAG "CloudD"
+#include <cutils/log.h>
+
 namespace Connectivity {
 namespace EntryPointParser {
-EntryPointParser::EntryPoint parse(const char* const data_nullterminated) throw(std::runtime_error) {
+EntryPointParser::EntryPoint parse(const char* const data_nullterminated) {
     // TODO: Verify the XML signature, [IHU-14218]
 
     tinyxml2::XMLDocument doc;
+
+    tinyxml2::XMLElement* client_uri_element = nullptr;
+    tinyxml2::XMLElement* host_uri_element = nullptr;
+    tinyxml2::XMLElement* port_element = nullptr;
+    tinyxml2::XMLElement* signal_service_uri_element = nullptr;
+
+    ALOGV(LOG_TAG, "Parsing entrypoint XML data");
     doc.Parse(data_nullterminated);
     tinyxml2::XMLElement* entry_point_element = doc.GetDocument()->FirstChildElement("entry_point");
-    if (entry_point_element == nullptr) throw std::runtime_error("entry_point not found");
-    tinyxml2::XMLElement* client_uri_element = entry_point_element->FirstChildElement("client_uri");
-    if (client_uri_element == nullptr) throw std::runtime_error("Client URI not found");
-    tinyxml2::XMLElement* host_uri_element = entry_point_element->FirstChildElement("host");
-    if (host_uri_element == nullptr) throw std::runtime_error("host not found");
-    tinyxml2::XMLElement* port_element = entry_point_element->FirstChildElement("port");
-    if (port_element == nullptr) throw std::runtime_error("port not found");
-    const std::string port_str = std::string{port_element->GetText()};
-    const int port = std::stoi(port_str);
+    if (entry_point_element != nullptr) {
+        ALOGV(LOG_TAG, "Found entrypoint element in XML data");
 
-    tinyxml2::XMLElement* signal_service_uri_element = entry_point_element->FirstChildElement("signal_service_uri");
-    if (client_uri_element == nullptr) throw std::runtime_error("Signal service uri (MQTT broker uri) not found");
+        client_uri_element = entry_point_element->FirstChildElement("client_uri");
+        if (client_uri_element == nullptr) {
+            ALOGE(LOG_TAG, "Client URI element not found in entrypoint XML data");
+        }
 
-    return EntryPointParser::EntryPoint{std::string{client_uri_element->GetText()},
-                                        std::string{host_uri_element->GetText()},
-                                        port,
-                                        std::string{signal_service_uri_element->GetText()}};
+        host_uri_element = entry_point_element->FirstChildElement("host");
+        if (host_uri_element == nullptr) {
+            ALOGE(LOG_TAG, "Host URI element not found in entrypoint XML data");
+        }
+
+        port_element = entry_point_element->FirstChildElement("port");
+        if (port_element == nullptr) {
+            ALOGE(LOG_TAG, "Port element not found in entrypoint XML data");
+        }
+
+        signal_service_uri_element = entry_point_element->FirstChildElement("signal_service_uri");
+        if (client_uri_element == nullptr) {
+            ALOGD(LOG_TAG, "Signal Service URI element not found in entrypoint XML data");
+        }
+    }
+
+    return EntryPointParser::EntryPoint{
+            client_uri_element != nullptr ? client_uri_element->GetText() : "",
+            host_uri_element != nullptr ? host_uri_element->GetText() : "",
+            port_element != nullptr ? std::stoi(port_element->GetText()) : -1,
+            signal_service_uri_element != nullptr ? signal_service_uri_element->GetText() : ""};
 }
 }
 }

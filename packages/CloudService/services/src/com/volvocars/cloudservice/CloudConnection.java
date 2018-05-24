@@ -91,9 +91,9 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
     }
 
     @Override
-    public void isConnected(boolean connected) {
-        Log.d(LOG_TAG, "Backend connection status changed to  " + connected);
-        service.isConnected(connected);
+    public void isConnected(boolean connected, String clientUri) {
+        Log.d(LOG_TAG, "Backend connection status changed to  " + connected + " (clientUri = " + clientUri + ")");
+        service.isConnected(connected, clientUri);
     }
 
     @Override
