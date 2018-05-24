@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          coreApp="true"
+          package="com.volvocars.remotectrlservice.generalsettingsservice.service"
+          android:exported="true"
+          android:sharedUserId="android.uid.system">
+
+    <permission
+        android:name="android.volvocars.permission.REMOTE_CTRL"
+        android:protectionLevel="system|signature"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.volvocars.permission.REMOTE_CTRL"/>
+
+    <application
+        android:label="GeneralSettingsService"
+        android:persistent="true">
+        <receiver
+            android:name=".StartOnBoot"
+            android:enabled="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".RemoteGeneralSettingsService"
+            android:enabled="true"
+            android:exported="true"
+            android:persistent="true"
+            android:singleUser="true">
+            <intent-filter>
+                <action android:name=".RemoteGeneralSettingsService.BIND"/>
+                <action android:name="generalsettingsservice.broadcastaction.checkoverlaystate"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".CheckDisplayBrightnessService"
+            android:enabled="true"
+            android:exported="true"
+            android:persistent="true"
+            android:singleUser="true">
+
+        </service>
+    </application>
+
+</manifest>

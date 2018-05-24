@@ -62,7 +62,8 @@ PRODUCT_PACKAGES += \
     RemoteClimateService \
     RemoteMediaCtrlGateway \
     RemoteMediaCtrlService \
-
+    RemoteCtrlGeneralSettingsGateway \
+    RemoteCtrlGeneralSettingsService \
 
 ##############################################################
 # SWDL stuff
