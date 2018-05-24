@@ -41,7 +41,8 @@ public class VehicleFunctionsActivity extends AppCompatActivity {
             viewPager.setCurrentItem(position, false);
             return true;
         });
-
+        bottomNavigationBar.setCurrentIndex(1);
+        viewPager.setCurrentItem(1, false);
         viewPager.setPagingEnabled(false);
     }
 }
