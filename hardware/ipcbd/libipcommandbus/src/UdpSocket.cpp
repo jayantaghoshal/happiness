@@ -34,13 +34,12 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
 
     if ((Message::Ecu::ALL == ecu) || (Message::Ecu::IHU == ecu)) {
         // Look up IHU info from ECU map
-        auto it = std::find_if(
-                ecu_ip_map_.begin(), ecu_ip_map_.end(), [](const std::pair<Message::Ecu, EcuAddress>& pair) {
-                    return pair.first == Message::Ecu::IHU;
-                });
+        auto it = std::find_if(ecu_ip_map_.begin(),
+                               ecu_ip_map_.end(),
+                               [&ecu](const std::pair<Message::Ecu, EcuAddress>& pair) { return pair.first == ecu; });
 
         if (it == ecu_ip_map_.end()) {
-            ALOGW("[UdpSocket] IHU not found in ECU map!");
+            ALOGW("[UdpSocket] Socket config for ECU: %s not found in ECU map!", Message::EcuStr(ecu));
             return;
         }
 
@@ -49,20 +48,6 @@ void UdpSocket::setup(const Message::Ecu& ecu) {
 
         // If we are setting up a broadcast socket
         if (Message::Ecu::ALL == ecu) {
-            // Look up ALL (broadcast) info from ECU map
-            it = std::find_if(
-                    ecu_ip_map_.begin(), ecu_ip_map_.end(), [](const std::pair<Message::Ecu, EcuAddress>& pair) {
-                        return pair.first == Message::Ecu::ALL;
-                    });
-
-            if (it == ecu_ip_map_.end()) {
-                ALOGW("[UdpSocket] \"ALL\" (broadcast) not found in ECU map!");
-                return;
-            }
-
-            // Use broadcast address for broadcast socket
-            local_ip = it->second.ip;
-
             set_option(SOL_SOCKET, SO_BROADCAST, true);
         }
 
@@ -226,7 +211,7 @@ void UdpSocket::readEventHandler() {
     auto it = std::find_if(ecu_ip_map_.begin(),
                            ecu_ip_map_.end(),
                            [&fromIp, fromPort](const std::pair<Message::Ecu, EcuAddress>& pair) {
-                               return (pair.second.ip == fromIp && pair.second.port == fromPort);
+                               return (pair.second.ip == fromIp);
                            });
 
     auto ecu = (it != ecu_ip_map_.end()) ? it->first : Message::Ecu::UNKNOWN;

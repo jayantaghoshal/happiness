@@ -233,8 +233,16 @@ void TransportServices::sendPdu(Message::Ecu destination, const Pdu& pdu) {
         }
 
         if (destination == Message::Ecu::ALL) {
+            if (m_pBroadcastSocket == nullptr) {
+                ALOGV("[TransportServices] ERROR, trying to send PDU on nullptr socket(m_pBroadcastSocket)");
+                return;
+            }
             m_pBroadcastSocket->writeTo(buffer, destination);
         } else {
+            if (m_pSocket == nullptr) {
+                ALOGV("[TransportServices] ERROR, trying to send PDU on nullptr socket(m_pSocket)");
+                return;
+            }
             m_pSocket->writeTo(buffer, destination);
         }
     } catch (const SocketException& e) {
@@ -301,11 +309,14 @@ void TransportServices::generateErrorPdu(Pdu& errorPdu, const Pdu& pdu, ErrorCod
 }
 
 void TransportServices::sendError(Message::Ecu destination, const Pdu& pdu, ErrorCode errorCode, uint16_t errorInfo) {
-    Pdu errorPdu;
-
-    generateErrorPdu(errorPdu, pdu, errorCode, errorInfo);
-
-    this->sendPdu(destination, errorPdu);
+    // If incoming message is of typ NOTIFICATION_CYCLIC, no response shall be sent on error. (REQPROD 346855)
+    if (pdu.header.operation_type != IpCmdTypes::OperationType::NOTIFICATION_CYCLIC) {
+        Pdu errorPdu;
+        generateErrorPdu(errorPdu, pdu, errorCode, errorInfo);
+        this->sendPdu(destination, errorPdu);
+    } else {
+        ALOGV("[TransportServices]: Will not send error message as reponse to NOTIFICATION_CYCLIC message");
+    }
 }
 
 void TransportServices::handleInUnicastData(void) {
@@ -354,7 +365,6 @@ void TransportServices::handleInData(ISocket* socket) {
         const bool pduDataValid = pdu.fromData(buffer);
 
         // Since the error codes are ranked we shall not test for payload length here, but after the other header tests.
-
         // TODO: Resolve if this check is valid. According to example in spec a message with no sender handle id shall
         // be ignored and discarded.
         uint32_t sender_handle_mask = ((static_cast<uint16_t>(pdu.header.service_id) & 0xFF) << 24) |
