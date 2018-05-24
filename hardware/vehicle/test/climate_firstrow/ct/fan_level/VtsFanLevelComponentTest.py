@@ -20,10 +20,12 @@ from subprocess import call
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 from com.dtmilano.android.viewclient import ViewClient
-import vehiclehalcommon
+from vehiclehalcommon import VehicleHalCommon, wait_for, get_dataelements_connection
 from generated.datatypes import VehModMngtGlbSafe1, HmiHvacFanLvl, TwliBriSts1, IdPen
 from generated import datatypes as DE
+from uiautomator import device as device
 
+wait_time_seconds = 1
 
 class VtsFanLevelComponentTest(base_test.BaseTestClass):
     """Testing FanLevel functions"""
@@ -39,23 +41,23 @@ class VtsFanLevelComponentTest(base_test.BaseTestClass):
         # Disable the reminder bubble about how to leave full screen in the climate pane
         self.dut.shell.one.Execute("settings put global policy_control \"immersive.preconfirms=*\"")
         self.dut.shell.one.Execute("input keyevent 3") # Home button press
+        self.dut.adb.shell("input tap 384 988") # Open climate view
 
-        self.fr = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
-        self.vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        self.vc, self.device = self.vHalCommon.getViewClient()
-
-        # Open climate view and dump the view
-        self.device.touchDip(388.0, 988.0, 0)
-        self.vc.dump()
+        self.fr = get_dataelements_connection(self.dut.adb)
+        self.vHalCommon = VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
 
         #Get fan buttons
-        self.fan_off = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_off)
-        self.fan_level_1 = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_level_1)
-        self.fan_level_2 = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_level_2)
-        self.fan_level_3 = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_level_3)
-        self.fan_level_4 = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_level_4)
-        self.fan_level_5 = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_level_5)
-        self.fan_max = self.vc.findViewByIdOrRaise(self.vHalCommon.fan_max)
+        self.fan_off = device(resourceId=self.vHalCommon.fan_off)
+        self.fan_level_1 = device(resourceId=self.vHalCommon.fan_level_1)
+        self.fan_level_2 = device(resourceId=self.vHalCommon.fan_level_2)
+        self.fan_level_3 = device(resourceId=self.vHalCommon.fan_level_3)
+        self.fan_level_4 = device(resourceId=self.vHalCommon.fan_level_4)
+        self.fan_level_5 = device(resourceId=self.vHalCommon.fan_level_5)
+        self.fan_max = device(resourceId=self.vHalCommon.fan_max)
+
+        #get properties and zones
+        self.prop_fan = self.vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED
+        self.zone_center = self.vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER
 
         # To avoid setting illumination to night mode which will dim the CSD
         self.fr.send_TwliBriSts(TwliBriSts1.Day)
@@ -63,11 +65,8 @@ class VtsFanLevelComponentTest(base_test.BaseTestClass):
 
 
     def setUp(self):
-        # Open climate view
-        self.device.touchDip(388.0, 988.0, 0)
-
         self.vehmod = VehModMngtGlbSafe1()
-        self.vehmod.CarModSts1 = DE.CarModSts1.CarModDyno
+        self.vehmod.CarModSts1 = DE.CarModSts1.CarModNorm
         self.vehmod.UsgModSts = DE.UsgModSts1.UsgModActv
         self.vehmod.Chks = 0
         self.vehmod.Cntr = 0
@@ -78,119 +77,125 @@ class VtsFanLevelComponentTest(base_test.BaseTestClass):
         self.vehmod.PwrLvlElecSubtyp = 0
         self.vehmod.FltEgyCnsWdSts = DE.FltEgyCns1.Flt
 
-    def tearDown(self):
-            self.dut.shell.one.Execute("input keyevent 3")
-
     def tearDownClass(self):
         try:
+            self.dut.shell.one.Execute("input keyevent 3")
             self.fr.close()
         except:
             pass
 
+    def assertFanLevelUI(self,expected_fan_off = False, expected_fan_one = False, expected_fan_two = False, expected_fan_three = False,\
+        expected_fan_four = False, expected_fan_five = False, expected_fan_max = False):
+        wait_for(lambda : self.fan_off.selected, expected_fan_off, wait_time_seconds, "ERROR : Fan Level Off UI Value mismatch.")
+        wait_for(lambda : self.fan_level_1.selected, expected_fan_one, wait_time_seconds, "ERROR : Fan Level one UI Value mismatch.")
+        wait_for(lambda : self.fan_level_2.selected, expected_fan_two, wait_time_seconds, "ERROR : Fan Level two UI Value mismatch.")
+        wait_for(lambda : self.fan_level_3.selected, expected_fan_three, wait_time_seconds, "ERROR : Fan Level three UI Value mismatch.")
+        wait_for(lambda : self.fan_level_4.selected, expected_fan_four, wait_time_seconds, "ERROR : Fan Level four UI Value mismatch.")
+        wait_for(lambda : self.fan_level_5.selected, expected_fan_five, wait_time_seconds, "ERROR : Fan Level five UI Value mismatch.")
+        wait_for(lambda : self.fan_max.selected, expected_fan_max, wait_time_seconds, "ERROR : Fan Level max UI Value mismatch.")
+
 
     def testFanLevel(self):
-        _s = 0.5
         fr = self.fr
         vHalCommon = self.vHalCommon
 
         # Set climate to Active
-        # TODO: Run negative tests
         self.vehmod.UsgModSts = DE.UsgModSts1.UsgModDrvg
         fr.send_VehModMngtGlbSafe1(self.vehmod)
         fr.send_ClimaActv(DE.OnOff1.On)
-        self.vc.sleep(_s)
 
         # Set to OFF
-        self.fan_off.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 0)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off)
+        self.fan_off.click()
+        self.assertFanLevelUI(True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [0], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set to Level 1
-        self.fan_level_1.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 1)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinusMinus)
+        self.fan_level_1.click()
+        self.assertFanLevelUI(False,True)
+        wait_for(lambda : self.fan_off.selected, False, wait_time_seconds, "ERROR : Fan Level UI Value mismatch.")
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [1], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinusMinus, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set to Level 2
-        self.fan_level_2.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 2)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus)
+        self.fan_level_2.click()
+        self.assertFanLevelUI(False,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [2], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set to Level 3
-        self.fan_level_3.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 3)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutoNorm)
+        self.fan_level_3.click()
+        self.assertFanLevelUI(False,True,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [3], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutoNorm, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set to Level 4
-        self.fan_level_4.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 4)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlus)
+        self.fan_level_4.click()
+        self.assertFanLevelUI(False,True,True,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [4], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlus, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set to Level 5
-        self.fan_level_5.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 5)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlusPlus)
+        self.fan_level_5.click()
+        self.assertFanLevelUI(False,True,True,True,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [5], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutPlusPlus, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set to Max
-        self.fan_max.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED, vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 6)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Max)
+        self.fan_max.click()
+        self.assertFanLevelUI(False,True,True,True,True,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [6], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Max, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
     def testFanLevelAvailability(self):
-        _s = 0.5
         fr = self.fr
         vHalCommon = self.vHalCommon
 
         # Set climate to Active
-        print("set to active")
         self.vehmod.UsgModSts = DE.UsgModSts1.UsgModDrvg
         fr.send_VehModMngtGlbSafe1(self.vehmod)
         fr.send_ClimaActv(DE.OnOff1.On)
 
-        self.vc.sleep(_s)
         # Set to Level 2
-        print("set to Level 2")
-        self.fan_level_2.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED,
-                                           vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 2)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus)
+        self.fan_level_2.click()
+        self.assertFanLevelUI(False,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [2], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set climate to Inactive
-        print("set to inactive")
         self.vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
         fr.send_VehModMngtGlbSafe1(self.vehmod)
         fr.send_ClimaActv(DE.OnOff1.Off)
 
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED,
-                                           vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 7)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off)
+        self.assertFanLevelUI(False,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [7], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Try to set to Level 3 - will not be possible
-        print("Try to set to Level 3 - will not work")
-        self.fan_level_3.touch()
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED,
-                                           vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 7)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off)
+        self.fan_level_3.click()
+        self.assertFanLevelUI(False,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [7], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.Off, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
         # Set climate to Active - will go back to previous state i.e. 2
-        print("Set climate to Active - will go back to previous state i.e. 2")
         self.vehmod.UsgModSts = DE.UsgModSts1.UsgModDrvg
         fr.send_VehModMngtGlbSafe1(self.vehmod)
         fr.send_ClimaActv(DE.OnOff1.On)
 
-        self.vc.sleep(_s)
-        vHalCommon.assert_prop_area_equals(vHalCommon.vtypes.VehicleProperty.HVAC_FAN_SPEED,
-                                           vHalCommon.vtypes.VehicleAreaZone.ROW_1_CENTER, 2)
-        asserts.assertEqual(fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus)
+        self.assertFanLevelUI(False,True,True)
+        wait_for(lambda : self.vHalCommon.readVhalProperty(self.prop_fan, self.zone_center)['value']['int32Values'], [2], \
+             wait_time_seconds, "ERROR : Fan Level Property value mismatch.")
+        wait_for(lambda : self.fr.get_HmiHvacFanLvlFrnt(), HmiHvacFanLvl.LvlAutMinus, wait_time_seconds, "ERROR : Fan Level FR Value mismatch.")
 
 if __name__ == "__main__":
     test_runner.main()
