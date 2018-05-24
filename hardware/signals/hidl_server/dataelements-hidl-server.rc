@@ -1,5 +1,5 @@
 service dataelements-hidl-server /vendor/bin/dataelements-hidl-server
-    class main
+    class early_hal
     user root
     group root
     seclabel u:r:dataelements-hidl-server:s0

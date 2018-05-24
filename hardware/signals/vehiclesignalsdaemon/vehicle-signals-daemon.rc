@@ -11,7 +11,7 @@ on property:ro.boot.hardware_type=JPN
    symlink /dev/ttyACM0 /dev/ttyFlexray
 
 service vehicle-signals-daemon /vendor/bin/vehicle-signals-daemon /dev/ttyFlexray
-    class main
+    class early_hal
     user root
     group root
     seclabel u:r:vehicle-signals-daemon:s0
