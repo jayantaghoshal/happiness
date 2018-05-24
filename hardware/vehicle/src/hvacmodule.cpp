@@ -12,18 +12,21 @@
 #include <functional>
 #include <memory>
 
+#include <v0/org/volvocars/climate/FirstRow.hpp>
 #include "common_factory.h"
 #include "common_types_printers.h"
 #include "first_row_printers.h"
 #include "logging_context.h"
+
 #undef LOG_TAG
 #define LOG_TAG "HvacModule"
 
 LOG_SET_DEFAULT_CONTEXT(FirstRowContext)
 
 using namespace v0::org::volvocars::climate;
+using FirstRowGen = v0::org::volvocars::climate::FirstRow;
 using namespace android::hardware::automotive::vehicle::V2_0;
-using namespace vendor::volvocars::hardware::vehiclehal::V1_0::impl;
+// using namespace vendor::volvocars::hardware::vehiclehal::V1_0::impl;
 using namespace std::placeholders;
 
 using namespace android;
@@ -138,7 +141,7 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
       prop_defroster(propconfig_defroster(), dispatcher, vehicleHal),
       prop_maxdefroster(propconfig_maxdefrost(), dispatcher, vehicleHal),
       prop_ac(propconfig_acon(), dispatcher, vehicleHal),
-      prop_fanlevelfront(propconfig_fanlevelfront(), dispatcher, vehicleHal),
+      prop_fanlevelfront(propconfig_fanlevelfront(), PaPropHandlerHelper::notUsedStatusID, dispatcher, vehicleHal),
       prop_fandir(propconfig_fandirection(), dispatcher, vehicleHal),
       prop_temperature_mode(propconfig_temperaturemode(), dispatcher, vehicleHal) {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,9 +279,17 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
     });
     subs_.push_back(logicFactory_.fanLevelFront_.subscribeAndCall([this](const auto& state) {
         log_debug() << "fireFanLevelFrontAttributeChanged " << state;
-        prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_),
-                                    VehiclePropertyStatus::AVAILABLE,
-                                    toInt(VehicleAreaZone::ROW_1_CENTER));
+        if ((state != FirstRowGen::FanLevelFrontValue::DISABLED) &&
+            (state != FirstRowGen::FanLevelFrontValue::SYSTEM_ERROR)) {
+            log_debug() << "fireFanLevel is available ";
+            prop_fanlevelfront.PushProp(static_cast<int32_t>(state.value_),
+                                        vccvhal10::PAStatus::Active,
+                                        toInt(VehicleAreaZone::ROW_1_CENTER));
+        } else if (state == FirstRowGen::FanLevelFrontValue::DISABLED) {
+            prop_fanlevelfront.PushStatus(vccvhal10::PAStatus::Disabled, toInt(VehicleAreaZone::ROW_1_CENTER));
+        } else if (state == FirstRowGen::FanLevelFrontValue::SYSTEM_ERROR) {
+            prop_fanlevelfront.PushStatus(vccvhal10::PAStatus::SystemError, toInt(VehicleAreaZone::ROW_1_CENTER));
+        }
     }));
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////

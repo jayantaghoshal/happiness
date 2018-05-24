@@ -6,9 +6,10 @@
 #pragma once
 
 #include "first_row_factory.h"
-#include "modulepropertyhandler.h"
 #include "notifiable_property.h"
+#include "papropertyhandler.h"
 #include "propertyhandler.h"
+
 using namespace v0::org::volvocars::climate;
 
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
@@ -83,7 +84,7 @@ class HvacModule {
     VhalPropertyHandler<bool> prop_defroster;
     VhalPropertyHandler<bool> prop_maxdefroster;
     VhalPropertyHandler<bool> prop_ac;
-    VhalPropertyHandler<int32_t> prop_fanlevelfront;
+    PAPropHandler<int32_t> prop_fanlevelfront;
     VhalPropertyHandler<int32_t> prop_fandir;
     VhalPropertyHandler<int32_t> prop_temperature_mode;
 };
