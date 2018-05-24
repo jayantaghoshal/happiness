@@ -12,6 +12,16 @@ import json
 
 class Artifactory(object):
 
+    def __init__(self, uri='https://swf1.artifactory.cm.volvocars.biz/artifactory', verbose=False):
+        super(Artifactory, self).__init__()
+        self.uri = uri
+        try:
+            self._verify_uri(self.uri)
+        except:
+            print("failed for URL: " + self.uri)
+            return None
+        if verbose: print("URI OK: " + self.uri)
+
     def retrieve_artifacts(self, uri, dest_dir):
         ''' Download all files in directory '''
         response = self.properties(uri)
@@ -63,6 +73,11 @@ class Artifactory(object):
         latest_position = creation_dates.index(max(creation_dates))
         return build_uris[latest_position]
 
+    def _verify_uri(self, uri):
+        '''Send a get request to verify the URI'''
+        r = requests.get(uri)
+        r.raise_for_status()
+
     def _verify_checksum(self, filename, checksum):
         calculated_checksum = self._check_sum("md5", filename)
         if checksum != calculated_checksum:
@@ -113,7 +128,7 @@ class Artifactory(object):
         return self._base_url() + '/' + uri
 
     def _base_url(self):
-        return "https://swf1.artifactory.cm.volvocars.biz/artifactory"
+        return self.uri
 
     def _headers(self):
         return {
