@@ -11,7 +11,7 @@ import android.os.Parcelable;
 public class CommissionElement implements Parcelable {
 
     public enum Action {
-        UNKNOWN, ORDER_SOFTWARE_INSTALLATION, REQUEST_INSTALLATION_CANCELLATION, ENTER_INSTALLATION_MODE
+        UNKNOWN, ORDER_SOFTWARE_INSTALLATION, REQUEST_INSTALLATION_CANCELLATION;
     }
 
     public enum Reason {
@@ -85,8 +85,6 @@ public class CommissionElement implements Parcelable {
                 return Action.ORDER_SOFTWARE_INSTALLATION;
             case "REQUEST_INSTALLATION_CANCELLATION":
                 return Action.REQUEST_INSTALLATION_CANCELLATION;
-            case "ENTER_INSTALLATION_MODE":
-                return Action.ENTER_INSTALLATION_MODE;
             default:
                 return Action.UNKNOWN;
             }

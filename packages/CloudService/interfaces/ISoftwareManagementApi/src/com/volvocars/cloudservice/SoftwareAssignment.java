@@ -69,6 +69,98 @@ public class SoftwareAssignment implements Parcelable {
         }
     }
 
+    public static class ActionRequest implements Parcelable {
+
+        public enum Type {
+            INSTALLATION, CANCELLATION, WITHDRAWAL;
+        }
+
+        public enum Reason {
+            AUTOMATIC_UPDATE, USER, SYSTEM;
+        }
+
+        // Type of action request. Can be either:
+        // INSTALLATION (customer initiate direct or indirect via Commission).
+        // CANCELLATION (customer initiate via Commission).
+        // WITHDRAWAL (backend system initiate vi OTA-105).
+        public Type type;
+        // Unique id of the client that performs the action request, eg. "VIN" for a
+        // vehicle, "volvoid" for a system name for a backend-system.
+        public String clientId = "";
+        // AUTOMATIC_UPDATE (for instance auto commission).
+        // USER (for instance a user orders or cancels a software installation).
+        // SYSTEM (for instance a software withdrawal from backend).
+        public Reason reason;
+        // Date and time of when the software action was performed.
+        public String created;
+
+        public ActionRequest(Parcel in) {
+            readFromParcel(in);
+        }
+
+        public ActionRequest() {
+        }
+
+        public static final Creator<ActionRequest> CREATOR = new Creator<ActionRequest>() {
+            @Override
+            public ActionRequest createFromParcel(Parcel in) {
+                return new ActionRequest(in);
+            }
+
+            @Override
+            public ActionRequest[] newArray(int size) {
+                return new ActionRequest[size];
+            }
+        };
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(type.toString());
+            dest.writeString(clientId);
+            dest.writeString(reason.toString());
+            dest.writeString(created);
+        }
+
+        public void readFromParcel(Parcel in) {
+            type = stringToType(in.readString());
+            clientId = in.readString();
+            reason = stringToReason(in.readString());
+            created = in.readString();
+        }
+
+        @Override
+        public int describeContents() {
+            // As long there are no children, this function is quite useless?
+            return 0;
+        }
+
+        public static Type stringToType(String str) {
+            switch (str) {
+            case "INSTALLATION":
+                return Type.INSTALLATION;
+            case "CANCELLATION":
+                return Type.CANCELLATION;
+            case "WITHDRAWAL":
+                return Type.WITHDRAWAL;
+            default:
+                return null;
+            }
+        }
+
+        public static Reason stringToReason(String str) {
+            switch (str) {
+            case "AUTOMATIC_UPDATE":
+                return Reason.AUTOMATIC_UPDATE;
+            case "USER":
+                return Reason.USER;
+            case "SYSTEM":
+                return Reason.SYSTEM;
+            default:
+                return null;
+            }
+        }
+    }
+
     // Unique id of the software
     public String id = "";
     // The name of the software
@@ -91,7 +183,8 @@ public class SoftwareAssignment implements Parcelable {
     public Status status = Status.UNKNOWN;
     // Software type can be either: SYSTEM, ACCESSORY
     public Type type = Type.UNKNOWN;
-    // Deliverable type can be either: UPDATE, NEW (depending on type (need a check for this?))
+    // Deliverable type can be either: UPDATE, NEW (depending on type (need a check
+    // for this?))
     public DeliverableType deliverableType = DeliverableType.UNKNOWN;
     // Installation type can be either: BOOT, NORMAL
     public InstallationType installationType = InstallationType.UNKNOWN;
@@ -100,6 +193,8 @@ public class SoftwareAssignment implements Parcelable {
     // URI for commissioning the software. Only shown if software/status is
     // COMMISSIONABLE or COMMISSIONED.
     public String commissionUri = "";
+    // Element for action request made.
+    public ActionRequest actionRequest = new ActionRequest();
     // Installation order element with commissioned software.
     public InstallationOrder installationOrder = new InstallationOrder();
 
@@ -146,7 +241,8 @@ public class SoftwareAssignment implements Parcelable {
 
     @Override
     public String toString() {
-        String string = "id: " + id + "\n name: " + name + "\n shortDescription: " + shortDescription + "\n status: " + status + "\n installationOrder.status: " + installationOrder.status + "\n deliverableType: " + deliverableType.toString();
+        String string = "id: " + id + "\n name: " + name + "\n shortDescription: " + shortDescription + "\n status: "
+                + status + "\n" + "deliverableType: " + deliverableType.toString();
         return string;
     }
 

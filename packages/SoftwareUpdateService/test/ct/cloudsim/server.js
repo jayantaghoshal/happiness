@@ -75,9 +75,6 @@ function createInstallationOrderId(counter) {
 function addInstallationOrder(obj, id) {
   var installation_order_data = {};
   installation_order_data['id'] = id;
-  installation_order_data['status'] = "READY";
-  installation_order_data['created_by'] = "1FTKR1EDXBPB10452";
-  installation_order_data['created'] = "2002-05-30T09:00:00";
   installation_order_data['downloads_uri'] = "/downloads";
   installation_order_data['install_notifications_uri'] = "/installnotifications";
   installation_order_data['installation_report_uri'] = "/installationreport";
@@ -85,6 +82,17 @@ function addInstallationOrder(obj, id) {
 
   obj['installation_order'] = installation_order_data
   obj['status'] = "COMMISSIONED";
+  return obj;
+}
+
+function addActionRequest(obj, type, reason) {
+  var action_request = {};
+  action_request['type'] = type;
+  action_request['client_id'] = "1FTKR1EDXBPB10452";
+  action_request['reason'] = reason;
+  action_request['created'] = "2018-05-24T10:20:00";
+
+  obj['action_request'] = action_request;
   return obj;
 }
 
@@ -135,6 +143,7 @@ server.post('/commission', function (req, res, next) {
     counter++;
     console.log(assignment)
     addInstallationOrder(assignment, createInstallationOrderId(counter));
+    addActionRequest(assignment, "INSTALLATION", req.body.reason);
     found = true;
   }
 

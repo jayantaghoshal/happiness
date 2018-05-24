@@ -31,8 +31,8 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
     private ISoftwareUpdateApp softwareUpdateApp;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView swId, name, desc, installationId, installationStatus, state, downloads, downloadedResources;
-        public LinearLayout swIdLayout, installationIdLayout, installationStatusLayout, downloadsLayout,
+        public TextView swId, name, desc, installationId, state, downloads, downloadedResources;
+        public LinearLayout swIdLayout, installationIdLayout, downloadsLayout,
                 downloadedResourcesLayout;
         public ImageView overflow, icon;
         public CardView cardView;
@@ -51,8 +51,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             downloadsLayout = (LinearLayout) view.findViewById(R.id.downloadsLayout);
             downloadedResourcesLayout = (LinearLayout) view.findViewById(R.id.downloadedResourcesLayout);
             downloadedResources = (TextView) view.findViewById(R.id.downloadedResources);
-            installationStatus = (TextView) view.findViewById(R.id.installationStatus);
-            installationStatusLayout = (LinearLayout) view.findViewById(R.id.installationStatusLayout);
             state = (TextView) view.findViewById(R.id.state);
             overflow = (ImageView) view.findViewById(R.id.overflow);
             icon = (ImageView) view.findViewById(R.id.icon);
@@ -138,12 +136,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
         else
             holder.installationIdLayout.setVisibility(View.INVISIBLE);
 
-        holder.installationStatus.setText(swInfo.softwareAssignment.installationOrder.status.name());
-        if (holder.moreInfo && !swInfo.softwareAssignment.installationOrder.status.name().isEmpty())
-            holder.installationStatusLayout.setVisibility(View.VISIBLE);
-        else
-            holder.installationStatusLayout.setVisibility(View.INVISIBLE);
-
         String str = "";
         if(!swInfo.downloadInfo.resourceUris.isEmpty()) {
             str = Integer.toString(swInfo.downloadInfo.resourceUris.size());
@@ -179,8 +171,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                     holder.swIdLayout.setVisibility(View.VISIBLE);
                     if (!swInfo.softwareAssignment.installationOrder.id.isEmpty())
                         holder.installationIdLayout.setVisibility(View.VISIBLE);
-                    if (!swInfo.softwareAssignment.installationOrder.status.name().isEmpty())
-                        holder.installationStatusLayout.setVisibility(View.VISIBLE);
                     if (!swInfo.downloadInfo.resourceUris.isEmpty())
                         holder.downloadsLayout.setVisibility(View.VISIBLE);
                     if (!swInfo.downloadInfo.downloadedResources.isEmpty())
@@ -188,7 +178,6 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                 } else {
                     holder.swIdLayout.setVisibility(View.INVISIBLE);
                     holder.installationIdLayout.setVisibility(View.INVISIBLE);
-                    holder.installationStatusLayout.setVisibility(View.INVISIBLE);
                     holder.downloadsLayout.setVisibility(View.INVISIBLE);
                     holder.downloadedResourcesLayout.setVisibility(View.INVISIBLE);
                 }
