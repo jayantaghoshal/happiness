@@ -52,7 +52,7 @@ public final class FeaturesParser extends XmlParser {
             }
             String name = parser.getName();
             // Starts by looking for the feature tag
-            if (name.equals(FEATURES)) {
+            if (name.equals("feature")) {
                 features.add(readFeature(parser));
             } else {
                 SkipElement(parser);
