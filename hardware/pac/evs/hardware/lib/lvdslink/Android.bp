@@ -1,0 +1,38 @@
+/*
+ * Copyright 2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_defaults {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware-lvdslink-defaults",
+
+    defaults: [
+        "volvocars_cc_defaults_hq_pac_debug",
+        "vcc_pac_use_libdbg",
+    ],
+
+    cflags: [
+        "-DLOG_TAG=\"lvdslink\"",
+    ],
+}
+
+cc_library_static {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware-lvdslink-static-lib",
+
+    defaults: [
+        "android.hardware.automotive.evs.vcc@1.0-hardware-lvdslink-defaults",
+    ],
+
+    srcs: [
+        "src/gpio.cpp",
+    ],
+}
+
+// Header library for lvdslink unit tests
+cc_library_headers {
+    name: "android.hardware.automotive.evs.vcc@1.0-hardware-lvdslink-test-header-lib",
+
+    export_include_dirs: [
+        "src",
+    ],
+}

@@ -35,6 +35,7 @@ test_plan_gate = [
 
 test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/dim/test/ct/apix",                           standard_caps | {cp.apix}), #Erik Dahlgren
+    VTSTest("vendor/volvocars/hardware/pac/evs/hardware/lib/lvdslink/test/ut/",     standard_caps), #VtsHalPacEvsHardwareLvdslink, Lars Brange
     VTSTest("vendor/volvocars/hardware/pac/evs/hardware/test/ut",                   standard_caps), #VtsHalPacEvsHardware, Janne Petkovski
     VTSTest("vendor/volvocars/hardware/pac/evs/manager/test/ut",                    standard_caps), #VtsHalPacEvsManager, Mikael Olsson
     VTSTest("vendor/volvocars/hardware/pac/libpacconfig/test/ut",                   standard_caps), #VtsLibPacConfig, Mikael Olsson
