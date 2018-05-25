@@ -108,6 +108,7 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
         sounds = audio.audioutils.get_sounds(norm_file, silence_threshold=silence_threshold)
         return sounds
 
+
     # ----------------------------------------------------------------------------------------------------------
     # Test Park Brake sound.
     # ----------------------------------------------------------------------------------------------------------
@@ -798,6 +799,187 @@ class VtsSoundNotificationIT(base_test.BaseTestClass):
 
         self.logger.info("=== testCollisionWarnReqSound result %s ===" % res)
         asserts.assertEqual(res, True, "Collision Warning Req Sound NOT MATCHED - FAILED")
+
+    # ----------------------------------------------------------------------------------------------------------
+    # Test Cross Traffic Alert warning sound(Left side)
+    # ----------------------------------------------------------------------------------------------------------
+    def testCrossTrafficLeftWarnSound(self):
+        # This is Cross Traffic Alert warning sound, SPA-UI-S051.wav
+        self.logger.info("=== Test testCrossTrafficLeftWarnSound Start ===")
+
+        _silence_dur = 0.5
+        _sound_dur = 0.8
+
+        # creating the CTA preconditions true
+        vehmod = de_types.VehModMngtGlbSafe1()
+        vehmod.CarModSts1 = de_types.CarModSts1.CarModNorm
+        vehmod.UsgModSts = de_types.UsgModSts1.UsgModDrvg
+        vehmod.Chks = 0
+        vehmod.Cntr = 0
+        vehmod.CarModSubtypWdCarModSubtyp = 0
+        vehmod.EgyLvlElecMai = 0
+        vehmod.EgyLvlElecSubtyp = 0
+        vehmod.PwrLvlElecMai = 0
+        vehmod.PwrLvlElecSubtyp = 0
+        vehmod.FltEgyCnsWdSts = de_types.FltEgyCns1.Flt
+
+        ar = audio.alsarecorder.AlsaRecorder()
+        # start recording for 10 seconds.
+        with ar.alsa_recorder(10, host_folder=self.host_folder):
+            time.sleep(0.5) #record some silence first.
+            self.flexray.send_VehModMngtGlbSafe1(vehmod)
+
+            # Here it plays the sound like:-
+            # 1) sound play once
+            # 2) silence(0.5 secs)
+            # 3) sound play twice
+            # 4) silence(0.5 secs)
+            # 5) sound play three times
+            # 6) silence(0.5 secs)
+            # 7) play once more to make the last sound valid
+            # 8) compare this pattern
+
+            #sound played once
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.CtraWarn)
+            time.sleep(_silence_dur) # silence for 0.5 secs
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.NoCtraWarn)
+            time.sleep(_sound_dur) # sound duration 0.8secs(to finish ongoing sound plus 0.5secs silence)
+
+            #sound played twice
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.CtraWarn)
+            # waiting for less than the sound duration because in case the sound started again then it cannot be stopped in between.
+            # silence for 0.5 secs and including the sound time 0.8secs(to finish ongoing sound)
+            time.sleep(_silence_dur + _sound_dur)
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.NoCtraWarn)
+            time.sleep(_sound_dur)
+
+            #sound played thrice
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.CtraWarn)
+            #want to play three times before off so waiting for two sound to complete.
+            # silence for 0.5 secs and including the two sound time 0.8secs(to finish ongoing sound)
+            time.sleep(_silence_dur + _sound_dur + _sound_dur)
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.NoCtraWarn)
+            time.sleep(_sound_dur)
+
+            #sound played once
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.CtraWarn)
+            time.sleep(_silence_dur)
+            self.flexray.send_CtraIndcnLe(de_types.CtraIndcn1.NoCtraWarn)
+
+        fn = ar.host_fn
+        try:
+            # Get list of normalized sounds (seprated by quiet)
+            sounds = self.getNormalizedSoundlist(fn, -0.9)
+        except Exception as e:
+            self.logger.warning("Exception during testCrossTrafficLeftWarnSound sounds retrieval", e)
+            raise e
+        try:
+            # Match that list dof sounds towards a list of Match objects
+            # SPA-UI-S051.wav is 0.80s, with 0.77s sound, so we expect silence to be short!
+            res = audio.match.match_sound_silence(sounds,
+                [audio.match.Match(_sound_dur, 0.05, _silence_dur, 0.05), # matching once played sound
+                audio.match.Match((_sound_dur + _sound_dur), 0.05, _silence_dur, 0.05), # matching twice played sound
+                audio.match.Match((_sound_dur + _sound_dur + _sound_dur), 0.05, _silence_dur, 0.05)], # matching thrice played sound
+                reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+        except audio.match.NoMatch:
+            self.logger.warning("Too few sound recorded to match!")
+            res = False
+
+        self.logger.info("=== testCrossTrafficLeftWarnSound result %s ===" % res)
+        asserts.assertEqual(res, True, "Left Side Cross Traffic Alert Warning Sound NOT MATCHED - FAILED")
+
+    # ----------------------------------------------------------------------------------------------------------
+    # Test Cross Traffic Alert warning sound(Right side)
+    # ----------------------------------------------------------------------------------------------------------
+    def testCrossTrafficRightWarnSound(self):
+        # This is Cross Traffic Alert warning sound, SPA-UI-S051.wav
+        self.logger.info("=== Test testCrossTrafficRightWarnSound Start ===")
+
+        _silence_dur = 0.5
+        _sound_dur = 0.8
+
+        # creating the CTA preconditions true
+        vehmod = de_types.VehModMngtGlbSafe1()
+        vehmod.CarModSts1 = de_types.CarModSts1.CarModNorm
+        vehmod.UsgModSts = de_types.UsgModSts1.UsgModDrvg
+        vehmod.Chks = 0
+        vehmod.Cntr = 0
+        vehmod.CarModSubtypWdCarModSubtyp = 0
+        vehmod.EgyLvlElecMai = 0
+        vehmod.EgyLvlElecSubtyp = 0
+        vehmod.PwrLvlElecMai = 0
+        vehmod.PwrLvlElecSubtyp = 0
+        vehmod.FltEgyCnsWdSts = de_types.FltEgyCns1.Flt
+
+        ar = audio.alsarecorder.AlsaRecorder()
+        # start recording for 10 seconds.
+        with ar.alsa_recorder(10, host_folder=self.host_folder):
+            time.sleep(0.5) #record some silence first.
+            self.flexray.send_VehModMngtGlbSafe1(vehmod)
+
+            # Here it plays the sound like:-
+            # 1) sound play once
+            # 2) silence(0.5 secs)
+            # 3) sound play twice
+            # 4) silence(0.5 secs)
+            # 5) sound play three times
+            # 6) silence(0.5 secs)
+            # 7) play once more to make the last sound valid
+            # 8) compare this pattern
+
+            #sound played once
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.CtraWarn)
+            time.sleep(_silence_dur) # silence for 0.5 secs
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.NoCtraWarn)
+            time.sleep(_sound_dur) # sound duration 0.8secs(to finish ongoing sound plus 0.5secs silence)
+
+            #sound played twice
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.CtraWarn)
+            # waiting for less than the sound duration because in case the sound started again then it cannot be stopped in between.
+            # silence for 0.5 secs and including the sound time 0.8secs(to finish ongoing sound)
+            time.sleep(_silence_dur + _sound_dur)
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.NoCtraWarn)
+            time.sleep(_sound_dur)
+
+            #sound played thrice
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.CtraWarn)
+            #want to play three times before off so waiting for two sound to complete.
+            # silence for 0.5 secs and including the two sound time 0.8secs(to finish ongoing sound)
+            time.sleep(_silence_dur + _sound_dur + _sound_dur)
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.NoCtraWarn)
+            time.sleep(_sound_dur)
+
+            #sound played once
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.CtraWarn)
+            time.sleep(_silence_dur)
+            self.flexray.send_CtraIndcnRi(de_types.CtraIndcn1.NoCtraWarn)
+
+        fn = ar.host_fn
+        try:
+            # Get list of normalized sounds (seprated by quiet)
+            sounds = self.getNormalizedSoundlist(fn, -0.9)
+        except Exception as e:
+            self.logger.warning("Exception during testCrossTrafficRightWarnSound sounds retrieval", e)
+            raise e
+        try:
+            # Match that list dof sounds towards a list of Match objects
+            # SPA-UI-S051.wav is 0.80s, with 0.77s sound, so we expect silence to be short!
+            res = audio.match.match_sound_silence(sounds,
+                [audio.match.Match(_sound_dur, 0.05, _silence_dur, 0.05), # matching once played sound
+                audio.match.Match((_sound_dur + _sound_dur), 0.05, _silence_dur, 0.05), # matching twice played sound
+                audio.match.Match((_sound_dur + _sound_dur + _sound_dur), 0.05, _silence_dur, 0.05)], # matching thrice played sound
+                reorder=False, log_buffer_list=self.log_list)
+            if not res:
+                self.logger.info("Sound matching returned:\n" + self._log_list_as_str())
+        except audio.match.NoMatch:
+            self.logger.warning("Too few sound recorded to match!")
+            res = False
+
+        self.logger.info("=== testCrossTrafficRightWarnSound result %s ===" % res)
+        asserts.assertEqual(res, True, "Right Side Cross Traffic Alert Warning Sound NOT MATCHED - FAILED")
+
 
 if __name__ == "__main__":
     logging.basicConfig(
