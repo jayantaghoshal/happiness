@@ -32,6 +32,16 @@
                   branches:
                     - branch-compare-type: 'REG_EXP'
                       branch-pattern: '.*'
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'vendor/volvocars/hmi/Launcher'
+                  branches:
+                    - branch-compare-type: 'REG_EXP'
+                      branch-pattern: '.*'
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'vendor/volvocars/hmi/MediaLibrary'
+                  branches:
+                    - branch-compare-type: 'REG_EXP'
+                      branch-pattern: '.*'
     scm:
         - git:
             url: ssh://gotsvl1415.got.volvocars.net:29421/vendor/volvocars
