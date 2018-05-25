@@ -270,6 +270,7 @@ class VehicleHalCommon():
 
             logging.info("Waiting...%s", str(time.time() - start_time))
             time.sleep(2)
+        logging.info("UserListFromADB: "+result)
         asserts.assertTrue(False, "Time out! User didn't switch")
 
     # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
