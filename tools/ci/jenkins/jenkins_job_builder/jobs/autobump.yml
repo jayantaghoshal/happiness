@@ -59,7 +59,7 @@
     builders:
         - shell: |
                 export WORKSPACE_ROOT=$(pwd)
-
+                export PYTHONPATH=$PYTHONPATH:./vendor/volvocars/tools/lib/python
                 ##  Fake the directory structure of "repo" because the bump.py script assumes default AOSP structure.
                 # TODO: Move this inside the autobump.py script
                 # Can't use git clone because directory might exist from last run
