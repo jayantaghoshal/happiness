@@ -29,7 +29,8 @@ import com.volvocars.cloudservice.parser.FeaturesParser;
  */
 public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
     private CloudConnection server = null;
-    private static final String LOG_TAG = "CloudService.FsApi";
+    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_PREFIX = "[FoundationServicesApiImpl]";
 
     private boolean foundation_services_is_available = false;
 
@@ -63,7 +64,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
             byte[] bytesdata = new byte[response.responseData.size()];
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
-                Log.d(LOG_TAG, "Http Response Code: " + response.httpResponse
+                Log.d(LOG_TAG, LOG_PREFIX + " Http Response Code: " + response.httpResponse
                         + ".\nSomething went bananas with the request. And it is not handled properly :'(");
             }
 
@@ -79,10 +80,10 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
             return true;
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
         } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot read input data stream: IOException [" + ex.getMessage() + "]");
         }
 
         return false;
@@ -97,7 +98,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
     */
     @Override
     public boolean isFeatureAvailable(String feature, IFoundationServicesApiCallback callback) throws RemoteException {
-        Log.v(LOG_TAG, "isFeatureAvailable [" + feature + "]");
+        Log.v(LOG_TAG, LOG_PREFIX + " isFeatureAvailable [" + feature + "]");
 
         if (!foundation_services_is_available) {
             return false;
@@ -121,7 +122,7 @@ public class FoundationServicesApiImpl extends IFoundationServicesApi.Stub {
                 callback.featureAvailableResponse(theFeature);
             }
             catch (RemoteException e) {
-                Log.e(LOG_TAG, "featureAvailableResponse callback failed (" + e.getMessage() + ")");
+                Log.e(LOG_TAG, LOG_PREFIX + " featureAvailableResponse callback failed (" + e.getMessage() + ")");
             }
         });
 

@@ -29,7 +29,8 @@ import android.os.HwBinder;
  */
 public class CloudConnection extends ICloudConnectionEventListener.Stub {
     private CloudService service;
-    private static final String LOG_TAG = "CloudService.CloudConn";
+    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_PREFIX = "[CloudConnection]";
 
     private ICloudConnection cloud_connection = null;
 
@@ -48,7 +49,7 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
 
         @Override
         public void serviceDied(long cookie) {
-            Log.e(LOG_TAG, "Lost Connection to CloudDaemon");
+            Log.e(LOG_TAG, LOG_PREFIX + " Lost Connection to CloudDaemon");
             connection.daemonDied();
         }
     }
@@ -71,7 +72,7 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
 
         } catch (RemoteException ex) {
             // Something went bananas with binder.. What do?
-            Log.e(LOG_TAG, "Cannot connect to ICloudConnection: RemoteException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot connect to ICloudConnection: RemoteException [" + ex.getMessage() + "]");
         }
     }
 
@@ -79,11 +80,11 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
         try {
             connectToService();
         } catch (NoSuchElementException e) {
-            Log.e(LOG_TAG, "CloudDaemon not up yet.. Scheduling retry.");
+            Log.e(LOG_TAG, LOG_PREFIX + " CloudDaemon not up yet.. Scheduling retry.");
             new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Log.d(LOG_TAG, "Retrying to connect to CloudDaemon");
+                        Log.d(LOG_TAG, LOG_PREFIX + " Retrying to connect to CloudDaemon");
                         retryService();
                     }
                 }, 2000);
@@ -92,13 +93,13 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
 
     @Override
     public void isConnected(boolean connected, String clientUri) {
-        Log.d(LOG_TAG, "Backend connection status changed to  " + connected + " (clientUri = " + clientUri + ")");
+        Log.d(LOG_TAG, LOG_PREFIX + " Backend connection status changed to  " + connected + " (clientUri = " + clientUri + ")");
         service.isConnected(connected, clientUri);
     }
 
     @Override
     public void enteredErrorState(String reason) {
-        Log.e(LOG_TAG, "Backend entered error state with reason: [" + reason + "]");
+        Log.e(LOG_TAG, LOG_PREFIX + " Backend entered error state with reason: [" + reason + "]");
         service.enteredErrorState(reason);
     }
 
@@ -110,13 +111,13 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
     public class DownloadResponseCallback extends ICloudConnectionDownloadResponseCallback.Stub {
         @Override
         public void updateDownloadStatus(Response response) {
-            Log.v(LOG_TAG, "updateDownloadStatus: Calling service.notifyDownloadStatus()");
+            Log.v(LOG_TAG, LOG_PREFIX + " updateDownloadStatus: Calling service.notifyDownloadStatus()");
             service.notifyDownloadStatus(response);
         }
     }
 
     public Response doGetRequest(String uri, ArrayList<HttpHeaderField> headers, int timeout) {
-        Log.v(LOG_TAG, "doGetRequest");
+        Log.v(LOG_TAG, LOG_PREFIX + " doGetRequest");
         Response response = null;
         if(cloud_connection != null) {
             try {
@@ -127,14 +128,14 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
                 }
             } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
-                Log.e(LOG_TAG, "Cannot send getRequest: RemoteException [" + ex.getMessage() + "]");
+                Log.e(LOG_TAG, LOG_PREFIX + " Cannot send getRequest: RemoteException [" + ex.getMessage() + "]");
             }
         }
         return response;
     }
 
     public Response doPostRequest(String uri, ArrayList<HttpHeaderField> headers, String body, int timeout) {
-        Log.v(LOG_TAG, "doPostRequest");
+        Log.v(LOG_TAG, LOG_PREFIX + " doPostRequest");
         Response response = null;
         if(cloud_connection != null) {
             try {
@@ -146,21 +147,21 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
 
              } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
-                Log.e(LOG_TAG, "Cannot send postRequest: RemoteException [" + ex.getMessage() + "]");
+                Log.e(LOG_TAG, LOG_PREFIX + " Cannot send postRequest: RemoteException [" + ex.getMessage() + "]");
              }
         }
         return response;
     }
 
     public void downloadRequest(String uri, ArrayList<HttpHeaderField> headers, String file_path, int timeout) {
-        Log.v(LOG_TAG, "downloadRequest");
+        Log.v(LOG_TAG, LOG_PREFIX + " downloadRequest");
         if(cloud_connection != null) {
             DownloadResponseCallback downloadCallback = new DownloadResponseCallback();
             try {
                 cloud_connection.downloadRequest(uri, headers, file_path, timeout, downloadCallback);
             } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
-                Log.e(LOG_TAG, "Cannot send downloadRequest: RemoteException [" + ex.getMessage() + "]");
+                Log.e(LOG_TAG, LOG_PREFIX + " Cannot send downloadRequest: RemoteException [" + ex.getMessage() + "]");
             }
         }
     }

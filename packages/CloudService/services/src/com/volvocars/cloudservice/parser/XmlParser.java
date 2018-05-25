@@ -23,7 +23,9 @@ import android.util.Xml;
 * Follows structure found on https://developer.android.com/training/basics/network-ops/xml.html
 */
 public class XmlParser {
-    protected static final String LOG_TAG = "CloudService.XmlParser";
+    protected static final String LOG_TAG = "CloudService";
+    protected static final String LOG_PREFIX = "[XmlParser]";
+
     private static final String null_string = null;
 
     /**
@@ -106,7 +108,7 @@ public class XmlParser {
                 string = parser.getText();
             }
         }
-        Log.v(LOG_TAG, "String: " + string);
+        Log.v(LOG_TAG, LOG_PREFIX + " String: " + string);
         return string;
     }
 

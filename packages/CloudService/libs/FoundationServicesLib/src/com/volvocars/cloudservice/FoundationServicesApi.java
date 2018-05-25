@@ -14,7 +14,9 @@ import android.os.RemoteException;
 * Library/wrapper class that is used to communicate with FSAPI (Foundation Services API)
 */
 public class FoundationServicesApi implements ServiceConnection{
-    private static final String LOG_TAG = "FsApi";
+    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_PREFIX = "[FoundationServicesApi]";
+
     private static final String PACKAGENAME = "com.volvocars.cloudservice";
     private static final String PACKAGENAME_SERVICENAME = "com.volvocars.cloudservice.CloudService";
     private Context mContext = null;

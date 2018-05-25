@@ -28,7 +28,7 @@ public final class DownloadInfoParser extends XmlParser {
 
     public static DownloadInfo ParseDownloadInfo(InputStream in) throws XmlPullParserException, IOException {
 
-        Log.v(LOG_TAG, "+ ParseDownloadInfo");
+        Log.v(LOG_TAG, LOG_PREFIX + " + ParseDownloadInfo");
 
         DownloadInfo downloadInfo = new DownloadInfo();
 
@@ -38,24 +38,24 @@ public final class DownloadInfoParser extends XmlParser {
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_DOCUMENT) {
-                Log.v(LOG_TAG, "Start of Document");
+                Log.v(LOG_TAG, LOG_PREFIX + " Start of Document");
             } else if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("downloads")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG, LOG_PREFIX + " Parsing: " + tag);
                     downloadInfo = ParseDownloadInfoElement(parser);
                 } else {
-                    Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
+                    Log.d(LOG_TAG, LOG_PREFIX + " Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
                 }
             } else {
-                Log.d(LOG_TAG, "Unknown Element of type: " + eventType);
+                Log.d(LOG_TAG, LOG_PREFIX + " Unknown Element of type: " + eventType);
             }
             eventType = parser.next();
         }
-        Log.v(LOG_TAG, "End of Document");
+        Log.v(LOG_TAG, LOG_PREFIX + " End of Document");
 
-        Log.v(LOG_TAG, "- ParseDownloadInfo");
+        Log.v(LOG_TAG, LOG_PREFIX + " - ParseDownloadInfo");
 
         return downloadInfo;
     }
@@ -75,38 +75,38 @@ public final class DownloadInfoParser extends XmlParser {
             if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("this")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG, LOG_PREFIX + " Skipping: " + tag);
                     SkipElement(parser);
                 } else if (tag.equals("id")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG, LOG_PREFIX + " Parsing: " + tag);
                     downloadInfo.id = ParseString("id", parser);
                 } else if (tag.equals("install_notification_uri")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG, LOG_PREFIX + " Parsing: " + tag);
                     downloadInfo.installNotificationUri = ParseString("install_notification_uri", parser);
                 } else if (tag.equals("installation_order_id")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     downloadInfo.installationOrderId = ParseString("installation_order_id", parser);
                 } else if (tag.equals("downloads")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     downloadInfo.resourceUris = ParseDownloadPaths(parser);
                 } else if (tag.equals("Signature")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Skipping: " + tag);
                     SkipElement(parser);
                 } else {
-                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, LOG_PREFIX + " Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("downloads")) {
                     depth--;
                 } else {
-                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, LOG_PREFIX + " Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
-                Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
+                Log.e(LOG_TAG, LOG_PREFIX + " Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
                 throw new IllegalStateException();
             } else {
-                Log.d(LOG_TAG, "Unknown element on depth: " + depth);
+                Log.d(LOG_TAG, LOG_PREFIX + " Unknown element on depth: " + depth);
             }
         }
         return downloadInfo;
@@ -127,23 +127,23 @@ public final class DownloadInfoParser extends XmlParser {
             if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("file")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG, LOG_PREFIX + " Parsing: " + tag);
                     downloads.add(ParseString("file", parser));
                 } else {
-                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG, LOG_PREFIX + " Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("downloads")) {
                     depth--;
                 } else {
-                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG, LOG_PREFIX + " Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
-                Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
+                Log.e(LOG_TAG, LOG_PREFIX + " Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
                 throw new IllegalStateException();
             } else {
-                Log.d(LOG_TAG, "Unknown element on depth: " + depth);
+                Log.d(LOG_TAG, LOG_PREFIX + " Unknown element on depth: " + depth);
             }
         }
         return downloads;

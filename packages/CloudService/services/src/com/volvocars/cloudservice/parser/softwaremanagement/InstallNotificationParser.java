@@ -30,7 +30,7 @@ public final class InstallNotificationParser extends XmlParser {
 
     public static InstallNotification ParseInstallNotification(InputStream in) throws XmlPullParserException, IOException {
 
-        Log.v(LOG_TAG, "+ ParseInstallNotification");
+        Log.v(LOG_TAG, LOG_PREFIX + " + ParseInstallNotification");
 
         InstallNotification installNotification = new InstallNotification();
 
@@ -40,24 +40,24 @@ public final class InstallNotificationParser extends XmlParser {
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_DOCUMENT) {
-                Log.v(LOG_TAG, "Start of Document");
+                Log.v(LOG_TAG,  LOG_PREFIX + " Start of Document");
             } else if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("install_notifications")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG, LOG_PREFIX + " Parsing: " + tag);
                     installNotification = ParseInstallNotificationElement(parser);
                 } else {
-                    Log.d(LOG_TAG, "Skipping Unknown Tag: " + tag);
+                    Log.d(LOG_TAG, LOG_PREFIX + " Skipping Unknown Tag: " + tag);
                     SkipElement(parser);
                 }
             } else {
-                Log.d(LOG_TAG, "Unknown Element of type: " + eventType);
+                Log.d(LOG_TAG, LOG_PREFIX + " Unknown Element of type: " + eventType);
             }
             eventType = parser.next();
         }
-        Log.v(LOG_TAG, "End of Document");
+        Log.v(LOG_TAG,  LOG_PREFIX + " End of Document");
 
-        Log.v(LOG_TAG, "- ParseDownloadInfo");
+        Log.v(LOG_TAG,  LOG_PREFIX + " - ParseDownloadInfo");
 
         return installNotification;
     }
@@ -77,35 +77,35 @@ public final class InstallNotificationParser extends XmlParser {
             if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("this")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Skipping: " + tag);
                     SkipElement(parser);
                 } else if (tag.equals("installation_order_id")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     installNotification.installationOrderId = ParseString("installation_order_id", parser);
                 } else if (tag.equals("software_id")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     installNotification.softwareId = ParseString("software_id", parser);
                 } else if (tag.equals("notification")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     installNotification.notification = ParseNotificationElement(parser);
                 } else if (tag.equals("Signature")) {
-                    Log.v(LOG_TAG, "Skipping: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Skipping: " + tag);
                     SkipElement(parser);
                 } else {
-                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG,  LOG_PREFIX + " Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("install_notifications")) {
                     depth--;
                 } else {
-                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG,  LOG_PREFIX + " Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
-                Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
+                Log.e(LOG_TAG,  LOG_PREFIX + " Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
                 throw new IllegalStateException();
             } else {
-                Log.d(LOG_TAG, "Unknown element on depth: " + depth);
+                Log.d(LOG_TAG,  LOG_PREFIX + " Unknown element on depth: " + depth);
             }
         }
         return installNotification;
@@ -125,35 +125,35 @@ public final class InstallNotificationParser extends XmlParser {
             if (eventType == XmlPullParser.START_TAG) {
                 String tag = parser.getName();
                 if (tag.equals("id")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     notification.id = ParseString(tag, parser);
                 } else if (tag.equals("created")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     notification.created = ParseString(tag, parser);
                 } else if (tag.equals("timestamp")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     notification.timestamp = ParseString(tag, parser);
                 } else if (tag.equals("status_code")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     notification.status.statusCode = Status.stringToStatusCode(ParseString(tag, parser));
                 } else if (tag.equals("sub_status_code")) {
-                    Log.v(LOG_TAG, "Parsing: " + tag);
+                    Log.v(LOG_TAG,  LOG_PREFIX + " Parsing: " + tag);
                     notification.status.subStatusCode = Status.stringToSubStatusCode(ParseString(tag, parser));
                 }else {
-                    Log.d(LOG_TAG, "Skipping unknown tag: " + tag);
+                    Log.d(LOG_TAG,  LOG_PREFIX + " Skipping unknown tag: " + tag);
                     SkipElement(parser);
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (parser.getName().equals("notification")) {
                     depth--;
                 } else {
-                    Log.d(LOG_TAG, "Unknown End of Tag: " + parser.getName());
+                    Log.d(LOG_TAG,  LOG_PREFIX + " Unknown End of Tag: " + parser.getName());
                 }
             } else if (eventType == XmlPullParser.END_DOCUMENT) {
-                Log.e(LOG_TAG, "Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
+                Log.e(LOG_TAG,  LOG_PREFIX + " Oh gosh, darnit! Unecpected end of document. Maybe throw some stuff?");
                 throw new IllegalStateException();
             } else {
-                Log.d(LOG_TAG, "Unknown element on depth: " + depth);
+                Log.d(LOG_TAG,  LOG_PREFIX + " Unknown element on depth: " + depth);
             }
         }
         return notification;

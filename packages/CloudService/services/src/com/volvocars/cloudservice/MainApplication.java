@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -11,11 +11,12 @@ import android.content.Intent;
 import android.util.Log;
 
 public class MainApplication extends Application {
-    private static final String LOGTAG = "CloudService.MainApp";
+    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_PREFIX = "[MainApplication]";
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.v(LOGTAG, "CloudService.MainApplication created, sending intent to start CloudService");
+        Log.v(LOG_TAG, LOG_PREFIX + " CloudService.MainApplication created, sending intent to start CloudService");
         Intent intent = new Intent(this, CloudService.class);
         startService(intent);
     }

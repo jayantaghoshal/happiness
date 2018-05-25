@@ -17,7 +17,9 @@ import java.util.ArrayList;
  * Library/wrapper class that is used to access SoftwareManagement features
  */
 public class SoftwareManagementApi implements ServiceConnection {
-    private static final String LOG_TAG = "SWAPI";
+    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_PREFIX = "[SoftwareManagementApi]";
+
     private static final String PACKAGENAME = "com.volvocars.cloudservice";
     private static final String PACKAGENAME_SERVICENAME = "com.volvocars.cloudservice.CloudService";
     private Context context = null;
@@ -39,14 +41,14 @@ public class SoftwareManagementApi implements ServiceConnection {
 
         @Override
         public void binderDied() {
-            Log.e(LOG_TAG, "CloudService died");
+            Log.e(LOG_TAG, LOG_PREFIX + " CloudService died");
 
             if (retries < 5) {
-                Log.d(LOG_TAG, "Trying CloudService again... Attempt " + (retries + 1));
+                Log.d(LOG_TAG, LOG_PREFIX + " Trying CloudService again... Attempt " + (retries + 1));
                 retries++;
                 client.connect();
             } else {
-                Log.d(LOG_TAG, "CloudService seems unreliable, no more attempts to connect.");
+                Log.d(LOG_TAG, LOG_PREFIX + " CloudService seems unreliable, no more attempts to connect.");
             }
         }
     }
@@ -60,7 +62,7 @@ public class SoftwareManagementApi implements ServiceConnection {
         try {
             service.linkToDeath(death, 0 /* flags */);
         } catch (RemoteException e) {
-            Log.w(LOG_TAG, "Unable to register Death Recipient. :(");
+            Log.w(LOG_TAG, LOG_PREFIX + " Unable to register Death Recipient. :(");
         }
     }
 
@@ -166,7 +168,6 @@ public class SoftwareManagementApi implements ServiceConnection {
      */
     public void PostInstallNotification(InstallNotification notification, ISoftwareManagementApiCallback callback)
             throws RemoteException {
-        Log.v(LOG_TAG, "PostInstallNotification: " + notification.installationOrderId);
         if (software_management != null && service_bound) {
             software_management.PostInstallNotification(notification, callback);
         }

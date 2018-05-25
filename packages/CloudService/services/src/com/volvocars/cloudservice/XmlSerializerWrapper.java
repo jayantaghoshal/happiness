@@ -18,7 +18,8 @@ import org.xmlpull.v1.XmlSerializer;
 
 
 public final class XmlSerializerWrapper {
-    private static final String LOG_TAG = "XmlSerializer";
+    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_PREFIX = "[XmlSerializerWrapper]";
 
     private static void startDocument(XmlSerializer serializer) throws IOException {
         serializer.startDocument("UTF-8", true);
@@ -151,13 +152,13 @@ public final class XmlSerializerWrapper {
             serializer.endDocument();
 
         } catch (IOException e) {
-            Log.w(LOG_TAG, "Serializing of InstallationReport failed, IOException: [" + e.getMessage() + "]");
+            Log.w(LOG_TAG, LOG_PREFIX + " Serializing of InstallationReport failed, IOException: [" + e.getMessage() + "]");
             return null;
         } catch (IllegalStateException e) {
-            Log.w(LOG_TAG, "Serializing of InstallationReport failed, IllegalStateException: [" + e.getMessage() + "]");
+            Log.w(LOG_TAG, LOG_PREFIX + " Serializing of InstallationReport failed, IllegalStateException: [" + e.getMessage() + "]");
             return null;
         } catch (IllegalArgumentException e) {
-            Log.w(LOG_TAG, "Serializing of InstallationReport failed, IllegalArgumentException: [" + e.getMessage() + "]");
+            Log.w(LOG_TAG, LOG_PREFIX + " Serializing of InstallationReport failed, IllegalArgumentException: [" + e.getMessage() + "]");
             return null;
         }
 
@@ -211,13 +212,13 @@ public final class XmlSerializerWrapper {
             serializer.endDocument();
 
         } catch (IOException e) {
-            Log.w(LOG_TAG, "Serializing of InstallNotification failed, IOException: [" + e.getMessage() + "]");
+            Log.w(LOG_TAG, LOG_PREFIX + " Serializing of InstallNotification failed, IOException: [" + e.getMessage() + "]");
             return null;
         } catch (IllegalStateException e) {
-            Log.w(LOG_TAG, "Serializing of InstallNotification failed, IllegalStateException: [" + e.getMessage() + "]");
+            Log.w(LOG_TAG, LOG_PREFIX + " Serializing of InstallNotification failed, IllegalStateException: [" + e.getMessage() + "]");
             return null;
         } catch (IllegalArgumentException e) {
-            Log.w(LOG_TAG, "Serializing of InstallNotification failed, IllegalArgumentException: [" + e.getMessage() + "]");
+            Log.w(LOG_TAG, LOG_PREFIX + " Serializing of InstallNotification failed, IllegalArgumentException: [" + e.getMessage() + "]");
             return null;
         }
 

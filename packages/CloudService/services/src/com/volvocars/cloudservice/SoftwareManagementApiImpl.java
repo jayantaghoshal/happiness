@@ -26,7 +26,9 @@ import com.volvocars.cloudservice.parser.softwaremanagement.SoftwareManagementPa
  * Implementation of Foundation service API.
  */
 public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
-    private static final String LOG_TAG = "CloudService.SWAPI";
+    private static final String LOG_TAG = "CloudService";
+    private static final String LOG_PREFIX = "[SoftwareManagementApiImpl]";
+
 
     private CloudConnection cloudConnection = null;
 
@@ -66,7 +68,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     private void FetchSoftwareManagementURIs() {
-        Log.v(LOG_TAG, "FetchSoftwareManagementURIs");
+        Log.v(LOG_TAG, LOG_PREFIX + " FetchSoftwareManagementURIs");
 
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -78,7 +80,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + softwareManagementUri);
+            Log.v(LOG_TAG, LOG_PREFIX + " Calling doGetRequest with uri: " + softwareManagementUri);
             Response response = cloudConnection.doGetRequest(softwareManagementUri, headers, 10000);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
@@ -92,26 +94,26 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 bytesdata[i] = response.responseData.get(i);
             }
 
-            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
+            Log.v(LOG_TAG, LOG_PREFIX + " Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
             uris = SoftwareManagementParser.ParseSoftwareManagementURIs(stream);
             stream.close();
 
-            Log.v(LOG_TAG, "SoftwareManagement URIS: \n" + uris.available_updates + "\n" + uris.available_accessories
+            Log.v(LOG_TAG, LOG_PREFIX + " SoftwareManagement URIS: \n" + uris.available_updates + "\n" + uris.available_accessories
                     + "\n" + uris.downloads + "\n" + uris.pending_installations);
 
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
         } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG, "Something went bananas with the streams: IOException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Something went bananas with the streams: IOException [" + ex.getMessage() + "]");
         }
     }
 
     private SwListResponse<SoftwareAssignment> FetchSoftwareAssignment(Query query, AssignmentType type) {
-        Log.v(LOG_TAG, "FetchSoftwareAssignmentsList");
+        Log.v(LOG_TAG, LOG_PREFIX + " FetchSoftwareAssignmentsList");
         // Build request
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -121,7 +123,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         headers.add(field);
 
         String systemLanguage = GetSystemLanguage();
-        Log.v(LOG_TAG, "SystemLanguage: " + systemLanguage);
+        Log.v(LOG_TAG, LOG_PREFIX + " SystemLanguage: " + systemLanguage);
 
         if (!systemLanguage.isEmpty()) {
             HttpHeaderField languagefield = new HttpHeaderField();
@@ -139,13 +141,13 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
             // Send request
             String uri = (type == AssignmentType.UPDATE) ? uris.available_updates : uris.available_accessories;
 
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + uri);
+            Log.v(LOG_TAG, LOG_PREFIX + " Calling doGetRequest with uri: " + uri);
             Response response = null;
 
             response = cloudConnection.doGetRequest(uri + query.buildQuery(), headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
-                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                Log.w(LOG_TAG, LOG_PREFIX + " Http Response Code: " + response.httpResponse
                         + ".\nSomething went bananas with the request. And it is not handled properly :'(");
             }
 
@@ -155,7 +157,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 bytesdata[i] = response.responseData.get(i);
             }
 
-            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
+            Log.v(LOG_TAG, LOG_PREFIX + " Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
             software_list = SoftwareAssignmentParser.ParseSoftwareAssignments(stream);
@@ -165,10 +167,10 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.d(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
+            Log.d(LOG_TAG, LOG_PREFIX + " Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
         } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG, "Something went bananas with the streams: IOException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Something went bananas with the streams: IOException [" + ex.getMessage() + "]");
         }
 
         return swrsp;
@@ -176,7 +178,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
     private int CommissionSoftwareAssignment(CommissionElement commissionElement) {
         Log.v(LOG_TAG,
-                "CommissionSoftwareAssignment [id: " + commissionElement.id + ", reason:" + commissionElement.reason
+        LOG_PREFIX + " CommissionSoftwareAssignment [id: " + commissionElement.id + ", reason:" + commissionElement.reason
                         + ", action:" + commissionElement.action + ", client_id: " + commissionElement.clientId
                         + ", uri: " + commissionElement.commissionUri + "]");
 
@@ -192,7 +194,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         String body = xmlWrapper.serializeCommissionElement(commissionElement);
 
         Log.v(LOG_TAG,
-                "Calling doPostRequest with uri: " + softwareManagementUri
+        LOG_PREFIX + " Calling doPostRequest with uri: " + softwareManagementUri
                         + (commissionElement.commissionUri.startsWith("/") ? commissionElement.commissionUri
                                 : "/" + commissionElement.commissionUri)
                         + " and body: " + body);
@@ -206,7 +208,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     private String GetSystemLanguage() {
-        Log.v(LOG_TAG, "Note: GetSystemLanguage is not tested, maybe do so?");
+        Log.v(LOG_TAG, LOG_PREFIX + " Note: GetSystemLanguage is not tested, maybe do so?");
         switch (CarConfigApi.getValue(CarConfigEnums.CC_197_SystemLanguage.class)) {
         case Arabic:
             return "ar-BH";
@@ -288,7 +290,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     private DownloadInfoResponse FetchDownloadInfo(InstallationOrder installationOrder) {
-        Log.v(LOG_TAG, "FetchDownloadInfo");
+        Log.v(LOG_TAG, LOG_PREFIX + " FetchDownloadInfo");
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
         HttpHeaderField field = new HttpHeaderField();
@@ -302,11 +304,11 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri: " + softwareManagementUri + installationOrder.downloadsUri);
+            Log.v(LOG_TAG, LOG_PREFIX + " Calling doGetRequest with uri: " + softwareManagementUri + installationOrder.downloadsUri);
             Response response = cloudConnection.doGetRequest(softwareManagementUri + installationOrder.downloadsUri, headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
-                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                Log.w(LOG_TAG, LOG_PREFIX + " Http Response Code: " + response.httpResponse
                         + ".\nSomething went bananas with the request. And it is not handled properly :'(");
             }
 
@@ -323,21 +325,21 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
         } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot read input data stream: IOException [" + ex.getMessage() + "]");
         }
 
         return downloadInfoResponse;
     }
 
     private void FetchDownloadData() {
-        Log.v(LOG_TAG, "FetchDownloadData");
+        Log.v(LOG_TAG, LOG_PREFIX + " FetchDownloadData");
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
         // Todo: Content-Disposition header?
-        Log.v(LOG_TAG, "Should Content-Disposition header be included in downloadRequest? (Not implemented)");
+        Log.v(LOG_TAG, LOG_PREFIX + " Should Content-Disposition header be included in downloadRequest? (Not implemented)");
 
         int timeout = 20000;
 
@@ -347,11 +349,11 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         // If resource URI does not contain any '/' an IndexOutOfBoundException will be
         // thrown.
-        Log.w(LOG_TAG, "FetchDownloadData: Currently ignoring potential IndexOutOfBoundException");
+        Log.w(LOG_TAG, LOG_PREFIX + " FetchDownloadData: Currently ignoring potential IndexOutOfBoundException");
         String filepath = "/data/vendor/ota/" + currentDownloadInfo.installationOrderId
                 + uri.substring(uri.lastIndexOf("/"));
 
-        Log.v(LOG_TAG, "Calling downloadRequest with uri: \"" + uri + "\" and filepath: \"" + filepath + "\"");
+        Log.v(LOG_TAG, LOG_PREFIX + " Calling downloadRequest with uri: \"" + uri + "\" and filepath: \"" + filepath + "\"");
         cloudConnection.downloadRequest(uri, headers, filepath, timeout);
     }
 
@@ -360,19 +362,19 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         currentDownloadInfo.resourceUris.remove(0);
 
         if (currentDownloadInfo.resourceUris.isEmpty()) {
-            Log.v(LOG_TAG, "Download finished...");
+            Log.v(LOG_TAG, LOG_PREFIX + " Download finished...");
 
             try {
                 softwareManagementApiCallback.DownloadData(200, currentDownloadInfo);
             } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
                 Log.e(LOG_TAG,
-                        "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
+                LOG_PREFIX + " Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
             }
             softwareManagementApiCallback = null;
             currentDownloadInfo = null;
         } else {
-            Log.v(LOG_TAG, "Downloading next file...");
+            Log.v(LOG_TAG, LOG_PREFIX + " Downloading next file...");
 
             FetchDownloadData();
         }
@@ -381,16 +383,16 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     public void downloadStatusUpdate(Response response) {
         // Check if download_id match currentDownloadId?
 
-        Log.v(LOG_TAG, "File download finished with response " + response.httpResponse);
+        Log.v(LOG_TAG, LOG_PREFIX + " File download finished with response " + response.httpResponse);
 
         if (response.httpResponse != 200) {
-            Log.d(LOG_TAG, "Download failed with error code: " + response.httpResponse);
+            Log.d(LOG_TAG, LOG_PREFIX + " Download failed with error code: " + response.httpResponse);
             try {
                 softwareManagementApiCallback.DownloadData(response.httpResponse, currentDownloadInfo);
             } catch (RemoteException ex) {
                 // Something went bananas with binder.. What do?
                 Log.e(LOG_TAG,
-                        "Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
+                LOG_PREFIX + " Something went bananas with DownloadData callback: RemoteException [" + ex.getMessage() + "]");
             }
             softwareManagementApiCallback = null;
             currentDownloadInfo = null;
@@ -400,7 +402,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     private int postInstallNotification(InstallNotification notification) {
-        Log.v(LOG_TAG, "notification: [softwareid: " + notification.softwareId + ", installationOrderId: "
+        Log.v(LOG_TAG, LOG_PREFIX + " notification: [softwareid: " + notification.softwareId + ", installationOrderId: "
                 + notification.installationOrderId + ", StatusCode: "
                 + notification.notification.status.statusCode.toString() + ", SubStatusCode: "
                 + notification.notification.status.subStatusCode.toString() + ", SubStatusReason: "
@@ -418,7 +420,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         String body = xmlWrapper.serializeInstallNotification(notification);
 
         Log.v(LOG_TAG,
-                "Calling doPostRequest with uri: " + softwareManagementUri + (notification.uri.startsWith("/") ? notification.uri
+        LOG_PREFIX + " Calling doPostRequest with uri: " + softwareManagementUri + (notification.uri.startsWith("/") ? notification.uri
                 : "/" + notification.uri) + " and body: " + body);
         Response response = cloudConnection.doPostRequest(softwareManagementUri + notification.uri, headers, body,
                 timeout); // TODO: retrieve uri from software?
@@ -427,7 +429,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
     }
 
     private InstallNotificationResponse fetchInstallNotification(String installationOrderId, String uri) {
-        Log.v(LOG_TAG, "fetchInstallNotification: [installationOrderId: " + installationOrderId + "]");
+        Log.v(LOG_TAG,LOG_PREFIX + " fetchInstallNotification: [installationOrderId: " + installationOrderId + "]");
 
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
 
@@ -442,7 +444,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         try {
             // Send request
-            Log.v(LOG_TAG, "Calling doGetRequest with uri:" + (uri.startsWith("/") ? uri
+            Log.v(LOG_TAG, LOG_PREFIX + " Calling doGetRequest with uri:" + (uri.startsWith("/") ? uri
             : "/" + uri) + "and query: ?installation_order_id="
                     + installationOrderId);
             Response response = cloudConnection.doGetRequest(softwareManagementUri + (uri.startsWith("/") ? uri
@@ -450,7 +452,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                     headers, timeout);
 
             if (!HandleHttpResponseCode(response.httpResponse)) {
-                Log.w(LOG_TAG, "Http Response Code: " + response.httpResponse
+                Log.w(LOG_TAG, LOG_PREFIX + " Http Response Code: " + response.httpResponse
                         + ".\nSomething went bananas with the request. And it is not handled properly :'(");
             }
 
@@ -460,7 +462,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
                 bytesdata[i] = response.responseData.get(i);
             }
 
-            Log.v(LOG_TAG, "Response: " + new String(bytesdata));
+            Log.v(LOG_TAG, LOG_PREFIX + " Response: " + new String(bytesdata));
 
             InputStream stream = new ByteArrayInputStream(bytesdata);
 
@@ -469,17 +471,17 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         } catch (XmlPullParserException ex) {
             // Something went bananas with the parsing.. What do?
-            Log.e(LOG_TAG, "Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot parse response data: XmlPullParserException [" + ex.getMessage() + "]");
         } catch (IOException ex) {
             // Something went bananas with the streams.. What do?
-            Log.e(LOG_TAG, "Cannot read input data stream: IOException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Cannot read input data stream: IOException [" + ex.getMessage() + "]");
         }
 
         return notificationResponse;
     }
 
     private int postInstallationReport(InstallationReport report) {
-        Log.v(LOG_TAG, "report: [installationOrderId: " + report.installationOrderId + ", reportReason: "
+        Log.v(LOG_TAG, LOG_PREFIX + " report: [installationOrderId: " + report.installationOrderId + ", reportReason: "
                 + report.reportReason.toString() + "]");
 
         ArrayList<HttpHeaderField> headers = new ArrayList<HttpHeaderField>();
@@ -493,7 +495,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         String body = xmlWrapper.serializeInstallationReport(report);
 
-        Log.v(LOG_TAG, "Calling doPostRequest with uri: " + softwareManagementUri + (report.uri.startsWith("/") ? report.uri
+        Log.v(LOG_TAG, LOG_PREFIX + " Calling doPostRequest with uri: " + softwareManagementUri + (report.uri.startsWith("/") ? report.uri
         : "/" + report.uri) + " and body: " + body);
         Response response = cloudConnection.doPostRequest(softwareManagementUri + (report.uri.startsWith("/") ? report.uri
         : "/" + report.uri), headers, body,
@@ -521,7 +523,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         }
 
         SwListResponse<SoftwareAssignment> swrsp = FetchSoftwareAssignment(query, type);
-        Log.d(LOG_TAG, "GetSoftwareAssignment: list size: " + swrsp.swlist.size());
+        Log.d(LOG_TAG, LOG_PREFIX + " GetSoftwareAssignment: list size: " + swrsp.swlist.size());
 
         if (query.id.isEmpty() && query.installationOrderId.isEmpty()) {
             callback.SoftwareAssignmentList(swrsp.code, type, swrsp.swlist);
@@ -529,7 +531,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         else {
             if (swrsp.swlist.size() > 1) {
                 Log.w(LOG_TAG,
-                        "Size of returned list is >1, which should not happen since request was called with query containing id. What to do?");
+                LOG_PREFIX + " Size of returned list is >1, which should not happen since request was called with query containing id. What to do?");
             } else {
                 callback.SoftwareAssignment(swrsp.code, query, type, swrsp.swlist.get(0));
             }
@@ -584,12 +586,12 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
         // TODO: Verify that no download is in progress already, if so... call callback
         // function with some busy info...
         if (softwareManagementApiCallback != null) {
-            Log.w(LOG_TAG, "Download already in progress, try later...");
+            Log.w(LOG_TAG, LOG_PREFIX + " Download already in progress, try later...");
             callback.DownloadData(-1, null);
             return;
         }
 
-        Log.v(LOG_TAG, "Download requested, try to download " + downloadInfo.resourceUris.size() + " files");
+        Log.v(LOG_TAG, LOG_PREFIX + " Download requested, try to download " + downloadInfo.resourceUris.size() + " files");
 
         softwareManagementApiCallback = callback;
         currentDownloadInfo = downloadInfo;
@@ -623,7 +625,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
      */
     public void PostInstallNotification(InstallNotification notification, ISoftwareManagementApiCallback callback)
             throws RemoteException {
-        Log.d(LOG_TAG, "PostInstall");
+        Log.d(LOG_TAG, LOG_PREFIX + " PostInstall");
         if (!softwareManagementAvailable) {
             callback.InstallNotificationStatus(-1, notification.installationOrderId);
             return;
