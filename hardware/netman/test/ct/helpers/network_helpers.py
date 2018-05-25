@@ -30,8 +30,8 @@ class PingTest(object):
         reg_exp = r"time=([0-9.]+) ms"
         groups = re.search(reg_exp, str(output))
         if groups:
-            logging.info("NOT REACHABLE")
+            logging.info("REACHABLE")
             self.is_destination_reachable = True
         else:
-            logging.info("REACHABLE")
+            logging.info("NOT REACHABLE")
             self.is_destination_reachable = False
