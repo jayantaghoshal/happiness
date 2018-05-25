@@ -189,7 +189,7 @@ public class SoftwareManagementApiImpl extends ISoftwareManagementApi.Stub {
 
         int timeout = 20000;
 
-        String body = "id=" + commissionElement.id + "&client_id=" + commissionElement.clientId + "&reason="
+        String body = "id=" + commissionElement.id + "&client_id=" + commissionElement.clientId + "&action=" + commissionElement.action +"&reason="
                 + commissionElement.reason;
 
         Log.v(LOG_TAG,
