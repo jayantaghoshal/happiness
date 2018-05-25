@@ -50,7 +50,8 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
             ./out/target/product/ihu_abl_car/data \
             ./out/host/linux-x86/bin \
             ./out/host/linux-x86/vts/android-vts \
-            ./out/host/linux-x86/tradefed
+            ./out/host/linux-x86/tradefed \
+            ./out/host/linux-x86/framework
 du -sh "${OUT_ARCHIVE}"
 
 # Create archive dist.zip (zip format required to download single file within archive in Artifactory)
