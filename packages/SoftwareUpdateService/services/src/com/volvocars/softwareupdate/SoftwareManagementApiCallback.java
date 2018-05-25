@@ -22,7 +22,8 @@ import com.volvocars.cloudservice.DownloadInfo;
 import com.volvocars.cloudservice.ISoftwareManagementApiCallback;
 
 public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallback.Stub {
-    private static final String LOG_TAG = "SwManagementApiCallback";
+    private static final String LOG_TAG = "SoftwareUpdateService";
+    private static final String LOG_PREFIX = "[SoftwareManagementApiCallback]";
 
     SoftwareUpdateService service = null;
 
@@ -37,45 +38,48 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
     public void CommissionStatus(String uuid, int code) {
         Log.v(LOG_TAG, "Got result of commissioning assignment [" + uuid + "]: " + code);
         if (code == 200) {
-            Log.d(LOG_TAG, "updating softwarestate, remove when MQTT is in place!");
+            Log.d(LOG_TAG, LOG_PREFIX + " updating softwarestate, remove when MQTT is in place!");
             service.UpdateSoftwareState(uuid, SoftwareState.COMMISSIONED);
         } else {
-            Log.w(LOG_TAG, "CommissionStatus for uuid: " + uuid + "failed with code: " + code);
+            Log.w(LOG_TAG, LOG_PREFIX + " CommissionStatus for uuid: " + uuid + "failed with code: " + code);
         }
     }
 
     @Override
     public void SoftwareAssignmentList(int code, AssignmentType type, List<SoftwareAssignment> software_list) {
-        Log.v(LOG_TAG, "Got result of getting software assingment list (type: " + type + ") [size of list: "
-                + software_list.size() + "]: " + code);
+        Log.v(LOG_TAG, LOG_PREFIX + " Got result of getting software assingment list (type: " + type
+                + ") [size of list: " + software_list.size() + "]: " + code);
         if (code == 200) {
             service.onNewSoftwareAssignmentList(software_list, type);
         } else {
-            Log.w(LOG_TAG, "SoftwareAssignmentList for list of type: " + type + "failed with code: " + code);
+            Log.w(LOG_TAG,
+                    LOG_PREFIX + " SoftwareAssignmentList for list of type: " + type + "failed with code: " + code);
         }
 
     }
 
     @Override
     public void SoftwareAssignment(int code, Query query, AssignmentType type, SoftwareAssignment softwareAssignment) {
-        Log.v(LOG_TAG, "Got result of getting software assingment list (type: " + type + "software: "
+        Log.v(LOG_TAG, LOG_PREFIX + " Got result of getting software assingment list (type: " + type + "software: "
                 + softwareAssignment.id + ") " + code);
         if (200 == code) {
             service.onNewSoftwareAssignment(softwareAssignment, type);
         } else {
-            Log.w(LOG_TAG, "SoftwareAssignmentList for assignment of type: " + type + "failed with code: " + code);
+            Log.w(LOG_TAG, LOG_PREFIX + " SoftwareAssignmentList for assignment of type: " + type + "failed with code: "
+                    + code);
         }
     }
 
     @Override
     public void DownloadInfo(int code, DownloadInfo info) {
-        Log.v(LOG_TAG, "Got result of getting download information [" + info.id + "]: " + code);
+        Log.v(LOG_TAG, LOG_PREFIX + " Got result of getting download information [" + info.id + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(info);
-            Log.v(LOG_TAG, "Received download information, ask service to download according to information");
+            Log.v(LOG_TAG,
+                    LOG_PREFIX + " Received download information, ask service to download according to information");
             service.download(info);
         } else {
-            Log.w(LOG_TAG, "DownloadInfo for uuid: " + info.id + "failed with code: " + code);
+            Log.w(LOG_TAG, LOG_PREFIX + " DownloadInfo for uuid: " + info.id + "failed with code: " + code);
         }
     }
 
@@ -87,15 +91,15 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
      */
     @Override
     public void DownloadData(int code, DownloadInfo downloadInfo) {
-        Log.v(LOG_TAG, "Got result of downloading assignment [" + downloadInfo.id + "]: " + code);
+        Log.v(LOG_TAG, LOG_PREFIX + " Got result of downloading assignment [" + downloadInfo.id + "]: " + code);
         if (200 == code) {
             service.UpdateSoftwareList(downloadInfo);
-            Log.v(LOG_TAG, "Downloading completed");
+            Log.v(LOG_TAG, LOG_PREFIX + " Downloading completed");
             service.onDownloadedAssignment(downloadInfo);
         } else
 
         {
-            Log.w(LOG_TAG, "DownloadData for uuid: " + downloadInfo.id + "failed with code: " + code);
+            Log.w(LOG_TAG, LOG_PREFIX + " DownloadData for uuid: " + downloadInfo.id + "failed with code: " + code);
         }
     }
 
@@ -106,7 +110,8 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
      * @param installationOrderId UUID of the posted Installation Report
      */
     public void InstallationReportStatus(int code, String installationOrderId) {
-        Log.v(LOG_TAG, "Got result of posting Installation Report [" + installationOrderId + "]: " + code);
+        Log.v(LOG_TAG,
+                LOG_PREFIX + " Got result of posting Installation Report [" + installationOrderId + "]: " + code);
     }
 
     /**
@@ -116,7 +121,8 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
      * @param installationOrderId installation order Id
      */
     public void InstallNotificationStatus(int code, String installationOrderId) {
-        Log.v(LOG_TAG, "Got result of posting Installation Notification [" + installationOrderId + "]: " + code);
+        Log.v(LOG_TAG,
+                LOG_PREFIX + " Got result of posting Installation Notification [" + installationOrderId + "]: " + code);
         if (200 == code)
             service.UpdateSoftwareState(installationOrderId, SoftwareState.INSTALL_PENDING);
     }
@@ -128,14 +134,14 @@ public class SoftwareManagementApiCallback extends ISoftwareManagementApiCallbac
      * @param notification The InstallNotification
      */
     public void InstallNotification(int code, InstallNotification notification) {
-        Log.v(LOG_TAG,
-                "Got result of getting Installation Notification [" + notification.installationOrderId + "]: " + code);
+        Log.v(LOG_TAG, LOG_PREFIX + " Got result of getting Installation Notification ["
+                + notification.installationOrderId + "]: " + code);
         if (notification.notification.status.statusCode == Status.StatusCode.IN_PROGRESS)
             service.UpdateSoftwareState(notification.installationOrderId, SoftwareState.INSTALLING);
         else if (notification.notification.status.statusCode == Status.StatusCode.OK)
             service.UpdateSoftwareState(notification.installationOrderId, SoftwareState.INSTALLED);
         else
-            Log.d(LOG_TAG, "InstallNotification with status " + notification.notification.status.statusCode.toString()
-                    + " is not handled");
+            Log.d(LOG_TAG, LOG_PREFIX + " InstallNotification with status "
+                    + notification.notification.status.statusCode.toString() + " is not handled");
     }
 }

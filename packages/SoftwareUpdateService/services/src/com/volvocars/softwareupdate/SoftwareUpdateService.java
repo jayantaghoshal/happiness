@@ -66,7 +66,8 @@ import com.volvocars.settingsstorageservice.SettingsStorageManagerConnectionCall
 *
 */
 public class SoftwareUpdateService extends Service {
-    private static final String LOG_TAG = "SoftwareUpdate.Service";
+    private static final String LOG_TAG = "SoftwareUpdateService";
+    private static final String LOG_PREFIX = "[SoftwareUpdateService]";
 
     private Context context;
 
@@ -95,7 +96,7 @@ public class SoftwareUpdateService extends Service {
     private SoftwareManagementApiConnectionCallback swapiConnectionCallback = new SoftwareManagementApiConnectionCallback() {
         @Override
         public void onServiceConnected() {
-            Log.v(LOG_TAG, "Connected to SoftwareManagementApi");
+            Log.v(LOG_TAG, LOG_PREFIX + " Connected to SoftwareManagementApi");
 
             state = 1;
             softwareUpdateManager.UpdateState(state);
@@ -103,7 +104,7 @@ public class SoftwareUpdateService extends Service {
 
         @Override
         public void onServiceDisconnected() {
-            Log.d(LOG_TAG, "Connection to SoftwareManagementApi was lost. How to handle?");
+            Log.d(LOG_TAG, LOG_PREFIX + " Connection to SoftwareManagementApi was lost. How to handle?");
             state = 0;
         }
     };
@@ -112,24 +113,26 @@ public class SoftwareUpdateService extends Service {
 
         @Override
         public void onServiceDisconnected() {
-            Log.d(LOG_TAG, "Connection to SettingsStorageManager was lost, How to handle?");
+            Log.d(LOG_TAG, LOG_PREFIX + " Connection to SettingsStorageManager was lost, How to handle?");
         }
 
         @Override
         public void onServiceConnected() {
-            Log.v(LOG_TAG, "Connected to SettingsStorageManager");
+            Log.v(LOG_TAG, LOG_PREFIX + " Connected to SettingsStorageManager");
             try {
                 settingsStorageManager.getAsyncByString(appId, "ota_enabled", settingsCallback);
                 settingsStorageManager.getAsyncByString(appId, "automatic_download_enabled", settingsCallback);
 
             } catch (RemoteException e) {
-                Log.d(LOG_TAG, "settingsStorageManager.registerClient RemoteException: [" + e.getMessage() + "]");
+                Log.d(LOG_TAG, LOG_PREFIX + " settingsStorageManager.registerClient RemoteException: [" + e.getMessage()
+                        + "]");
             }
         }
     };
+
     @Override
     public void onCreate() {
-        Log.v(LOG_TAG, "onCreate");
+        Log.v(LOG_TAG, LOG_PREFIX + " onCreate");
         super.onCreate();
 
         // Save context in order to be able to send it to
@@ -156,31 +159,31 @@ public class SoftwareUpdateService extends Service {
         // Provide SUSApi
         softwareUpdateManager = new SoftwareUpdateManagerImpl(this);
 
-        Log.v(LOG_TAG, "Creating car");
+        Log.v(LOG_TAG, LOG_PREFIX + " Creating car");
         car = Car.createCar(this, carServiceConnection);
-        Log.v(LOG_TAG, "Connecting to car");
+        Log.v(LOG_TAG, LOG_PREFIX + " Connecting to car");
         car.connect();
     }
 
     public IBinder onBind(Intent intent) {
-        Log.v(LOG_TAG, "OnBind");
+        Log.v(LOG_TAG, LOG_PREFIX + " OnBind");
         return softwareUpdateManager.asBinder(); // Binder to SUSApi
     }
 
     public int GetState() {
-        Log.e(LOG_TAG, "GetState not implemented");
+        Log.e(LOG_TAG, LOG_PREFIX + " GetState not implemented");
         return state;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(LOG_TAG, "onStartCommand");
+        Log.v(LOG_TAG, LOG_PREFIX + " onStartCommand");
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        Log.v(LOG_TAG, "onDestroy");
+        Log.v(LOG_TAG, LOG_PREFIX + " onDestroy");
         super.onDestroy();
     }
 
@@ -197,10 +200,12 @@ public class SoftwareUpdateService extends Service {
             try {
                 swapi.GetSoftwareAssignment(query, type, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "GetSoftwareAssignmentList failed: RemoteException [" + e.getMessage() + "]");
+                Log.e(LOG_TAG,
+                        LOG_PREFIX + " GetSoftwareAssignmentList failed: RemoteException [" + e.getMessage() + "]");
             }
         } else {
-            Log.e(LOG_TAG, "GetSoftwareAssignmentList failed: Local SoftwareManagementApi variable is null");
+            Log.e(LOG_TAG,
+                    LOG_PREFIX + " GetSoftwareAssignmentList failed: Local SoftwareManagementApi variable is null");
         }
     }
 
@@ -237,7 +242,7 @@ public class SoftwareUpdateService extends Service {
     public void onDownloadedAssignment(DownloadInfo info) {
         Query query = new Query();
         query.installationOrderId = info.installationOrderId;
-        Log.d(LOG_TAG, "id " + info.id);
+        Log.d(LOG_TAG, LOG_PREFIX + " id " + info.id);
 
         boolean found = false;
         for (SoftwareInformation software : mergedSoftwareInformationList) {
@@ -248,13 +253,13 @@ public class SoftwareUpdateService extends Service {
                 } else if (DeliverableType.UPDATE == software.softwareAssignment.deliverableType) {
                     GetSoftwareAssignment(query, AssignmentType.UPDATE);
                 } else {
-                    Log.w(LOG_TAG, "Unknown deliverable type of software " + info.id);
+                    Log.w(LOG_TAG, LOG_PREFIX + " Unknown deliverable type of software " + info.id);
                 }
             }
         }
 
         if (!found) {
-            Log.w(LOG_TAG, "Software " + info.id + "was not found in any list... what to do?");
+            Log.w(LOG_TAG, LOG_PREFIX + " Software " + info.id + "was not found in any list... what to do?");
         }
     }
 
@@ -270,15 +275,16 @@ public class SoftwareUpdateService extends Service {
             }
 
             if (!found && !swInfo.downloadInfo.downloadedResources.isEmpty()) {
-                Log.d(LOG_TAG, "SoftwareAssignment " + swInfo.softwareAssignment.name + " removed from list");
+                Log.d(LOG_TAG,
+                        LOG_PREFIX + " SoftwareAssignment " + swInfo.softwareAssignment.name + " removed from list");
 
                 String directory = "/data/vendor/ota/" + swInfo.softwareAssignment.installationOrder.id;
                 File file = new File(directory);
                 try {
                     delete(file);
                 } catch (IOException e) {
-                    Log.w(LOG_TAG,
-                            "Directory " + directory + "could not be deleted [IOException: " + e.getMessage() + "]");
+                    Log.w(LOG_TAG, LOG_PREFIX + " Directory " + directory + "could not be deleted [IOException: "
+                            + e.getMessage() + "]");
                 }
 
             }
@@ -304,7 +310,8 @@ public class SoftwareUpdateService extends Service {
     public void CommissionAssignment(String uuid, CommissionElement.Reason reason) {
         if (swapi != null) {
             try {
-                Log.v(LOG_TAG, "CommissionAssignment called with uuid: " + uuid + " and reason: " + reason.name());
+                Log.v(LOG_TAG, LOG_PREFIX + " CommissionAssignment called with uuid: " + uuid + " and reason: "
+                        + reason.name());
 
                 for (SoftwareInformation software : mergedSoftwareInformationList) {
                     if (software.softwareAssignment.id.equals(uuid)) {
@@ -315,19 +322,19 @@ public class SoftwareUpdateService extends Service {
                             commissionElement.action = CommissionElement.Action.ORDER_SOFTWARE_INSTALLATION;
                             commissionElement.reason = reason;
                             commissionElement.commissionUri = software.softwareAssignment.commissionUri;
-                            Log.w(LOG_TAG, "Calling CommissionSoftwareAssignment: client_id not set (implement!)");
+                            Log.w(LOG_TAG, LOG_PREFIX + " Calling CommissionSoftwareAssignment: client_id not set (implement!)");
                             swapi.CommissionSoftwareAssignment(commissionElement, swapiCallback);
                         } else {
-                            Log.v(LOG_TAG, "CommissionSoftwareAssignment not called, software status is: "
+                            Log.v(LOG_TAG, LOG_PREFIX + " CommissionSoftwareAssignment not called, software status is: "
                                     + software.softwareAssignment.status.name());
                         }
                     }
                 }
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "CommissionAssignment failed: RemoteException [" + e.getMessage() + "]");
+                Log.e(LOG_TAG, LOG_PREFIX + " CommissionAssignment failed: RemoteException [" + e.getMessage() + "]");
             }
         } else {
-            Log.e(LOG_TAG, "CommissionAssignment failed: Local SoftwareManagementApi variable is null");
+            Log.e(LOG_TAG, LOG_PREFIX + " CommissionAssignment failed: Local SoftwareManagementApi variable is null");
         }
     }
 
@@ -338,13 +345,14 @@ public class SoftwareUpdateService extends Service {
     public void GetDownloadInfo(InstallationOrder installationOrder) {
         if (swapi != null) {
             try {
-                Log.v(LOG_TAG, "Get download information for assignment with installationOrderId: " + installationOrder.id);
+                Log.v(LOG_TAG, LOG_PREFIX + " Get download information for assignment with installationOrderId: "
+                        + installationOrder.id);
                 swapi.GetDownloadInfo(installationOrder, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "GetDownloadInfo failed: RemoteException [" + e.getMessage() + "]");
+                Log.e(LOG_TAG, LOG_PREFIX + " GetDownloadInfo failed: RemoteException [" + e.getMessage() + "]");
             }
         } else {
-            Log.e(LOG_TAG, "GetDownloadInfo failed: Local SoftwareManagementApi variable is null");
+            Log.e(LOG_TAG, LOG_PREFIX + " GetDownloadInfo failed: Local SoftwareManagementApi variable is null");
         }
     }
 
@@ -355,38 +363,39 @@ public class SoftwareUpdateService extends Service {
     public void GetDownloadData(DownloadInfo downloadInfo) {
         if (swapi != null) {
             try {
-                Log.v(LOG_TAG, "Get download data for downloadInfo with id: " + downloadInfo.id);
+                Log.v(LOG_TAG, LOG_PREFIX + " Get download data for downloadInfo with id: " + downloadInfo.id);
                 swapi.GetDownloadData(downloadInfo, swapiCallback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "GetDownloadData failed: RemoteException [" + e.getMessage() + "]");
+                Log.e(LOG_TAG, LOG_PREFIX + " GetDownloadData failed: RemoteException [" + e.getMessage() + "]");
             }
         } else {
-            Log.e(LOG_TAG, "GetDownloadData failed: Local SoftwareManagementApi variable is null");
+            Log.e(LOG_TAG, LOG_PREFIX + " GetDownloadData failed: Local SoftwareManagementApi variable is null");
         }
     }
 
     public void assignInstallation(String uuid) {
         if (installationMaster != null) {
 
-            Log.v(LOG_TAG, "Assigning installation for installation order with uuid:" + uuid);
+            Log.v(LOG_TAG, LOG_PREFIX + " Assigning installation for installation order with uuid:" + uuid);
             installationMaster.assignInstallation(uuid);
         } else {
-            Log.e(LOG_TAG, "ConfirmInstallation failed: Local InstallationMaster variable is null");
+            Log.e(LOG_TAG, LOG_PREFIX + " ConfirmInstallation failed: Local InstallationMaster variable is null");
         }
     }
 
     public void onInstallationNotification(String uuid, String notification) {
-        Log.v(LOG_TAG, "onInstallNotificaion: [installationOrderID: " + uuid + ", notification: " + notification + "]");
+        Log.v(LOG_TAG, LOG_PREFIX + " onInstallNotificaion: [installationOrderID: " + uuid + ", notification: "
+                + notification + "]");
 
-        Log.w(LOG_TAG,
-                "Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
+        Log.w(LOG_TAG, LOG_PREFIX
+                + " Todo: Construct a real install notification, only sending a \"hacked\" one for testing purpose...");
         InstallNotification installNotification = new InstallNotification();
 
         for (SoftwareInformation softwareInformation : mergedSoftwareInformationList) {
             if (softwareInformation.softwareAssignment.installationOrder.id.equals(uuid)) {
                 installNotification.uri = softwareInformation.softwareAssignment.installationOrder.installNotificationsUri;
             } else {
-                Log.w(LOG_TAG, "InstallationOrder " + uuid
+                Log.w(LOG_TAG, LOG_PREFIX + " InstallationOrder " + uuid
                         + " was not found in list! Couldn't set installation notification uri!");
             }
         }
@@ -400,22 +409,22 @@ public class SoftwareUpdateService extends Service {
         try {
             swapi.PostInstallNotification(installNotification, swapiCallback);
         } catch (RemoteException e) {
-            Log.e(LOG_TAG, "onInstallationNotification failed: RemoteException [" + e.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " onInstallationNotification failed: RemoteException [" + e.getMessage() + "]");
         }
     }
 
     public void onInstallationReport(String installationOrder, InstallationSummary installationSummary) {
-        Log.v(LOG_TAG, "onInstallationReport: [installationOrderID: " + installationOrder + ", installation summary: "
-                + installationSummary.softwareId + "]");
-        Log.w(LOG_TAG,
-                "Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
+        Log.v(LOG_TAG, LOG_PREFIX + " onInstallationReport: [installationOrderID: " + installationOrder
+                + ", installation summary: " + installationSummary.softwareId + "]");
+        Log.w(LOG_TAG, LOG_PREFIX
+                + " Todo: Construct a real installation report, only sending a \"hacked\" one for testing purpose...");
         InstallationReport installationReport = new InstallationReport();
 
         for (SoftwareInformation softwareInformation : mergedSoftwareInformationList) {
             if (softwareInformation.softwareAssignment.installationOrder.id.equals(installationOrder)) {
                 installationReport.uri = softwareInformation.softwareAssignment.installationOrder.installationReportUri;
             } else {
-                Log.w(LOG_TAG, "InstallationOrder " + installationOrder
+                Log.w(LOG_TAG, LOG_PREFIX + " InstallationOrder " + installationOrder
                         + " was not found in list! Couldn't set installation notification uri!");
             }
         }
@@ -424,34 +433,35 @@ public class SoftwareUpdateService extends Service {
         installationReport.reportReason = InstallationReport.ReportReason.OK;
         installationReport.timestamp = "2018-05-08T10:00:00";
 
-        Log.d(LOG_TAG, "created report");
+        Log.d(LOG_TAG, LOG_PREFIX + " created report");
         try {
-            Log.i(LOG_TAG, "sending installation report");
+            Log.i(LOG_TAG, LOG_PREFIX + " sending installation report");
             swapi.PostInstallationReport(installationReport, swapiCallback);
         } catch (RemoteException e) {
-            Log.e(LOG_TAG, "onInstallationReport failed: RemoteException [" + e.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " onInstallationReport failed: RemoteException [" + e.getMessage() + "]");
         }
     }
 
     public void GetInstallNotification(String installationOrderId) {
         if (swapi != null) {
             try {
-                Log.v(LOG_TAG, "GetInstallNotification [installationOrderId: " + installationOrderId + "]");
+                Log.v(LOG_TAG,
+                        LOG_PREFIX + " GetInstallNotification [installationOrderId: " + installationOrderId + "]");
                 for (SoftwareInformation softwareInformation : mergedSoftwareInformationList) {
                     if (softwareInformation.softwareAssignment.installationOrder.id.equals(installationOrderId)) {
                         swapi.GetInstallNotification(installationOrderId,
                                 softwareInformation.softwareAssignment.installationOrder.installNotificationsUri,
                                 swapiCallback);
                     } else {
-                        Log.w(LOG_TAG, "installationorder " + installationOrderId
+                        Log.w(LOG_TAG, LOG_PREFIX + " installationorder " + installationOrderId
                                 + "was not found in list! No uri to install notification => GetInstallNotification not sent!");
                     }
                 }
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");
+                Log.e(LOG_TAG, LOG_PREFIX + " GetInstallNotification failed: RemoteException [" + e.getMessage() + "]");
             }
         } else {
-            Log.e(LOG_TAG, "GetInstallNotification failed: Local SoftwareManagementApi variable is null");
+            Log.e(LOG_TAG, LOG_PREFIX + " GetInstallNotification failed: Local SoftwareManagementApi variable is null");
         }
     }
 
@@ -467,40 +477,42 @@ public class SoftwareUpdateService extends Service {
     public void OnInstallationPopup(InstallOption option, String uuid) {
         switch (option) {
         case INSTALL:
-            Log.v(LOG_TAG, "OnInstallationPopup: [option: INSTALL, uuid: " + uuid + "]");
+            Log.v(LOG_TAG, LOG_PREFIX + " OnInstallationPopup: [option: INSTALL, uuid: " + uuid + "]");
             installationMaster.assignInstallation(uuid);
             break;
         case CANCEL:
-            Log.v(LOG_TAG, "OnInstallationPopup: [option: CANCEL, uuid: " + uuid + "] (Option not implemented)");
+            Log.v(LOG_TAG,
+                    LOG_PREFIX + " OnInstallationPopup: [option: CANCEL, uuid: " + uuid + "] (Option not implemented)");
             break;
         case POSTPONE:
-            Log.v(LOG_TAG, "OnInstallationPopup: [option: POSTPONE, uuid: " + uuid + "] (Option not implemented)");
+            Log.v(LOG_TAG, LOG_PREFIX + " OnInstallationPopup: [option: POSTPONE, uuid: " + uuid
+                    + "] (Option not implemented)");
             break;
         }
     }
 
     public void UpdateSoftwareList(List<SoftwareAssignment> softwareAssignments, AssignmentType type) {
-        Log.v(LOG_TAG, "UpdateSoftwareList of type " + type);
+        Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftwareList of type " + type);
         if (AssignmentType.UPDATE == type) {
-            Log.v(LOG_TAG, "UpdateSoftwareList: Before update, softwareInformationListUpdates.size = "
+            Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftwareList: Before update, softwareInformationListUpdates.size = "
                     + softwareInformationListUpdates.size());
             softwareInformationListUpdates.clear();
             for (SoftwareAssignment assignment : softwareAssignments) {
                 softwareInformationListUpdates.add(new SoftwareInformation(assignment));
             }
-            Log.v(LOG_TAG, "UpdateSoftwareList: After update, softwareInformationListUpdates.size = "
+            Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftwareList: After update, softwareInformationListUpdates.size = "
                     + softwareInformationListUpdates.size());
         } else if (AssignmentType.ACCESSORY == type) {
-            Log.v(LOG_TAG, "UpdateSoftwareList: Before update, softwareInformationListAccessory.size = "
+            Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftwareList: Before update, softwareInformationListAccessory.size = "
                     + softwareInformationListAccessory.size());
             softwareInformationListAccessory.clear();
             for (SoftwareAssignment assignment : softwareAssignments) {
                 softwareInformationListAccessory.add(new SoftwareInformation(assignment));
             }
-            Log.v(LOG_TAG, "UpdateSoftwareList: After update, softwareInformationListAccessory.size = "
+            Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftwareList: After update, softwareInformationListAccessory.size = "
                     + softwareInformationListAccessory.size());
         } else {
-            Log.w(LOG_TAG, "Unknown AssignmentType: " + type);
+            Log.w(LOG_TAG, LOG_PREFIX + " Unknown AssignmentType: " + type);
         }
 
         mergedSoftwareInformationList.clear();
@@ -517,12 +529,12 @@ public class SoftwareUpdateService extends Service {
             if (downloadInfo.installationOrderId.equals(information.softwareAssignment.installationOrder.id)) {
                 found = true;
                 information.AddDownloadInfo(downloadInfo);
-                Log.e(LOG_TAG, "" + information.softwareState);
+                Log.e(LOG_TAG, LOG_PREFIX + "" + information.softwareState);
                 break;
             }
         }
         if (!found) {
-            Log.v(LOG_TAG, "UpdateSoftwareList(downloadInfo), id [" + downloadInfo.id
+            Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftwareList(downloadInfo), id [" + downloadInfo.id
                     + "] not found in list which is weird...");
         }
 
@@ -545,17 +557,18 @@ public class SoftwareUpdateService extends Service {
         }
 
         if (!found) {
-            Log.v(LOG_TAG, "UpdateSoftwareState, uuid [" + uuid + "] not found in list which is weird...");
+            Log.v(LOG_TAG,
+                    LOG_PREFIX + " UpdateSoftwareState, uuid [" + uuid + "] not found in list which is weird...");
         }
     }
 
     public void UpdateSetting(String setting, String value) {
-        Log.v(LOG_TAG, "UpdateSetting [setting: " + setting + ", value: " + value + "]");
+        Log.v(LOG_TAG, LOG_PREFIX + " UpdateSetting [setting: " + setting + ", value: " + value + "]");
         if (!value.isEmpty()) {
             settings.put(setting, (Integer.parseInt(value) != 0));
             softwareUpdateManager.UpdateSettings(settings);
         } else {
-            Log.w(LOG_TAG, "Setting: " + setting + "is empty, what to do?");
+            Log.w(LOG_TAG, LOG_PREFIX + " Setting: " + setting + "is empty, what to do?");
         }
     }
 
@@ -565,7 +578,7 @@ public class SoftwareUpdateService extends Service {
         public void onSensorChanged(final CarSensorEvent event) {
             if (ignitionState != event.intValues[0]) {
                 ignitionState = event.intValues[0];
-                Log.i(LOG_TAG, "Drive state changed");
+                Log.i(LOG_TAG, LOG_PREFIX + " Drive state changed");
             }
         }
     };
@@ -576,15 +589,17 @@ public class SoftwareUpdateService extends Service {
         public void onServiceConnected(ComponentName name, IBinder service) {
             synchronized (this) {
                 try {
-                    Log.v(LOG_TAG, "Car service connected");
+                    Log.v(LOG_TAG, LOG_PREFIX + " Car service connected");
 
                     carSensorManager = (CarSensorManager) car.getCarManager(Car.SENSOR_SERVICE);
 
-                    ignitionState = carSensorManager.getLatestSensorEvent(CarSensorManager.SENSOR_TYPE_IGNITION_STATE).intValues[0];
+                    ignitionState = carSensorManager
+                            .getLatestSensorEvent(CarSensorManager.SENSOR_TYPE_IGNITION_STATE).intValues[0];
 
-                    carSensorManager.registerListener(ignitionStateChangeHandler, CarSensorManager.SENSOR_TYPE_IGNITION_STATE, CarSensorManager.SENSOR_RATE_UI);
+                    carSensorManager.registerListener(ignitionStateChangeHandler,
+                            CarSensorManager.SENSOR_TYPE_IGNITION_STATE, CarSensorManager.SENSOR_RATE_UI);
                 } catch (CarNotConnectedException ex) {
-                    Log.e(LOG_TAG, "Exception thrown: " + ex);
+                    Log.e(LOG_TAG, LOG_PREFIX + " Exception thrown: " + ex);
                 }
             }
         }
@@ -592,7 +607,7 @@ public class SoftwareUpdateService extends Service {
         @Override
         public void onServiceDisconnected(ComponentName name) {
             synchronized (this) {
-                Log.v(LOG_TAG, "Car service disconnected");
+                Log.v(LOG_TAG, LOG_PREFIX + " Car service disconnected");
 
                 carSensorManager.unregisterListener(ignitionStateChangeHandler);
 

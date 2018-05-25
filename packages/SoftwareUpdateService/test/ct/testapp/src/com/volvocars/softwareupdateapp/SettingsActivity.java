@@ -22,7 +22,8 @@ import java.util.*;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final String LOG_TAG = "SwUpdApp.SettingsActivity";
+    private final String LOG_TAG = "SwUpdApp";
+    private final String LOG_PREFIX = "SettingsActivity";
     private SoftwareUpdateManager softwareUpdateManager = null;
 
     private LinearLayout settingsLayout;
@@ -45,21 +46,21 @@ public class SettingsActivity extends AppCompatActivity {
     private SoftwareUpdateManagerCallback softwareUpdateManagerCallback = new SoftwareUpdateManagerCallback() {
         @Override
         public void onServiceConnected() {
-            Log.v(LOG_TAG, "onServiceConnected app");
+            Log.v(LOG_TAG, LOG_PREFIX + " onServiceConnected app");
             try {
                 softwareUpdateManager.RegisterSettingsClient(callback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Error RegisterSettingsClient");
+                Log.e(LOG_TAG, LOG_PREFIX + " Error RegisterSettingsClient");
             }
         }
 
         @Override
         public void onServiceDisconnected() {
-            Log.v(LOG_TAG, "onServiceDisconnected app");
+            Log.v(LOG_TAG, LOG_PREFIX + " onServiceDisconnected app");
             try {
                 softwareUpdateManager.UnregisterSettingsClient(callback);
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Error UnegisterSettingsClient");
+                Log.e(LOG_TAG, LOG_PREFIX + " Error UnegisterSettingsClient");
             }
         }
     };
@@ -67,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(LOG_TAG, "onCreate");
+        Log.v(LOG_TAG, LOG_PREFIX + " onCreate");
         softwareUpdateManager = new SoftwareUpdateManager(this, softwareUpdateManagerCallback);
 
         setContentView(R.layout.layout_settings);
@@ -87,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
                 try {
                     softwareUpdateManager.SetSetting(ENABLE_OTA, isChecked);
                 } catch (RemoteException e) {
-                    Log.w(LOG_TAG, "RemoteException " + e.getMessage());
+                    Log.w(LOG_TAG, LOG_PREFIX + " RemoteException " + e.getMessage());
                 }
             }
         });
@@ -97,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
                 try {
                     softwareUpdateManager.SetSetting(AUTO_DOWNLOAD, isChecked);
                 } catch (RemoteException e) {
-                    Log.w(LOG_TAG, "RemoteException " + e.getMessage());
+                    Log.w(LOG_TAG, LOG_PREFIX + " RemoteException " + e.getMessage());
                 }
             }
         });
@@ -106,12 +107,12 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v(LOG_TAG, "onDestroy");
+        Log.v(LOG_TAG, LOG_PREFIX + " onDestroy");
         softwareUpdateManager.disconnect();
     }
 
     private void updateSettings(String key, boolean value) {
-        Log.v(LOG_TAG, "updateSettings");
+        Log.v(LOG_TAG, LOG_PREFIX + " updateSettings");
 
         if (key.equals(ENABLE_OTA)) runOnUiThread(() -> enableOtaSwitch.setChecked(value));
         if (key.equals(AUTO_DOWNLOAD)) runOnUiThread(() -> autoDownloadSwitch.setChecked(value));

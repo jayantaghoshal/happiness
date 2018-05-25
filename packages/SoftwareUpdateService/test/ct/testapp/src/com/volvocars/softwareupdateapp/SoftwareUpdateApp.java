@@ -46,7 +46,8 @@ import android.support.v7.widget.Toolbar;
 import android.graphics.Rect;
 
 public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpdateApp {
-    private static final String LOG_TAG = "SwUpdApp";
+    private static final String LOG_TAG = "SoftwareUpdateApp";
+    private static final String LOG_PREFIX = "[SoftwareUpdateApp]";
 
     private SoftwareUpdateManager softwareUpdateManager = null;
 
@@ -63,23 +64,23 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void UpdateState(int state) {
             if (!registered) {
-                Log.v(LOG_TAG, "UpdateState: Not registered, returning");
+                Log.v(LOG_TAG, LOG_PREFIX + " UpdateState: Not registered, returning");
                 return;
             }
-            Log.v(LOG_TAG, "UpdateState " + state);
+            Log.v(LOG_TAG, LOG_PREFIX + " UpdateState " + state);
         }
 
         @Override
         public void UpdateSoftwareList(List<SoftwareInformation> software_list) {
             if (!registered) {
-                Log.v(LOG_TAG, "UpdateSoftwareList: Not registered, returning");
+                Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftwareList: Not registered, returning");
                 return;
             }
-            Log.v(LOG_TAG, "SoftwareList:");
+            Log.v(LOG_TAG, LOG_PREFIX + " SoftwareList:");
             boolean available = false;
             swInfos.clear();
             for (SoftwareInformation si : software_list) {
-                Log.v(LOG_TAG, "" + si.toString() + "\n" + si.softwareState.name());
+                Log.v(LOG_TAG, LOG_PREFIX + " " + si.toString() + "\n" + si.softwareState.name());
                 swInfos.add(si);
                 /*
                  * if (si.softwareAssignment.status = SoftwareAssignment.Status.COMMISSIONABLE)
@@ -93,11 +94,11 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void UpdateSoftware(SoftwareInformation software) {
             if (!registered) {
-                Log.v(LOG_TAG, "UpdateSoftware: Not registered, returning");
+                Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftware: Not registered, returning");
                 return;
             }
             for (SoftwareInformation si : swInfos) {
-                Log.v(LOG_TAG, "UpdateSoftware: " + si.toString());
+                Log.v(LOG_TAG, LOG_PREFIX + " UpdateSoftware: " + si.toString());
                 if (si.softwareAssignment.id.equals(software.softwareAssignment.id)) {
                     swInfos.set(swInfos.indexOf(si), software);
                     break;
@@ -108,7 +109,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
         @Override
         public void ProvideErrorMessage(int code, String message) {
-            Log.d(LOG_TAG, "ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
+            Log.d(LOG_TAG, LOG_PREFIX + " ProvideErrorMessage: [ code: " + code + ", message: " + message + "]");
         }
 
         /**
@@ -118,7 +119,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
         @Override
         public void showInstallationPopup(SoftwareAssignment software) {
             if (!registered) {
-                Log.v(LOG_TAG, "showInstallationPopUp: Not registered, returning");
+                Log.v(LOG_TAG, LOG_PREFIX + " showInstallationPopUp: Not registered, returning");
                 return;
             } else {
                 runOnUiThread(() -> showInstallationDialog(software.name, software.installationOrder.id));
@@ -133,25 +134,25 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     private final SoftwareUpdateManagerCallback softwareUpdateManagerCallback = new SoftwareUpdateManagerCallback() {
         @Override
         public void onServiceConnected() {
-            Log.v(LOG_TAG, "onServiceConnected app");
+            Log.v(LOG_TAG, LOG_PREFIX + " onServiceConnected app");
             try {
-                Log.v(LOG_TAG, "onServiceConnected app: Register - " + callback);
+                Log.v(LOG_TAG, LOG_PREFIX + " onServiceConnected app: Register - " + callback);
                 softwareUpdateManager.RegisterSwUpdClient(callback);
                 callback.registered = true;
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Error RegisterSwUpdClient");
+                Log.e(LOG_TAG, LOG_PREFIX + " Error RegisterSwUpdClient");
             }
         }
 
         @Override
         public void onServiceDisconnected() {
-            Log.v(LOG_TAG, "onServiceDisconnected app");
+            Log.v(LOG_TAG, LOG_PREFIX + " onServiceDisconnected app");
             try {
-                Log.v(LOG_TAG, "onServiceDisconnected app: Unregister - " + callback);
+                Log.v(LOG_TAG, LOG_PREFIX + " onServiceDisconnected app: Unregister - " + callback);
                 softwareUpdateManager.UnregisterSwUpdClient(callback);
                 callback.registered = false;
             } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Error UnregisterSwUpdClient");
+                Log.e(LOG_TAG, LOG_PREFIX + " Error UnregisterSwUpdClient");
             }
         }
     };
@@ -182,25 +183,25 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
             switch (menuItem.getItemId()) {
             case R.id.getUpdatesItem:
                 try {
-                    Log.v(LOG_TAG, "Sending GetSoftwareUpdates");
+                    Log.v(LOG_TAG, LOG_PREFIX + " Sending GetSoftwareUpdates");
                     Query query = new Query();
                     softwareUpdateManager.GetSoftwareAssignment(query, AssignmentType.UPDATE);
                     Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareUpdates", Snackbar.LENGTH_SHORT)
                             .show();
                     return true;
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "GetSoftwareAssignments failed, remote exception");
+                    Log.e(LOG_TAG, LOG_PREFIX + " GetSoftwareAssignments failed, remote exception");
                 }
             case R.id.getAccessoriesItem:
                 try {
-                    Log.v(LOG_TAG, "Sending GetSoftwareAccessories");
+                    Log.v(LOG_TAG, LOG_PREFIX + " Sending GetSoftwareAccessories");
                     Query query = new Query();
                     softwareUpdateManager.GetSoftwareAssignment(query, AssignmentType.ACCESSORY);
                     Snackbar.make(findViewById(R.id.rootLayout), "Calling GetSoftwareAccessories",
                             Snackbar.LENGTH_SHORT).show();
                     return true;
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "GetSoftwareAssignments failed, remote exception");
+                    Log.e(LOG_TAG, LOG_PREFIX + " GetSoftwareAssignments failed, remote exception");
                 }
             default:
             }
@@ -209,7 +210,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     }
 
     private void showInstallationDialog(String name, String id) {
-        Log.v(LOG_TAG, "showInstallationDialog");
+        Log.v(LOG_TAG, LOG_PREFIX + " showInstallationDialog");
 
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
@@ -232,7 +233,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
                     softwareUpdateManager.OnInstallationPopup(InstallOption.INSTALL,
                             id);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, e.getMessage());
+                    Log.e(LOG_TAG, LOG_PREFIX + e.getMessage());
                 }
             }
         });
@@ -246,7 +247,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
                     softwareUpdateManager.OnInstallationPopup(InstallOption.CANCEL,
                             id);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, e.getMessage());
+                    Log.e(LOG_TAG, LOG_PREFIX + e.getMessage());
                 }
             }
         });
@@ -260,7 +261,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
                     softwareUpdateManager.OnInstallationPopup(InstallOption.POSTPONE,
                             id);
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, e.getMessage());
+                    Log.e(LOG_TAG, LOG_PREFIX + e.getMessage());
                 }
             }
         });
@@ -271,7 +272,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(LOG_TAG, "onCreate");
+        Log.v(LOG_TAG, LOG_PREFIX + " onCreate");
         softwareUpdateManager = new SoftwareUpdateManager(this, softwareUpdateManagerCallback);
 
         setContentView(R.layout.activity_main);
@@ -297,13 +298,13 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v(LOG_TAG, "onDestroy");
+        Log.v(LOG_TAG, LOG_PREFIX + " onDestroy");
         try {
-            Log.v(LOG_TAG, "onDestroy app: Unregister - " + callback);
+            Log.v(LOG_TAG, LOG_PREFIX + " onDestroy app: Unregister - " + callback);
             softwareUpdateManager.UnregisterSwUpdClient(callback);
             callback.registered = false;
         } catch (RemoteException e) {
-            Log.e(LOG_TAG, "UnregisterSwUpdClient failed, remote exception");
+            Log.e(LOG_TAG, LOG_PREFIX + " UnregisterSwUpdClient failed, remote exception");
         }
         softwareUpdateManager.disconnect();
     }
@@ -387,20 +388,20 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
     @Override
     protected void onStart() {
         super.onStart();
-        Log.v(LOG_TAG, "OnStart");
+        Log.v(LOG_TAG, LOG_PREFIX + " OnStart");
         // showInstallationDialog();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v(LOG_TAG, "InBackground");
+        Log.v(LOG_TAG, LOG_PREFIX + " InBackground");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v(LOG_TAG, "InForeground");
+        Log.v(LOG_TAG, LOG_PREFIX + " InForeground");
     }
 
     @Override
@@ -410,7 +411,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
                     Snackbar.LENGTH_SHORT).show();
             softwareUpdateManager.CommissionAssignment(uuid);
         } catch (Exception e) {
-            Log.e(LOG_TAG, e.getMessage());
+            Log.e(LOG_TAG, LOG_PREFIX + e.getMessage());
         }
     }
 
@@ -421,7 +422,7 @@ public class SoftwareUpdateApp extends AppCompatActivity implements ISoftwareUpd
                     Snackbar.LENGTH_SHORT).show();
             softwareUpdateManager.GetInstallNotification(installationOrderId);
         } catch (Exception e) {
-            Log.e(LOG_TAG, e.getMessage());
+            Log.e(LOG_TAG, LOG_PREFIX + e.getMessage());
         }
     }
 }

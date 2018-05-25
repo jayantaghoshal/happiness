@@ -15,11 +15,14 @@ import java.util.List;
 
 import com.volvocars.cloudservice.AssignmentType;;
 import com.volvocars.cloudservice.Query;
+
 /**
  * Library/wrapper class that is used to access SoftwareUpdateManager features
  */
 public class SoftwareUpdateManager implements ServiceConnection {
-    private static final String LOG_TAG = "SoftwareUpdateManager.Lib";
+    private static final String LOG_TAG = "SoftwareUpdateService";
+    private static final String LOG_PREFIX = "SoftwareUpdateManager";
+
     private static final String PACKAGENAME = "com.volvocars.softwareupdate";
     private static final String PACKAGENAME_SERVICENAME = "com.volvocars.softwareupdate.SoftwareUpdateService";
     private Context context = null;
@@ -48,7 +51,8 @@ public class SoftwareUpdateManager implements ServiceConnection {
     }
 
     /**
-     * Used to bind to SoftwareUpdateService, can be used by client if service unbinds unexpectedly
+     * Used to bind to SoftwareUpdateService, can be used by client if service
+     * unbinds unexpectedly
      */
     public void connect() {
         Intent intent = new Intent();
@@ -111,10 +115,10 @@ public class SoftwareUpdateManager implements ServiceConnection {
     }
 
     /**
-    * Send result of installation pop-up
-    * Note: this is only used for test, remove once proper handling of system popups are in place
-    */
-    public void OnInstallationPopup(InstallOption option, String uuid) throws RemoteException{
+     * Send result of installation pop-up Note: this is only used for test, remove
+     * once proper handling of system popups are in place
+     */
+    public void OnInstallationPopup(InstallOption option, String uuid) throws RemoteException {
         if (softwareUpdateManager != null && serviceBound) {
             softwareUpdateManager.OnInstallationPopup(option, uuid);
         }

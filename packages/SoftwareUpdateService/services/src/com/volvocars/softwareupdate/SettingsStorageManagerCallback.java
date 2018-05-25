@@ -9,7 +9,8 @@ import android.util.Log;
 import com.volvocars.settingsstorageservice.ISettingsStorageManagerCallback;
 
 public class SettingsStorageManagerCallback extends ISettingsStorageManagerCallback.Stub {
-    private static final String LOG_TAG = "SettingsStorageManagerCallback";
+    private static final String LOG_TAG = "SoftwareUpdateService";
+    private static final String LOG_PREFIX = "[SettingsStorageManagerCallback]";
 
     SoftwareUpdateService service = null;
 
@@ -19,13 +20,13 @@ public class SettingsStorageManagerCallback extends ISettingsStorageManagerCallb
 
     @Override
     public void keyValueByString(String key, String value) {
-        Log.v(LOG_TAG, "keyValueByString: [key: " + key + ", value: " + value + "]");
+        Log.v(LOG_TAG, LOG_PREFIX + " keyValueByString: [key: " + key + ", value: " + value + "]");
         service.UpdateSetting(key, value);
     }
 
     @Override
     public void keyValueByInt(int key, String value) {
-        Log.v(LOG_TAG, "keyValueByInt: [key: " + key + ", value: " + value + "]");
+        Log.v(LOG_TAG, LOG_PREFIX + " keyValueByInt: [key: " + key + ", value: " + value + "]");
     }
 
 }

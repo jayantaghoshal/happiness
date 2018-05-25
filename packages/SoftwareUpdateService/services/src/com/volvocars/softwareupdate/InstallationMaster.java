@@ -14,7 +14,8 @@ import java.util.List;
 import vendor.volvocars.hardware.installationmaster.V1_0.*;
 
 public class InstallationMaster extends IInstallationMasterEventListener.Stub {
-    private static final String LOG_TAG = "SoftwareUpdate.IM";
+    private static final String LOG_TAG = "SoftwareUpdateService";
+    private static final String LOG_PREFIX = "[SoftwareUpdateService]";
 
     private IInstallationMaster installationmaster = null;
 
@@ -29,20 +30,21 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
             installationmaster = IInstallationMaster.getService();
             installationmaster.registerInstallationStatusListener(this);
         } catch (RemoteException ex) {
-            Log.e(LOG_TAG, "Cannot initialize InstallationMaster: RemoteException [" + ex.getMessage() + "]");
+            Log.e(LOG_TAG,
+                    LOG_PREFIX + " Cannot initialize InstallationMaster: RemoteException [" + ex.getMessage() + "]");
         }
     }
 
     @Override
     public void installNotification(String installationOrder, int notification) {
-        Log.v(LOG_TAG, "installNotification [installationOrder: " + installationOrder + ", notification: "
+        Log.v(LOG_TAG, LOG_PREFIX + " installNotification [installationOrder: " + installationOrder + ", notification: "
                 + InstallationStatus.toString(notification) + "]");
         service.onInstallationNotification(installationOrder, InstallationStatus.toString(notification));
     }
 
     @Override
     public void installationReport(String installationOrder, Summary summary) {
-        Log.v(LOG_TAG, "installationReport [installationOrder: " + installationOrder);
+        Log.v(LOG_TAG, LOG_PREFIX + " installationReport [installationOrder: " + installationOrder);
 
         InstallationSummary installationSummary = new InstallationSummary();
         installationSummary.softwareId = summary.softwareId;
@@ -54,20 +56,20 @@ public class InstallationMaster extends IInstallationMasterEventListener.Stub {
     }
 
     public void assignInstallation(String uuid) {
-        Log.v(LOG_TAG, "assignInstallation [uuid: " + uuid + "]");
+        Log.v(LOG_TAG, LOG_PREFIX + " assignInstallation [uuid: " + uuid + "]");
         try {
             installationmaster.assignInstallation(uuid);
         } catch (RemoteException e) {
-            Log.e(LOG_TAG, "Error in assignInstallation: RemoteException [" + e.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Error in assignInstallation: RemoteException [" + e.getMessage() + "]");
         }
     }
 
     public void verifyDownload(String installationOrderId) {
-        Log.v(LOG_TAG, "verifyDownload [installationOrderId: " + installationOrderId + "]");
+        Log.v(LOG_TAG, LOG_PREFIX + " verifyDownload [installationOrderId: " + installationOrderId + "]");
         try {
             installationmaster.verifyDownload(installationOrderId);
         } catch (RemoteException e) {
-            Log.e(LOG_TAG, "Error in verifyDownload: RemoteException [" + e.getMessage() + "]");
+            Log.e(LOG_TAG, LOG_PREFIX + " Error in verifyDownload: RemoteException [" + e.getMessage() + "]");
         }
     }
 }
