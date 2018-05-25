@@ -31,6 +31,9 @@
   <project name="vendor/volvocars/external/paho.mqtt.cpp" path="vendor/volvocars/external/paho.mqtt.cpp" revision="a436f5d21dea33e3d28eb0885aff45d859d04b79"/>
 
   <!-- AOSP Overrides -->
+  <remove-project name="aosp/platform/system/core" />
+  <project name="aosp/platform/system/core" path="system/core" revision="50d7fc01d1d4e1058f65056643e74066669640ba" />
+
   <remove-project name="aosp/platform/hardware/interfaces" />
   <project name="aosp/platform/hardware/interfaces" path="hardware/interfaces" revision="8bfbc79d31334c231e3dc0296730f8b05fb4e646" />
 
