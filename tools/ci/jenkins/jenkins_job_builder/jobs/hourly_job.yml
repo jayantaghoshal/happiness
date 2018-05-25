@@ -23,6 +23,7 @@
             project-name: ihu_hourly
             description: parameter 'TOP_JOB_NUMBER' will be used to store along with test results.    
     wrappers:
+        - workspace-cleanup
         - timestamps
         - timeout:
             timeout: 180
