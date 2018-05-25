@@ -18,6 +18,9 @@ import static org.junit.Assert.assertFalse;
 
 import java.lang.AssertionError;
 
+import com.volvocars.cloudservice.CommissionElement.Action;
+import com.volvocars.cloudservice.CommissionElement.Reason;
+
 @SmallTest
 @RunWith(AndroidJUnit4.class)
 public class XmlSerializerWrapperTest {
@@ -193,6 +196,39 @@ public class XmlSerializerWrapperTest {
         notification.notification.status.subStatusReason = Status.SubStatusReason.ENERGY_LOW;
 
         String actual = XmlSerializerWrapper.serializeInstallNotification(notification);
+
+        if (!actual.equals(expected)) {
+            for (int i = 0; i < expected.length(); i++) {
+                char expected_char = expected.charAt(i);
+
+                if (i < actual.length()) {
+                    if (actual.charAt(i) != expected.charAt(i)) {
+                        throw new AssertionError("XML Serialization Error at index " + i + ": Expected: "
+                                + getClosestTag(expected, i) + " Actual: " + getClosestTag(actual, i));
+                    }
+                }
+            }
+            throw new AssertionError("XML Serialization Error: Actual contains unexpected content:"
+                    + actual.substring(expected.length()));
+        }
+    }
+
+    @Test
+    public void testSerializeCommissionElementPopulated() {
+        String expected = "<?xml version='1.0' ?>"
+                + "<commission xsi:schemaLocation=\"http://schemas.volvocars.biz/conncar/foundation_services/software_management/commission commission.xsd\" xmlns=\"http://schemas.volvocars.biz/conncar/foundation_services/software_management/commission\" xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                + "<id>466c6c25-4169-480c-ad0b-ba37cc321ade</id>" + "<client_id>1FTKR1EDXBPB10452</client_id>"
+                + "<action>ORDER_SOFTWARE_INSTALLATION</action>" + "<reason>USER</reason>"
+                + "<ds:Signature>[Signature content omitted]</ds:Signature>" + "</commission>";
+
+        CommissionElement commissionElement = new CommissionElement();
+
+        commissionElement.id = "466c6c25-4169-480c-ad0b-ba37cc321ade";
+        commissionElement.clientId = "1FTKR1EDXBPB10452";
+        commissionElement.action = Action.ORDER_SOFTWARE_INSTALLATION;
+        commissionElement.reason = Reason.USER;
+
+        String actual = XmlSerializerWrapper.serializeCommissionElement(commissionElement);
 
         if (!actual.equals(expected)) {
             for (int i = 0; i < expected.length(); i++) {

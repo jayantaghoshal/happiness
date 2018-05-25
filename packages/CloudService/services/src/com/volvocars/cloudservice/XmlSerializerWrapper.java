@@ -223,4 +223,56 @@ public final class XmlSerializerWrapper {
 
         return writer.toString();
     }
+
+
+     /*
+     * ########################################################################
+     * #                        COMMISSION                                    #
+     * ########################################################################
+     */
+
+    public static String serializeCommissionElement(CommissionElement commissionElement) {
+        StringWriter writer = new StringWriter();
+        XmlSerializer serializer = Xml.newSerializer();
+
+        try {
+            serializer.setOutput(writer);
+
+            //serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
+
+            serializer.startDocument(null, null);
+
+            String defaultNamespace = "http://schemas.volvocars.biz/conncar/foundation_services/software_management/commission";
+            String signatureNamespace = "http://www.w3.org/2000/09/xmldsig#";
+            String instanceNamespace = "http://www.w3.org/2001/XMLSchema-instance";
+            serializer.setPrefix("", defaultNamespace);
+            serializer.setPrefix("ds", signatureNamespace);
+            serializer.setPrefix("xsi", instanceNamespace);
+            serializer.startTag(defaultNamespace, "commission");
+            serializer.attribute(instanceNamespace, "schemaLocation", "http://schemas.volvocars.biz/conncar/foundation_services/software_management/commission commission.xsd");
+
+            writeTextTag(serializer, "id", commissionElement.id);
+            writeTextTag(serializer, "client_id", commissionElement.clientId);
+            writeTextTag(serializer, "action", commissionElement.action.name());
+            writeTextTag(serializer, "reason", commissionElement.reason.name());
+
+            signDocument(serializer, signatureNamespace);
+
+            serializer.endTag(defaultNamespace, "commission");
+
+            serializer.endDocument();
+
+        } catch (IOException e) {
+            Log.w(LOG_TAG, "Serializing of CommissionElement failed, IOException: [" + e.getMessage() + "]");
+            return null;
+        } catch (IllegalStateException e) {
+            Log.w(LOG_TAG, "Serializing of CommissionElement failed, IllegalStateException: [" + e.getMessage() + "]");
+            return null;
+        } catch (IllegalArgumentException e) {
+            Log.w(LOG_TAG, "Serializing of CommissionElement failed, IllegalArgumentException: [" + e.getMessage() + "]");
+            return null;
+        }
+
+        return writer.toString();
+    }
 }
