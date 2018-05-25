@@ -286,9 +286,10 @@ RUN pip2 install \
     invoke==0.21.0 \
     openpyxl==2.3.3
 
-RUN pip2 install \
-    SWAT==4.5.0 \
-    --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
+# TODO: temporarily SWAT is installed when needed but before the product delivery, it has to be done on docker image creation
+# RUN pip2 install \
+#     SWAT==4.5.0 \
+#     --index-url https://${swf1_pypi_user}:${swf1_pypi_pass}@swf1.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
 ##################################################
 # Install rsync needed to build boot.img

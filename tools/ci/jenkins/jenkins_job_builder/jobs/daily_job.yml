@@ -515,6 +515,11 @@
                                 <credentialsId>E9426001_SWF1_ARTIFACTORY_API_KEY</credentialsId>
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
+                            <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
+                                <credentialsId>50aa7e90-b0b6-40e6-bcb5-6189eb0bf574</credentialsId>
+                                <usernameVariable>JENKINS_USER</usernameVariable>
+                                <passwordVariable>JENKINS_API_PASSWORD</passwordVariable>
+                            </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
                         </bindings>
                     </org.jenkinsci.plugins.credentialsbinding.impl.SecretBuildWrapper>
     parameters:
