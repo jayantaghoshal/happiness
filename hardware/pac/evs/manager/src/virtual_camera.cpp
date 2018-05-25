@@ -16,16 +16,34 @@ namespace evs {
 namespace V1_0 {
 namespace vcc_implementation {
 
-VirtualCamera::VirtualCamera(sp<IEvsVideoProvider> input_stream) : input_stream_(std::move(input_stream)) {}
+VirtualCamera::VirtualCamera(const sp<IEvsVideoProvider>& input_stream)
+    : input_stream_(std::move(input_stream)),
+      frames_allowed_(kDefaultFramesAllowed),
+      output_stream_state_(StreamState::STOPPED) {}
 
 VirtualCamera::~VirtualCamera() {
-    Shutdown();
+    ShutDown();
 }
 
-void VirtualCamera::Shutdown() {
+void VirtualCamera::ShutDown() {
     dbgD("called");
+    // In normal operation, the stream should already be stopped by the time we get here
+    if (output_stream_state_ != StreamState::STOPPED) {
+        // Note that if we hit this case, no terminating frame will be sent to the client,
+        // but they're probably already dead anyway.
+        dbgW("Virtual camera being shutdown while stream is running");
+        output_stream_state_ = StreamState::STOPPED;
 
-    // TODO(ihu) Improve handling of stream state and frames
+        if (!frames_held_.empty()) {
+            dbgW("VirtualCamera destructing with frames in flight.");
+            // Return to the underlying hardware camera any buffers the client was holding
+            for (auto&& held_frame : frames_held_) {
+                // Tell our parent that we're done with this buffer
+                input_stream_->DoneWithFrame(held_frame);
+            }
+            frames_held_.clear();
+        }
+    }
 
     // Drop our reference to our camera stream provider
     input_stream_ = nullptr;
@@ -47,10 +65,14 @@ bool VirtualCamera::DeliverFrame(const BufferDesc& buffer) {
 
         // Stop the video stream
         stopVideoStream();
-        return false;  // We do hold the buffer, so return false;
+        return false;  // We do not hold the buffer, so return false;
     }
 
-    // TODO(ihu) Add handling of max number of frames held.
+    if (frames_held_.size() >= frames_allowed_) {
+        // TODO(ihu) Consider downgrading to dbgD after evaluation of full EVS stack
+        dbgW("Rejecting new frame as we hold %zu of %" PRIu32 " allowed.", frames_held_.size(), frames_allowed_);
+        return false;
+    }
 
     // Log our use of frame and forward it to the output stream
     frames_held_.emplace_back(buffer);
@@ -65,7 +87,29 @@ Return<void> VirtualCamera::getCameraInfo(getCameraInfo_cb hidl_cb) {
 
 Return<EvsResult> VirtualCamera::setMaxFramesInFlight(uint32_t buffer_count) {
     dbgD("called with buffer_count %" PRIu32, buffer_count);
-    // TODO(ihu) Implement VirtualCamera::setMaxFramesInFlight method
+    // If we do not need more buffers.
+    if (buffer_count < frames_allowed_) {
+        bool result = input_stream_->ChangeFramesInFlight(0);  // Will shrink held buffers to fit.
+        if (!result) {
+            dbgE("Error when trying to decrease buffer count.");
+            // It should always be possible to reduce frames in flight.
+            return EvsResult::UNDERLYING_SERVICE_ERROR;
+        }
+    }
+    // If we need more buffers we need to check if they are available first.
+    else {
+        uint32_t extra_frames = buffer_count - frames_allowed_;
+        dbgD("Ask our parent for more buffers");
+        // Ask our parent for more buffers
+        bool result = input_stream_->ChangeFramesInFlight(extra_frames);
+        if (!result) {
+            dbgE("Failed to increase buffer count by %" PRIu32 " to %" PRIu32, extra_frames, buffer_count);
+            return EvsResult::BUFFER_NOT_AVAILABLE;
+        }
+    }
+    // Update our notion of how many frames we're allowed
+    frames_allowed_ = buffer_count;
+
     return EvsResult::OK;
 }
 
@@ -75,6 +119,17 @@ Return<EvsResult> VirtualCamera::startVideoStream(const sp<IEvsCameraStream>& st
     if (output_stream_state_ != StreamState::STOPPED) {
         dbgE("ignoring startVideoStream call since a stream is already running.");
         return EvsResult::STREAM_ALREADY_RUNNING;
+    }
+
+    // TODO(ihu) See if this check is actually neccessary.
+    // Ensure that we hold no frames since before
+    if (!frames_held_.empty()) {
+        dbgW("Record of held frames was not empty, returning held frames before proceeding.");
+        for (auto&& held_frame : frames_held_) {
+            // Tell our parent that we're done with this buffer
+            input_stream_->DoneWithFrame(held_frame);
+        }
+        frames_held_.clear();
     }
 
     // Inform the input stream provider that we want to stream

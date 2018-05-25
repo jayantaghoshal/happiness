@@ -27,11 +27,11 @@ namespace vcc_implementation {
 // objects.
 class EvsVideoProvider : public IEvsVideoProvider {
   public:
-    explicit EvsVideoProvider(const sp<IEvsCamera>& hw_camera) : hw_camera_(hw_camera){};
+    explicit EvsVideoProvider(sp<IEvsCamera>&& hw_camera);
 
     // Factory methods for VirtualCamera:s
     sp<IVirtualCamera> MakeVirtualCamera() override;
-    void DisownVirtualCamera(const sp<IVirtualCamera>& virtual_camera) override;
+    void DisownVirtualCamera(sp<IVirtualCamera>& virtual_camera) override;
 
     // Inline implementations
     sp<IEvsCamera> GetHwCamera() override { return hw_camera_; };
@@ -41,27 +41,36 @@ class EvsVideoProvider : public IEvsVideoProvider {
     Return<EvsResult> RequestVideoStream() override;
     void ReleaseVideoStream() override;
     void DoneWithFrame(const BufferDesc& buffer) override;
+    // Set the number of frames in flight
+    // The function will attempt to adjust the number of frames in flight in the hardware camera
+    // to the number needed by the current clients plus the input extra_frames.
+    // Returns true if the change was successful.
+    bool ChangeFramesInFlight(uint32_t extra_frames) override;
 
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCameraStream follow.
     Return<void> deliverFrame(const BufferDesc& buffer) override;
 
   private:
-    sp<IEvsCamera> hw_camera_;
-    std::list<wp<IVirtualCamera>> clients_;  // Weak pointers -> object destructs if client dies
-    StreamState output_stream_state_ = StreamState::STOPPED;
-
     struct FrameRecord {
         uint32_t frame_id;
         uint32_t ref_count;
         FrameRecord(uint32_t id) : frame_id(id), ref_count(0){};
     };
+    using size_type_frames = std::vector<EvsVideoProvider::FrameRecord>::size_type;
+
+    sp<IEvsCamera> hw_camera_;
+    std::list<wp<IVirtualCamera>> clients_;  // Weak pointers -> object destructs if client dies
+    StreamState output_stream_state_;
     std::vector<FrameRecord> frames_;
 
     FRIEND_TEST(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamStopped);
     FRIEND_TEST(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamRunning);
+    FRIEND_TEST(EvsVideoProviderTest, ReleaseVideoStreamLastClient);
     FRIEND_TEST(EvsVideoProviderTest, ReleaseVideoStreamNotLastClient);
     FRIEND_TEST(EvsVideoProviderTest, deliverFrameNoTakers);
     FRIEND_TEST(EvsVideoProviderTest, deliverFrame);
+    FRIEND_TEST(EvsVideoProviderTest, ChangeFramesInFlightDecrease);
+    FRIEND_TEST(EvsVideoProviderTest, ChangeFramesInFlight);
     FRIEND_TEST(EvsVideoProviderTest, DoneWithFrameNotLastUser);
     FRIEND_TEST(EvsVideoProviderTest, DoneWithFrameLastUser);
 };

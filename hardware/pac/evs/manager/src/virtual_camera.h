@@ -25,15 +25,19 @@ namespace vcc_implementation {
 // EvsVideoProvider.
 class VirtualCamera final : public IVirtualCamera {
   public:
-    explicit VirtualCamera(sp<IEvsVideoProvider> input_stream);
+    // Initial maximum number of frames to hold
+    static constexpr uint32_t kDefaultFramesAllowed = 6;
+
+    explicit VirtualCamera(const sp<IEvsVideoProvider>& input_stream);
     ~VirtualCamera();
 
     // Performs a controlled stop of the video stream
-    void Shutdown() override;
+    void ShutDown() override;
 
     // Inline implementations
     sp<IEvsVideoProvider> GetEvsVideoProvider() override { return input_stream_; };
     bool IsStreaming() override { return output_stream_state_ == StreamState::RUNNING; };
+    uint32_t GetAllowedBuffers() { return frames_allowed_; };
 
     // Proxy to receive frames from the input stream and forward them to the output stream
     bool DeliverFrame(const BufferDesc& buffer) override;
@@ -52,13 +56,15 @@ class VirtualCamera final : public IVirtualCamera {
     sp<IEvsCameraStream> output_stream_;  // The output stream to the consumer
 
     std::deque<BufferDesc> frames_held_;
+    uint32_t frames_allowed_;
 
-    StreamState output_stream_state_ = StreamState::STOPPED;
+    StreamState output_stream_state_;
 
     FRIEND_TEST(VirtualCameraTest, startVideoStreamWhenStreamAlreadyRunning);
     FRIEND_TEST(VirtualCameraTest, stopVideoStream);
     FRIEND_TEST(VirtualCameraTest, DeliverFrameOutputStreamStopped);
     FRIEND_TEST(VirtualCameraTest, DeliverFrameEndOfStream);
+    FRIEND_TEST(VirtualCameraTest, DeliverFrameTooManyFramesHeld);
     FRIEND_TEST(VirtualCameraTest, DeliverFrame);
     FRIEND_TEST(VirtualCameraTest, doneWithFrame);
 };

@@ -29,9 +29,10 @@ class MockIEvsCameraStream : public IEvsCameraStream {
 
 class MockVirtualCamera : public IVirtualCamera {
   public:
-    MOCK_METHOD0(Shutdown, void());
+    MOCK_METHOD0(ShutDown, void());
     MOCK_METHOD0(GetEvsVideoProvider, sp<IEvsVideoProvider>());
     MOCK_METHOD0(IsStreaming, bool());
+    MOCK_METHOD0(GetAllowedBuffers, uint32_t());
     MOCK_METHOD1(DeliverFrame, bool(const BufferDesc& buffer));
     MOCK_METHOD1(getCameraInfo, Return<void>(getCameraInfo_cb hidl_cb));
     MOCK_METHOD1(setMaxFramesInFlight, Return<EvsResult>(uint32_t buffer_count));
@@ -87,21 +88,38 @@ TEST_F(EvsVideoProviderTest, DeleteObject) {
     EXPECT_EQ(evs_video_provider, (EvsVideoProvider*)nullptr);
 }
 
-TEST_F(EvsVideoProviderTest, MakeAndDisownClient) {
+TEST_F(EvsVideoProviderTest, MakeAndDisownVirtualCamera) {
+    // SetUp
     size_type_clients client_count_initial = evs_video_provider->GetClientCount();
     size_type_clients client_count_initial_expected = 0;
-    EXPECT_EQ(client_count_initial, client_count_initial_expected);
+    ASSERT_EQ(client_count_initial, client_count_initial_expected);
+    // Call on Make
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+    // Calls on Disown
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(1)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
 
-    sp<IVirtualCamera> evs_camera = evs_video_provider->MakeVirtualCamera();
+    // Test and verify
+    sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
     size_type_clients client_count_after_make = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_make, client_count_initial + 1);
 
-    evs_video_provider->DisownVirtualCamera(evs_camera);
+    evs_video_provider->DisownVirtualCamera(client_1);
     size_type_clients client_count_after_disown = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_disown, client_count_initial);
+    EXPECT_EQ(client_1, nullptr);
 }
 
-TEST_F(EvsVideoProviderTest, MakeAndDisownMultipleClients) {
+TEST_F(EvsVideoProviderTest, MakeAndDisownMultipleVirtualCameras) {
+    // SetUp
+    // Calls on Make and Disown
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_))
+            .Times(4)
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::OK)))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::OK)))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::OK)))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+
+    // Test and verify
     sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
     sp<IVirtualCamera> client_2 = evs_video_provider->MakeVirtualCamera();
     size_type_clients client_count_after_make = evs_video_provider->GetClientCount();
@@ -111,6 +129,22 @@ TEST_F(EvsVideoProviderTest, MakeAndDisownMultipleClients) {
     evs_video_provider->DisownVirtualCamera(client_2);
     size_type_clients client_count_after_disown = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_disown, static_cast<size_type_clients>(0));
+    EXPECT_EQ(client_1, nullptr);
+    EXPECT_EQ(client_2, nullptr);
+}
+
+TEST_F(EvsVideoProviderTest, MakeVirtualCameraNotEnoughBuffers) {
+    // If the hw camera can not provide the required buffers the method should return a nullptr
+    // SetUp
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::BUFFER_NOT_AVAILABLE)));
+
+    // Test
+    sp<IVirtualCamera> client = evs_video_provider->MakeVirtualCamera();
+
+    // Verify
+    EXPECT_EQ(client, nullptr);
+    EXPECT_EQ(evs_video_provider->GetClientCount(), static_cast<size_type_clients>(0));
 }
 
 TEST_F(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamStopped) {
@@ -142,15 +176,18 @@ TEST_F(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamRunning) {
 TEST_F(EvsVideoProviderTest, ReleaseVideoStreamLastClient) {
     // Test that hw camera is called on to stop video stream if no clients are still running.
     // SetUp
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
     sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
     client_1->stopVideoStream();
     ASSERT_FALSE(client_1->IsStreaming());
+    // Expects for test
     EXPECT_CALL(*mock_hw_camera, stopVideoStream());
 
     // Test
     evs_video_provider->ReleaseVideoStream();
 
     // Verify
+    EXPECT_EQ(evs_video_provider->output_stream_state_, StreamState::STOPPED);
     // Implictly done by strict_mock_hw_camera, it would fail on "uninteresting call" if called upon.
 }
 
@@ -159,6 +196,8 @@ TEST_F(EvsVideoProviderTest, ReleaseVideoStreamNotLastClient) {
     // SetUp
     evs_video_provider = new EvsVideoProvider(strict_mock_hw_camera);
     evs_video_provider->output_stream_state_ = StreamState::RUNNING;
+    EXPECT_CALL(*strict_mock_hw_camera, setMaxFramesInFlight(_))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
     sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
     client_1->startVideoStream(new MockIEvsCameraStream());
     // We must have at least one running client for the test call to ReleaseVideoStream
@@ -168,6 +207,7 @@ TEST_F(EvsVideoProviderTest, ReleaseVideoStreamNotLastClient) {
     evs_video_provider->ReleaseVideoStream();
 
     // Verify
+    EXPECT_EQ(evs_video_provider->output_stream_state_, StreamState::RUNNING);
     // Implictly done by strict_mock_hw_camera, it would fail on "uninteresting call" if called upon.
 }
 
@@ -232,9 +272,90 @@ TEST_F(EvsVideoProviderTest, DoneWithFrameLastUser) {
     // Implictly done by EXPECT_CALL
 }
 
+TEST_F(EvsVideoProviderTest, ChangeFramesInFlightHwCameraError) {
+    // If the hw camera for some reason cannot provide the required buffers the method should return false.
+    // SetUp
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_))
+            .Times(4)
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::BUFFER_NOT_AVAILABLE)))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::OWNERSHIP_LOST)))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::INVALID_ARG)))
+            .WillOnce(testing::Return(testing::ByMove(EvsResult::STREAM_ALREADY_RUNNING)));  // Unexpected result
+
+    // Test and verify
+    EXPECT_FALSE(evs_video_provider->ChangeFramesInFlight(VirtualCamera::kDefaultFramesAllowed));
+    EXPECT_FALSE(evs_video_provider->ChangeFramesInFlight(VirtualCamera::kDefaultFramesAllowed));
+    EXPECT_FALSE(evs_video_provider->ChangeFramesInFlight(VirtualCamera::kDefaultFramesAllowed));
+    EXPECT_FALSE(evs_video_provider->ChangeFramesInFlight(VirtualCamera::kDefaultFramesAllowed));
+}
+
+TEST_F(EvsVideoProviderTest, ChangeFramesInFlightInputOverflow) {
+    // If we ask for an impossible number of frames, the method should return false.
+    // SetUp
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+    sp<IVirtualCamera> client = evs_video_provider->MakeVirtualCamera();
+
+    // Test
+    EXPECT_FALSE(evs_video_provider->ChangeFramesInFlight(UINT32_MAX));
+}
+
+TEST_F(EvsVideoProviderTest, ChangeFramesInFlightDecrease) {
+    // The method should shrink-to-fit the record of frames when called.
+    // Note that the actual method to test, ChangeFramesInFlight, is called by
+    // MakeVirtualCamera and DisownVirtualCamera
+    // SetUp
+    using size_type_frames = std::vector<EvsVideoProvider::FrameRecord>::size_type;
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+    sp<IVirtualCamera> client = evs_video_provider->MakeVirtualCamera();
+    ASSERT_EQ(evs_video_provider->frames_.capacity(),
+              static_cast<size_type_frames>(VirtualCamera::kDefaultFramesAllowed));
+    // Called on Disown
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(1)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+
+    // Test and verify
+    evs_video_provider->DisownVirtualCamera(client);
+    EXPECT_TRUE(evs_video_provider->frames_.empty());
+    // Expected capacity is 1 since we should always buffer at least 1 frame.
+    EXPECT_EQ(evs_video_provider->frames_.capacity(), static_cast<size_type_frames>(1));
+}
+
+TEST_F(EvsVideoProviderTest, ChangeFramesInFlight) {
+    // The method should
+    // SetUp
+    using size_type_frames = std::vector<EvsVideoProvider::FrameRecord>::size_type;
+    // Create client and set it to "Running" state.
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+    sp<IVirtualCamera> client = evs_video_provider->MakeVirtualCamera();
+    sp<IEvsCameraStream> mock_output_stream = new MockIEvsCameraStream();
+    EXPECT_CALL(*mock_hw_camera, startVideoStream(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+    client->startVideoStream(mock_output_stream);
+    // Add buffers to pipeline
+    BufferDesc dummy_buffer_1 = test_utils::CreateDummyBuffer(1);
+    BufferDesc dummy_buffer_2 = test_utils::CreateDummyBuffer(2);
+    BufferDesc dummy_buffer_3 = test_utils::CreateDummyBuffer(3);
+    evs_video_provider->deliverFrame(dummy_buffer_1);
+    evs_video_provider->deliverFrame(dummy_buffer_2);
+    evs_video_provider->deliverFrame(dummy_buffer_3);
+    // Verify client and pipeline setup
+    ASSERT_TRUE(evs_video_provider->frames_.size() == static_cast<size_type_frames>(3));
+    ASSERT_TRUE(evs_video_provider->frames_.capacity() ==
+                static_cast<size_type_frames>(VirtualCamera::kDefaultFramesAllowed));
+
+    // Expect calls from ChangeFramesInFlight command
+    EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_))
+            .Times(1)
+            .WillRepeatedly(testing::Return(testing::ByMove(EvsResult::OK)));
+
+    // Test and verify
+    uint32_t extra_frames = 12;
+    EXPECT_TRUE(evs_video_provider->ChangeFramesInFlight(extra_frames));
+    EXPECT_TRUE(evs_video_provider->frames_.size() == static_cast<size_type_frames>(3));
+    EXPECT_TRUE(evs_video_provider->frames_.capacity() ==
+                static_cast<size_type_frames>(VirtualCamera::kDefaultFramesAllowed + extra_frames));
+}
+
 TEST_F(EvsVideoProviderTest, deliverFrame) {
     using size_type_frames = std::vector<EvsVideoProvider::FrameRecord>::size_type;
-    using size_type_clients = std::list<wp<IVirtualCamera>>::size_type;
     // Create mocked virtual cameras
     sp<MockVirtualCamera> client_1 = new MockVirtualCamera();
     // Add mocks to list of clients
@@ -278,7 +399,6 @@ TEST_F(EvsVideoProviderTest, deliverFrame) {
 TEST_F(EvsVideoProviderTest, deliverFrameNoTakers) {
     // SetUp
     using size_type_frames = std::vector<EvsVideoProvider::FrameRecord>::size_type;
-    using size_type_clients = std::list<wp<IVirtualCamera>>::size_type;
     // Create mocked virtual cameras
     sp<MockVirtualCamera> client_1 = new MockVirtualCamera();
     sp<MockVirtualCamera> client_2 = new MockVirtualCamera();

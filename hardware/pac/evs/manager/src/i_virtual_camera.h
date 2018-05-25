@@ -22,11 +22,12 @@ class IEvsVideoProvider;  // From i_evs_video_provider.h
 class IVirtualCamera : public IEvsCamera {
   public:
     // Performs a controlled stop of the video stream
-    virtual void Shutdown() = 0;
+    virtual void ShutDown() = 0;
 
     // Inline implementations
     virtual sp<IEvsVideoProvider> GetEvsVideoProvider() = 0;
     virtual bool IsStreaming() = 0;
+    virtual uint32_t GetAllowedBuffers() = 0;
 
     // Proxy to receive frames from the EvsCameraStream and forward them to the consumer
     virtual bool DeliverFrame(const BufferDesc& buffer) = 0;

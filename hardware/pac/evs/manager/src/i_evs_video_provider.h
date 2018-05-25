@@ -24,7 +24,7 @@ class IEvsVideoProvider : public IEvsCameraStream {
   public:
     // Factory methods for VirtualCamera:s
     virtual sp<IVirtualCamera> MakeVirtualCamera() = 0;
-    virtual void DisownVirtualCamera(const sp<IVirtualCamera>& virtual_camera) = 0;
+    virtual void DisownVirtualCamera(sp<IVirtualCamera>& virtual_camera) = 0;
 
     // Inline implementations
     virtual sp<IEvsCamera> GetHwCamera() = 0;
@@ -34,6 +34,7 @@ class IEvsVideoProvider : public IEvsCameraStream {
     virtual Return<EvsResult> RequestVideoStream() = 0;
     virtual void ReleaseVideoStream() = 0;
     virtual void DoneWithFrame(const BufferDesc& buffer) = 0;
+    virtual bool ChangeFramesInFlight(uint32_t extra_frames) = 0;
 };
 
 }  // namespace vcc_implementation

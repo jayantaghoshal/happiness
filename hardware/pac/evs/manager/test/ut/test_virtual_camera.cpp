@@ -24,12 +24,13 @@ using testing::_;  // Matches any type
 class MockIEvsVideoProvider : public IEvsVideoProvider {
   public:
     MOCK_METHOD0(MakeVirtualCamera, sp<IVirtualCamera>());
-    MOCK_METHOD1(DisownVirtualCamera, void(const sp<IVirtualCamera>& virtual_camera));
+    MOCK_METHOD1(DisownVirtualCamera, void(sp<IVirtualCamera>& virtual_camera));
     MOCK_METHOD0(GetHwCamera, sp<IEvsCamera>());
     MOCK_METHOD0(GetClientCount, std::list<wp<IVirtualCamera>>::size_type());
     MOCK_METHOD0(RequestVideoStream, Return<EvsResult>());
     MOCK_METHOD0(ReleaseVideoStream, void());
     MOCK_METHOD1(DoneWithFrame, void(const BufferDesc& buffer));
+    MOCK_METHOD1(ChangeFramesInFlight, bool(uint32_t extra_frames));
     MOCK_METHOD1(deliverFrame, Return<void>(const BufferDesc& buffer));
 };
 
@@ -201,6 +202,26 @@ TEST_F(VirtualCameraTest, DeliverFrameEndOfStream) {
     EXPECT_EQ(virtual_camera->output_stream_state_, StreamState::STOPPED);
 }
 
+TEST_F(VirtualCameraTest, DeliverFrameTooManyFramesHeld) {
+    // Test handling of too many frames held, should reject frame unless it is end of stream marker.
+    // SetUp
+    virtual_camera->output_stream_ = mock_output_stream;
+    virtual_camera->output_stream_state_ = StreamState::RUNNING;
+    BufferDesc dummy_buffer = test_utils::CreateDummyBuffer(1);
+    BufferDesc empty_buffer = {};
+    virtual_camera->frames_allowed_ = 0;
+
+    // Test and verify
+    // General case
+    bool result = virtual_camera->DeliverFrame(dummy_buffer);
+    EXPECT_FALSE(result);
+    // End of stream case
+    EXPECT_CALL(*mock_output_stream, deliverFrame(_));
+    EXPECT_CALL(*mock_input_stream, ReleaseVideoStream());  // Implies that stopVideoStream was called.
+    bool result_end_of_stream = virtual_camera->DeliverFrame(empty_buffer);
+    EXPECT_FALSE(result_end_of_stream);
+}
+
 TEST_F(VirtualCameraTest, DeliverFrame) {
     // Test the "Happy Path"
     // SetUp
@@ -257,6 +278,80 @@ TEST_F(VirtualCameraTest, doneWithFrame) {
     EXPECT_NE(size_after_call, initial_size);
     virtual_camera->doneWithFrame(
             dummy_buffer_1);  // Implicitly verifies deletion since DoneWithFrame is not called on mock_input_stream
+}
+
+TEST_F(VirtualCameraTest, ShutDownWhenStreaming) {
+    // If ShutDown is somehow called when the camera is streaming we should return all held frames before destructing.
+    // SetUp
+    // Ensure we are streaming
+    EXPECT_CALL(*mock_input_stream, RequestVideoStream()).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+    virtual_camera->startVideoStream(mock_output_stream);
+    ASSERT_TRUE(virtual_camera->IsStreaming());
+    // Ensure we hold buffers
+    BufferDesc dummy_buffer_1 = test_utils::CreateDummyBuffer(1);
+    BufferDesc dummy_buffer_2 = test_utils::CreateDummyBuffer(2);
+    EXPECT_CALL(*mock_output_stream, deliverFrame(_)).Times(2);
+    ASSERT_TRUE(virtual_camera->DeliverFrame(dummy_buffer_1));
+    ASSERT_TRUE(virtual_camera->DeliverFrame(dummy_buffer_1));
+    // Expected calls from ShutDown
+    EXPECT_CALL(*mock_input_stream, DoneWithFrame(_)).Times(2);
+
+    // Test and verify
+    virtual_camera->ShutDown();
+    EXPECT_FALSE(virtual_camera->IsStreaming());
+}
+
+TEST_F(VirtualCameraTest, setMaxFramesInFlightDecreaseError) {
+    // SetUp
+    uint32_t buffer_count = 4;
+    uint32_t allowed_initial = virtual_camera->GetAllowedBuffers();
+    ASSERT_TRUE(buffer_count < allowed_initial);
+    EXPECT_CALL(*mock_input_stream, ChangeFramesInFlight(0)).WillOnce(testing::Return(false));
+
+    // Test and verify
+    EvsResult result = virtual_camera->setMaxFramesInFlight(buffer_count);
+    EXPECT_TRUE(result == EvsResult::UNDERLYING_SERVICE_ERROR);           // We got the expected error
+    EXPECT_TRUE(virtual_camera->GetAllowedBuffers() == allowed_initial);  // Allowed buffers has not changed
+}
+
+TEST_F(VirtualCameraTest, setMaxFramesInFlightDecrease) {
+    // SetUp
+    uint32_t buffer_count = 4;
+    ASSERT_TRUE(buffer_count < virtual_camera->GetAllowedBuffers());
+    EXPECT_CALL(*mock_input_stream, ChangeFramesInFlight(0)).WillOnce(testing::Return(true));
+
+    // Test and verify
+    EvsResult result = virtual_camera->setMaxFramesInFlight(buffer_count);
+    EXPECT_TRUE(result == EvsResult::OK);                              // We got the expected result
+    EXPECT_TRUE(virtual_camera->GetAllowedBuffers() == buffer_count);  // Allowed buffers has changed to buffer_count
+}
+
+TEST_F(VirtualCameraTest, setMaxFramesInFlightFramesNotAvailable) {
+    // SetUp
+    uint32_t buffer_count = 12;
+    uint32_t allowed_initial = virtual_camera->GetAllowedBuffers();
+    ASSERT_TRUE(buffer_count > allowed_initial);
+    uint32_t diff = buffer_count - allowed_initial;
+    EXPECT_CALL(*mock_input_stream, ChangeFramesInFlight(diff)).WillOnce(testing::Return(false));
+
+    // Test and verify
+    EvsResult result = virtual_camera->setMaxFramesInFlight(buffer_count);
+    EXPECT_TRUE(result == EvsResult::BUFFER_NOT_AVAILABLE);               // We got the expected error
+    EXPECT_TRUE(virtual_camera->GetAllowedBuffers() == allowed_initial);  // Allowed buffers has not changed
+}
+
+TEST_F(VirtualCameraTest, setMaxFramesInFlightFramesAvailable) {
+    // SetUp
+    uint32_t buffer_count = 12;
+    uint32_t allowed_initial = virtual_camera->GetAllowedBuffers();
+    ASSERT_TRUE(buffer_count > allowed_initial);
+    uint32_t diff = buffer_count - allowed_initial;
+    EXPECT_CALL(*mock_input_stream, ChangeFramesInFlight(diff)).WillOnce(testing::Return(true));
+
+    // Test and verify
+    EvsResult result = virtual_camera->setMaxFramesInFlight(buffer_count);
+    EXPECT_TRUE(result == EvsResult::OK);                              // We got the expected result
+    EXPECT_TRUE(virtual_camera->GetAllowedBuffers() == buffer_count);  // Allowed buffers has changed to buffer_count
 }
 
 }  // namespace vcc_implementation
