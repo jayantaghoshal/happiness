@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.volvocars.softwareupdatesample.SoftwareUpdateActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/availableAssignmentsRootLayout">
+
+<android.support.v7.widget.Toolbar
+   android:id="@+id/toolbar"
+   android:layout_width="match_parent"
+   android:layout_height="?attr/actionBarSize"
+   android:background="?attr/colorPrimary"
+   android:elevation="4dp"
+   app:title="Get Available Assignments"
+   app:titleTextColor="@android:color/white"
+   app:titleTextAppearance="@style/Toolbar.TitleText"
+   android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+   app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+</android.support.v7.widget.Toolbar>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/assignmentsLayout"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="60dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_gravity="top|center"
+            android:orientation="vertical">
+
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:context="com.volvocars.softwareupdatesample.SoftwareUpdateApp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+                <CheckBox
+                    android:id="@+id/installationOrderIdCB"
+                    android:text="Installation order id"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:switchMinWidth="70dp"
+                    android:switchPadding="343dp"
+                    android:layout_marginTop="@dimen/defaultPadding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"/>
+
+                <NumberPicker
+                    android:id="@+id/installationOrderIdNP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/installationOrderIdCB"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"/>
+        </FrameLayout>
+        <View
+            android:layout_height="2dp"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="@dimen/defaultPadding"
+            android:background="#8c8c8c"/>
+
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:context="com.volvocars.softwareupdatesample.SoftwareUpdateApp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+                <CheckBox
+                    android:id="@+id/softwareIdCB"
+                    android:text="Software id"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:switchMinWidth="70dp"
+                    android:switchPadding="343dp"
+                    android:layout_marginTop="@dimen/defaultPadding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"/>
+
+                <NumberPicker
+                    android:id="@+id/softwareIdNP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/softwareIdCB"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"/>
+        </FrameLayout>
+        <View
+            android:layout_height="2dp"
+            android:layout_width="fill_parent"
+            android:layout_marginTop="@dimen/defaultPadding"
+            android:background="#8c8c8c"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/sendButton"
+        android:text="Send GetAvailableAssignments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="100dp">
+    </Button>
+</FrameLayout>

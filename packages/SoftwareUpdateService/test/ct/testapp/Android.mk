@@ -1,12 +1,12 @@
-# Copyright 2017 Volvo Car Corporation
+# Copyright 2017-2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-    $(call all-java-files-under, src) \
-    $(call all-java-files-under, test)
+    $(call all-java-files-under, app/src/main/java) \
+    $(call all-java-files-under, app/src/test/java)
 
 LOCAL_PACKAGE_NAME := softwareupdateapp
 
@@ -15,6 +15,8 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_USE_AAPT2 := true
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_DATA_APPS)
+
+LOCAL_MANIFEST_FILE := app/src/main/AndroidManifest.xml
 
 LOCAL_STATIC_JAVA_LIBRARIES += \
     ctstestrunner \
@@ -39,7 +41,7 @@ LOCAL_AAPT_FLAGS := \
 --extra-packages android.support.v7.cardview \
 --extra-packages android.support.v7.recyclerview
 
-LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/res \
+LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/app/src/main/res \
 frameworks/support/v7/appcompat/res \
 frameworks/support/design/res \
 frameworks/support/v7/cardview/res \
