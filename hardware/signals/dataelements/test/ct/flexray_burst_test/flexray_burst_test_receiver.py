@@ -7,7 +7,6 @@ import os
 import sys
 import logging
 import time
-import typing
 
 from vts.runners.host import asserts
 from vts.runners.host import base_test
@@ -15,6 +14,7 @@ from vts.runners.host import test_runner
 from vts.utils.python.controllers import android_device
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
+import typing
 from generated.pyDataElements import FrSignalInterface
 
 logger = logging.getLogger('flexray_test.test')
