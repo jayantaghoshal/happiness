@@ -570,6 +570,7 @@ class VehicleHalCommon():
     def addIngoredPopUpWatchers(self, device = device_default):
         device.watcher("SetupWizard").when(textContains="Setup Wizard").click(text="OK")
         device.watcher("FullScreen").when(textContains="full screen").click(textContains="GOT")
+        device.watcher("GooglePlay").when(textContains="Google Play").click(textContains="OK")
 
 
 def get_dataelements_connection(adb, mode=None):
