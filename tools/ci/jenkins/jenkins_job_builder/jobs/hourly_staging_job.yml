@@ -86,10 +86,7 @@
               - name: ihu_hourly_staging_test-flexray
                 current-parameters: true
                 kill-phase-on: NEVER
-              - name: ihu_hourly_staging_test-audio
-                current-parameters: true
-                kill-phase-on: NEVER
-              - name: ihu_hourly_staging_test-apix
+              - name: ihu_hourly_staging_test-rig
                 current-parameters: true
                 kill-phase-on: NEVER
     publishers:
@@ -112,11 +109,6 @@
     node: daily_test-flexray
 
 - job:
-    name: ihu_hourly_staging_test-audio
+    name: ihu_hourly_staging_test-rig
     defaults: hourly_staging_job_defaults
-    node: daily_test-audio
-
-- job:
-    name: ihu_hourly_staging_test-apix
-    defaults: hourly_staging_job_defaults
-    node: daily_test-apix
+    node: daily_test-rig

@@ -108,13 +108,7 @@
                 predefined-parameters: |
                   UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                   UPSTREAM_JOB_GIT_URL=${GIT_URL}
-              - name: ihu_daily_staging_test-audio
-                current-parameters: true
-                kill-phase-on: NEVER
-                predefined-parameters: |
-                  UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                  UPSTREAM_JOB_GIT_URL=${GIT_URL}
-              - name: ihu_daily_staging_test-apix
+              - name: ihu_daily_staging_test-rig
                 current-parameters: true
                 kill-phase-on: NEVER
                 predefined-parameters: |
@@ -140,12 +134,7 @@
     node: daily_test-flexray
 
 - job:
-    name: ihu_daily_staging_test-audio
+    name: ihu_daily_staging_test-rig
     defaults: daily_staging_job_defaults
-    node: daily_test-audio
-
-- job:
-    name: ihu_daily_staging_test-apix
-    defaults: daily_staging_job_defaults
-    node: daily_test-apix
+    node: daily_test-rig
 

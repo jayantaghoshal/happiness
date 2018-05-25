@@ -21,12 +21,8 @@ if [ "${JOB_NAME}" = "ihu_hourly_test-flexray" ] || [ "${JOB_NAME}" = "ihu_stagi
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
-elif [ "${JOB_NAME}" = "ihu_hourly_test-audio" ]; then
-    capability="audio"
-elif [ "${JOB_NAME}" = "ihu_hourly_test-cem" ]; then
-    capability="cem"
-elif [ "${JOB_NAME}" = "ihu_hourly_test-apix" ]; then
-    capability="apix"
+elif [ "${JOB_NAME}" = "ihu_hourly_test-rig" ]; then
+    capability="audio apix cem"
 fi
 export capability
 

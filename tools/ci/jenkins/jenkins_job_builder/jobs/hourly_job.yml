@@ -144,13 +144,7 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_hourly_test-audio
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_hourly_test-apix
+            - name: ihu_hourly_test-rig
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters: |
@@ -218,11 +212,6 @@
     node: hourly_test-flexray
 
 - job:
-    name: ihu_hourly_test-audio
+    name: ihu_hourly_test-rig
     defaults: hourly_job_defaults
-    node: hourly_test-audio
-
-- job:
-    name: ihu_hourly_test-apix
-    defaults: hourly_job_defaults
-    node: hourly_test-apix
+    node: hourly_test-rig

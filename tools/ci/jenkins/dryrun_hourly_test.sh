@@ -37,12 +37,8 @@ if echo "${JOB_NAME}" | grep "test-flexray" >/dev/null; then
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
-elif echo "${JOB_NAME}" | grep "test-audio" >/dev/null; then
-    capability="audio"
-elif echo "${JOB_NAME}" | grep "test-cem" >/dev/null; then
-    capability="cem"
-elif echo "${JOB_NAME}" | grep "test-apix" >/dev/null; then
-    capability="apix"
+elif echo "${JOB_NAME}" | grep "test-rig" >/dev/null; then
+    capability="audio apix cem"
 fi
 export capability
 

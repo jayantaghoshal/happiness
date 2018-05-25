@@ -56,12 +56,9 @@ then
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
-elif [ "${JOB_NAME}" = "ihu_gate_test_audio" ]
+elif [ "${JOB_NAME}" = "ihu_gate_test_rig" ]
 then
-    capability="audio"
-elif [ "${JOB_NAME}" = "ihu_gate_test_apix" ]
-then
-    capability="apix"
+    capability="audio apix cem"
 fi
 export capability
 

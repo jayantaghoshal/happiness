@@ -200,18 +200,12 @@
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_daily_test-audio
+            - name: ihu_daily_test-rig
               current-parameters: true
               kill-phase-on: NEVER
               predefined-parameters: |
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
-            - name: ihu_daily_test-apix
-              current-parameters: true
-              kill-phase-on: NEVER
-              predefined-parameters: |
-                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}   
       - multijob:
           name: VTS
           condition: ALWAYS
@@ -334,14 +328,9 @@
     node: daily_test-flexray
 
 - job:
-    name: ihu_daily_test-audio
+    name: ihu_daily_test-rig
     defaults: daily_test_defaults
-    node: daily_test-audio
-
-- job:
-    name: ihu_daily_test-apix
-    defaults: daily_test_defaults
-    node: daily_test-apix
+    node: daily_test-rig
 
 - job:
     name: ihu_daily_vts-generic
@@ -536,16 +525,12 @@
             project-name: ihu_daily_test-flexray
             description: parameter 'DAILY_TEST_FLEXRAY_JOB_RESULT' will be used to validate if the daily test has passed.
         - run:
-            name: DAILY_TEST_AUDIO_JOB
-            project-name: ihu_daily_test-audio
-            description: parameter 'DAILY_TEST_AUDIO_JOB_RESULT' will be used to validate if the daily test has passed.
-        - run:
-            name: DAILY_TEST_APIX_JOB
-            project-name: ihu_daily_test-apix
-            description: parameter 'DAILY_TEST_APIX_JOB_RESULT' will be used to validate if the daily test has passed.
+            name: DAILY_TEST_RIG_JOB
+            project-name: ihu_daily_test-rig
+            description: parameter 'DAILY_TEST_RIG_JOB_RESULT' will be used to validate if the daily test has passed.
     builders:
         - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ] || [ "$DAILY_TEST_GENERIC_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_FLEXRAY_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_APIX_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_AUDIO_JOB" != "SUCCESS" ] 
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ] || [ "$DAILY_TEST_GENERIC_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_FLEXRAY_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_RIG_JOB" != "SUCCESS" ]
             then
                 echo "Daily build/test failed!!!"
                 exit 1

@@ -35,7 +35,7 @@ Before continuing with the next commands, please extract your __Jenkins__ token 
 # User is CDSID
 export CDSID=<YOUR_CDSID>
 export JENKINS_TOKEN=<YOUR_TOKEN>
-JOBS=(ihu_daily_test ihu_commit_check ihu_gate_build ihu_gate_test ihu_gate_test_flexray ihu_gate_test_audio ihu_gate_test_apix ihu_hourly_test ihu_hourly_test_flexray ihu_hourly_test_apix ihu_hourly_test_audio ihu_image_build icup_android_manifest_bump)
+JOBS=(ihu_daily_test ihu_commit_check ihu_gate_build ihu_gate_test ihu_gate_test_flexray ihu_gate_test_rig ihu_hourly_test ihu_hourly_test_flexray ihu_hourly_test_rig ihu_image_build icup_android_manifest_bump)
 
 mkdir -p old
 for job in "${JOBS[@]}"; do
