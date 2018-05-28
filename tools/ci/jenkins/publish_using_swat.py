@@ -72,7 +72,7 @@ def add_file_to_ip(TAG, sw_tags_to_filename, file_path):
              '--ip='+IP,
              '--file_path='+os.path.join(file_path, sw_tags_to_filename[TAG]),
              '--sw_tag='+TAG,
-             '--sw_details=\"Chain-Id: '+CHAIN_ID+'\"',
+             '--sw_details=\"chain id: '+CHAIN_ID+'\"',
              '--api_key_swf1='+API_KEY])
 
     except subprocess.CalledProcessError as e:

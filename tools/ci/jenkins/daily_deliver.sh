@@ -36,6 +36,10 @@ rm -rf "${REPO_ROOT_DIR}"/out/*.zip
 export PIP_CONFIG_FILE=""
 sudo pip install SWAT --index-url https://"${JENKINS_USER}":"${JENKINS_API_PASSWORD}"@ci2.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
+rm -rf ~/SWAT
+echo "[SERVER]" > ~/SWAT/SWAT_CONFIG.ini
+echo "server_address = gotsvw11045.got.volvocars.net:8003" >> ~/SWAT/SWAT_CONFIG.ini
+
 # change file name which is compatible for SWAT
 python "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/change_vbf_file_name.py "${REPO_ROOT_DIR}"/out
 
