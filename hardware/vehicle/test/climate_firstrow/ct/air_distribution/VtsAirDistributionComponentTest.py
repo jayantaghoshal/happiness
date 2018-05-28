@@ -385,8 +385,8 @@ class VtsAirDistributionComponentTest(base_test.BaseTestClass):
         self.assertAirDistribution(AirDistEnum.FAN_DIRECTION_FACE,HmiCmptmtAirDistbnFrnt.Aut)   # It should remain AUTO
 
         #Again Set the Fan Level to 1, Air Direction should be set to Vent automatically as last state was Vent
-        self.fan_off.click()
-        self.assertAirDistribution(AirDistEnum.FAN_DIRECTION_FACE,HmiCmptmtAirDistbnFrnt.Aut)
+        self.fan_level_1.click()
+        self.assertAirDistribution(AirDistEnum.FAN_DIRECTION_FACE,HmiCmptmtAirDistbnFrnt.Vent)
 
     # ----------------------------------------------------------------------------------------------------------
     # Test Air Distribution - To Check Air Direction value When Max Defroster is set

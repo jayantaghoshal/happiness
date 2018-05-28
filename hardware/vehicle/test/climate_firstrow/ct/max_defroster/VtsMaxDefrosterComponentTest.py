@@ -126,6 +126,7 @@ class VtsMaxDefrosterComponentTest(base_test.BaseTestClass):
         # Set Pre-conditions to pass
         self.vehmod.UsgModSts =  DE.UsgModSts1.UsgModDrvg
         fr.send_VehModMngtGlbSafe1(self.vehmod)
+        fr.send_ClimaActv(DE.OnOff1.On)
         time.sleep(wait_for_button_to_be_available)
 
         self.fan_level_2.click()
@@ -252,6 +253,7 @@ class VtsMaxDefrosterComponentTest(base_test.BaseTestClass):
         # Set Pre-conditions to pass
         self.vehmod.UsgModSts =  DE.UsgModSts1.UsgModDrvg
         fr.send_VehModMngtGlbSafe1(self.vehmod)
+        fr.send_ClimaActv(DE.OnOff1.On)
         time.sleep(wait_for_button_to_be_available)
 
         #TODO : When User sets the Auto Climate to ON, Max defroster should set to OFF.
