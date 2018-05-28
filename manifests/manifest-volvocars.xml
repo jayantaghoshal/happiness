@@ -74,6 +74,9 @@
     <copyfile dest="vendor/aptiv/components/Android.bp" src="kraken/blueprintintermediate" />
   </project>
 
+  <remove-project name="vendor/delphi/android_camera" />
+  <project name="vendor/volvocars/external/pac_legacy" path="vendor/volvocars/external/pac_legacy" revision="a0ac95b8f9d75b6457ab63fc2382fef0a4e97a45" />
+
   <remove-project name="bsp/kernel/bxt" />
   <project name="bsp/kernel/bxt" path="kernel/bxt" revision="953ec30676e5301192365f2d5fd5a8a178a65fa8" />
 
