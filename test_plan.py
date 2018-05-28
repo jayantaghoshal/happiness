@@ -117,6 +117,8 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray} | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/temperature_adjustment", standard_caps | {cp.flexray}), #Justin Saler
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray_or_carsim}), #Kirti Goel
+    TradefedTest("vendor/volvocars/hmi/SystemDialog/app/src/androidTest",standard_caps),
+    TradefedTest("vendor/volvocars/apps/Internal/SystemUITest/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/packages/SettingsStorageService/test/ut/services", standard_caps), #Matilda Bengtsson
 
     # The following test will set the screen-always-on to ON which will prevent the screen to power off.
