@@ -32,9 +32,9 @@ unzip -j "./out/ihu_vcc-target_files*.zip" "VENDOR/vip-update/pbl/*.VBF" -d "${R
 # rm the zip
 rm -rf "${REPO_ROOT_DIR}"/out/*.zip
 
-# install latest SWAT
+# install latest SWAT with sudo so it would keep the swat binary in the path
 export PIP_CONFIG_FILE=""
-pip install SWAT --index-url https://"${JENKINS_USER}":"${JENKINS_API_PASSWORD}"@ci2.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
+sudo pip install SWAT --index-url https://"${JENKINS_USER}":"${JENKINS_API_PASSWORD}"@ci2.artifactory.cm.volvocars.biz/artifactory/api/pypi/PyPi/simple
 
 # change file name which is compatible for SWAT
 python "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/change_vbf_file_name.py "${REPO_ROOT_DIR}"/out

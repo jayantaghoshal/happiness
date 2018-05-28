@@ -490,6 +490,7 @@
             timeout: 10000
             log: 0
     wrappers:
+        - workspace-cleanup
         - timestamps
         - timeout:
             timeout: 240
@@ -505,7 +506,7 @@
                                 <variable>ARTIFACTORY_API_KEY</variable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.StringBinding>
                             <org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
-                                <credentialsId>50aa7e90-b0b6-40e6-bcb5-6189eb0bf574</credentialsId>
+                                <credentialsId>functional-user-password</credentialsId>
                                 <usernameVariable>JENKINS_USER</usernameVariable>
                                 <passwordVariable>JENKINS_API_PASSWORD</passwordVariable>
                             </org.jenkinsci.plugins.credentialsbinding.impl.UsernamePasswordMultiBinding>
