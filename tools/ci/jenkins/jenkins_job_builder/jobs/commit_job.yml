@@ -263,7 +263,6 @@
                 - bootstrap_ihu_sdk_setup.sh
                 #- add test
                 - bootstrap_ihu_sdk_host_library.sh
-                
 
 - job:
     name: ihu_sdk_target
@@ -360,6 +359,7 @@
         - shell:
             !include-raw:
                 - bootstrap_common_commit_triggered.sh
+                - bootstrap_ihu_sdk_setup.sh
                 - bootstrap_ihu_hmi_commit_check.sh
     publishers:
       - archive:
