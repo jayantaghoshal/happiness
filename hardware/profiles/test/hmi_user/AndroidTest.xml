@@ -16,6 +16,6 @@
         <option name="test-module-name" value="VtsHmiUserComponentTest"/>
         <option name="test-case-path" value="VtsHmiUserComponentTest"/>
         <option name="precondition-lshal" value="vendor.volvocars.hardware.profiles@1.0-impl"/>
-        <option name="test-timeout" value="2m"/>
+        <option name="test-timeout" value="10m"/>
     </test>
 </configuration>

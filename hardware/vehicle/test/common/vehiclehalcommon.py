@@ -238,7 +238,7 @@ class VehicleHalCommon():
             else:
                 logging.info("View is not available: " + view_name)
                 return
-            time.sleep(2)
+            time.sleep(1)
         asserts.assertTrue(False, "Time out! View is still visible: " + view_name)
 
     def waitUntilViewAvailable(self, view_name, timeout_seconds=15, device = device_default):
@@ -251,10 +251,10 @@ class VehicleHalCommon():
                 return
             else:
                 logging.info("Waiting...%s", str(time.time() - start_time))
-            time.sleep(2)
+            time.sleep(1)
         asserts.assertTrue(False, "Time out! View is still not visible: " + view_name)
 
-    def waitUntilUserNotOwner(self, timeout_seconds=45):
+    def waitUntilUserNotOwner(self, raiseIfOwner=False, timeout_seconds=45):
         logging.info("Waiting until user not owner")
 
         start_time = time.time()
@@ -269,9 +269,11 @@ class VehicleHalCommon():
                 print "Exception while using adb shell"
 
             logging.info("Waiting...%s", str(time.time() - start_time))
-            time.sleep(2)
-        logging.info("UserListFromADB: "+result)
-        asserts.assertTrue(False, "Time out! User didn't switch")
+            time.sleep(1)
+        logging.info("UserListFromADB: "+ str(result))
+        # Ignore and run the test case instead of failing
+        if raiseIfOwner:
+            asserts.assertTrue(False, "Time out! User didn't switch")
 
     # Scroll until view with given Id is found or Exception is thrown if not found within maxFlings tries.
     def scrollAndFindViewByIdOrRaise(self, text, maxFlings=10, fineScroll=False):
