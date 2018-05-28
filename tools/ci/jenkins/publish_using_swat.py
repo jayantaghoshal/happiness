@@ -19,8 +19,8 @@ USER = "e9426001"  # case sensitive
 PROJECTS = ['519G', 'P319']
 SW_TAGS = ['SXBL', 'SWBL', 'SWL3', 'SWLM', 'SWP2', 'SWL2']
 HW_PART_NUMBERS = ['50877022000', '50902267000']
-SIGNAL_DATABASE = "SPA2610"
-ARCHITECTURE = "CMASPA"
+SIGNAL_DATABASE = ['SPA2610']
+ARCHITECTURE = ['CMASPA']
 API_KEY = os.environ["ARTIFACTORY_API_KEY"]
 CHAIN_ID = redis_con.get(
     "icup_android.gerrit.commit_id." + os.environ["UPSTREAM_JOB_GIT_REVISION"] + ".change_id").decode("utf-8")

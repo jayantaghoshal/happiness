@@ -549,11 +549,5 @@
                 <customProjectName>ihu_deliver_to_infotainment</customProjectName>
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
-        - workspace-cleanup:
-            clean-if:
-              - success: true
-              - unstable: false
-              - failure: false
-              - aborted: false
-              - not-built: false
+
 
