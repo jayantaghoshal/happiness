@@ -24,7 +24,7 @@
 
 # vehicle-signals-daemon execution rights and signalling
 /vendor/bin/vehicle-signals-daemon u:object_r:vehicle-signals-daemon_exec:s0
-/dev/ttyACM0 u:object_r:vehicle_comm_device:s0
+/dev/ttyFlexray u:object_r:vehicle_comm_device:s0
 
 # iproute2
 /vendor/bin/ip u:object_r:ip-vcc_exec:s0

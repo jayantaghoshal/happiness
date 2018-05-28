@@ -50,7 +50,7 @@ std::string BytesToHex(const int8_t bytes[], uint32_t length) {
 
 HomeButtonModule::~HomeButtonModule() {
     // Make sure we can exit thread functions and join threads
-    DesipClient::setExitListen(true);
+    HisipClient::disconnectFromHisipService();
 
     if (reader_thread_.joinable()) {
         reader_thread_.join();
@@ -64,8 +64,8 @@ void HomeButtonModule::init(HomeButtonCallback* listener) {
 
 void HomeButtonModule::VIPReader() {
     android::ProcessState::self()->startThreadPool();
-    // Handle callback messages from DesipService
-    DesipClient::listen<VIPListener, HomeButtonModule>(this);
+    // Handle callback messages from HisipService
+    HisipClient::connectToHisipService<VIPListener, void>(this);
     android::IPCThreadState::self()->joinThreadPool();
 }
 

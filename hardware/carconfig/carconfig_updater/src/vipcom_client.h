@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <DesipClient.hpp>
+#include "HisipClient.h"
 #include <mutex>
 #include <queue>
 #include <string>
@@ -26,7 +26,7 @@ typedef struct {
     int8_t data[35];
 } vip_msg;
 
-class CarConfigVipCom : public DesipClient {
+class CarConfigVipCom : public HisipClient {
   public:
     explicit CarConfigVipCom();
 

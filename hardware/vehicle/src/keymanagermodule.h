@@ -7,7 +7,7 @@
 
 #include "ModuleBase.h"
 
-#include "DesipClient.hpp"
+#include "HisipClient.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -125,13 +125,14 @@ class KeyManagerModule : public DesipClient,
     /**
      *  @brief Power Modding Desip Client Listener class
      */
-    class VIPListener final : public DesipClient::DesipClientListener {
+    class VIPListener final : public HisipClient::HisipClientListener {
+
       public:
         /**
          * Default constructor for VIP Listener
          * @param desip_client Instance of the Desip Client class to communicate with
          */
-        VIPListener(void* desip_client);
+        VIPListener(void* hisip_client);
 
         /**
          * Default destructor of the VIP Listener class
@@ -141,16 +142,15 @@ class KeyManagerModule : public DesipClient,
         /**
          * Callback to handle incoming messages from the VIP
          * @param  msg          Message coming from the vip
-         * @param  _aidl_return error code
          * @return              status
          */
-        virtual android::binder::Status deliverMessage(const ParcelableDesipMessage& msg, bool* _aidl_return) override;
+        virtual bool onMessageFromVip(const HisipMessage& msg) override;
 
         /**
          * Get the Application Name
          * @return application name
          */
-        virtual String16 getId() override;
+        virtual std::string getUserId() override;
 
       private:
         // The instance of the Desip Client to communicate with
