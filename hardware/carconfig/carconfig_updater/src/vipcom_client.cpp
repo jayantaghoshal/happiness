@@ -33,19 +33,16 @@ CarConfigVipCom::CarConfigVipCom() {
 
 CarConfigVipCom::~CarConfigVipCom() {
     // Make sure we can exit thread functions and join threads
-    DesipClient::setExitListen(true);
     android::IPCThreadState::self()->stopProcess();
     if (vipReader.joinable()) {
         vipReader.join();
     }
 }
 
-bool CarConfigVipCom::sendDESIPMsg(ParcelableDesipMessage msg) {
-    bool sendOK;
-    sendMsg(msg, &sendOK);
-    if (!sendOK) {
-        ALOGE("DESIP send method failed");
-    }
+bool CarConfigVipCom::sendHISIPMsg(HisipMessage &msg) {
+    bool sendOK = true;
+    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
+    HisipClient::sendToVip(msg);
     return sendOK;
 }
 
@@ -56,48 +53,44 @@ int32_t CarConfigVipCom::calculateChecksum(char* data, int32_t calcLength) {
 }
 
 void CarConfigVipCom::versionReport(void) {
-    ParcelableDesipMessage msg;
+    HisipMessage msg;
     int8_t* data = msg.allocDataPtr(2);
 
     data[0] = CATALOG_VERSION;
     data[1] = CATALOG_REVISION;
 
-    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::carConfigVersionReport);
 
     ALOGI("Sending version report (%i.%i)", data[0], data[1]);
-    sendDESIPMsg(msg);
+    sendHISIPMsg(msg);
 }
 
 void CarConfigVipCom::versionRequest(void) {
-    ParcelableDesipMessage msg;
+    HisipMessage msg;
 
-    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::carConfigVersionRequest);
 
     ALOGI("Sending version request");
-    sendDESIPMsg(msg);
+    sendHISIPMsg(msg);
 }
 
 void CarConfigVipCom::setTransfer(void) {
-    ParcelableDesipMessage msg;
+    HisipMessage msg;
 
-    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::carConfigTransferCmd);
 
     ALOGI("Sending transfer command");
-    sendDESIPMsg(msg);
+    sendHISIPMsg(msg);
 }
 
 void CarConfigVipCom::checksumCmd(const int8_t payload[35]) {
-    ParcelableDesipMessage msg;
+    HisipMessage msg;
     int8_t* data = msg.allocDataPtr(1);
     int16_t checkSumRangeSize = 0;
     int32_t vipChecksum = 0;
     bool checkSumMatch = false;
     bool sendOK = false;
 
-    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::carConfigChecksumReport);
 
     // Copy and flip endianness
@@ -124,19 +117,18 @@ void CarConfigVipCom::checksumCmd(const int8_t payload[35]) {
         data[0] = carConfigChecksumReportNok;
     }
 
-    sendOK = sendDESIPMsg(msg);
+    sendOK = sendHISIPMsg(msg);
     if (sendOK && (checkSumMatch == false)) {
         setTransfer();
     }
 }
 
 void CarConfigVipCom::dataRequest(const int8_t payload[35]) {
-    ParcelableDesipMessage msg;
+    HisipMessage msg;
     int8_t block = payload[0];
     int8_t nextBlock = block + 1;
     int8_t blockSize = DATA_REPORT_MAX_BLOCK_SIZE;
 
-    msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     msg.setFid(hisipBytes::carConfigDataReport);
 
     // The VIP read request starts inside the carconfig range but ends outside
@@ -155,16 +147,22 @@ void CarConfigVipCom::dataRequest(const int8_t payload[35]) {
     data[0] = block;
     data[1] = blockSize;
     std::memcpy(&data[2], ccList.data() + (block * blockSize), blockSize);
-    sendDESIPMsg(msg);
+    sendHISIPMsg(msg);
 }
 
 void CarConfigVipCom::VipReader() {
     android::ProcessState::self()->startThreadPool();
-    DesipClient::listen<CC_Desip_Listener, CarConfigVipCom>(this);
+    HisipClient::connectToHisipService<CC_HISIP_Listener, void>(this);
     android::IPCThreadState::self()->joinThreadPool();
 }
 
-void CarConfigVipCom::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(HISIP_APPLICATION_ID_CARCONFIG); }
+void CarConfigVipCom::setRxMsgID(HisipMessage* msg) { msg->setAid(HISIP_APPLICATION_ID_CARCONFIG); }
+
+
+std::vector<uint8_t> CarConfigVipCom::getApplicationId() {
+    std::vector<uint8_t> applicationId = { static_cast<uint8_t>(HISIP_APPLICATION_ID_CARCONFIG) };
+    return applicationId;
+}
 
 void CarConfigVipCom::onMessage(const uint8_t& _fid, const int8_t _payload[35]) {
     if (_fid == hisipBytes::carConfigChecksumCmd) {
@@ -198,15 +196,21 @@ void CarConfigVipCom::onMessage(const uint8_t& _fid, const int8_t _payload[35]) 
     }
 }
 
-CC_Desip_Listener::CC_Desip_Listener(CarConfigVipCom* carConfigVipCom) { this->carConfigVipCom = carConfigVipCom; }
+CC_HISIP_Listener::CC_HISIP_Listener(void* hisip_client)
+{
+    ALOGV("[%s] VIP listener created", __func__);
+    carConfigVipCom = static_cast<CarConfigVipCom*>(hisip_client);
+}
 
-Status CC_Desip_Listener::deliverMessage(const ParcelableDesipMessage& msg, bool* _aidl_return) {
+bool CC_HISIP_Listener::onMessageFromVip(const HisipMessage& msg) {
     vip_msg m;
     m.fid = msg.getFid();
     memcpy(static_cast<void*>(m.data), static_cast<void*>(msg.getDataPtr()), msg.getDataSize());
-    *_aidl_return = true;
     carConfigVipCom->onMessage(m.fid, m.data);
-    return android::binder::Status::ok();
+    return true;
 }
 
-String16 CC_Desip_Listener::getId() { return String16("Carconfig-updater"); }
+std::string CC_HISIP_Listener::getUserId()
+{
+    return "Carconfig-updater";
+}
