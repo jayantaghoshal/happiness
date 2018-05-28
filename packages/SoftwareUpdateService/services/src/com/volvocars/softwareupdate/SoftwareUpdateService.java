@@ -212,8 +212,8 @@ public class SoftwareUpdateService extends Service {
     public void onNewSoftwareAssignmentList(List<SoftwareAssignment> software_list, AssignmentType type) {
         // Check if software has been removed from list (and downloaded) to clear local
         // storage
-        UpdateSoftwareList(software_list, type);
         clearStorageOnRemovedSoftwareAssignment(software_list);
+        UpdateSoftwareList(software_list, type);
 
         // Check status of software assignment if there is an action to be taken
         for (SoftwareAssignment software : software_list) {
