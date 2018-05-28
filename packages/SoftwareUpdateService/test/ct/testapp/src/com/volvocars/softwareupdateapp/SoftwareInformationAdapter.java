@@ -31,9 +31,10 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
     private ISoftwareUpdateApp softwareUpdateApp;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView swId, name, desc, installationId, state, downloads, downloadedResources;
-        public LinearLayout swIdLayout, installationIdLayout, downloadsLayout,
-                downloadedResourcesLayout;
+        public TextView swId, name, desc, installationId, state, downloads, downloadedResources, installationType,
+                estimatedTime;
+        public LinearLayout swIdLayout, installationIdLayout, downloadsLayout, downloadedResourcesLayout,
+                installationTypeLayout, estimatedTimeLayout;
         public ImageView overflow, icon;
         public CardView cardView;
         private boolean moreInfo = false;
@@ -51,6 +52,10 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             downloadsLayout = (LinearLayout) view.findViewById(R.id.downloadsLayout);
             downloadedResourcesLayout = (LinearLayout) view.findViewById(R.id.downloadedResourcesLayout);
             downloadedResources = (TextView) view.findViewById(R.id.downloadedResources);
+            installationTypeLayout = (LinearLayout) view.findViewById(R.id.installationTypeLayout);
+            installationType = (TextView) view.findViewById(R.id.installationType);
+            estimatedTimeLayout = (LinearLayout) view.findViewById(R.id.estimatedTimeLayout);
+            estimatedTime = (TextView) view.findViewById(R.id.estimatedTime);
             state = (TextView) view.findViewById(R.id.state);
             overflow = (ImageView) view.findViewById(R.id.overflow);
             icon = (ImageView) view.findViewById(R.id.icon);
@@ -122,7 +127,9 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
 
         holder.name.setText(swInfo.softwareAssignment.name);
         holder.desc.setText(swInfo.softwareAssignment.shortDescription);
-        holder.state.setText(((swInfo.softwareState == SoftwareInformation.SoftwareState.UNDEFINED) ? swInfo.softwareAssignment.status.name() : swInfo.softwareState.name()).replace("_", " "));
+        holder.state.setText(((swInfo.softwareState == SoftwareInformation.SoftwareState.UNDEFINED)
+                ? swInfo.softwareAssignment.status.name()
+                : swInfo.softwareState.name()).replace("_", " "));
 
         holder.swId.setText(swInfo.softwareAssignment.id);
         if (holder.moreInfo)
@@ -137,7 +144,7 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             holder.installationIdLayout.setVisibility(View.INVISIBLE);
 
         String str = "";
-        if(!swInfo.downloadInfo.resourceUris.isEmpty()) {
+        if (!swInfo.downloadInfo.resourceUris.isEmpty()) {
             str = Integer.toString(swInfo.downloadInfo.resourceUris.size());
         }
         holder.downloads.setText(str);
@@ -147,7 +154,7 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             holder.downloadsLayout.setVisibility(View.INVISIBLE);
 
         str = "";
-        if(!swInfo.downloadInfo.downloadedResources.isEmpty()) {
+        if (!swInfo.downloadInfo.downloadedResources.isEmpty()) {
             str = Integer.toString(swInfo.downloadInfo.downloadedResources.size());
         }
 
@@ -156,6 +163,18 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
             holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
         else
             holder.downloadedResourcesLayout.setVisibility(View.INVISIBLE);
+
+        holder.installationType.setText(swInfo.softwareAssignment.installationType.toString());
+        if (holder.moreInfo)
+            holder.installationTypeLayout.setVisibility(View.VISIBLE);
+        else
+            holder.installationTypeLayout.setVisibility(View.INVISIBLE);
+
+        holder.estimatedTime.setText(Integer.toString(swInfo.softwareAssignment.estimatedInstallationTime));
+        if (holder.moreInfo && (swInfo.softwareAssignment.estimatedInstallationTime != -1))
+            holder.estimatedTimeLayout.setVisibility(View.VISIBLE);
+        else
+            holder.estimatedTimeLayout.setVisibility(View.INVISIBLE);
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,19 +194,24 @@ public class SoftwareInformationAdapter extends RecyclerView.Adapter<SoftwareInf
                         holder.downloadsLayout.setVisibility(View.VISIBLE);
                     if (!swInfo.downloadInfo.downloadedResources.isEmpty())
                         holder.downloadedResourcesLayout.setVisibility(View.VISIBLE);
+                    if(swInfo.softwareAssignment.estimatedInstallationTime != -1) {
+                        holder.estimatedTimeLayout.setVisibility(View.VISIBLE);
+                    }
+                    holder.installationTypeLayout.setVisibility(View.VISIBLE);
                 } else {
                     holder.swIdLayout.setVisibility(View.INVISIBLE);
                     holder.installationIdLayout.setVisibility(View.INVISIBLE);
                     holder.downloadsLayout.setVisibility(View.INVISIBLE);
                     holder.downloadedResourcesLayout.setVisibility(View.INVISIBLE);
+                    holder.estimatedTimeLayout.setVisibility(View.INVISIBLE);
+                    holder.installationTypeLayout.setVisibility(View.INVISIBLE);
                 }
             }
         });
 
         if (swInfo.softwareAssignment.deliverableType == SoftwareAssignment.DeliverableType.NEW) {
             holder.icon.setImageResource(R.drawable.outline_add_black_24dp);
-        }
-        else if (swInfo.softwareAssignment.deliverableType == SoftwareAssignment.DeliverableType.UPDATE) {
+        } else if (swInfo.softwareAssignment.deliverableType == SoftwareAssignment.DeliverableType.UPDATE) {
             holder.icon.setImageResource(R.drawable.ic_system_update_black_24dp);
         }
 

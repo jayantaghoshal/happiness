@@ -118,6 +118,42 @@
                 android:textSize="15sp"
                 />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/installationTypeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Installation type: "
+                />
+                <TextView
+                android:id="@+id/installationType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/estimatedTimeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="Estimated installation time: "
+                />
+                <TextView
+                android:id="@+id/estimatedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
+            </LinearLayout>
         </LinearLayout>
         <TextView
                 android:id="@+id/state"
