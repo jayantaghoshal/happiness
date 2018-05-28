@@ -13,7 +13,7 @@ import logging
 
 redis_con = redis.Redis("gotsvl1416.got.volvocars.net")
 
-IP = "013"
+IP = "013" # should be updated on new ip releases
 ECU = "IHU_4.0_HIGH"
 USER = "e9426001"  # case sensitive
 PROJECTS = ['519G', 'P319']
@@ -120,7 +120,8 @@ def main(vbf_dir):
     else:
         raise("path does not exist")
 
-    create_ip()
+    # create ip should be triggered once every 12 weeks(IP release).
+    # create_ip()
     set_meta_data_in_ip()
 
     for TAG in SW_TAGS:

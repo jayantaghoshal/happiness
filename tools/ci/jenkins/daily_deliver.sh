@@ -47,4 +47,11 @@ python "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/change_vbf_file_name.p
 # Publish VBF using SWAT
 python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/publish_using_swat.py "${REPO_ROOT_DIR}"/out
 
+# upload only vbfs to the artifactory
+VBF_ARCHIVE=VBF.zip
+# shellcheck disable=SC1065
+time (zip -r - "${REPO_ROOT_DIR}/out") > "${VBF_ARCHIVE}"
+du -sh "${VBF_ARCHIVE}"
+time artifactory push "${UPSTREAM_JOB_JOBNAME}" "${UPSTREAM_JOB_NUMBER}"_"${MP_PART_NUMBER}" "${VBF_ARCHIVE}"
+
 rm -rf "${REPO_ROOT_DIR}"/out
