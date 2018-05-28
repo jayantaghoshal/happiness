@@ -15,10 +15,13 @@ from handle_result.ci_database_reporter import ci_database_reporter
 from handle_result.vcc_dashboard_reporter import vcc_dashboard_reporter
 from handle_result.console_reporter import console_reporter
 from shipit.testscripts import get_test_set, assemble_plan, get_component, build_testcases, run_test, \
-    detect_loose_test_cases, enforce_timeout_in_gate_tests, pre_static_analysis_on_all_testcases, pre_static_analysis_on_testcases
+    detect_loose_test_cases, enforce_timeout_in_gate_tests, pre_static_analysis_on_all_testcases, \
+    pre_static_analysis_on_testcases, pull_ihu_files
 from shipit.test_runner.test_types import ResultData
 from utilities import ihuhandler, artifact_handler
 import bson
+import subprocess
+import shutil
 
 class Tester:
 
@@ -47,6 +50,39 @@ class Tester:
         for r in self.reporter_list:
             r.module_finished(test, test_result, testrun_uuid)
 
+    def _pre_run(self):
+        self.old_tombstones = self._list_tombstones()
+        logging.info("old_tombstones: {}".format(self.old_tombstones))
+
+    def _post_run(self, test_result):
+        all_tombstones = self._list_tombstones()
+        new_tombstones = list(set(all_tombstones) - set(self.old_tombstones))
+        test_result.test_kpis['number_of_new_tombstones'] = len(new_tombstones)
+
+        logging.info("all_tombstones: {}".format(all_tombstones))
+        logging.info("new_tombstones: {}".format(new_tombstones))
+
+        logging.info("tmp save_files_dir: {}".format(test_result.save_files_dir))
+
+        if test_result.save_files_dir:
+            # file_path is empty when there have been a exception
+            if os.path.isdir(test_result.save_files_dir):
+                tmp_folder = test_result.save_files_dir
+                tmp_folder_on_ihu = '/data/tmp_save_files/'
+
+                for new_tombstone in new_tombstones:
+                    pull_ihu_files(os.path.join('/data/tombstones/', new_tombstone), tmp_folder, 'tombstones')
+
+                try:
+                    save_files = subprocess.check_output(['adb', 'shell', 'ls', tmp_folder_on_ihu]).decode("utf-8").split()
+                    for save_file in save_files:
+                        pull_ihu_files(os.path.join(tmp_folder_on_ihu, save_file), tmp_folder, save_file)
+                    subprocess.check_call(['adb', 'shell', 'rm', '-rf', tmp_folder_on_ihu])
+                except subprocess.CalledProcessError:
+                    logging.info("Could't find any files to save")
+            shutil.rmtree(tmp_folder, ignore_errors=True)
+        return test_result
+
     def _flash_started(self):
         self.logger.debug("Flashing started")
         for r in self.reporter_list:
@@ -63,7 +99,9 @@ class Tester:
         for t in tests_to_run:
             test_id = str(bson.ObjectId())  #TODO: Quick hack to get valid objectid, should not have dependency to mongo bson?
             self._module_started(t, test_id)
+            self._pre_run()
             test_result = run_test(t, max_testtime_sec)
+            test_result = self._post_run(test_result)
             test_results.append(test_result)
             self._module_finished(t, test_result, test_id)
             if not test_result.passed and abort_on_first_failure:
@@ -153,6 +191,10 @@ class Tester:
         except ValueError as e:
             self.logger.error(str(e))
             sys.exit(1)
+
+    def _list_tombstones(self):
+        return subprocess.check_output(['adb', 'shell', 'ls', '/data/tombstones/']).decode("utf-8").split()
+
 
     def main(self):
         args = self._parse_args()

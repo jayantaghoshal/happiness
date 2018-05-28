@@ -20,6 +20,7 @@ import concurrent.futures
 from typing import Dict, List, Optional, Set
 from subprocess import check_output, CalledProcessError
 import typing
+import tempfile
 #import zipfile
 
 logger = logging.getLogger(__name__)
@@ -117,7 +118,8 @@ def vts_tradefed_run_module(module_name: str,
                       info=info,
                       test_kpis=get_json_kpi_results(),
                       logs=logdict,
-                      screenshot_paths=screenshots)
+                      screenshot_paths=screenshots,
+                      save_files_dir=tempfile.mkdtemp(), )
 
 def _log_output(output: str, max_lines: int=10):
     lines = output.splitlines()

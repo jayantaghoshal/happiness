@@ -234,5 +234,9 @@ def enforce_timeout_in_gate_tests():
         raise Exception("Test cases in commit gate test plan must adhere to timeout constraints." + os.linesep + "* " +
                         (os.linesep + "* ").join(errors))
 
-
+def pull_ihu_files(from_ihu_path, tmp_path, name):
+    logging.info("Move files from_ihu_path: {}, to tmp_path: {}".format(from_ihu_path, tmp_path))
+    to_path = os.path.join(tmp_path, name)
+    os.makedirs(to_path, exist_ok=True)
+    subprocess.check_call(['adb', 'pull', from_ihu_path, to_path])
 

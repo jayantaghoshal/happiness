@@ -90,7 +90,8 @@ class ResultData:
                  console: str,
                  test_kpis: Mapping[str, Any],
                  logs: Mapping[str, str],
-                 screenshot_paths : typing.List[str]) -> None:
+                 screenshot_paths: typing.List[str],
+                 save_files_dir: typing.Optional[str]=None) -> None:
         self.name = name
         self.passed = passed
         self.results = results
@@ -99,6 +100,7 @@ class ResultData:
         self.test_kpis = test_kpis
         self.logs = logs
         self.screenshot_paths = screenshot_paths
+        self.save_files_dir = save_files_dir
 
     def __str__(self):
         if self.passed:

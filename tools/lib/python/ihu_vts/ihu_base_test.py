@@ -44,25 +44,11 @@ class IhuBaseTestClass(base_test.BaseTestClass):
         except Exception:
             print("*** Unable to patch test_runner.TestRunner._writeResultsJsonString ***")
 
-    def _setUpClass(self):
+    def setUpClass(self):
         self.dut = self.android_devices[0]
         self.dut.shell.InvokeTerminal("IhuBaseShell")
-        self.old_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
 
-        return super(IhuBaseTestClass, self)._setUpClass()
-
-    def _tearDownClass(self):
-
-        try:
-            all_tombstones = self.executeInShell("ls /data/tombstones/")[const.STDOUT][0].split()
-            new_tombstones = list(set(all_tombstones) - set(self.old_tombstones))
-            self.write_kpi('number_of_new_tombstones', len(new_tombstones))
-            for new_tombstone in new_tombstones:
-                self.saveFiles(os.path.join('/data/tombstones/', new_tombstone), 'tombstones')
-        except Exception as e:
-            # Catch exception so that the rest of BaseTestClass _tearDownClass is executed
-            logging.exception("ERROR in _tearDownClass: Couldn't save tombstones. %r" % e)
-
+    def tearDownClass(self):
         try:
             if len(self.vcc_kpis) > 0:
                 with open("/tmp/test_run_kpis.json", "w") as f:
@@ -70,7 +56,7 @@ class IhuBaseTestClass(base_test.BaseTestClass):
         except:
             pass
 
-        return super(IhuBaseTestClass, self)._tearDownClass()
+        super(IhuBaseTestClass, self).tearDownClass()
 
     def executeInShell(self, command):
         return self.dut.shell.IhuBaseShell.Execute(command)
@@ -79,17 +65,14 @@ class IhuBaseTestClass(base_test.BaseTestClass):
         # type: (str, _kpi_value_type, str) -> None
         self.vcc_kpis[name] = value
 
-    def saveFiles(self, from_ihu_path, name):
+    def save_files(self, from_ihu_path, name):
+        # files in this path will be picked up and and stored by the test runner later.
+        to_ihu_path = os.path.join('/data/tmp_save_files/', name)
 
-        save_file_path = '/tmp/saved_files_from_tests/files'
-        to_path = os.path.join(save_file_path, name)
-
-        if not os.path.isdir(save_file_path):
-            os.makedirs(save_file_path)
-        if not os.path.isdir(to_path):
-            os.makedirs(to_path)
-
-        subprocess.check_call(['adb', 'pull', from_ihu_path, to_path])
+        command = 'mkdir -p {}'.format(to_ihu_path)
+        self.dut.shell.IhuBaseShell.Execute(command)
+        command = 'cp -r {} {}'.format(from_ihu_path, to_ihu_path)
+        self.dut.shell.IhuBaseShell.Execute(command)
 
     def deviceReboot(self):
         self.executeInShell("reboot")

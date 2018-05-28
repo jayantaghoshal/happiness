@@ -74,7 +74,7 @@ class VtsCiSmokeTest(ihu_base_test.IhuBaseTestClass):
 
         self.write_kpi("bootchart_boot_time", boot_time, "s")
 
-        self.saveFiles('/data/bootchart/', 'bootchart')
+        self.save_files('/data/bootchart', 'bootchart')
 
         asserts.assertLess(boot_time, max_boot_time, "Bootchart boot time longer than the maximum allowed {} s".format(max_boot_time / 100))
         self.executeInShell("rm /data/bootchart/*")
