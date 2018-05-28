@@ -4,15 +4,15 @@
 # This file is covered by LICENSE file in the root of this project
 
 ''' Prerequisite: IPM_MAP_FILE set through jenkins build environment (job specific).'''
-class IHU_power_control(CI_power_control):
+class Flexray_power_control(CI_power_control):
 
     def __init__(self):
         super().__init__()
-        ihu = self.test_machine["ihu"]
-        self.ipm_port = self.ipm_machine[ihu]
+        flexray = self.test_machine["flexray"]
+        self.ipm_port = self.ipm_machine[flexray]
 
 ''' Sample Usage
-    ipm_instance = IHU_power_control()
+    ipm_instance = Flexray_power_control()
     ipm_instance.port_detail()
     ipm_instance.off()
     ipm_instance.on()

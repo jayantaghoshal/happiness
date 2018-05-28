@@ -22,6 +22,8 @@ then
     export VECTOR_FDX_IP
     VECTOR_FDX_IP=$(python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/get_flexray_IP.py)
     ping -c1 "${VECTOR_FDX_IP}"
+    export power_cycle_length=5
+    python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/ci/jenkins/flexray_ipm_reboot.py "$power_cycle_length"
 elif [ "${JOB_NAME}" = "ihu_daily_test-rig" ]
 then
     capability="audio apix cem"
