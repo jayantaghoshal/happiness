@@ -360,7 +360,7 @@
             !include-raw:
                 - bootstrap_common_commit_triggered.sh
                 - bootstrap_ihu_sdk_setup.sh
-                - bootstrap_ihu_hmi_commit_check.sh
+                - bootstrap_ihu_sdk_host_check.sh
     publishers:
       - archive:
           artifacts: '${workspace}/**/build/reports/*'
