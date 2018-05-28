@@ -31,18 +31,32 @@ class VirtualCamera final : public IVirtualCamera {
     explicit VirtualCamera(const sp<IEvsVideoProvider>& input_stream);
     ~VirtualCamera();
 
-    // Performs a controlled stop of the video stream
+    /// Performs a controlled stop of the video stream
+    ///
+    /// Will return all held frames before destructing if called when stream state is not STOPPED;
     void ShutDown() override;
 
     // Inline implementations
     sp<IEvsVideoProvider> GetEvsVideoProvider() override { return input_stream_; };
+
+    /// @returns true if the output stream state is "RUNNING".
     bool IsStreaming() override { return output_stream_state_ == StreamState::RUNNING; };
+
+    /// @returns the maximum number of frames the camera will hold at a time.
     uint32_t GetAllowedBuffers() { return frames_allowed_; };
 
-    // Proxy to receive frames from the input stream and forward them to the output stream
+    /// Proxy to receieve and buffer/hold frames from the input stream and forward them to the output stream
+    ///
+    /// The method will forward but not hold a nullptr/"end of stream" frame.
+    ///
+    /// @param[in] buffer the frame to deliver
+    ///
+    /// @returns true if frame was delivered and held
     bool DeliverFrame(const BufferDesc& buffer) override;
 
     // Methods from ::android::hardware::automotive::evs::V1_0::IEvsCamera follow.
+    /// @see https://source.android.com/reference/hidl/android/hardware/automotive/evs/1.0/IEvsCamera
+    ///@{
     Return<void> getCameraInfo(getCameraInfo_cb hidl_cb) override;
     Return<EvsResult> setMaxFramesInFlight(uint32_t buffer_count) override;
     Return<EvsResult> startVideoStream(const sp<IEvsCameraStream>& stream) override;
@@ -50,12 +64,13 @@ class VirtualCamera final : public IVirtualCamera {
     Return<void> stopVideoStream() override;
     Return<int32_t> getExtendedInfo(uint32_t opaque_identifier) override;
     Return<EvsResult> setExtendedInfo(uint32_t opaque_identifier, int32_t opaque_value) override;
+    ///@}
 
   private:
     sp<IEvsVideoProvider> input_stream_;  // The low level camera interface to the hardware camera
     sp<IEvsCameraStream> output_stream_;  // The output stream to the consumer
 
-    std::deque<BufferDesc> frames_held_;
+    std::deque<BufferDesc> frames_held_;  // The record of held frames
     uint32_t frames_allowed_;
 
     StreamState output_stream_state_;

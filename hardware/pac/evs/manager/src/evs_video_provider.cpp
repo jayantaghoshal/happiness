@@ -44,8 +44,8 @@ sp<IVirtualCamera> EvsVideoProvider::MakeVirtualCamera() {
         return nullptr;
     }
 
-    dbgD("Ensure we have enough buffers available for all of our clients");
     // Ensure we have enough buffers for all of our clients
+    dbgD("Ensure we have enough buffers available for all of our clients");
     if (!ChangeFramesInFlight(client->GetAllowedBuffers())) {
         dbgE("Could not get enough buffers to support the client. dropping our reference, thus destroying the client "
              "object.");
@@ -81,6 +81,7 @@ void EvsVideoProvider::DisownVirtualCamera(sp<IVirtualCamera>& virtual_camera) {
     virtual_camera->ShutDown();
     virtual_camera = nullptr;
 
+    // Shrink-to-fit the record of held frames
     if (!ChangeFramesInFlight(0)) {
         dbgE("Error when trying to reduce the in flight buffer count");
     }
@@ -236,8 +237,8 @@ Return<void> EvsVideoProvider::deliverFrame(const BufferDesc& buffer) {
         }
     }
 
+    // If no client could accept the frame, return it
     if (frame_deliveries == 0) {
-        // If no client could accept the frame, return it
         dbgI("Trivially rejecting frame with no acceptances");  // TODO(ihu) consider downgrading to debug
         hw_camera_->doneWithFrame(buffer);
         return Void();

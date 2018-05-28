@@ -89,27 +89,33 @@ TEST_F(EvsVideoProviderTest, DeleteObject) {
 }
 
 TEST_F(EvsVideoProviderTest, MakeAndDisownVirtualCamera) {
+    // MakeVirtualCamera should return a virtual camera and add an entry for it in the EvsVideoProvider.
+    // DisownVirtualCamera should destruct the input virtual camera and remove its entry from EvsVideoProvider.
     // SetUp
+    // Ensure that we have no clients initially.
     size_type_clients client_count_initial = evs_video_provider->GetClientCount();
     size_type_clients client_count_initial_expected = 0;
     ASSERT_EQ(client_count_initial, client_count_initial_expected);
-    // Call on Make
+    // Called on Make
     EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
-    // Calls on Disown
+    // Called on Disown
     EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(1)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
 
     // Test and verify
     sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
+    // Verify that client was added
     size_type_clients client_count_after_make = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_make, client_count_initial + 1);
 
     evs_video_provider->DisownVirtualCamera(client_1);
+    // Verify that client was removed
     size_type_clients client_count_after_disown = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_disown, client_count_initial);
     EXPECT_EQ(client_1, nullptr);
 }
 
 TEST_F(EvsVideoProviderTest, MakeAndDisownMultipleVirtualCameras) {
+    // Test that MakeVirtualCamera and DisownVirtualCamera works with multiple calls.
     // SetUp
     // Calls on Make and Disown
     EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_))
@@ -122,11 +128,13 @@ TEST_F(EvsVideoProviderTest, MakeAndDisownMultipleVirtualCameras) {
     // Test and verify
     sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
     sp<IVirtualCamera> client_2 = evs_video_provider->MakeVirtualCamera();
+    // Verify that clients were added.
     size_type_clients client_count_after_make = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_make, static_cast<size_type_clients>(2));
 
     evs_video_provider->DisownVirtualCamera(client_1);
     evs_video_provider->DisownVirtualCamera(client_2);
+    // Verify that clients were removed.
     size_type_clients client_count_after_disown = evs_video_provider->GetClientCount();
     EXPECT_EQ(client_count_after_disown, static_cast<size_type_clients>(0));
     EXPECT_EQ(client_1, nullptr);
@@ -162,7 +170,7 @@ TEST_F(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamStopped) {
 }
 
 TEST_F(EvsVideoProviderTest, RequestVideoStreamWhenOutputStreamRunning) {
-    // Test that method returns ok if output stream state is not STOPPED.
+    // Test that method returns ok if output stream state is RUNNING.
     // SetUp
     evs_video_provider->output_stream_state_ = StreamState::RUNNING;
 
@@ -178,7 +186,6 @@ TEST_F(EvsVideoProviderTest, ReleaseVideoStreamLastClient) {
     // SetUp
     EXPECT_CALL(*mock_hw_camera, setMaxFramesInFlight(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
     sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
-    client_1->stopVideoStream();
     ASSERT_FALSE(client_1->IsStreaming());
     // Expects for test
     EXPECT_CALL(*mock_hw_camera, stopVideoStream());
@@ -195,13 +202,16 @@ TEST_F(EvsVideoProviderTest, ReleaseVideoStreamNotLastClient) {
     // Test that nothing happens if there are still clients alive when method is called
     // SetUp
     evs_video_provider = new EvsVideoProvider(strict_mock_hw_camera);
-    evs_video_provider->output_stream_state_ = StreamState::RUNNING;
+    // Ensure the EvsVideoProvider output stream is running.
+    EXPECT_CALL(*strict_mock_hw_camera, startVideoStream(_)).WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
+    // Create a client and ensure it is streaming
     EXPECT_CALL(*strict_mock_hw_camera, setMaxFramesInFlight(_))
             .WillOnce(testing::Return(testing::ByMove(EvsResult::OK)));
     sp<IVirtualCamera> client_1 = evs_video_provider->MakeVirtualCamera();
     client_1->startVideoStream(new MockIEvsCameraStream());
     // We must have at least one running client for the test call to ReleaseVideoStream
     ASSERT_TRUE(client_1->IsStreaming());
+    ASSERT_EQ(evs_video_provider->output_stream_state_, StreamState::RUNNING);
 
     // Test
     evs_video_provider->ReleaseVideoStream();

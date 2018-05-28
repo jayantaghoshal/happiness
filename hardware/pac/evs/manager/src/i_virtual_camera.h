@@ -17,8 +17,8 @@ namespace vcc_implementation {
 
 class IEvsVideoProvider;  // From i_evs_video_provider.h
 
-// The VirtualCamera acts as a middle-man between the consumer of the camera stream and the wrapper of the hardware
-// camera (EvsCameraStream). Many VirtualCamera:s can share the same EvsCameraStream.
+// This interface is a wrapper to allow for easy mocking of the implementation class.
+// See the implementation class for details on use.
 class IVirtualCamera : public IEvsCamera {
   public:
     // Performs a controlled stop of the video stream
@@ -29,7 +29,6 @@ class IVirtualCamera : public IEvsCamera {
     virtual bool IsStreaming() = 0;
     virtual uint32_t GetAllowedBuffers() = 0;
 
-    // Proxy to receive frames from the EvsCameraStream and forward them to the consumer
     virtual bool DeliverFrame(const BufferDesc& buffer) = 0;
 };
 
