@@ -8,6 +8,7 @@ set -uex
 pwd
 ls -l
 echo "$ZUUL_PROJECT"
+export ANDROID_HOME="$PWD/android-sdk-linux"
 
 cat "$ZUUL_PROJECT"/build.gradle
 "$ZUUL_PROJECT"/gradlew tasks --all
