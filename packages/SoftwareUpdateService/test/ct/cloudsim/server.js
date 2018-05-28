@@ -138,22 +138,27 @@ server.post('/commission', function (req, res, next) {
   var accessories = db.get('availableAccessories').get('software');
   var found = false;
 
-  var assignment = findMatchingObj(req.body.id, 'id', updates);
+  var xml = req.body['<?xml version'];
+  var id = getValue(xml, "id");
+  var reason = getValue(xml, "reason");
+
+  var assignment = findMatchingObj(id, 'id', updates);
   if (assignment != null) {
     counter++;
     console.log(assignment)
     addInstallationOrder(assignment, createInstallationOrderId(counter));
-    addActionRequest(assignment, "INSTALLATION", req.body.reason);
+    addActionRequest(assignment, "INSTALLATION", reason);
     found = true;
   }
 
   //If software was not found in availableUpdates, iterate over availableAccessories
   //if software found that matches id in body => add installation order to software and change status to COMMISSIONED
   if (!found) {
-    var assignment = findMatchingObj(req.body.id, 'id', accessories);
+    var assignment = findMatchingObj(id, 'id', accessories);
     if (assignment != null) {
       counter++;
       addInstallationOrder(assignment, createInstallationOrderId(counter));
+      addActionRequest(assignment, "INSTALLATION", reason);
       found = true;
     }
   }
@@ -161,7 +166,7 @@ server.post('/commission', function (req, res, next) {
   //Find software that matches the id in body in preDownloadInfo
   if (found) {
     var preDownloadInfos = db.get('preDownloadInfo');
-    var preDownloadInfoObj = findMatchingObj(req.body.id, 'id', preDownloadInfos);
+    var preDownloadInfoObj = findMatchingObj(id, 'id', preDownloadInfos);
 
     //Copy the software, add installationorder and put it in downloads
     if (preDownloadInfoObj != null) {
@@ -172,7 +177,7 @@ server.post('/commission', function (req, res, next) {
 
     //For all other assignments: set status to NON-COMMISSIONABLE
     for (i = 0; i < updates.value().length; i++) {
-      if (updates.value()[i]['id'] != req.body.id) {
+      if (updates.value()[i]['id'] != id) {
         assignment = updates.value()[i];
         assignment['status'] = "NON-COMMISSIONABLE";
         delete assignment.commission_uri;
@@ -180,7 +185,8 @@ server.post('/commission', function (req, res, next) {
     }
     //For all other assignments: set status to NON-COMMISSIONABLE
     for (i = 0; i < accessories.value().length; i++) {
-      if (accessories.value()[i]['id'] != req.body.id) {
+      console.log(accessories.value()['id'])
+      if (accessories.value()[i]['id'] != id) {
         assignment = accessories.value()[i];
         assignment['status'] = "NON-COMMISSIONABLE";
         delete assignment.commission_uri;
