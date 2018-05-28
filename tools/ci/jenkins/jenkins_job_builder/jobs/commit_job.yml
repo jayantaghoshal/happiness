@@ -250,7 +250,7 @@
 - job:
     name: ihu_sdk_host_library
     defaults: commit_job_defaults
-    node: gate_test-generic
+    node: high
     builders:
         - config-file-provider:
             files:
