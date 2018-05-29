@@ -93,9 +93,7 @@ public class MediaPlayer {
     }
 
     public boolean play() {
-        if (isPlaying) {
-            return true; //Already playing, do nothing
-        } else if (isPaused) {
+        if (isPaused) {
             player.setPlayWhenReady(true);
             return true;
         }
@@ -180,7 +178,7 @@ public class MediaPlayer {
                         mediaPlayerCallback.PlaybackStatusChanged(MediaPlayerService.STOP_STOPPED,
                                 RemoteCtrlHalPropertyStatus.AVAILABLE);
                         isPlaying = false;
-                        isPaused = true;
+                        isPaused = false;
                     	break;
                     case Player.STATE_READY:
                         mediaPlayerCallback.PlaybackStatusChanged(MediaPlayerService.PAUSE_PAUSED,
