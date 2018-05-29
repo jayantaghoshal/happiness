@@ -53,6 +53,7 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/fan_level", standard_caps | {cp.flexray_or_carsim}),# Torbjörn Sandsgård
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_keeping_aid_setting",      standard_caps | {cp.flexray_or_carsim}), #Martin Stigels
     VTSTest("vendor/volvocars/packages/TimeUpdateService/test/ct",                  standard_caps), #Renjith Rajagopal
+    VTSTest("vendor/volvocars/hardware/vehicle/test/traffic_sign_information",      standard_caps | {cp.flexray_or_carsim}), #Vivek Kumaar
     VTSTest("vendor/volvocars/hardware/vehicle/test/connected_safety_setting",      standard_caps | {cp.flexray_or_carsim}), #Martin Stigels
     VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray_or_carsim}), #Jayanta Ghoshal
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray},
@@ -84,7 +85,6 @@ test_plan_staging_hourly = [
     TradefedTest("vendor/volvocars/hmi/Launcher/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/apps/tunerbrowserservice/app/src/androidTest", standard_caps), #Ankit Bhargava
     VTSTest("vendor/volvocars/hardware/vehicle/test/lane_departure_warning_setting", standard_caps | {cp.flexray_or_carsim}), #Raju Yadav
-    VTSTest("vendor/volvocars/hardware/vehicle/test/traffic_sign_information",      standard_caps | {cp.flexray_or_carsim}), #Vivek Kumaar
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/profiles/test/hmi_user",                     standard_caps | {cp.cem}), #Uguudei
