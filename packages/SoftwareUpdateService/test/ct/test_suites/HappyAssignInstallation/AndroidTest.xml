@@ -20,7 +20,7 @@
     <test class="com.android.tradefed.testtype.AndroidJUnitTest">
         <option name="package" value="com.volvocars.softwareupdateapp" />
         <option name="runtime-hint" value="40s" />
-        <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyAssignInstallationUpdates"/>
+        <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyAssignInstallationUpdate"/>
         <option name="include-filter" value="com.volvocars.softwareupdateapp.SoftwareUpdateAppTest#happyAssignInstallationAccessories" />
     </test>
     <result_reporter class="com.android.tradefed.result.ConsoleResultReporter" />

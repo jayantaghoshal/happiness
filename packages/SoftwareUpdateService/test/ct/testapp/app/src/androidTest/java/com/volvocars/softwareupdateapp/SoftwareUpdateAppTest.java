@@ -35,18 +35,17 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.File;
 import java.lang.Thread;
 import java.util.List;
-
-import android.util.Log;
 
 @MediumTest
 @RunWith(AndroidJUnit4.class)
 public class SoftwareUpdateAppTest {
 
-        private static final String LOG_TAG = "SoftwareUpdateAppTest";
         private static final String SOFTWAREUPDATEAPP_PACKAGE = "com.volvocars.softwareupdateapp";
         private static final int LAUNCH_TIMEOUT = 5000;
+        private static final int LONG_TIMEOUT = 10000;
 
         private UiDevice mDevice;
 
@@ -233,16 +232,15 @@ public class SoftwareUpdateAppTest {
          * Verify that assignment exists
          *
          * @param assignmentName name of assignment
+         * @param timeout        timeout
          * @return if assignment exists
          */
-        private boolean verifyAssignment(String assignmentName) throws UiObjectNotFoundException {
-                // Find assignment with name "Spotify"
+        private boolean verifyAssignment(String assignmentName, int timeout) throws UiObjectNotFoundException{
                 scrollToAssignment(assignmentName);
-
-                UiObject assignment = mDevice.findObject(new UiSelector()
-                                .resourceId("com.volvocars.softwareupdateapp:id/name").text(assignmentName));
-
-                return assignment.exists();
+                // Find assignment with name "Spotify"
+                BySelector textSelector = By.clazz(CLASS_TEXT_VIEW).res("com.volvocars.softwareupdateapp:id/name")
+                                .text(assignmentName);
+                return mDevice.wait(Until.hasObject(textSelector), timeout);
         }
 
         /**
@@ -250,15 +248,15 @@ public class SoftwareUpdateAppTest {
          *
          * @param assignmentName name of assignment
          * @param state          expected state of assignment
+         * @param timeout        timeout
          * @return if assignment exists and is in expected state
          */
-        private boolean verifyAssignment(String assignmentName, String state) throws UiObjectNotFoundException {
-                if (verifyAssignment(assignmentName)) {
+        private boolean verifyAssignment(String assignmentName, String state, int timeout) throws UiObjectNotFoundException{
+                if (verifyAssignment(assignmentName, timeout)) {
                         BySelector textSelector = By.clazz(CLASS_TEXT_VIEW)
                                         .res("com.volvocars.softwareupdateapp:id/state").text(state);
-                        return mDevice.wait(Until.hasObject(textSelector), LAUNCH_TIMEOUT);
+                        return mDevice.wait(Until.hasObject(textSelector), timeout);
                 }
-                Log.v(LOG_TAG, "false: assigment name" + assignmentName);
                 return false;
         }
 
@@ -303,33 +301,33 @@ public class SoftwareUpdateAppTest {
                 clickOnCloudMenuItem(GET_AVAILABLE_ACCESSORIES);
 
                 // Verify that all expected assignments are visible
-                assertTrue(verifyAssignment(SPOTIFY));
-                assertTrue(verifyAssignment(SECURITY_PATCH_FOR_IHU));
-                assertTrue(verifyAssignment(ADAPTIVE_CRUISE_CONTROL));
+                assertTrue(verifyAssignment(SPOTIFY, LAUNCH_TIMEOUT));
+                assertTrue(verifyAssignment(SECURITY_PATCH_FOR_IHU, LAUNCH_TIMEOUT));
+                assertTrue(verifyAssignment(ADAPTIVE_CRUISE_CONTROL, LAUNCH_TIMEOUT));
         }
 
         @Test
-        public void happyCommissionAssignment() throws UiObjectNotFoundException {
+        public void happyCommissionAssignment() throws UiObjectNotFoundException{
                 // Call Get available updates
                 clickOnCloudMenuItem(GET_AVAILABLE_UPDATES);
 
                 // Verify that expected assignment is visible
-                assertTrue(verifyAssignment(SPOTIFY));
+                assertTrue(verifyAssignment(SPOTIFY, LAUNCH_TIMEOUT));
 
                 // Commission assignment
                 clickOnAssignmentMenuItem(SPOTIFY, COMMISSION_ASSIGNMENT);
 
                 // Verify that expected assignment is visible and in state "COMMISSIONED"
-                assertTrue(verifyAssignment(SPOTIFY, COMMISSIONED));
+                assertTrue(verifyAssignment(SPOTIFY, COMMISSIONED, LAUNCH_TIMEOUT));
         }
 
         @Test
-        public void happyAutoCommissionAssignment() throws UiObjectNotFoundException {
+        public void happyAutoCommissionAssignment() throws UiObjectNotFoundException{
                 // Call Get available updates
                 clickOnCloudMenuItem(GET_AVAILABLE_UPDATES);
 
                 // Verify that expected assignment is visible and in state "COMMISSIONABLE"
-                assertTrue(verifyAssignment(SECURITY_PATCH_FOR_IHU, COMMISSIONABLE));
+                assertTrue(verifyAssignment(SECURITY_PATCH_FOR_IHU, COMMISSIONABLE, LAUNCH_TIMEOUT));
 
                 // Set setting "Automatic download" to true
                 setSetting(AUTO_DOWNLOAD_ID, true);
@@ -338,11 +336,11 @@ public class SoftwareUpdateAppTest {
                 clickOnCloudMenuItem(GET_AVAILABLE_UPDATES);
 
                 // Verify that expected assignment is visible and in state "COMMISSIONED"
-                assertTrue(verifyAssignment(SECURITY_PATCH_FOR_IHU, COMMISSIONED));
+                assertTrue(verifyAssignment(SECURITY_PATCH_FOR_IHU, COMMISSIONED, LAUNCH_TIMEOUT));
         }
 
         @Test
-        public void happyGetDownloads() throws UiObjectNotFoundException {
+        public void happyGetDownloads() throws UiObjectNotFoundException{
                 // Call Get available updates
                 clickOnCloudMenuItem(GET_AVAILABLE_UPDATES);
 
@@ -351,40 +349,51 @@ public class SoftwareUpdateAppTest {
                 performActionOnInstallPopUp(SPOTIFY, CANCEL);
 
                 // Verify that expected assignment is visible and in state "DOWNLOADED"
-                assertTrue(verifyAssignment(SPOTIFY, DOWNLOADED));
+                assertTrue(verifyAssignment(SPOTIFY, DOWNLOADED, LAUNCH_TIMEOUT));
         }
 
         @Test
-        public void happyAssignInstallationUpdates() throws UiObjectNotFoundException {
+        public void happyAssignInstallationUpdate() throws UiObjectNotFoundException {
                 // Call Get available updates
 
                 clickOnCloudMenuItem(GET_AVAILABLE_UPDATES);
 
                 // Verify that expected assignment is visible
 
-                verifyAssignment(SPOTIFY);
+                verifyAssignment(SPOTIFY, LAUNCH_TIMEOUT);
 
                 // Commission assignment
                 clickOnAssignmentMenuItem(SPOTIFY, COMMISSION_ASSIGNMENT);
 
                 // Verify that expected assignment is visible and in state "COMMISSIONED"
-                verifyAssignment(SPOTIFY, COMMISSIONED);
+                verifyAssignment(SPOTIFY, COMMISSIONED, LAUNCH_TIMEOUT);
 
                 // Call Get available updates
                 clickOnCloudMenuItem(GET_AVAILABLE_UPDATES);
+
+                // Verify that expected assignment is visible and in state "DOWNLOADED"
+                verifyAssignment(SPOTIFY, DOWNLOADED, LAUNCH_TIMEOUT);
+
+                // Verify that directory only contains one directory (of downloaded files)
+                File file = new File("/data/vendor/ota/");
+                assertTrue(file.list().length == 1);
 
                 // Verify that installation popup is visible for assignment and click on INSTALL
                 // button
                 performActionOnInstallPopUp(SPOTIFY, INSTALL);
 
                 // Verify that expected assignment is visible and in state "COMMISSIONED"
-                assertTrue(verifyAssignment(SPOTIFY, INSTALL_PENDING));
+                assertTrue(verifyAssignment(SPOTIFY, INSTALL_PENDING, LAUNCH_TIMEOUT));
 
                 // Call Get available updates
                 clickOnCloudMenuItem(GET_AVAILABLE_UPDATES);
 
                 // Verify that assignment is removed from list
-                assertFalse(verifyAssignment(SPOTIFY));
+                assertFalse(verifyAssignment(SPOTIFY, LONG_TIMEOUT));
+
+                // Verify that directory of downloaded files is cleared
+                assertTrue(file.list().length == 0);
+
         }
 
         @Test
@@ -394,29 +403,39 @@ public class SoftwareUpdateAppTest {
                 clickOnCloudMenuItem(GET_AVAILABLE_ACCESSORIES);
                 // Verify that expected assignment is visible
 
-                verifyAssignment(ADAPTIVE_CRUISE_CONTROL);
+                verifyAssignment(ADAPTIVE_CRUISE_CONTROL, LAUNCH_TIMEOUT);
                 // Commission assignment
 
                 clickOnAssignmentMenuItem(ADAPTIVE_CRUISE_CONTROL, COMMISSION_ASSIGNMENT);
                 // Verify that expected assignment is visible and in state "COMMISSIONED"
 
-                verifyAssignment(ADAPTIVE_CRUISE_CONTROL, COMMISSIONED);
+                verifyAssignment(ADAPTIVE_CRUISE_CONTROL, COMMISSIONED, LAUNCH_TIMEOUT);
                 // Call Get available accessories
 
                 clickOnCloudMenuItem(GET_AVAILABLE_ACCESSORIES);
+
+                // Verify that expected assignment is visible and in state "DOWNLOADED"
+                verifyAssignment(ADAPTIVE_CRUISE_CONTROL, DOWNLOADED, LAUNCH_TIMEOUT);
+
+                // Verify that directory only contains one directory (of downloaded files)
+                File file = new File("/data/vendor/ota/");
+                assertTrue(file.list().length == 1);
 
                 // Verify that installation popup is visible for assignment and click on INSTALL
                 // button
                 performActionOnInstallPopUp(ADAPTIVE_CRUISE_CONTROL, INSTALL);
                 // Verify that expected assignment is visible and in state "COMMISSIONED"
 
-                assertTrue(verifyAssignment(ADAPTIVE_CRUISE_CONTROL, INSTALL_PENDING));
+                assertTrue(verifyAssignment(ADAPTIVE_CRUISE_CONTROL, INSTALL_PENDING, LAUNCH_TIMEOUT));
                 // Call Get available accessories
 
                 clickOnCloudMenuItem(GET_AVAILABLE_ACCESSORIES);
 
                 // Verify that assignment is removed from list
-                assertFalse(verifyAssignment(ADAPTIVE_CRUISE_CONTROL));
+                assertFalse(verifyAssignment(ADAPTIVE_CRUISE_CONTROL, LONG_TIMEOUT));
+
+                // Verify that directory of downloaded files is cleared
+                assertTrue(file.list().length == 0);
         }
 
 }
