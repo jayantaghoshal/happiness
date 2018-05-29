@@ -17,6 +17,11 @@
                   branches:
                     - branch-compare-type: 'REG_EXP'
                       branch-pattern: '.*'
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'vendor/volvocars/hmi/ComponentLibrary'
+                  branches:
+                    - branch-compare-type: 'REG_EXP'
+                      branch-pattern: '.*'
     notifications:
         - http:
             url: http://gotsvl1416.got.volvocars.net:3002/events
