@@ -17,4 +17,4 @@ fi
 # Download the Android SDK
 export ANDROID_HOME="$PWD/android-sdk-linux"
 
-yes | "$ANDROID_HOME"/tools/bin/sdkmanager --licenses
+yes | "$ANDROID_HOME"/tools/bin/sdkmanager --licenses --proxy=http --proxy_host=127.0.01 --proxy_port=3128
