@@ -145,6 +145,9 @@ class VehicleHalCommon():
     app_context_vehiclefunctions = "com.volvocars.vehiclefunctions:id/"
     app_context_halmodulesink = "com.volvocars.halmodulesink:id/"
 
+    # VehicleFunctions recyclerView Id
+    recycler_view_id = "com.volvocars.vehiclefunctions:id/recyclerView"
+
     # ClimatePane buttons
     fan_off = "com.volvocars.launcher:id/fan_off_button"
     fan_level_1 = "com.volvocars.launcher:id/fan_one"
@@ -243,10 +246,6 @@ class VehicleHalCommon():
         self.dut.adb.shell('am start -n \"com.volvocars.vehiclefunctions/com.volvocars.vehiclefunctions.VehicleFunctionsActivity\" -a \"android.intent.action.MAIN\" -c \"android.intent.category.LAUNCHER\"')
         self.waitUntilViewAvailable("com.volvocars.vehiclefunctions:id/assistance_item")
 
-        # Open menu drawer button
-        drive_assistant = device(resourceId="com.volvocars.vehiclefunctions:id/assistance_item")
-        drive_assistant.click()
-
     def deviceReboot(self):
         self.dut.shell.one.Execute("reboot")
         self.dut.stopServices()
@@ -292,7 +291,7 @@ class VehicleHalCommon():
                 if lastUser != '0':
                     return
             except:
-                print "Exception while using adb shell"
+                print("Exception while using adb shell")
 
             logging.info("Waiting...%s", str(time.time() - start_time))
             time.sleep(1)
@@ -340,6 +339,7 @@ class VehicleHalCommon():
             if view.exists:
                 return view
             device.drag(100, 200, 100, 400, 10)
+        device(resourceId=self.recycler_view_id).scroll.toEnd()
         return None
 
     def scrollDownAndFindViewByIdUiAutomator(self, viewId, device, maxFlings=15):
@@ -349,16 +349,15 @@ class VehicleHalCommon():
             if view.exists:
                 return view
             device.drag(100, 300, 100, 100, 10)
+        device(resourceId=self.recycler_view_id).scroll.toBeginning()   # Make sure that it starts the search from the top
         return None
 
     def findAllViewWithIds(self, ids, device, assert_views_found=True):
         # Scroll all buttons to be shown
         for id in ids:
-            self.scrollDownAndFindViewByIdUiAutomator(id, device)
-        # Assert if all buttons are visible and found
-        if assert_views_found:
-            for id in ids:
-                asserts.assertTrue(device(resourceId=id).exists, "View " + str(id) + " not found!")
+            view = self.scrollDownAndFindViewByIdUiAutomator(id, device)
+            if assert_views_found:
+                asserts.assertTrue(view.exists, "View " + str(id) + " not found!")
 
     def emptyValueProperty(self, propertyId, areaId=0):
         """Creates a property structure for use with the Vehicle HAL.

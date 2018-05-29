@@ -6,350 +6,212 @@
 import sys
 import time
 
-from vts.runners.host import asserts
-from vts.runners.host import base_test
-from vts.runners.host import const
 from vts.runners.host import test_runner
-from vts.utils.python.controllers import android_device
 
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
-sys.path.append('/tmp/ihu/.local/lib/python2.7/site-packages')
 
 from generated import datatypes as DE
-from vehiclehalcommon import wait_for
-import vehiclehalcommon
-from uiautomator import device as device
-
-ns_per_ms = 1000000
+from vf_common import vf_base_test
+from vf_common import uiautomator_common
+from vf_common.signals_common import wait_for_fr_signal
+from vf_common.vf_vts_common import wait_for
 
 app_context = "com.volvocars.vehiclefunctions:id/"
-ACC_button_on = app_context + "adaptive_cruise_control_on"
-CC_button_on = app_context + "cruise_control_on"
-SL_button_on = app_context + "speed_limiter_on"
-wait_after_button_click = 0.5
+acc_button_on = app_context + "adaptive_cruise_control_on"
+cc_button_on = app_context + "cruise_control_on"
+sl_button_on = app_context + "speed_limiter_on"
+
+DRIVER_SUPPORT_FUNCTION_MODE = 557842459  # Hard coded VCC-HAL property ID for DRIVER_SUPPORT_FUNCTION
+CRUISE_CONTROL = 0
+ADAPTIVE_CRUISE_CONTROL = 1
+SPEED_LIMITER = 2
 
 
-class VtsDriverSupportComponentTest(base_test.BaseTestClass):
-    def setUpClass(self):
-        """Creates a mirror and init vehicle hal."""
-        self.dut = self.registerController(android_device)[0]
-        self.dut.shell.InvokeTerminal("one")
-        self.dut.shell.one.Execute("setenforce 0")  # SELinux permissive mode
-        results = self.dut.shell.one.Execute("id -u system")
-        self.system_uid = results[const.STDOUT][0].strip()
-        self.flexray = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
-
-    def tearDownClass(self):
-        try:
-            self.flexray.close()
-        except:
-            pass
-
-    def deviceReboot(self):
-        if self.flexray is not None:
-            self.flexray.close()
-        time.sleep(1)
-        self.dut.shell.one.Execute("reboot")
-        self.dut.stopServices()
-        self.dut.waitForBootCompletion()
-        self.dut.startServices()
-        self.dut.shell.InvokeTerminal("one")
-        self.flexray = vehiclehalcommon.get_dataelements_connection(self.dut.adb)
-        time.sleep(1)
+class VtsDriverSupportComponentTest(vf_base_test.VFBaseTest):
 
     # ----------------------------------------------------------------------------------------------------------
     # Test buttons not present CC36 <= 1
     # ----------------------------------------------------------------------------------------------------------
     def testDriverSupportCCDisabled1(self):
-        self.dut.shell.one.Execute("changecarconfig 23 1")
-        self.dut.shell.one.Execute("changecarconfig 36 1")
+        self.change_carconfig_and_reboot_if_needed([(23, 1), (36, 1)])
+        self.setUpVehicleFunction()
 
-        # Reboot device after changing carconfig
-        self.deviceReboot()
+        self.ui.scrollAndAssertViewsAreNotFound([
+            acc_button_on,
+            cc_button_on,
+            sl_button_on])
 
-        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        vHalCommon.setUpVehicleFunction()
-
-        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], device, assert_views_found=False)
-        ACC_button = device(resourceId=ACC_button_on)
-        CC_button = device(resourceId=CC_button_on)
-        SL_button = device(resourceId=SL_button_on)
-
-        # Compare result
-        asserts.assertFalse(ACC_button, "ACC_button is still visible")
-        asserts.assertFalse(CC_button, "CC_button is still visible")
-        asserts.assertFalse(SL_button, "SL_button is still visible")
-
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
     # ----------------------------------------------------------------------------------------------------------
     # Test buttons not present CC36 > 1
     # ----------------------------------------------------------------------------------------------------------
     def testDriverSupportCCDisabled2(self):
-        self.dut.shell.one.Execute("changecarconfig 23 1")
-        self.dut.shell.one.Execute("changecarconfig 36 2")
+        self.change_carconfig_and_reboot_if_needed([(23, 1), (36, 2)])
+        self.setUpVehicleFunction()
 
-        # Reboot device after changing carconfig
-        self.deviceReboot()
+        self.ui.scrollAndAssertViewsAreNotFound([
+            acc_button_on,
+            cc_button_on,
+            sl_button_on])
 
-        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        vHalCommon.setUpVehicleFunction()
-
-        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], device, assert_views_found=False)
-        ACC_button = device(resourceId=ACC_button_on)
-        CC_button = device(resourceId=CC_button_on)
-        SL_button = device(resourceId=SL_button_on)
-
-        # Compare result
-        asserts.assertFalse(ACC_button, "ACC_button is still visible")
-        asserts.assertFalse(CC_button, "CC_button is still visible")
-        asserts.assertFalse(SL_button, "SL_button is still visible")
-
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
 
     # ----------------------------------------------------------------------------------------------------------
     # Test buttons present CC23=2 && CC36>1, 2 Buttons CC && SL
     # ----------------------------------------------------------------------------------------------------------
     def testDriverSupportCCAndSLEnabled(self):
-        self.dut.shell.one.Execute("changecarconfig 23 2")
-        self.dut.shell.one.Execute("changecarconfig 36 2")
+        self.change_carconfig_and_reboot_if_needed([(23, 2), (36, 2)])
 
         # Clear database
         self.dut.shell.one.Execute("stop settingstorage-hidl-server")
         self.dut.shell.one.Execute("rm /data/vendor/vehiclesettings/vehiclesettings.db*")
         self.dut.shell.one.Execute("start settingstorage-hidl-server")
 
-        # Reboot device after changing carconfig
-        self.deviceReboot()
+        self.setUpVehicleFunction()
 
-        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        vHalCommon.setUpVehicleFunction()
+        self.ui.scrollAndAssertViewsAreNotFound([acc_button_on])
+        cc_button = self.ui.scrollDownAndFindViewById(cc_button_on)
+        sl_button = self.ui.scrollDownAndFindViewById(sl_button_on)
 
-        vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
-
-        # Get buttons
-        vHalCommon.findAllViewWithIds([CC_button_on, SL_button_on], device, assert_views_found=False)
-        ACC_button = device(resourceId=ACC_button_on)
-        CC_button = device(resourceId=CC_button_on)
-        SL_button = device(resourceId=SL_button_on)
-
-        # Compare result
-        asserts.assertFalse(ACC_button, "ACC_button is still visible!")
-        asserts.assertTrue(CC_button.enabled, "CC_button is not enabled")
-        asserts.assertTrue(SL_button.enabled, "SL_button is not enabled")
-
-        DRIVER_SUPPORT_FUNCTION_ON = vHalCommon.get_id('DRIVER_SUPPORT_FUNCTION_ON')
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
         # ----------------------------------------------------------------------------------------------------------
         # Test active state
         # ----------------------------------------------------------------------------------------------------------
-        # UsgModSts ACTIVE
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
-        self.flexray.send_CrsCtrlrSts(DE.CrsCtrlrSts1.Off)
-        self.flexray.send_AccSts(DE.AccSts1.Stb)
-        self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Off)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModActv)
 
-        wait_for(self.flexray.get_AdjSpdLimnSts, DE.AdjSpdLimnSts2.Off, timeout_sec=1)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
-
-        SL_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
+        sl_button.click()
+        self.vhal.wait_for_Int32_equals(SPEED_LIMITER, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
 
         # UsgModSts NOT_ACTIVE
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModInActv)
 
-        # TODO: Fix when HMI handles Status. Shall expect DE.DrvrSpprtFct.ACC instead of CC.
-        CC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        cc_button.click()
+        self.vhal.wait_for_Int32_equals(SPEED_LIMITER, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
-        SL_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        sl_button.click()
+        self.vhal.wait_for_Int32_equals(SPEED_LIMITER, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
-        # UsgModeSts ACTIVE
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModDrvg
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
-        self.flexray.send_CrsCtrlrSts(DE.CrsCtrlrSts1.Actv)
-        self.flexray.send_AccSts(DE.AccSts1.Actv)
-        self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Actv)
+        # UsgModSts ACTIVE
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModActv)
 
-        SL_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        cc_button.click()
+        self.vhal.wait_for_Int32_equals(CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
+
+        sl_button.click()
+        self.vhal.wait_for_Int32_equals(SPEED_LIMITER, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
 
     # ----------------------------------------------------------------------------------------------------------
     # Test buttons present CC23>2 && CC36<=1, 2 Buttons CC && ACC
     # ----------------------------------------------------------------------------------------------------------
     def testDriverSupportACCandCCEnabled(self):
-        self.dut.shell.one.Execute("changecarconfig 23 3")
-        self.dut.shell.one.Execute("changecarconfig 36 1")
+        self.change_carconfig_and_reboot_if_needed([(23, 3), (36, 1)])
 
         # Clear database
         self.dut.shell.one.Execute("stop settingstorage-hidl-server")
         self.dut.shell.one.Execute("rm /data/vendor/vehiclesettings/vehiclesettings.db*")
         self.dut.shell.one.Execute("start settingstorage-hidl-server")
 
-        # Reboot device after changing carconfig
-        self.deviceReboot()
+        self.setUpVehicleFunction()
 
-        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        vHalCommon.setUpVehicleFunction()
+        self.ui.scrollAndAssertViewsAreNotFound([sl_button_on])
+        acc_button = self.ui.scrollDownAndFindViewById(acc_button_on)
+        cc_button = self.ui.scrollDownAndFindViewById(cc_button_on)
 
-        vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
-
-        # Get buttons
-        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on], device, assert_views_found=False)
-        ACC_button = device(resourceId=ACC_button_on)
-        CC_button = device(resourceId=CC_button_on)
-        SL_button = device(resourceId=SL_button_on)
-
-        # Compare result
-        asserts.assertTrue(ACC_button.enabled, "ACC_button is not enabled")
-        asserts.assertTrue(CC_button.enabled, "CC_button is not enabled")
-        asserts.assertFalse(SL_button, "SL_button is still visible!")
-
-        DRIVER_SUPPORT_FUNCTION_ON = vHalCommon.get_id('DRIVER_SUPPORT_FUNCTION_ON')
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
         # ----------------------------------------------------------------------------------------------------------
         # Test active state
         # ----------------------------------------------------------------------------------------------------------
-        # UsgModSts ACTIVE
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
-        self.flexray.send_CrsCtrlrSts(DE.CrsCtrlrSts1.Off)
-        self.flexray.send_AccSts(DE.AccSts1.Stb)
-        self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Off)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModActv)
 
-        wait_for(self.flexray.get_AdjSpdLimnSts, DE.AdjSpdLimnSts2.Off, timeout_sec=1)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
-
-        ACC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.ACC)
+        acc_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.ACC)
 
         # UsgModSts NOT_ACTIVE
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModInActv)
 
-        # TODO: Fix when HMI handles Status. Shall expect DE.DrvrSpprtFct.ACC instead of CC.
-        CC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        cc_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
-        ACC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        acc_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
-        # UsgModeSts ACTIVE
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModDrvg
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
-        self.flexray.send_CrsCtrlrSts(DE.CrsCtrlrSts1.Actv)
-        self.flexray.send_AccSts(DE.AccSts1.Actv)
-        self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Actv)
+        # UsgModSts ACTIVE
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModActv)
 
-        ACC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        cc_button.click()
+        self.vhal.wait_for_Int32_equals(CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
+
+        acc_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.ACC)
 
     # ----------------------------------------------------------------------------------------------------------
     # Test buttons present CC23>2 && CC36>1, All 3 Buttons CC,ACC,SL
     # ----------------------------------------------------------------------------------------------------------
     def testDriverSupportAllEnabled(self):
-        self.dut.shell.one.Execute("changecarconfig 23 3")
-        self.dut.shell.one.Execute("changecarconfig 36 2")
+        self.change_carconfig_and_reboot_if_needed([(23, 3), (36, 2)])
 
         # Clear database
         self.dut.shell.one.Execute("stop settingstorage-hidl-server")
         self.dut.shell.one.Execute("rm /data/vendor/vehiclesettings/vehiclesettings.db*")
         self.dut.shell.one.Execute("start settingstorage-hidl-server")
 
-        # Reboot device after changing carconfig
-        self.deviceReboot()
+        self.setUpVehicleFunction()
 
-        vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, self.system_uid, with_flexray_legacy=False)
-        vHalCommon.setUpVehicleFunction()
+        acc_button = self.ui.scrollDownAndFindViewById(acc_button_on)
+        cc_button = self.ui.scrollDownAndFindViewById(cc_button_on)
+        sl_button = self.ui.scrollDownAndFindViewById(sl_button_on)
 
-        vehmod = vHalCommon.GetDefaultInitiated_VehModMngtGlbSafe1()
-
-        # Get buttons
-        vHalCommon.findAllViewWithIds([ACC_button_on, CC_button_on, SL_button_on], device)
-        ACC_button = device(resourceId=ACC_button_on)
-        CC_button = device(resourceId=CC_button_on)
-        SL_button = device(resourceId=SL_button_on)
-
-        # Compare result
-        asserts.assertTrue(ACC_button.enabled, "ACC_button is not enabled")
-        asserts.assertTrue(CC_button.enabled, "CC_button is not enabled")
-        asserts.assertTrue(SL_button.enabled, "SL_button is not enabled")
-
-        DRIVER_SUPPORT_FUNCTION_ON = vHalCommon.get_id('DRIVER_SUPPORT_FUNCTION_ON')
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.CC)
 
         # ----------------------------------------------------------------------------------------------------------
         # Test active state
         # ----------------------------------------------------------------------------------------------------------
-        # UsgModSts ACTIVE
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
-        self.flexray.send_CrsCtrlrSts(DE.CrsCtrlrSts1.Off)
-        self.flexray.send_AccSts(DE.AccSts1.Stb)
-        self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Off)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModActv)
 
-        wait_for(self.flexray.get_AdjSpdLimnSts, DE.AdjSpdLimnSts2.Off, timeout_sec=1)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.CC)
+        sl_button.click()
+        self.vhal.wait_for_Int32_equals(SPEED_LIMITER, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
 
-        SL_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 2)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
-
-        ACC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.ACC)
+        acc_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.ACC)
 
         # UsgModSts NOT_ACTIVE
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModInActv
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModInActv)
 
-        # TODO: Fix when HMI handles Status. Shall expect DE.DrvrSpprtFct.ACC instead of SL.
-        SL_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
+        sl_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
 
-        ACC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
+        acc_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
 
-        CC_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 1)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
+        cc_button.click()
+        self.vhal.wait_for_Int32_equals(ADAPTIVE_CRUISE_CONTROL, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
 
-        # UsgModeSts ACTIVE
-        vehmod.UsgModSts = DE.UsgModSts1.UsgModDrvg
-        self.flexray.send_VehModMngtGlbSafe1(vehmod)
-        self.flexray.send_CrsCtrlrSts(DE.CrsCtrlrSts1.Actv)
-        self.flexray.send_AccSts(DE.AccSts1.Actv)
-        self.flexray.send_AdjSpdLimnSts(DE.AdjSpdLimnSts2.Actv)
+        # UsgModSts ACTIVE
+        self.signals.set_usage_mode(DE.UsgModSts1.UsgModActv)
 
-        SL_button.click()
-        time.sleep(wait_after_button_click)
-        vHalCommon.assert_prop_equals(DRIVER_SUPPORT_FUNCTION_ON, 0)
-        asserts.assertEqual(self.flexray.get_UsrSeldDrvrSpprtFct(), DE.DrvrSpprtFct.SL)
+        sl_button.click()
+        self.vhal.wait_for_Int32_equals(SPEED_LIMITER, DRIVER_SUPPORT_FUNCTION_MODE)
+        wait_for_fr_signal(self.fr.get_UsrSeldDrvrSpprtFct, DE.DrvrSpprtFct.SL)
+
 
 if __name__ == "__main__":
     test_runner.main()
+

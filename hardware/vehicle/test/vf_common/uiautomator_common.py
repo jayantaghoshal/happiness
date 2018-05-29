@@ -9,6 +9,7 @@ from uiautomator import device as device_default
 class AppId:
     app_context_vehiclefunctions = "com.volvocars.vehiclefunctions:id/"
     app_context_halmodulesink = "com.volvocars.halmodulesink:id/"
+    vehiclefunctions_view = "com.volvocars.vehiclefunctions:id/recyclerView"
 
 class ButtonId:
     fan_off = "com.volvocars.launcher:id/fan_off"
@@ -69,4 +70,4 @@ class UIAutomatorCommon:
                 view = self.device(resourceId=id)
                 asserts.assertFalse(view.exists, "Found view with id=%s when no view was expected" % id)
             self.device.drag(100, 300, 100, 100, 10)
-
+        self.device(resourceId=AppId.vehiclefunctions_view).scroll.toBeginning()   # Make sure that it starts the search from the top
