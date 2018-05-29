@@ -91,6 +91,9 @@
 # remotectrl_climatectrld
 /vendor/bin/remotectrl_climatectrld u:object_r:remotectrl_climatectrl_exec:s0
 
+# remotectrl_mediactrld
+/vendor/bin/remotectrl_mediactrld u:object_r:remotectrl_mediactrl_exec:s0
+
 # PAC
 /vendor/bin/hw/android.hardware.automotive.evs.vcc@1.0-hardware   u:object_r:evs_hardware_exec:s0
 /vendor/bin/android.hardware.automotive.evs.vcc@1.0-manager       u:object_r:evs_manager_exec:s0

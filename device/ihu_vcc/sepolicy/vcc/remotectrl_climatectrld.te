@@ -1,10 +1,2 @@
 # remotectrl_climatectrl service
-type remotectrl_climatectrl, domain;
-type remotectrl_climatectrl_exec, exec_type, file_type, vendor_file_type;
-
-init_daemon_domain(remotectrl_climatectrl)
-
-allow remotectrl_climatectrl remotectrl_data_file:file { getattr open read };
-allow remotectrl_climatectrl device:sock_file write;
-
-hal_server_domain(remotectrl_climatectrl, hal_remotectrl)
+init_remotectrl_domain(remotectrl_climatectrl)

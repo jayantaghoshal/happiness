@@ -1,0 +1,13 @@
+##################################################
+# init_remotectrl_domain(domain)
+# Allow a base set of permissions required for a domain
+# to offer a RemoteCtrlHal implementation
+#
+define(`init_remotectrl_domain', `
+type $1, domain;
+type $1_exec, exec_type, file_type, vendor_file_type;
+init_daemon_domain($1)
+allow $1 remotectrl_data_file:file {getattr open read};
+allow $1 device:sock_file write;
+hal_server_domain($1, hal_remotectrl)
+')
