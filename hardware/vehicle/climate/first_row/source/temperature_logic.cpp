@@ -12,7 +12,9 @@
 #include <carconfig.h>
 #include <cc_parameterlist.h>
 
-LOG_SET_DEFAULT_CONTEXT(FirstRowContext)
+#include <log/log.h>
+#undef LOG_TAG
+#define LOG_TAG "TemperatureLogic"
 
 TemperatureLogic::TemperatureLogic(bool isValidCarConfig,
                                    common::daemon::TemperatureConverter& tempConverter,
@@ -184,14 +186,14 @@ bool TemperatureLogic::activationCheck(const autosar::UsgModSts1 usgMode,
 }
 
 void TemperatureLogic::update(double temp) {
-    log_debug() << "Temp " << temp_.get() << " >> " << temp;
+    ALOGD("Temp %f >> %f", temp_.get(), temp);
     if (temp != temp_.get()) {
         temp_.set(temp);
     }
 }
 
 void TemperatureLogic::update(autosar::HmiCmptmtTSpSpcl tempHiLoN) {
-    log_debug() << "TempHiLoN " << static_cast<int>(tempHiLoN_.get()) << " >> " << static_cast<int>(tempHiLoN);
+    ALOGD("TempHiLoN %d >> %d", static_cast<int>(tempHiLoN_.get()), static_cast<int>(tempHiLoN));
     if (active_ && (tempHiLoN != tempHiLoN_.get())) {
         tempHiLoN_.set(tempHiLoN);
     }

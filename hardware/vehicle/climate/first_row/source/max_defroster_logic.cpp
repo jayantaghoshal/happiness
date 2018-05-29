@@ -7,9 +7,10 @@
 
 #include "first_row_printers.h"
 #include "kpi_log.h"
-#include "logging_context.h"
 
-LOG_SET_DEFAULT_CONTEXT(FirstRowContext)
+#include <log/log.h>
+#undef LOG_TAG
+#define LOG_TAG "MaxDefrosterLogic"
 
 MaxDefrosterLogic::MaxDefrosterLogic(NotifiableProperty<FirstRowGen::MaxDefrosterState>& state,
                                      ReadOnlyNotifiableProperty<FirstRowGen::FanLevelFrontValue>& fanLevelFrontState,
@@ -29,12 +30,12 @@ MaxDefrosterLogic::MaxDefrosterLogic(NotifiableProperty<FirstRowGen::MaxDefroste
         switch (shareMaxDefroster.get()) {
             case FirstRowGen::MaxDefrosterState::ON:
                 maxDefrosterSignal.send(autosar::ActrReq::On);
-                log_info() << KPI_MARKER << "Max Defroster signal ON";
+                ALOGI("%s Max Defroster signal ON", KPI_MARKER_CSTR);
                 break;
             case FirstRowGen::MaxDefrosterState::OFF:
             case FirstRowGen::MaxDefrosterState::DISABLED:
                 maxDefrosterSignal.send(autosar::ActrReq::Off);
-                log_info() << KPI_MARKER << "Max Defroster signal OFF";
+                ALOGI("%s Max Defroster signal OFF", KPI_MARKER_CSTR);
                 break;
         }
     });
@@ -46,28 +47,28 @@ MaxDefrosterLogic::MaxDefrosterLogic(NotifiableProperty<FirstRowGen::MaxDefroste
         if (shareFanLevelFront.get() == FirstRowGen::FanLevelFrontValue::OFF ||
             shareFanLevelFront.get() == FirstRowGen::FanLevelFrontValue::DISABLED ||
             shareFanLevelFront.get() == FirstRowGen::FanLevelFrontValue::SYSTEM_ERROR) {
-            log_debug() << "MaxDefroster: FanLevel turned off; turning of Max Defroster as well";
+            ALOGD("FanLevel turned off; turning off Max Defroster as well");
             this->request(FirstRowGen::MaxDefrosterRequest::OFF);
         }
     });
 
     airDistributionId = shareAirDistribution.subscribe([this](const auto&) {
         if (shareAirDistribution.get() != FirstRowGen::AirDistributionAngle::AUTO) {
-            log_debug() << "MaxDefroster: AirDistribution no longer AUTO; turning of Max Defroster";
+            ALOGD("AirDistribution no longer AUTO; turning off Max Defroster");
             this->request(FirstRowGen::MaxDefrosterRequest::OFF);
         }
     });
 
     autoClimateId = shareAutoClimate.subscribe([this](const auto&) {
         if (shareAutoClimate.get() == FirstRowGen::AutoClimateState::ON) {
-            log_debug() << "MaxDefroster: Auto climate ON; turning of Max Defroster";
+            ALOGD("Auto climate ON; turning off Max Defroster");
             this->request(FirstRowGen::MaxDefrosterRequest::OFF);
         }
     });
 
     climateResetId = shareClimateReset.subscribe([this](const auto&) {
         if (shareClimateReset.get() == ClimateResetLogic::ClimateResetEvent::ACTIVATED) {
-            log_debug() << "MaxDefrosterLogic: Handling climate reset";
+            ALOGD("Handling climate reset");
             this->request(FirstRowGen::MaxDefrosterRequest::OFF);
         }
     });
@@ -90,7 +91,7 @@ void MaxDefrosterLogic::request(FirstRowGen::MaxDefrosterRequest state) {
 }
 
 void MaxDefrosterLogic::request(OnOff requestedState) {
-    log_debug() << "MaxDefroster, requestCCSM " << requestedState;
+    ALOGD("requestCCSM %d", requestedState);
 
     if (requestedState == OnOff::On) {
         request(FirstRowGen::MaxDefrosterRequest::ON);

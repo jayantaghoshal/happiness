@@ -9,21 +9,20 @@
 #include "first_row_printers.h"
 #include "kpi_log.h"
 #include "local_config_helper.h"
-#include "logging_context.h"
 #include "settings_proxy.h"
 
 #include <carconfig.h>
 #include <cc_parameterlist.h>
 
-LOG_SET_DEFAULT_CONTEXT(FirstRowContext)
+#include <log/log.h>
+#undef LOG_TAG
+#define LOG_TAG "FanLevelFrontLogic"
 
 using namespace SettingsFramework;
 using namespace ApplicationDataElement;
 using namespace std::chrono_literals;
 
 namespace {
-
-auto const LOG_PREFIX = "FanLevelFrontLogic: ";
 
 autosar::HmiHvacFanLvl toMccAutosar(const FirstRowGen::FanLevelFrontValue level) {
     switch (level) {
@@ -107,7 +106,7 @@ FanLevelFrontLogic::FanLevelFrontLogic(
         executeTransition(FanLevelFrontState::INIT, FanLevelFrontState::SYSTEM_OK);
 
         autoFanLevelSetting_.subscribe([this](auto newSetting) {
-            log_debug() << "FanLevelFrontLogic: autoFanLevelSetting_ Setting updated";
+            ALOGD("autoFanLevelSetting_ Setting updated");
             autoFanLevelSettingGETPORT_ = newSetting;
             // TODO(climateport): This subscription was missing before, I added it to set the member variable instead of
             // .get() but
@@ -115,7 +114,7 @@ FanLevelFrontLogic::FanLevelFrontLogic(
         });
 
         fanLevelFrontSetting_.subscribe([this](auto newSetting) {
-            log_debug() << "FanLevelFrontLogic: Setting updated";
+            ALOGD("Setting updated");
             fanLevelFrontSettingGETPORT_ = newSetting;
             reqFanLevel_ = fanLevelFrontSettingGETPORT_;
             changeFanLevelCheck();
@@ -125,7 +124,7 @@ FanLevelFrontLogic::FanLevelFrontLogic(
         subscriptions_.push_back(autoClimate_.subscribe([this](const auto) { this->handleAutoClimate(); }));
         subscriptions_.push_back(climateReset_.subscribe([this](const auto) {
             if (climateReset_.get() == ClimateResetLogic::ClimateResetEvent::ACTIVATED) {
-                log_debug() << "FanLevelFrontLogic: Handling climate reset";
+                ALOGD("Handling climate reset");
                 this->resetFanLevel(FirstRowGen::FanLevelFrontValue::LVL3);
             }
         }));
@@ -137,7 +136,7 @@ FanLevelFrontLogic::FanLevelFrontLogic(
         changeFanLevelCheck();
     } else {
         executeTransition(FanLevelFrontState::INIT, FanLevelFrontState::CARCONFIG_INVALID);
-        log_error() << LOG_PREFIX << " No support!";
+        ALOGE("No support!");
     }
 }
 
@@ -222,7 +221,7 @@ bool FanLevelFrontLogic::carConfigState(ClimateControl& climateControl) {
 
         return result;
     } catch (const std::out_of_range& e) {
-        log_error() << LOG_PREFIX << "CarConfig threw: " << e.what();
+        ALOGE("CarConfig threw: %s", e.what());
         throw;
     }
 }
@@ -257,29 +256,28 @@ bool FanLevelFrontLogic::changeFanLevelCheck() {
                 fanLevelFrontSetting_.set(static_cast<FirstRowGen::FanLevelFrontValue::Literal>(reqFanLevel_.value_));
             }
             setFanLevel(reqFanLevel_);
-            log_debug() << LOG_PREFIX << "New fan level requested, set level to : " << reqFanLevel_;
+            ALOGD("New fan level requested, set level to: %d", static_cast<int>(reqFanLevel_));
         } else if (reqAutoClimate_ != currentAutoClimate_ && reqAutoClimate_ == FirstRowGen::AutoClimateState::ON) {
             auto const value = autoFanLevelSettingGETPORT_;
             setFanLevel(value);
             fanLevelFrontSetting_.set(value);
-            log_debug() << LOG_PREFIX << "Handle Auto climate, set level to : " << value;
+            ALOGD("Handle Auto climate, set level to: %d", static_cast<int>(reqFanLevel_));
             currentAutoClimate_ = reqAutoClimate_;
         } else if (reqMaxDefrost_ != currentMaxDefrost_) {
             if (reqMaxDefrost_ == FirstRowGen::MaxDefrosterState::ON &&
                 currentFanLevel_ != FirstRowGen::FanLevelFrontValue::LVL5) {
                 setFanLevel(FirstRowGen::FanLevelFrontValue::LVL5);
-                log_debug() << LOG_PREFIX
-                            << "Handle max defroster, set level to : " << FirstRowGen::FanLevelFrontValue::LVL5;
+                ALOGD("Handle max defroster, set level to: %d", FirstRowGen::FanLevelFrontValue::LVL5);
             } else if (currentMaxDefrost_ == FirstRowGen::MaxDefrosterState::ON &&
                        currentAutoClimate_ != FirstRowGen::AutoClimateState::ON) {
                 if (FirstRowGen::AutoClimateState::ON == autoClimate_.get()) {
                     auto value = autoFanLevelSettingGETPORT_;
                     setFanLevel(value);
-                    log_debug() << LOG_PREFIX << "Handle max defroster (auto climate on), set level to : " << value;
+                    ALOGD("Handle max defroster (auto climate on), set level to: %d", value);
                 } else {
                     auto value = fanLevelFrontSettingGETPORT_;
                     setFanLevel(value);
-                    log_debug() << LOG_PREFIX << "Handle max defroster, set level to : " << value;
+                    ALOGD("Handle max defroster, set level to: %d", value);
                 }
             }
         }
@@ -300,10 +298,10 @@ bool FanLevelFrontLogic::changeFanLevelCheck() {
         }
 
         if (inState(FanLevelFrontState::ON)) {
-            log_debug() << LOG_PREFIX << "Start timer!!!";
+            ALOGD("Start timer!!!");
 
             timerDispatcher_.Start(timeout_, [this] {
-                log_debug() << LOG_PREFIX << "Timeout";
+                ALOGD("Timeout");
 
                 if (((usageMode_ == autosar::UsgModSts1::UsgModCnvinc) ||
                      (usageMode_ == autosar::UsgModSts1::UsgModActv)) &&
@@ -315,10 +313,10 @@ bool FanLevelFrontLogic::changeFanLevelCheck() {
             timerDispatcher_.Cancel();
         }
 
-        log_debug() << LOG_PREFIX << "FanLevel: " << reqFanLevel_;
+        ALOGD("FanLevel: %d", static_cast<int>(reqFanLevel_));
         return true;
     } else {
-        log_debug() << LOG_PREFIX << "Not Active!";
+        ALOGD("Not Active!");
     }
 
     return false;
@@ -329,7 +327,7 @@ void FanLevelFrontLogic::handleMaxDefroster() {
 
     reqMaxDefrost_ = maxDefroster_.get();
 
-    log_debug() << LOG_PREFIX << "handleMaxDefroster : " << reqMaxDefrost_;
+    ALOGD("handleMaxDefroster: %d", static_cast<int>(reqMaxDefrost_));
     changeFanLevelCheck();
 }
 
@@ -338,7 +336,7 @@ void FanLevelFrontLogic::handleAutoClimate() {
 
     reqAutoClimate_ = autoClimate_.get();
 
-    log_debug() << LOG_PREFIX << "handleAutoClimate : " << reqAutoClimate_;
+    ALOGD("handleAutoClimate: %d", static_cast<int>(reqAutoClimate_));
     changeFanLevelCheck();
 }
 
@@ -349,7 +347,9 @@ void FanLevelFrontLogic::handleUsageAndCarMode() {
     carMode_ = vehicleModesSignal_.get().value().CarModSts1_;
 
     if (activationCheck()) {
-        log_debug() << LOG_PREFIX << "handleUsageAndCarMode  " << usageMode_ << ", " << carMode_ << ", in state active";
+        ALOGD("handleUsageAndCarMode, usageMode: %d carMode: %d",
+              static_cast<int>(usageMode_),
+              static_cast<int>(carMode_));
         transitionToState(FanLevelFrontState::ACTIVE);
 
         if (inState(FanLevelFrontState::ACTIVE) && usageMode_ == autosar::UsgModSts1::UsgModDrvg &&
@@ -359,7 +359,7 @@ void FanLevelFrontLogic::handleUsageAndCarMode() {
 
         changeFanLevelCheck();
     } else {
-        log_debug() << LOG_PREFIX << "In state not active";
+        ALOGD("In state not active");
         transitionToState(FanLevelFrontState::NOT_ACTIVE);
     }
 }
@@ -372,7 +372,7 @@ void FanLevelFrontLogic::handleClimateActive() {
 
     if (climateActiveSignal_.get().isError()) {
         transitionToState(FanLevelFrontState::SYSTEM_ERROR);
-        log_debug() << LOG_PREFIX << "handleClimateActive Signal Error!";
+        ALOGD("handleClimateActive Signal Error!");
     } else if (climateActiveSignal_.get().isOk()) {
         if (inState(FanLevelFrontState::SYSTEM_ERROR)) {
             transitionToState(FanLevelFrontState::SYSTEM_OK);
@@ -412,7 +412,7 @@ void FanLevelFrontLogic::sendFanLevel(FirstRowGen::FanLevelFrontValue level) {
     }
 
     fanLevelFrontSignal_.send(fanLevel);
-    log_info() << KPI_MARKER << LOG_PREFIX << "FanLevel is " << static_cast<int>(fanLevel);
+    ALOGI("%s FanLevel is %d", KPI_MARKER_CSTR, static_cast<int>(fanLevel));
 }
 
 void FanLevelFrontLogic::setFanLevel(FirstRowGen::FanLevelFrontValue value) {
@@ -440,5 +440,5 @@ void FanLevelFrontLogic::resetFanLevel(FirstRowGen::FanLevelFrontValue level) {
 
     setAutoFanLevel(level);
     setFanLevel(level);
-    log_debug() << LOG_PREFIX << "Set fan level: " << level;
+    ALOGD("Set fan level: %d", static_cast<int>(level));
 }

@@ -11,3 +11,4 @@
 #include "logging.h"
 
 const std::string KPI_MARKER = "[KPI]:";
+constexpr char const* KPI_MARKER_CSTR = "[KPI]:";
