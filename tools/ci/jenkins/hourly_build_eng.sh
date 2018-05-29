@@ -76,14 +76,26 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 
 du -sh "$OUT_ARCHIVE"
 
+# Upload to Artifactory - prepare meta data, ensure common namespace
+META=$(artifactory meta-create)
+artifactory meta-add "$META" IHU_JENKINS_JOB "${JOB_NAME}"
+artifactory meta-add "$META" IHU_JENKINS_BUILD_NR "${BUILD_NUMBER}"
+artifactory meta-add "$META" IHU_MP_PART_NR "${MP_PART_NUMBER}"
+artifactory meta-add "$META" IHU_GIT_REVISION "${UPSTREAM_JOB_GIT_REVISION}"
+artifactory meta-add "$META" IHU_GIT_URL "https://icup_android.gerrit.cm.volvocars.biz/"
+
 # Upload to Artifactory
 if [ "${test_type}" == "dryrun" ]; then
    citime scp "${OUT_ARCHIVE}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
 else
-   time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+   time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" --meta-file "$META" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
 fi
+
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".mp_part_number "${MP_PART_NUMBER}" || die "redis-cli set failed"
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".commit "${UPSTREAM_JOB_GIT_REVISION}" || die "redis-cli set failed"
+
+# meta data, destroy meta data objects
+artifactory meta-destroy "$META"
 
 # Set this job to latest image build in Redis
 redis-cli set icup_android.jenkins."${JOB_NAME}".latest.job_number "${BUILD_NUMBER}" || die "Failed to set LATEST image build in Redis"

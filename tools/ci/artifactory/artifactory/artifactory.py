@@ -8,6 +8,7 @@ import sys
 import os
 import hashlib
 import time
+import tempfile
 import json
 
 class Artifactory(object):
@@ -15,12 +16,13 @@ class Artifactory(object):
     def __init__(self, uri='https://swf1.artifactory.cm.volvocars.biz/artifactory', verbose=False):
         super(Artifactory, self).__init__()
         self.uri = uri
+        self.verbose=verbose
         try:
             self._verify_uri(self.uri)
         except:
             print("failed for URL: " + self.uri)
             return None
-        if verbose: print("URI OK: " + self.uri)
+        if self.verbose: print("URI OK: " + self.uri)
 
     def retrieve_artifacts(self, uri, dest_dir):
         ''' Download all files in directory '''
@@ -39,6 +41,44 @@ class Artifactory(object):
         self._verify_checksum(filename, checksum)
         return response
 
+    @staticmethod
+    def meta_create():
+        try:
+            fp = tempfile.NamedTemporaryFile(prefix='meta_', suffix='.tmp', delete=False)
+        except:
+            print('failed to create a temporary file')
+
+        _name = fp.name
+        fp.close()
+        return _name
+
+    @staticmethod
+    def meta_add(metafile, key, value):
+        '''Add a key, value pair to the META file.'''
+        if not os.path.isfile(metafile):
+            return False
+        _content = {}
+        with open(metafile, 'r') as fp:
+            try:
+                _content = json.load(fp)
+            except:
+                None
+
+        _content[key] = value
+
+        with open(metafile, 'w') as fp:
+            json.dump(_content, fp, ensure_ascii=False)
+
+        return True
+
+    @staticmethod
+    def meta_destroy(metafile):
+        '''Destroy a META file object and return the path.'''
+        try:
+            os.remove(metafile)
+        except:
+            print('failed to delete, ignored')
+
     def deploy_artifact(self, uri, filename):
         headers = {
             'X-Checksum-Deploy': "false",
@@ -46,10 +86,43 @@ class Artifactory(object):
             'X-Checksum-Sha256': self._check_sum("sha256", filename)
         }
 
-        print("Deploy file to Artifactory - %s -> %s" % (filename, uri))
+        print("Artifactory - %10s: %s -> %s" % ('deploy', filename, uri))
         response = self._upload(self._url(uri), filename, headers=headers)
         response.raise_for_status()
         return response
+
+    def set_properties(self, uri, metafile):
+        '''Set Arifactory properties for a file/folder stored in a file.'''
+        headers = {}
+        headers.update(self._headers())
+        print('Artifactory - %10s: %s, from file: %s' % ('setProps', uri, metafile))
+        with open(metafile, 'r') as fp:
+            _content = json.load(fp)
+
+        # construct the complex URL and ensure that
+        # special characters are escaped
+        _str = "?properties="
+        for key in _content.keys():
+            if self.verbose:
+                print('  %30s: %s' % (key, _content[key]))
+            _str += '%s=%s;' % (key, self._htmlifystring(_content[key]))
+        _str += 'recursive=1'
+
+        url = self._url('api/storage/' + uri + _str)
+        if self.verbose:
+            print('URL: %s' % (url))
+        response = requests.put(url, stream=False, headers=headers)
+        response.raise_for_status()
+        return response
+
+    @staticmethod
+    def _htmlifystring(_str):
+        '''Escape certain characters and return the _str'''
+        _str = _str.replace(';', '%5C;')
+        _str = _str.replace('=', '%5C=')
+        _str = _str.replace(',', '%5C,')
+        _str = _str.replace('\/', '%5C/')
+        return _str
 
     def properties(self, path):
         url = self._url("api/storage/"+path)
@@ -101,7 +174,6 @@ class Artifactory(object):
                 hasher.update(buf)
                 buf = fd.read(BLOCKSIZE)
         return hasher.hexdigest()
-
 
     def _upload(self, url, filename, headers={}):
         headers.update(self._headers())

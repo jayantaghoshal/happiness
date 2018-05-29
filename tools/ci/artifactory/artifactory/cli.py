@@ -3,6 +3,7 @@
 
 import argparse
 import textwrap
+import tempfile
 import sys
 import json
 import os
@@ -18,10 +19,13 @@ class ArgumentHandler(object):
             Command line tool to interact with Artifactory
 
             Commands:
-            push        - Upload files to Artifactory
-            pull        - Download files from Artifactory
-            pull-latest - Download latest files or folder
-            show        - View attributes
+            push         - Upload files to Artifactory
+            pull         - Download files from Artifactory
+            pull-latest  - Download latest files or folder
+            show         - View attributes
+            meta-create  - add meta data to a artifactory
+            meta-add     - add meta data to a file object
+            meta-destroy - remove meta data file object
             ''')
         )
 
@@ -59,6 +63,14 @@ class ArgumentHandler(object):
             nargs='+',
             metavar='FILE',
             help='Files to upload'
+        )
+
+        push_parser.add_argument(
+            '--metafile',
+            metavar='META-FILE',
+            type=str,
+            default=None,
+            help='text file containing meta data in JSON format'
         )
 
         push_parser.set_defaults(func=self.push)
@@ -156,6 +168,50 @@ class ArgumentHandler(object):
 
         show_parser.set_defaults(func=self.show)
 
+        ##
+        # Create a parser for the "meta" command
+        #
+        metacreate_parser = subparsers.add_parser('meta-create',
+                                            description='handle Artifactory properties')
+
+        metaadd_parser = subparsers.add_parser('meta-add',
+                                            description='handle Artifactory properties')
+
+        metadel_parser = subparsers.add_parser('meta-destroy',
+                                            description='handle Artifactory properties')
+
+        metaadd_parser.add_argument(
+            'metafile',
+            metavar='FILE',
+            action='store',
+            help='the META file object, usually a file name'
+        )
+
+        metaadd_parser.add_argument(
+            'metavar',
+            metavar='VAR',
+            action='store',
+            help='unique name of the META variable'
+        )
+
+        metaadd_parser.add_argument(
+            'metavalue',
+            metavar='VALUE',
+            action='store',
+            help='content of the meta variable'
+        )
+
+        metadel_parser.add_argument(
+            'metafile',
+            metavar='FILE',
+            action='store',
+            help=''
+        )
+
+        metacreate_parser.set_defaults(func=self.metaCreate)
+        metaadd_parser.set_defaults(func=self.metaAdd)
+        metadel_parser.set_defaults(func=self.metaDestroy)
+
         return parser
 
     def push(self, args):
@@ -163,6 +219,7 @@ class ArgumentHandler(object):
         for file in args.files:
             uri = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, os.path.basename(file))
             artifactory.deploy_artifact(uri, file)
+            artifactory.set_properties(uri, args.metafile)
 
 
     def pull_latest(self, args):
@@ -186,6 +243,21 @@ class ArgumentHandler(object):
                 uri = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, file)
                 artifactory.retrieve_artifact(uri, args.dir)
 
+    def metaCreate(self, args):
+        _name = Artifactory.meta_create()
+        print(_name)
+        return 0
+
+    def metaAdd(self, args):
+        if not Artifactory.meta_add(args.metafile, args.metavar, args.metavalue):
+            print('Could not find temporary file object storing meta data')
+            return 255
+
+        return 0
+
+    def metaDestroy(self, args):
+        _name = Artifactory.meta_destroy(os.path.abspath(args.metafile))
+        return 0
 
     def show(self, args):
         artifactory = Artifactory()
@@ -215,13 +287,12 @@ class ArgumentHandler(object):
             for child in response.json()['children']:
                 print(path + child['uri'])
 
-
 def main():
     '''Main function'''
     parser = ArgumentHandler().parse()
     args = parser.parse_args()
     if hasattr(args, 'func'):
-        args.func(args)
+        sys.exit(args.func(args))
     else:
         parser.print_help()
         sys.exit(1)
