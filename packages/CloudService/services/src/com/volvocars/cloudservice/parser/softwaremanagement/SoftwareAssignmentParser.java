@@ -253,7 +253,7 @@ public final class SoftwareAssignmentParser extends XmlParser {
                 } else if (tag.equals("downloads_uri")) {
                     Log.v(LOG_TAG, LOG_PREFIX + " Parsing: " + tag);
                     installationOrder.downloadsUri = ParseString(tag, parser);
-                } else if (tag.equals("install_notifications_uri")) {
+                } else if (tag.equals("install_notification_uri")) {
                     Log.v(LOG_TAG, LOG_PREFIX + " Parsing: " + tag);
                     installationOrder.installNotificationsUri = ParseString(tag, parser);
                 } else if (tag.equals("installation_report_uri")) {
