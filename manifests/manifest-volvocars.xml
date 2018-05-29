@@ -2,9 +2,9 @@
   <include name="manifest-delphi.xml" />
 
   <!-- Volvo Cars -->
-  <project name="vendor/volvocars" path="vendor/volvocars" revision="ZUUL_COMMIT_OR_HEAD"/>
-  <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD"/>
-  <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD"/>
+  <project name="vendor/volvocars" path="vendor/volvocars" revision="ZUUL_COMMIT_OR_HEAD" />
+  <project name="aic_test" path="vendor/volvocars/apps/aic_test" revision="ZUUL_COMMIT_OR_HEAD" />
+  <project name="vendor/volvocars/apps/ihu_test" path="vendor/volvocars/apps/ihu_test" revision="ZUUL_COMMIT_OR_HEAD" />
 
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="ZUUL_COMMIT_OR_HEAD" />
@@ -28,7 +28,7 @@
   <project name="vendor/volvocars/external/boost/1.64.0" path="vendor/volvocars/external/boost-1.64.0" revision="2b10dcddd0b1c4c9167cd3818746011d31fda049" />
   <project name="vendor/volvocars/external/vsomeip" path="vendor/volvocars/external/vsomeip-2.10.10" revision="25294b78f752dd17c37beda7854da66b190e5d24" />
   <project name="vendor/volvocars/external/paho.mqtt.c" path="vendor/volvocars/external/paho.mqtt.c" revision="e746236fc4b78409f75c1201d7b9ea0ad8c9e6a1" />
-  <project name="vendor/volvocars/external/paho.mqtt.cpp" path="vendor/volvocars/external/paho.mqtt.cpp" revision="a436f5d21dea33e3d28eb0885aff45d859d04b79"/>
+  <project name="vendor/volvocars/external/paho.mqtt.cpp" path="vendor/volvocars/external/paho.mqtt.cpp" revision="a436f5d21dea33e3d28eb0885aff45d859d04b79" />
 
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/system/core" />
@@ -52,7 +52,7 @@
   <remove-project name="aosp/platform/system/bt" />
   <project name="aosp/platform/system/bt" path="system/bt" revision="e92feeb2a95d4a9458589b3d51363bed8d514270" />
 
-  <remove-project name="aosp/platform/frameworks/opt/net/ethernet"/>
+  <remove-project name="aosp/platform/frameworks/opt/net/ethernet" />
   <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="e2df01945be5807aaeb79010d66d38cf696a4ea5" />
 
   <!-- Aptiv Overrides -->
@@ -67,10 +67,10 @@
   <project name="bsp/external/vim" path="vendor/aptiv/external/vim" revision="9ad5bdf6e9546f9e96f6f44bee5375e62e335c40" />
 
   <remove-project name="vendor/delphi/android_vehicle-hal" />
-  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="e15258283f218ffe58d29c892c051c8f7b7b904c" />
+  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="f779c53bb20d285f219f4397b4163ec501af8ddf" />
 
   <remove-project name="vendor/delphi/android_devices" />
-  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="7d4b69f25984b3cf99330ec9d8c6b8db32996db1" >
+  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="43bec429b33d7d87712faeb95e1dea57bd0eb17e">
     <copyfile dest="vendor/aptiv/components/Android.bp" src="kraken/blueprintintermediate" />
   </project>
 
