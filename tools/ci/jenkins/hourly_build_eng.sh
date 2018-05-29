@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Copyright 2017-2018 Volvo Car Corporation
+# Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
 set -ex
+
+# Parameter for selecting dryrun test - controls the need for repo sync, which is needed for an open change in Gerrit.
+# Default is ordinary hourly build.
+test_type=$1
+
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 source "${SCRIPT_DIR}/common.sh"
 REPO_ROOT_DIR=$(readlink -f "${SCRIPT_DIR}"/../../../../..)
@@ -19,10 +24,26 @@ export CC_WRAPPER=/usr/bin/ccache
 export CXX_WRAPPER=/usr/bin/ccache
 export USE_CCACHE=true
 
+if [ "${test_type}" == "dryrun" ]; then
+   # Rerun commit check in case merge effect changed after the change was validated at the check step
+   python3 ./vendor/volvocars/tools/ci/shipit/bump.py . check "${ZUUL_BRANCH}"
+
+   # Update the manifests based on the templates and download all other
+   # repositories. First time this will take a very long time but subsequent
+   # downloads are incremental and faster.
+   citime python3 ./vendor/volvocars/tools/ci/shipit/bump.py . local sync "${ZUUL_PROJECT}"
+fi
+
 rm -rf out  # Remove previous OUT_DIR for clean build.
 
 source "$REPO_ROOT_DIR"/build/envsetup.sh
 lunch ihu_vcc-eng
+
+if [ "${test_type}" == "dryrun" ]; then
+   # Rerun commit check in case it changed after the change was validated at the check step
+   time "$SCRIPT_DIR"/commit_check_and_gate_common.sh
+   time python3 "$REPO_ROOT_DIR"/vendor/volvocars/tools/bin/gate_check.py
+fi
 
 # Add part number for hourly build
 MP_PART_NUMBER=$(ihuci vbf get SWL2H)
@@ -56,7 +77,11 @@ time tar -c --use-compress-program='pigz -1' -f "${OUT_ARCHIVE}" \
 du -sh "$OUT_ARCHIVE"
 
 # Upload to Artifactory
-time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+if [ "${test_type}" == "dryrun" ]; then
+   citime scp "${OUT_ARCHIVE}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
+else
+   time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+fi
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".mp_part_number "${MP_PART_NUMBER}" || die "redis-cli set failed"
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".commit "${UPSTREAM_JOB_GIT_REVISION}" || die "redis-cli set failed"
 
@@ -69,7 +94,12 @@ time tar -c --use-compress-program='pigz -1' -f "${BUILD_META_DATA}" \
             ./out/vcc_build_metadata  || die "Could not create metadata archive"
 
 ls -lh "$BUILD_META_DATA"
-time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${BUILD_META_DATA}" || die "Could not push out archive to Artifactory."
+
+if [ "${test_type}" == "dryrun" ]; then
+   time scp "${BUILD_META_DATA}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
+else
+   time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${BUILD_META_DATA}" || die "Could not push out archive to Artifactory."
+fi
 
 
 # Cleanup
