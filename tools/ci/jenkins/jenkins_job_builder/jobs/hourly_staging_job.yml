@@ -6,8 +6,8 @@
     parameters:
         - string:
             name: UPSTREAM_JOB_GIT_REVISION
-            default: 'master'
-            description: 'Will use latest git revision as standard'
+            default: 'ci/last_successful_hourly_build'
+            description: 'Uses the last successfully hourly build'
         - string:
             name: UPSTREAM_JOB_GIT_URL
             default: 'ssh://gotsvl1415.got.volvocars.net:29421/manifest'
@@ -33,7 +33,7 @@
     wrappers:
         - timestamps
         - timeout:
-            timeout: 60
+            timeout: 120
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
@@ -75,7 +75,7 @@
     description: Link to test report - http://gotsvl1416.got.volvocars.net/hourly_staging_test_report/<BUILD_NUMBER>
     node: high
     triggers:
-        - timed: "H * * * *"
+        - timed: "H */2 * * *"
     builders:
         - multijob:
             name: Test

@@ -13,16 +13,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 SUCCESS_BRANCHES = {
-    "ihu_image_build": "ci/last_successful_hourly_build",    #Not used
-    "ihu_hourly_test": "ci/last_successful_hourly_test",     #Not used
-    "ihu_nightly_build": "ci/last_successful_nightly_build", #Not used
-    "ihu_nightly_test": "ci/last_successful_nightly_test",   #Not used
+    "ihu_hourly_build-eng": "ci/last_successful_hourly_build",
+    #"ihu_hourly_test": "ci/last_successful_hourly_test",     #Not used
+    "ihu_daily_build_vcc_eng": "ci/last_successful_nightly_build",
+    #"ihu_nightly_test": "ci/last_successful_nightly_test",   #Not used
     "ihu_hourly": "ci/last_successful_hourly",
     "ihu_daily": "ci/last_successful_daily",
     "ihu_weekly": "ci/last_successful_weekly", #Not used
 }
 
 LAST_BRANCHES = {
+    "ihu_hourly_build-eng": "ci/last_run_hourly_build",
+    "ihu_daily_build_vcc_eng": "ci/last_run_nightly_build",
     "ihu_hourly": "ci/last_run_hourly",
     "ihu_daily": "ci/last_run_daily",
     "ihu_weekly": "ci/last_run_weekly", #Not used

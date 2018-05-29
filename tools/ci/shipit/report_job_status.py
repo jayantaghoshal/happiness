@@ -8,6 +8,7 @@ import json
 import logging.config
 import logging
 from jenkins import Jenkins
+import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -44,52 +45,82 @@ class JenkinsClient():
         return status
 
 
+def report(job_name, job_number, git_hash, status, last_status):
+    if job_name == 'ihu_hourly':
+        if status == 'pass':
+            #reporter.set_gerrit_confidence_level(job_name, job_number, status) #Not implemented
+            pass
+        elif status == 'fail':
+            if last_status == 'pass':
+                logger.info("Emailing committers since last")
+                reporter.email_committers_since_last(job_name, str(job_number), git_hash)
+            else:
+                pass
+        else:
+            raise Exception('Unknown value for status parameter')
+
+    elif job_name == 'ihu_daily':
+        if status == 'pass':
+            #reporter.set_gerrit_confidence_level(job_name, str(job_number), status) #Not implemented
+            pass
+        elif status == 'fail':
+            pass #Skipped as daily still ain't stable enough
+            #reporter.email_list_of_users(po_emails, job_name, str(job_number), git_hash)
+        else:
+            raise Exception('Unknown value for status parameter')
+
+    elif job_name == 'ihu_hourly_build-eng':
+        # Only update the manifest branches
+        pass
+
+    elif job_name == 'ihu_daily_build_vcc_eng':
+        # Only update the manifest branches
+        pass
+
+    else:
+        raise Exception('Unknown value for job name parameter')
+
+    reporter.update_manifest_branches(job_name, status, git_hash)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-j", "--job_name", type=str, required=True,
+                        help="The job name for which results should be reported")
+    parser.add_argument("-n", "--job_number", type=int, required=False,
+                        help="The jenkins job number, used for retrieving job status")
+    parser.add_argument("-g", "--git_hash", type=str, required=True,
+                        help="The git hash for the results")
+    parser.add_argument("-s", "--status", type=str, default=None,
+                        help="The job status to be reported")
+    parser.add_argument("-l", "--last_status", type=str, default=None,
+                        help="The previous job status")
+    return parser.parse_args()
+
+
 def main():
     with open(os.path.join(os.path.dirname(__file__), "logging.json"), "rt") as f:
         log_config = json.load(f)
     logging.config.dictConfig(log_config)
 
-    jenkins_job_name = sys.argv[1]
-    try:
-        jenkins_build_number = int(sys.argv[2])
-    except ValueError as e:
-        raise Exception('Unknown value for jenkins build number')
-    git_hash = sys.argv[3]
+    args = parse_args()
 
-    jenkins_client = JenkinsClient()
-    status = jenkins_client.get_job_status(jenkins_job_name, jenkins_build_number)
+    if args.status:
+        status = args.status
+    else:
+        jenkins_client = JenkinsClient()
+        status = jenkins_client.get_job_status(args.job_name, args.job_number)
     logger.info("Job status: {}".format(status))
-    if jenkins_build_number > 0:
-        last_status = jenkins_client.get_job_status(jenkins_job_name, jenkins_build_number - 1)
+
+    if args.last_status:
+        last_status = args.last_status
+    elif args.job_number > 0:
+        last_status = jenkins_client.get_job_status(args.job_name, args.job_number - 1)
     else:
         last_status = 'none'
     logger.info("Last job status: {}".format(last_status))
 
-    if jenkins_job_name == 'ihu_hourly':
-        if status == 'pass':
-            #reporter.set_gerrit_confidence_level(jenkins_job_name, jenkins_build_nr, status) #Not implemented
-            pass
-        elif status == 'fail':
-            if last_status == 'pass':
-                logger.info("Emailing committers since last")
-                reporter.email_committers_since_last(jenkins_job_name, str(jenkins_build_number), git_hash)
-            else:
-                pass
-        else:
-            raise Exception('Unknown value for status parameter')
-    elif jenkins_job_name == 'ihu_daily':
-        if status == 'pass':
-            #reporter.set_gerrit_confidence_level(jenkins_job_name, str(jenkins_build_number), status) #Not implemented
-            pass
-        elif status == 'fail':
-            pass #Skipped as daily still ain't stable enough
-            #reporter.email_list_of_users(po_emails, jenkins_job_name, str(jenkins_build_number), git_hash)
-        else:
-            raise Exception('Unknown value for status parameter')
-    else:
-        raise Exception('Unknown value for jenkins job name parameter')
-
-    reporter.update_manifest_branches(jenkins_job_name, status, git_hash)
+    report(args.job_name, args.job_number, args.git_hash, status, last_status)
 
 
 if __name__ == "__main__":

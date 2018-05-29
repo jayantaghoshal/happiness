@@ -17,5 +17,5 @@ clean_all() {
 }
 
 (get_repos || (clean_all && get_repos)) &&
-(./vendor/volvocars/tools/ci/jenkins/ci_docker_run.sh python3 vendor/volvocars/tools/ci/shipit/report_job_status.py "${JOB_NAME}" "${BUILD_NUMBER}" "${GIT_COMMIT}" || (echo "report job status failed" && exit 1)) ||
+(./vendor/volvocars/tools/ci/jenkins/ci_docker_run.sh python3 vendor/volvocars/tools/ci/shipit/report_job_status.py -j "${JOB_NAME}" -n "${BUILD_NUMBER}" -g "${GIT_COMMIT}" || (echo "report job status failed" && exit 1)) ||
 exit 0 # always green
