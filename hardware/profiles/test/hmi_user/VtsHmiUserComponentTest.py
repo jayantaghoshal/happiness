@@ -16,13 +16,11 @@ from vts.utils.python.controllers import android_device
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 sys.path.append('/tmp/ihu/.local/lib/python2.7/site-packages')
 
-from vehiclehalcommon import *
-import vehiclehalcommon
-from uiautomator import device as device
+from vf_common import vehiclehalcommon
+from uiautomator import AutomatorDevice
 
 user_creation_timeout = 5;
 user_deletion_timeout = 0.1
-user_switch_init_start_timeout = 10 # After switching user, it takes some time to init all servers
 
 new_driver_id = "com.volvocars.launcher:id/new_user_profile"
 hmi_defined_name = "Sten Olsson"
@@ -44,13 +42,16 @@ class VtsHmiUserComponentTest(base_test.BaseTestClass):
 
         # Clear the setting database
         self.clearUserProfile()
-        self.deviceReboot()
 
-    def tearDownClass(self):
+
+    def tearDown(self):
         self.clearUserProfile()
 
     # Reset user profile
     def clearUserProfile(self):
+        # Switch to guest for reset
+        self.dut.shell.one.Execute("am switch-user 10")
+
         # Clear the setting database
         self.dut.shell.one.Execute("stop settingstorage-hidl-server")
         self.dut.shell.one.Execute("rm /data/vendor/vehiclesettings/vehiclesettings.db*")
@@ -74,25 +75,28 @@ class VtsHmiUserComponentTest(base_test.BaseTestClass):
     """
     def testCreateAndSwitchUser(self):
         # Init common support library and start up the user application
+        self.deviceReboot()
         self.vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, None, False, True)
 
         # Setup the environment
         self.vHalCommon.waitUntilUserNotOwner()
-        time.sleep(user_switch_init_start_timeout)
+        time.sleep(user_creation_timeout)
         self.dut.adb.shell('input keyevent 3')
         self.dut.adb.shell(start_up_user_app)
+        time.sleep(1)
         self.vHalCommon.waitUntilViewAvailable(hmi_user_profile_list_id)
+        time.sleep(1)
 
         # Store number of the current users
-        list_view_count_first = device(resourceId=hmi_user_profile_list_id).info['childCount']
+        list_view_count_first = self.device_def(resourceId=hmi_user_profile_list_id).info['childCount']
 
         # Get the new driver button and click twice
-        new_driver_button = device(resourceId=new_driver_id)
+        new_driver_button = self.device_def(resourceId=new_driver_id)
         new_driver_button.click()
         time.sleep(user_creation_timeout)
         new_driver_button.click()
         time.sleep(user_creation_timeout)
-        list_view = device(resourceId=hmi_user_profile_list_id)
+        list_view = self.device_def(resourceId=hmi_user_profile_list_id)
         list_view_count_after = list_view.info['childCount']
 
         # Compare if a new user is added
@@ -110,11 +114,14 @@ class VtsHmiUserComponentTest(base_test.BaseTestClass):
         # Open up the userswitch
         self.vHalCommon.waitUntilViewNotAvailable(hmi_user_profile_list_id)
         self.dut.adb.shell('input keyevent 3')
+        time.sleep(1)
         self.dut.adb.shell(start_up_user_app)
+        time.sleep(1)
         self.vHalCommon.waitUntilViewAvailable(hmi_user_profile_list_id)
+        time.sleep(1)
 
         # Check If it has switched a user
-        list_view = device(resourceId=hmi_user_profile_list_id)
+        list_view = self.device_def(resourceId=hmi_user_profile_list_id)
         user_switched = list_view.child(resourceId=hmi_user_profile_item_id,
                                         instance=0).child(text=hmi_defined_name).exists
         asserts.assertTrue(user_switched, "User is not switched")
@@ -124,12 +131,14 @@ class VtsHmiUserComponentTest(base_test.BaseTestClass):
     def testGuestUser(self):
 
         for _ in range(guest_user_test_nr_of_times):
-            # Reset device
+            # Reset self.device_def
             self.deviceReboot()
+
+            # Init common support library and start up the user application
+            self.vHalCommon = vehiclehalcommon.VehicleHalCommon(self.dut, None, False, True)
 
             # Check if user is switched
             self.vHalCommon.waitUntilUserNotOwner(True)
-
 
     def deviceReboot(self):
         time.sleep(1)
@@ -138,7 +147,7 @@ class VtsHmiUserComponentTest(base_test.BaseTestClass):
         self.dut.waitForBootCompletion()
         self.dut.startServices()
         self.dut.shell.InvokeTerminal("one")
-
+        self.device_def = AutomatorDevice();
 
 if __name__ == "__main__":
     test_runner.main()
