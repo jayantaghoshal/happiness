@@ -8,7 +8,6 @@
 #include "ModuleBase.h"
 
 #include "Application_dataelement.h"
-#include "HisipClient.h"
 
 namespace vhal20 = ::android::hardware::automotive::vehicle::V2_0;
 

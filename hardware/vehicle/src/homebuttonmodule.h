@@ -72,7 +72,7 @@ class HomeButtonModule : public HisipClient {
          * Default constructor for VIP Listener
          * @param homebuttonModule Instance of the Hisip Client class to communicate with.
          */
-        VIPListener(HomeButtonModule* homebuttonModule);
+        VIPListener(void* hisip_client);
 
         /**
          * Default destructor of the VIP Listener class
@@ -85,7 +85,6 @@ class HomeButtonModule : public HisipClient {
          * @return              status
          */
         virtual bool onMessageFromVip(const HisipMessage& msg) override;
-
 
         /**
          * Get the Application Name

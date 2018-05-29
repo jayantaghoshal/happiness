@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -45,7 +45,7 @@ enum class HomeButtonState { kHomeButtonLongInactive = 0, kHomeButtonLongActive 
 /**
  *  @brief Key Manager Desip Client class
  */
-class KeyManagerModule : public DesipClient,
+class KeyManagerModule : public HisipClient,
                          public vhal20::impl::ModuleBase,
                          public vendor::volvocars::hardware::HomeButtonCallback {
   public:
@@ -104,7 +104,7 @@ class KeyManagerModule : public DesipClient,
      * Set the received message's application ID
      * @param[in] msg The received message
      */
-    virtual void setRxMsgID(ParcelableDesipMessage* msg) override;
+    virtual std::vector<uint8_t> getApplicationId() override;
 
     void processKey(int8_t* data);
     void processKnob(int8_t* data);
@@ -126,7 +126,6 @@ class KeyManagerModule : public DesipClient,
      *  @brief Power Modding Desip Client Listener class
      */
     class VIPListener final : public HisipClient::HisipClientListener {
-
       public:
         /**
          * Default constructor for VIP Listener

@@ -1,7 +1,8 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
+
 #include <IDispatcher.h>
 #include <android/keycodes.h>
 #include <binder/IPCThreadState.h>
@@ -246,7 +247,7 @@ KeyManagerModule::KeyManagerModule(vhal20::impl::IVehicleHalImpl* vehicleHal)
 
 KeyManagerModule::~KeyManagerModule() {
     // Make sure we can exit thread functions and join threads
-    DesipClient::setExitListen(true);
+    HisipClient::disconnectFromHisipService();
 
     if (reader_thread_.joinable()) {
         reader_thread_.join();
@@ -265,9 +266,8 @@ void KeyManagerModule::init() {
 }
 
 void KeyManagerModule::VIPReader() {
-    android::ProcessState::self()->startThreadPool();
     // Handle callback messages from DesipService
-    DesipClient::listen<VIPListener, void>(this);
+    HisipClient::connectToHisipService<VIPListener, void>(this);
     android::IPCThreadState::self()->joinThreadPool();
 }
 
@@ -408,7 +408,10 @@ void KeyManagerModule::SendVersionResponseMsg() {
     SendToVIP(FID_hisip_version_response, hisip_version_message, sizeof(hisip_version_message));
 }
 
-void KeyManagerModule::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(AID_keyboard); }
+std::vector<uint8_t> KeyManagerModule::getApplicationId() {
+    std::vector<uint8_t> applicationId = {static_cast<uint8_t>(AID_keyboard)};
+    return applicationId;
+}
 
 std::vector<vhal20::VehiclePropConfig> KeyManagerModule::listProperties() {
     ALOGV("[%s] Vehicle property configs returned.", __FUNCTION__);
@@ -437,13 +440,12 @@ std::unique_ptr<vhal20::VehiclePropValue> KeyManagerModule::getProp(const vhal20
 void KeyManagerModule::SendToVIP(uint8_t fid, int8_t data[], uint32_t size) {
     ALOGV("[%s] AID: 0x%02X FID: 0x%02X HISIP data: %s", __func__, AID_keyboard, fid, BytesToHex(data, size).c_str());
 
-    ParcelableDesipMessage msg;
+    HisipMessage msg;
     msg.setAid(AID_keyboard);
     msg.setFid(fid);
     msg.setDataPtr(data, size);
 
-    bool aidl_return;  // Dummy variable to conform with DesipClient::sendMsg
-    DesipClient::sendMsg(msg, &aidl_return);
+    HisipClient::sendToVip(msg);
 }
 
 KeyManagerModule::VIPListener::VIPListener(void* desip_client) {
@@ -452,8 +454,7 @@ KeyManagerModule::VIPListener::VIPListener(void* desip_client) {
 }
 
 /* Messages handling from VIP */
-android::binder::Status KeyManagerModule::VIPListener::deliverMessage(const ParcelableDesipMessage& msg,
-                                                                      bool* _aidl_return) {
+bool KeyManagerModule::VIPListener::onMessageFromVip(const HisipMessage& msg) {
     // Forward Power Application related messages for processing
     vip_msg m;
     m.fid = msg.getFid();
@@ -465,15 +466,14 @@ android::binder::Status KeyManagerModule::VIPListener::deliverMessage(const Parc
 
     key_manager_module_->ProcessMessage(m);
 
-    *_aidl_return = true;
-    return android::binder::Status::ok();
+    return true;
 }
 
-String16 KeyManagerModule::VIPListener::getId() { return String16{"KeyManagerModule"}; }
+std::string KeyManagerModule::VIPListener::getUserId() { return "KeyManagerModule"; }
 
 vhal20::VehiclePropValue KeyManagerModule::convertToLongpressPropValue(HomeButtonState homekeystate) {
     vhal20::VehiclePropValue prop_value;
-    prop_value.timestamp = elapsedRealtimeNano();
+    prop_value.timestamp = android::elapsedRealtimeNano();
     prop_value.areaId = 0;
     prop_value.prop = vhal20::toInt(vccvhal10::VehicleProperty::HOME_KEY_LONGPRESS);
     prop_value.value.int32Values.resize(1);

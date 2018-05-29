@@ -63,7 +63,6 @@ void HomeButtonModule::init(HomeButtonCallback* listener) {
 }
 
 void HomeButtonModule::VIPReader() {
-    android::ProcessState::self()->startThreadPool();
     // Handle callback messages from HisipService
     HisipClient::connectToHisipService<VIPListener, void>(this);
     android::IPCThreadState::self()->joinThreadPool();
@@ -83,16 +82,18 @@ void HomeButtonModule::processMessage(vip_msg& msg) {
     }
 }
 
-void HomeButtonModule::setRxMsgID(ParcelableDesipMessage* msg) { msg->setAid(AID_power_synchronization); }
+std::vector<uint8_t> HomeButtonModule::getApplicationId() {
+    std::vector<uint8_t> applicationId = {static_cast<uint8_t>(AID_power_synchronization)};
+    return applicationId;
+}
 
-HomeButtonModule::VIPListener::VIPListener(HomeButtonModule* homebuttonModule) {
+HomeButtonModule::VIPListener::VIPListener(void* hisip_client) {
     ALOGV("[%s] VIP listener created", __func__);
-    home_button_module_ = homebuttonModule;
+    home_button_module_ = static_cast<HomeButtonModule*>(hisip_client);
 }
 
 /* Messages handling from VIP */
-android::binder::Status HomeButtonModule::VIPListener::deliverMessage(const ParcelableDesipMessage& msg,
-                                                                      bool* _aidl_return) {
+bool HomeButtonModule::VIPListener::onMessageFromVip(const HisipMessage& msg) {
     // Forward Power Application related messages for processing
     vip_msg m;
     m.fid = msg.getFid();
@@ -104,11 +105,10 @@ android::binder::Status HomeButtonModule::VIPListener::deliverMessage(const Parc
 
     home_button_module_->processMessage(m);
 
-    *_aidl_return = true;
-    return android::binder::Status::ok();
+    return true;
 }
 
-String16 HomeButtonModule::VIPListener::getId() { return String16{"HomeButtonModule"}; }
+std::string HomeButtonModule::VIPListener::getUserId() { return "HomeButtonModule"; }
 
 }  // namespace hardware
 }  // namespace volvocars
