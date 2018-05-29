@@ -17,13 +17,6 @@
                   branches:
                     - branch-compare-type: 'REG_EXP'
                       branch-pattern: '.*'
-    scm:
-        - git:
-            url: ssh://gotsvl1415.got.volvocars.net:29421/vendor/volvocars
-            credentials-id: 0cc7da38-6d74-4a55-8773-e706f59cb82f
-            branches:
-                - "*/${GERRIT_BRANCH}"
-            basedir: vendor/volvocars
     notifications:
         - http:
             url: http://gotsvl1416.got.volvocars.net:3002/events
@@ -32,17 +25,11 @@
             timeout: 10000
             log: 0
     builders:
-        - shell: |
-                
-                # vendor/volvocars is downloaded through jenkins plugin
-                export WORKSPACE_ROOT=$(pwd)
+        - shell:
+            !include-raw:
+                - bootstrap_common_time_triggered.sh
+                - bootstrap_progression_job.sh
 
-                ## Do an update to the manifest
-                ## Make local commit
-                ## Send commit to Gerrit
-                ## Use rgerrit to set +1 Verify, +2 Review and Automerge +1 to trigger the pipeline and test the manifest change
-
-                python3 ./vendor/volvocars/tools/ci/shipit/bump.py . update_manifest_for_progression ${GERRIT_PROJECT}
 
     publishers:
         - raw:
