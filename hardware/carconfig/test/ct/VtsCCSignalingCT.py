@@ -113,7 +113,7 @@ class ComponentTest(base_test.BaseTestClass):
         self.dut.shell.one.Execute("stop carconfig_updater;start carconfig_updater")
 
         event = threading.Event()
-        senderthread= threading.Thread(target=sendCCParameters, args=(self, event, True, False ))
+        senderthread= threading.Thread(target=sendCCParameters, args=(self, event, self.fr, True, False ))
         senderthread.start()
         sleep(30) #Wait for carconfig_updater to time out while waiting for all the cc frames.
         event.set()
