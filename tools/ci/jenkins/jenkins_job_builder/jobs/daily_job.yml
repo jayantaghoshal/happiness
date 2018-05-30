@@ -96,7 +96,7 @@
     wrappers:
         - timestamps
         - timeout:
-            timeout: 60
+            timeout: 120
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
@@ -144,7 +144,7 @@
             wipe-workspace: true
     triggers:
         - pollscm:
-            cron: "H H(0-1) * * *"
+            cron: "0 21 * * *"
             ignore-post-commit-hooks: True
     notifications:
         - http:
@@ -186,6 +186,15 @@
                 UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
                 UPSTREAM_JOB_GIT_URL=${GIT_URL}
       - multijob:
+          name: Deliver
+          condition: ALWAYS
+          projects:
+            - name: ihu_deliver_to_infotainment
+              current-parameters: true
+              predefined-parameters: |
+                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
+                UPSTREAM_JOB_GIT_URL=${GIT_URL}
+      - multijob:
           name: Test
           condition: ALWAYS
           projects:
@@ -223,15 +232,6 @@
           projects:
             - name: ihu_analyze_code-sonarqube
               current-parameters: true
-      - multijob:
-          name: Deliver
-          condition: ALWAYS
-          projects:
-            - name: ihu_deliver_to_infotainment
-              current-parameters: true
-              predefined-parameters: |
-                UPSTREAM_JOB_GIT_REVISION=${GIT_COMMIT}
-                UPSTREAM_JOB_GIT_URL=${GIT_URL}
     publishers:
       - raw:
             xml: |
@@ -467,6 +467,7 @@
               - failure: false
               - aborted: false
               - not-built: false
+
 - job:
     name: ihu_deliver_to_infotainment
     project-type: freestyle
@@ -518,23 +519,24 @@
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-        - run:
-            name: DAILY_TEST_GENERIC_JOB
-            project-name: ihu_daily_test-generic
-            description: parameter 'DAILY_TEST_GENERIC_JOB_RESULT' will be used to validate if the daily test has passed.
-        - run:
-            name: DAILY_TEST_FLEXRAY_JOB
-            project-name: ihu_daily_test-flexray
-            description: parameter 'DAILY_TEST_FLEXRAY_JOB_RESULT' will be used to validate if the daily test has passed.
-        - run:
-            name: DAILY_TEST_RIG_JOB
-            project-name: ihu_daily_test-rig
-            description: parameter 'DAILY_TEST_RIG_JOB_RESULT' will be used to validate if the daily test has passed.
+#        - run:
+#            name: DAILY_TEST_GENERIC_JOB
+#            project-name: ihu_daily_test-generic
+#            description: parameter 'DAILY_TEST_GENERIC_JOB_RESULT' will be used to validate if the daily test has passed.
+#        - run:
+#            name: DAILY_TEST_FLEXRAY_JOB
+#            project-name: ihu_daily_test-flexray
+#            description: parameter 'DAILY_TEST_FLEXRAY_JOB_RESULT' will be used to validate if the daily test has passed.
+#        - run:
+#            name: DAILY_TEST_RIG_JOB
+#            project-name: ihu_daily_test-rig
+#            description: parameter 'DAILY_TEST_RIG_JOB_RESULT' will be used to validate if the daily test has passed.
     builders:
         - shell: |
-            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ] || [ "$DAILY_TEST_GENERIC_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_FLEXRAY_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_RIG_JOB" != "SUCCESS" ]
+#            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ] || [ "$DAILY_TEST_GENERIC_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_FLEXRAY_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_RIG_JOB" != "SUCCESS" ]
+            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
             then
-                echo "Daily build/test failed!!!"
+                echo "Daily build failed!!!"
                 exit 1
             fi
         - shell:
