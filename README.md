@@ -3,7 +3,7 @@ This is the main repository for IHU Android
 To download the complete repo structure including aosp, which is required to build etc:
 
    repo init -u https://icup_android.gerrit.cm.volvocars.biz/a/manifest.git
-   repo sync --no-clone-bundle
+   repo sync -j4 --no-clone-bundle
 
 
 To build the complete system:
@@ -12,7 +12,4 @@ To build the complete system:
 
 
 See also: https://c1.confluence.cm.volvocars.biz/display/IHUA/Project+-+IHU+Android
-
-
-
 
