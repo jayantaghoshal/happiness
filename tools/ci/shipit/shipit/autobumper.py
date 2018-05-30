@@ -83,14 +83,18 @@ def progression_manifest(aosp_root_dir: str, repository: str):
     volvocars_repo = git.Repo(volvocars_repo_path)
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
     commit = ""
+    dest = ""
 
     for template_manifest in vcc_manifest_files:
         commit = manifest.set_sha_in_template_manifest(aosp_root_dir, template_manifest, repository)
         if commit != "":
+            dest = os.path.join(volvocars_repo.path, os.path.basename(template_manifest))
+            logger.info("Staging manifest changes done to: " + template_manifest)
+            volvocars_repo.run_git(["diff"])
+            volvocars_repo.add([dest])
             logger.info("Setting " + repository + " commit to " + commit)
             break
 
-    logger.info("Setting " + repository + " commit to " + commit)
     logger.info("Commit change in manifest")
     commit_title = "Updating " + repository  + " sha in the manifest"
     volvocars_repo.commit(commit_title)
