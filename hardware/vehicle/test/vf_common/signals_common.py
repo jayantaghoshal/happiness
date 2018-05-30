@@ -53,6 +53,7 @@ def wait_for_signal(fr_interface, fdx_signal, expected_value, timeout_sec=3):
                             (fdx_signal.fdx_name, expected_value, timeout_sec, fdx_signal.get()))
 
 GETFUNC_T = typing.TypeVar('GETFUNC_T')
+GETFUNC_MEMBER_T = typing.TypeVar('GETFUNC_MEMBER_T')
 def wait_for_fr_signal(fr_get_func, expected_value, timeout_sec=3, message=""):
     # type: (typing.Callable[[], GETFUNC_T], GETFUNC_T, float, str) -> None
 
@@ -66,6 +67,21 @@ def wait_for_fr_signal(fr_get_func, expected_value, timeout_sec=3, message=""):
     asserts.assertEqual(read_value, expected_value,
                         "Expected signal %s to be %r within %d sec, got %r. %s)" %
                         (fr_get_func.__name__, expected_value, timeout_sec, read_value, message))
+
+def wait_for_fr_subsignal(fr_get_func, member_getter, expected_value, timeout_sec=3, message=""):
+
+    end = time.time() + timeout_sec
+    full_frame = fr_get_func()
+    read_value = member_getter(full_frame)
+    while time.time() < end:
+        full_frame = fr_get_func()
+        read_value = member_getter(full_frame)
+        if read_value == expected_value:
+            break
+        time.sleep(0.2)
+    asserts.assertEqual(read_value, expected_value,
+                        "Expected sub-signal in %s to be %r within %d sec, Extracted value:%r, Full frame: %r . %s)" %
+                        (fr_get_func.__name__, expected_value, timeout_sec, read_value, full_frame, message))
 
 def assert_fr_signal_equals(fr_get_func, expected_value, message=""):
     # type: (typing.Callable[[], GETFUNC_T], GETFUNC_T, str) -> None

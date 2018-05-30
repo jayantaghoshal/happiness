@@ -50,8 +50,6 @@ property_list = [
     ('LANE_KEEPING_AID_ON_STATUS', 557842442),
     ('LANE_KEEPING_AID_MODE', 557842443),
     ('LANE_KEEPING_AID_MODE_STATUS', 557842444),
-    ('CONNECTED_SAFETY_ON', 555745284),
-    ('CONNECTED_SAFETY_ON_STATUS', 557842461),
     ('DRIVER_SUPPORT_FUNCTION_ON', 557842459),
     ('EMERGENCY_LANE_KEEPING_AID_ON',555745294),
     ('LANE_DEPARTURE_WARNING_ON', 555745306),
@@ -328,6 +326,7 @@ class VehicleHalCommon():
     def scrollDownAndFindViewByIdOrRaiseUiAutomator(self, viewId, device, maxFlings=15):
         view = self.scrollDownAndFindViewByIdUiAutomator(viewId, device, maxFlings)
         asserts.assertNotEqual(None, view, "Did not find view")
+        asserts.assertTrue(view.exists, "Did not find view")
         return view
 
     # Scroll until view with given Id is found within maxFlings tries. Returns None if view not found.

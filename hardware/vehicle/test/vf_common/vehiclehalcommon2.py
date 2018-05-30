@@ -10,7 +10,8 @@ from vts.runners.host import asserts
 
 
 class Properties:
-    CONNECTED_SAFETY_ON = 557842436
+    CONNECTED_SAFETY_ON = 555745284
+    CONNECTED_SAFETY_ON_STATUS = 557842461
     DAI_SETTING = 557842437
     CURVE_SPEED_ADAPTION_ON = 555745286
     LANE_KEEPING_AID_ON = 555745289
@@ -259,6 +260,22 @@ class VehicleHalCommon():
                 break
             time.sleep(0.2)
 
+        asserts.assertEqual(read_value, expected_value,
+                            "Expected VHAL property %s to be %r within %d sec, got %r. %s)" %
+                            (self.propIdToName(propId), expected_value, timeout_sec, read_value, msg))
+
+
+    def wait_for_prop_equals(self, propId, expected_value, timeout_sec=3, msg=""):
+        #type: (int, int, float, str) -> None
+        end = time.time() + timeout_sec
+        vhal_value = self.readVhalProperty(propId)
+        read_value = self.extractValue(vhal_value)
+        while time.time() < end:
+            vhal_value = self.readVhalProperty(propId)
+            read_value = self.extractValue(vhal_value)
+            if read_value == expected_value:
+                break
+            time.sleep(0.2)
         asserts.assertEqual(read_value, expected_value,
                             "Expected VHAL property %s to be %r within %d sec, got %r. %s)" %
                             (self.propIdToName(propId), expected_value, timeout_sec, read_value, msg))

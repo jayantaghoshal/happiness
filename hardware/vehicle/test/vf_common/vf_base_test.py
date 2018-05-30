@@ -3,17 +3,20 @@
 
 import time
 import sys
+import logging
 sys.path.append('/usr/local/lib/python2.7/dist-packages')
 import typing
 from . import signals_common
 from . import vehiclehalcommon2
 from . import user_common
 from . import uiautomator_common
+from generated import datatypes
 from vts.runners.host import base_test
 from vts.runners.host import const
 from vts.utils.python.controllers import android_device
 from uiautomator import device as device_default
 from generated import dataelements_abc, dataelements_fdx
+from contextlib import contextmanager
 
 class VFBaseTest(base_test.BaseTestClass):
     def __init__(self, configs, with_flexray=True):
@@ -90,6 +93,7 @@ class VFBaseTest(base_test.BaseTestClass):
 
 
     def setUpVehicleFunction(self):
+        self.fr.send_ProfPenSts1(datatypes.IdPen.Prof13)
         self.users.waitUntilUserNotOwner()
 
         self.press_homebutton()
@@ -102,3 +106,10 @@ class VFBaseTest(base_test.BaseTestClass):
 
     def press_homebutton(self):
         self.dut.adb.shell('input keyevent 3')
+
+
+@contextmanager
+def SUBTEST(msg):
+    logging.info("START " + msg)
+    yield
+    logging.info("END " + msg)
