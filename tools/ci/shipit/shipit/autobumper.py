@@ -86,6 +86,9 @@ def progression_manifest(aosp_root_dir: str, repository: str):
 
     for template_manifest in vcc_manifest_files:
         commit = manifest.set_sha_in_template_manifest(aosp_root_dir, template_manifest, repository)
+        if commit != "":
+            logger.info("Setting " + repository + " commit to " + commit)
+            break
 
     logger.info("Setting " + repository + " commit to " + commit)
     logger.info("Commit change in manifest")
