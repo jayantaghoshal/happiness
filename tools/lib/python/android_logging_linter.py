@@ -97,9 +97,10 @@ def check_file(filename: str) -> typing.Iterable[LoggingViolation]:
                     ", ".join(["'%s'" % c for c in invalid_characters_in_tag])),
                                        filename)
 
-        if 0 <= first_alogx_index < first_define_logtag_index:
-            yield LoggingViolation("ALOGx called before #define LOG_TAG (or no LOG_TAG defined)",
-                                   filename)
+        if 0 <= first_alogx_index:
+            if first_define_logtag_index < 0 or first_alogx_index < first_define_logtag_index:
+                yield LoggingViolation("ALOGx called before #define LOG_TAG (or no LOG_TAG defined)",
+                                       filename)
 
         if last_include_index >= 0 and 0 <= last_define_logtag_index < last_include_index:
             yield LoggingViolation("LOG_TAG defined before #includes, this might overwrite your LOG_TAG",

@@ -5,7 +5,9 @@
 
 #include "lsc_service.h"
 
-#include <cutils/log.h>
+#undef LOG_TAG  // workaround #include <hidl/HidlTransportSupport.h>
+#define LOG_TAG "iplm_ctrl.main"
+#include <log/log.h>
 
 LscService::LscService() {
     ALOGD("IIplm getService!");

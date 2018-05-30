@@ -4,11 +4,13 @@
  */
 
 #include "dim_operation_data.h"
-#include <cutils/log.h>
 #include "dim_image.h"
 #include "dim_item.h"
 #include "dim_label.h"
 #include "dim_linked_item.h"
+
+#define LOG_TAG "dim_manager"
+#include <log/log.h>
 
 namespace vcc {
 namespace dim {

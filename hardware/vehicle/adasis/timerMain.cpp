@@ -4,6 +4,7 @@
  */
 
 #include "timerMain.h"
+#define LOG_TAG "Adasis"
 #include <log/log.h>
 
 timerGoogleImpl::timerGoogleImpl(adasisFlexrayConverterImpl* googleAdasisConverterhal)

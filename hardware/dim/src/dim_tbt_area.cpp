@@ -5,9 +5,11 @@
 
 #include "dim_tbt_area.h"
 #include <assert.h>
-#include <cutils/log.h>
 #include "dim_item.h"
 #include "dim_label.h"
+
+#define LOG_TAG "dim_manager"
+#include <log/log.h>
 
 namespace vcc {
 namespace dim {

@@ -12,6 +12,9 @@
 #include <algorithm>
 #include <array>
 #include <utility>
+#undef LOG_TAG
+#define LOG_TAG "TemperatureConverter"
+#include <log/log.h>
 
 namespace {
 double min = 17;

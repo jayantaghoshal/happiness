@@ -7,7 +7,8 @@
 #include <vcc/localconfig.h>
 #include "JNIHelp.h"
 #include "jni.h"
-#include "utils/Log.h"
+#define LOG_TAG "LocalconfigJNI"
+#include <log/log.h>
 
 auto* lcfg = vcc::LocalConfigDefault();
 
