@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "HisipClient.h"
 #include <mutex>
 #include <queue>
 #include <string>
 #include <thread>
+#include "HisipClient.h"
 #include "carconfig_base.h"
 #include "carconfig_reader.h"
 
@@ -37,7 +37,7 @@ class CarConfigVipCom : public HisipClient {
     void setTransfer(void);
     void checksumCmd(const int8_t payload[35]);
     void dataRequest(const int8_t payload[35]);
-    bool sendHISIPMsg(HisipMessage &msg);
+    bool sendHISIPMsg(HisipMessage& msg);
     int32_t calculateChecksum(char* data, int32_t calcLength);
     int waitForVipAcknowledge();
     void onMessage(const uint8_t& _fid, const int8_t _payload[35]);

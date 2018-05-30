@@ -39,7 +39,7 @@ CarConfigVipCom::~CarConfigVipCom() {
     }
 }
 
-bool CarConfigVipCom::sendHISIPMsg(HisipMessage &msg) {
+bool CarConfigVipCom::sendHISIPMsg(HisipMessage& msg) {
     bool sendOK = true;
     msg.setAid(HISIP_APPLICATION_ID_CARCONFIG);
     HisipClient::sendToVip(msg);
@@ -158,9 +158,8 @@ void CarConfigVipCom::VipReader() {
 
 void CarConfigVipCom::setRxMsgID(HisipMessage* msg) { msg->setAid(HISIP_APPLICATION_ID_CARCONFIG); }
 
-
 std::vector<uint8_t> CarConfigVipCom::getApplicationId() {
-    std::vector<uint8_t> applicationId = { static_cast<uint8_t>(HISIP_APPLICATION_ID_CARCONFIG) };
+    std::vector<uint8_t> applicationId = {static_cast<uint8_t>(HISIP_APPLICATION_ID_CARCONFIG)};
     return applicationId;
 }
 
@@ -196,8 +195,7 @@ void CarConfigVipCom::onMessage(const uint8_t& _fid, const int8_t _payload[35]) 
     }
 }
 
-CC_HISIP_Listener::CC_HISIP_Listener(void* hisip_client)
-{
+CC_HISIP_Listener::CC_HISIP_Listener(void* hisip_client) {
     ALOGV("[%s] VIP listener created", __func__);
     carConfigVipCom = static_cast<CarConfigVipCom*>(hisip_client);
 }
@@ -210,7 +208,4 @@ bool CC_HISIP_Listener::onMessageFromVip(const HisipMessage& msg) {
     return true;
 }
 
-std::string CC_HISIP_Listener::getUserId()
-{
-    return "Carconfig-updater";
-}
+std::string CC_HISIP_Listener::getUserId() { return "Carconfig-updater"; }
