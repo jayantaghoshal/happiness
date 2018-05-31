@@ -337,7 +337,31 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:ZONE),
+
+      /**
+     * Request to hide Park Assist system
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     */
+    PAS_REQUEST_PAS_HIDE = (
+      0x0020
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for PAS_REQUEST_PAS_HIDE
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    PAS_REQUEST_PAS_HIDE_STATUS = (
+      0x0021
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
     };
+
 
 enum PAStatus: int32_t {
   NotAvailable = 0,

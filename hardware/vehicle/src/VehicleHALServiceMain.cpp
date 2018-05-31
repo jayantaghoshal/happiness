@@ -25,6 +25,7 @@
 #include "vhal_modules/e_lane_keeping_aid_module.h"
 #include "vhal_modules/lane_departure_warning_module.h"
 #include "vhal_modules/lane_keeping_aid_module.h"
+#include "vhal_modules/parking_module.h"
 #include "vhal_modules/speed_limit_adaptation_module.h"
 #include "vhal_modules/traffic_sign_information_module.h"
 #include "vmsmodule.h"
@@ -88,6 +89,7 @@ int main(int /* argc */, char* /* argv */ []) {
     TrafficSignInformationModule trafficSignInformation{&ctx};
     ActiveSafetyModule activeSafetyModule{&ctx};
     ELaneKeepingAidModule e_lane_keeping_aid_module{&ctx};
+    ParkingModule parking_module{&ctx};
 
     auto vmsModule = std::make_unique<vmsHal>(hal.get());
     // Register modules
