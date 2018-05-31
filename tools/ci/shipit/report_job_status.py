@@ -114,7 +114,7 @@ def main():
 
     if args.last_status:
         last_status = args.last_status
-    elif args.job_number > 0:
+    elif args.job_number is not None and args.job_number > 0:
         last_status = jenkins_client.get_job_status(args.job_name, args.job_number - 1)
     else:
         last_status = 'none'

@@ -99,7 +99,7 @@ if [ "${test_type}" == "dryrun" ]; then
    time scp "${BUILD_META_DATA}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
 else
    time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${BUILD_META_DATA}" || die "Could not push out archive to Artifactory."
-   time python3 vendor/volvocars/tools/ci/shipit/report_job_status.py -j "${JOB_NAME}" -g "${GIT_COMMIT}" -s pass || die "Report job status failed"
+   time python3 vendor/volvocars/tools/ci/shipit/report_job_status.py -j "${JOB_NAME}" -g "${UPSTREAM_JOB_GIT_REVISION}" -s pass || die "Report job status failed"
 fi
 
 
