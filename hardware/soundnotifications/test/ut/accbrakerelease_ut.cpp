@@ -27,7 +27,7 @@ TEST_F(AccBrakeReleaseTest, AccBrakeReleaseTest_SoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ACCBrakeReleaseWarning)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -48,7 +48,7 @@ TEST_F(AccBrakeReleaseTest, AccBrakeRelease_SoundStopped) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ACCBrakeReleaseWarning)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 

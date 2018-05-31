@@ -29,7 +29,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnUS_SoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::WarnUS),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::WarnUS)),
                           testing::_))
             .Times(1);
 
@@ -50,7 +50,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnUS_SoundStopped) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::WarnUS),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::WarnUS)),
                           testing::_))
             .Times(1);
 
@@ -75,7 +75,7 @@ TEST_F(BeltReminderTest, BeltReminder_Warn1_SoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::Warn1),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::Warn1)),
                           testing::_))
             .Times(1);
 
@@ -96,7 +96,7 @@ TEST_F(BeltReminderTest, BeltReminder_Warn1_SoundStopped) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::Warn1),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::Warn1)),
                           testing::_))
             .Times(1);
 
@@ -121,7 +121,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnFinal_SoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::WarnFinal),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::WarnFinal)),
                           testing::_))
             .Times(1);
 
@@ -142,7 +142,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnFinal_SoundStopped) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::WarnFinal),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::WarnFinal)),
                           testing::_))
             .Times(1);
 
@@ -167,7 +167,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnRear_SoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::WarnRear),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::WarnRear)),
                           testing::_))
             .Times(1);
 
@@ -188,7 +188,7 @@ TEST_F(BeltReminderTest, BeltReminder_WarnRear_SoundStopped) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::BeltReminder)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::WarnRear),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::WarnRear)),
                           testing::_))
             .Times(1);
 

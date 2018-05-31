@@ -50,7 +50,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedGtrThanMax_EpbSoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -82,7 +82,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_InActive_EpbSoundStopped) {
    */
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
     epb_lamp.EpbLampReq = EpbLampReqType1::Flash3;
@@ -119,7 +119,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_On_SpeedGtrThanMax_EpbSoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -151,7 +151,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedLessThanMin_EpbSoundStopped) 
     */
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
     epb_lamp.EpbLampReq = EpbLampReqType1::On;
@@ -191,7 +191,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedEqlToMin_EpbSoundStopped) {
     */
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
     epb_lamp.EpbLampReq = EpbLampReqType1::On;
@@ -226,7 +226,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedLessThanMax_EpbNotPlayed) {
     // Not expecting the call because conditions does not meet.
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(0);
 
@@ -253,7 +253,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_InActive_SpeedGtrThanMax_EpbNotPlayed) {
     // Not expecting the call because conditions does not meet.
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(0);
 
@@ -282,7 +282,7 @@ TEST_F(ParkingBrakeTest, EpbLampSignal_Active_SpeedGtrThanMin_EpbNotStopped) {
     */
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::ElectricalParkingBrakeEPB)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
     epb_lamp.EpbLampReq = EpbLampReqType1::On;

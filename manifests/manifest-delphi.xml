@@ -55,34 +55,35 @@
   <project name="bsp/external/iperf2" path="vendor/aptiv/external/iperf2" revision="bc9cb1ff0d9e5442596a4821cad314a967909cb2" />
 
   <!-- Android Product Configurations -->
-  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="09374365c260cb2b2afdefe4526f5966d02f4208" >
+  <project name="vendor/delphi/android_devices" path="device/aptiv" revision="774b59f09736b54e81dc1eca8381f0737cffb172">
     <copyfile dest="vendor/aptiv/components/Android.bp" src="kraken/blueprintintermediate" />
   </project>
 
   <!-- Project specific Aptiv building blocks -->
-  <project name="vendor/delphi/android_patches" path="delphi_volvoihu_aosp_patches" revision="ced12725c4bf0c661cd77d1c59b759bc6be1987a" />
-  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="38afbcdddf9b73ddb9fe11d991ba318aa090f07e" />
-  <project name="vendor/delphi/android_audio-hal" path="vendor/aptiv/components/audio-hal" revision="327cf14f38d01d68d481008f6f110697711704da" />
-  <project name="vendor/delphi/android_audiocontrol-hal" path="vendor/aptiv/components/audiocontrol-hal" revision="6cafe6e77c15f211e79f817bc8eab74931245d30" />
-  <project name="vendor/delphi/android_diagnostics" path="vendor/aptiv/components/vcc_ihu_diagnostics" revision="de918aeeb98ec4321e070d224452593d0f60a223" />
-  <project name="vendor/delphi/bb_android_desip_key_handler" path="vendor/aptiv/components/bb_android_desip_key_handler" revision="dfd69f2244bd8c11f1af1acdcb7a4f74996b86b7" />
-  <project name="vendor/delphi/android_camera" path="vendor/aptiv/components/camera" revision="18918376c90d27d447e45a101cb693cae5db7cbf" />
-  <project name="vendor/delphi/android_sensors" path="vendor/aptiv/components/android_sensors" revision="08f50ae7b11e0a6351955e85b408163fb533d9a3" />
-  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="80e287c9ef9812b55d137f95c5f8805ec2150731" />
-  <project name="vendor/delphi/android_hmi_engineering-menu" path="vendor/aptiv/packages/apps/EngineeringMenu" revision="7ef8927dbc03426414d6eb66f261a90df704ec9c" />
+  <project name="vendor/delphi/android_patches" path="delphi_volvoihu_aosp_patches" revision="215ddaf7723faa90585a05ad04f82378e05c66e3" />
+  <project name="vendor/delphi/android_vehicle-hal" path="vendor/aptiv/components/vehicle-hal" revision="ca27c5c3cc616ff5facdb2664430a6eb576eae84" />
+  <project name="vendor/delphi/android_audio-hal" path="vendor/aptiv/components/audio-hal" revision="067a89af44811e5b3fabcc1457afbe5dc128791a" />
+  <project name="vendor/delphi/android_audiocontrol-hal" path="vendor/aptiv/components/audiocontrol-hal" revision="29d5cec9dde93a27e1de065e231e6629dfa227c9" />
+  <project name="vendor/delphi/android_diagnostics" path="vendor/aptiv/components/vcc_ihu_diagnostics" revision="1466cf5f0085ecbc513ee8717234674a1ef7c26c" />
+  <project name="vendor/delphi/bb_android_desip_key_handler" path="vendor/aptiv/components/bb_android_desip_key_handler" revision="a3b9226199b3cf435e23a3d100771c11277697e5" />
+  <project name="vendor/delphi/android_camera" path="vendor/aptiv/components/camera" revision="3fa3a300f5b51d5bcba1cb5249977f855832c47c" />
+  <project name="vendor/delphi/android_sensors" path="vendor/aptiv/components/android_sensors" revision="47953ccd2e89916b1f46c514a72a5f32b63f632c" />
+  <project name="vendor/delphi/android_lvds_diagnostic_proxies" path="vendor/aptiv/components/lvds_diagnostic_proxies" revision="cb6399cdcb18820d7b50b5f6e11a7ed2192dfc26" />
+  <project name="vendor/delphi/android_hmi_engineering-menu" path="vendor/aptiv/packages/apps/EngineeringMenu" revision="cd1915188977260d334d1fdb7643e16c56e47c5a" />
+  <project name="vendor/delphi/android_reference_app_tuner" path="vendor/aptiv/packages/apps/ReferenceTunerApp" revision="b263b0a0182627bb1d681f207f9752a319efaeb3" />
   <!-- Android device vendor -->
-  <project name="vendor/delphi/android_vendor_interfaces" path="vendor/aptiv/interfaces" revision="e204af52a0dcb278866657488f24cf10ac105c43" />
+  <project name="vendor/delphi/android_vendor_interfaces" path="vendor/aptiv/interfaces" revision="906e795368564a21478bff020d59b7c70ef86726" />
 
   <!-- Common Delphi building blocks -->
-  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="768726dd6aad05e9fb922e6ae50870e678dbd16b" />
+  <project name="vendor/delphi/bb_reprogramming" path="vendor/aptiv/components/bb_reprogramming" revision="8e1b7cd449f01b8dbb8f2ffaee84a63382289edd" />
   <project name="vendor/delphi/Delphi_Android_Platform_Support" path="vendor/aptiv/components/libdelphi_platform" revision="542c68086bf9a1a02c1d66bceee0d1a5a3af9f43" />
-  <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="334794067ceaad5ce02d3ed63ba77674407ef697" />
+  <project name="vendor/delphi/bb_android_hisip_desip" path="vendor/aptiv/components/bb_android_hisip_desip" revision="4cbdf65595f1e85bfc3fb500069aa4f4c0882314" />
   <project name="vendor/delphi/AShmemService" path="vendor/aptiv/components/AShmemService" revision="492ee9fbb56ca1cfd9a71708554cfd7ddcb2c498" />
   <!-- DelphiTraceSystem repo problems due to "plastic merge", now pointing to int/int/VCC-IHU40-COMB-NB-P-65_vcc in Delphi manifest
   <project name="vendor/delphi/DelphiTraceSystem" path="vendor/aptiv/components/DelphiTraceSystem" revision="394069e3b5c101dc93f6eba9aaa9e0440411b4a5" />  -->
   <project name="vendor/delphi/DelphiTraceSystem" path="vendor/aptiv/components/DelphiTraceSystem" revision="b5da774a7cb6359774484cb40fa3894b5459ce3c" />
   <project name="vendor/delphi/AP_ProcessManager" path="device/delphi/vcc_ihu/private/ProcessManager" revision="4a8451dd3ebefbd37714a81efde0b372faca1ef1" />
-  <project name="vendor/delphi/AP_XSAL" path="vendor/aptiv/components/libxsal" revision="7595babd4ab1797282efb8c246d396812c4c3d39" />
+  <project name="vendor/delphi/AP_XSAL" path="vendor/aptiv/components/libxsal" revision="fab40a0d7be0745024b6f027cda64642f13cc737" />
   <project name="vendor/delphi/AP_XSALcpp" path="vendor/aptiv/components/libxsalcpp" revision="62f9b948835bcd38ff46a1014191841cdf91f141" />
   <project name="vendor/delphi/AP_XSAL_Inline" path="vendor/aptiv/components/libxsal_inline" revision="d1a943ba2fdf238513a8d3524ca209ebc68d437e" />
   <project name="vendor/delphi/AP_PI" path="vendor/aptiv/components/libpi" revision="76d9e26211384a17bd33d04ef3e270dea5317d45" />
@@ -99,15 +100,15 @@
   <project name="vendor/delphi/bb_util" path="vendor/aptiv/components/libutilities" revision="6f32b236e97b0098afd2dbc7294c23256c2c27e3" />
 
   <!-- Common Delphi building blocks that are delivered as binaries -->
-  <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="4c921fe145c0c067020c8e3810c965368958d1d2" />
-  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="c9ff36485502ff6277c98694e05ba4dff20c7247" />
-  <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="8da726e4c2615c984dcae9fbfd6ed6974c117c00" />
-  <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="4a318bead592a828e50acf45fec5553327398cbc" />
-  <project name="vendor/delphi/binaries_android_traffic" path="vendor/aptiv/components/traffic" revision="d584696435c7a68c12d7bf94f93f8d97594dfa0b" />
+  <project name="vendor/delphi/binaries_android_most" path="vendor/aptiv/components/most" revision="e92b0aa3e8ec3b3dccf7254d740c567bde4ee7fc" />
+  <project name="vendor/delphi/binaries_android_audioengine" path="vendor/aptiv/components/audioengine" revision="b39d882014c27668eccd65f3ec8dcbc7bfbe1a3d" />
+  <project name="vendor/delphi/binaries_android_audio" path="vendor/aptiv/components/audio" revision="e0bac875cddf6bc18e73628e1cecc29df4010d59" />
+  <project name="vendor/delphi/binaries_android_tunermanager" path="vendor/aptiv/components/vcc_ihu_tuner" revision="2e8c6c61f96e0dfc53507e092d904240e8f5dd76" />
+  <project name="vendor/delphi/binaries_android_traffic" path="vendor/aptiv/components/traffic" revision="fd41e15bc6760e293c411b759830cad24a8cb7aa" />
   <project name="vendor/delphi/binaries_ap_list" path="vendor/aptiv/components/liblist" revision="c770619d37cff1e41ce3d070ce47b2b34e25178e" />
-  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="a97766fdc712eae977305cb522c2434ca081dc0d" />
+  <project name="vendor/delphi/android_ihu_vipimages" path="vendor/aptiv/components/vip_images" revision="16b147253ab8f1330abfbe36b7e514c7c6aea56a" />
 
   <!-- External dependencies -->
   <project name="vendor/delphi/AP_libsoci" path="external/libsoci" revision="71b35446828103012d4f3f6fa12e84011fe83148" />
-  <project name="vendor/delphi/external/vcc_carconfig" path="vendor/aptiv/external/vcc_carconfig" revision="ba6ff270f52fd5a8d895ace092fa8c78b322860e" />
+  <project name="vendor/delphi/external/vcc_carconfig" path="vendor/aptiv/external/vcc_carconfig" revision="4203d3ca7a278544545d5704ca652f2e54a6f0ce" />
 </manifest>

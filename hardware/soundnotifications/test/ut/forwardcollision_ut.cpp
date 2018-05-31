@@ -33,7 +33,7 @@ TEST_F(ForwardCollisionTest, ForwardCollision_signal_On_received_sound_played) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -52,7 +52,7 @@ TEST_F(ForwardCollisionTest, Collision_signal_On_received_sound_played) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -68,7 +68,7 @@ TEST_F(ForwardCollisionTest, Collision_signal_Off_received_sound_stopped) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
     CllsnWarn_sender.inject(autosar::OnOff1::On);
@@ -87,7 +87,7 @@ TEST_F(ForwardCollisionTest, ForwardCollision_SignalOff_received_sound_stopped) 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
     CllsnFwdWarn_sender.inject(autosar::OnOff1::On);
@@ -106,7 +106,7 @@ TEST_F(ForwardCollisionTest, Collision_signal_Error_received_sound_Stopped) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -126,7 +126,7 @@ TEST_F(ForwardCollisionTest, FwdCllsn_signal_Error_received_sound_Stopped) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -147,7 +147,7 @@ TEST_F(ForwardCollisionTest, FwdCllsn_signal_Err_Cllsn_Off_sound_Stopped) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -170,7 +170,7 @@ TEST_F(ForwardCollisionTest, Cllsn_signal_Err_FwdCllsn_Off_sound_Stopped) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -193,7 +193,7 @@ TEST_F(ForwardCollisionTest, FwdCllsn_On_Sound_Played_Cllsn_Off_NotStopped) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -215,7 +215,7 @@ TEST_F(ForwardCollisionTest, Cllsn_On_sound_Played_FwdCllsnOff_NotStopped) {
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
     CllsnWarn_sender.inject(autosar::OnOff1::On);
@@ -236,7 +236,7 @@ TEST_F(ForwardCollisionTest, Both_Cllsn_Signal_On_Played_then_Off_sound_Stopped)
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 
@@ -263,7 +263,7 @@ TEST_F(ForwardCollisionTest, Both_Cllsn_Signal_On_Played_then_Err_sound_Stopped)
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(
                                   AudioTable::SoundType::ForwardCollisionWarningACCBrakeCapacity)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::NotAvailable),
+                          hidl_string(AudioTable::getSoundComponentName(AudioTable::SoundComponent::NotAvailable)),
                           testing::_))
             .Times(1);
 

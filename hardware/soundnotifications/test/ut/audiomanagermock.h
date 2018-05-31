@@ -23,8 +23,18 @@ class AudioManagerMock : public IAudioManager {  // public vendor::delphi::audio
 
     MOCK_METHOD3(playSound,
                  Return<void>(const ::android::hardware::hidl_string& soundType,
-                              int32_t soundComp,
+                              const ::android::hardware::hidl_string& soundComp,
                               playSound_cb _aidl_return));
+    MOCK_METHOD8(playChime,
+                 Return<void>(const ::android::hardware::hidl_string& soundType,
+                              const ::android::hardware::hidl_string& soundComp,
+                              uint8_t repititions,
+                              uint8_t time,
+                              uint8_t volumeStep,
+                              bool mixed,
+                              uint8_t balance,
+                              playChime_cb _hidl_cb));
+
     MOCK_METHOD1(stopSound, Return<AMStatus>(uint32_t connectionId));
     MOCK_METHOD2(setVolume, Return<void>(int32_t sinkId, int32_t volume));
     MOCK_METHOD1(setBass, Return<AMStatus>(int32_t step));
@@ -48,7 +58,7 @@ class AudioManagerMock : public IAudioManager {  // public vendor::delphi::audio
     using defaultVolumeStep_cb = std::function<void(AMStatus status, int32_t volumeStep)>;
     MOCK_METHOD3(defaultVolumeStep,
                  android::hardware::Return<void>(const ::android::hardware::hidl_string& soundType,
-                                                 int32_t soundComp,
+                                                 const ::android::hardware::hidl_string& soundComp,
                                                  defaultVolumeStep_cb _hidl_cb));
 
     ::android::sp<IAudioManagerCallback> callback_;
