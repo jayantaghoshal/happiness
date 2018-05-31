@@ -40,7 +40,7 @@ class gerrit():
     def _run_ssh(self, command: List[str]) -> str:
         #print("ssh -p{} {}@{} {}".format(self.port, self.username, self.hostname, " ".join(command)))
         output = subprocess.check_output(["ssh",
-                                          "-p{}".format(self.port),
+                                          "-p {}".format(self.port),
                                           "{}@{}".format(self.username, self.hostname)] + command)
         return output.decode()
 
