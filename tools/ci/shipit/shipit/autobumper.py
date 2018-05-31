@@ -103,7 +103,7 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
 
     #PUsh the added commit
     #git push ssh://sshusername@hostname:29418/projectname HEAD:refs/for/branch
-    volvocars_repo.run_git(["push", "ssh://gotsvl1415.got.volvocars.net:29421", "HEAD:refs/for/", branch])
+    volvocars_repo.run_git(["push", "ssh://gotsvl1415.got.volvocars.net:29421/vendor/volvocars", "HEAD:refs/for/", branch])
     #volvocars_repo.push(["origin", "HEAD:refs/for/" + branch])
 
     # Do a Gerrit update for the manifest and fullfill the requirement to trigger pipeline
