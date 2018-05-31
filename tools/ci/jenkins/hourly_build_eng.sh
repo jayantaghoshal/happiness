@@ -92,6 +92,7 @@ else
 fi
 
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".mp_part_number "${MP_PART_NUMBER}" || die "redis-cli set failed"
+redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".date "$(date +'%Y-%m-%dT%H:%M:%S%z')" || die "redis-cli set failed"
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".commit "${UPSTREAM_JOB_GIT_REVISION}" || die "redis-cli set failed"
 
 # meta data, destroy meta data objects

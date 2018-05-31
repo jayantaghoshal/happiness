@@ -49,7 +49,9 @@
                     <th>Test Modules</th>
                     <th>Type</th>
                     <th>Job Name</th>
-                    <th>Time(sec)</th>
+                    <th>Test Time(sec)</th>
+                    <th>Started Time</th>
+                    <th>Total Time(sec)</th>
                     <th>Node</th>
                     <th>Result</th>
                 </tr>
@@ -70,6 +72,14 @@
                 </td>
                 <td>
                         <%= Math.round(basic_test_detail[i]["runtime"] / 1000)%>
+                        
+                </td>
+                <td>
+                        <%= basic_test_detail[i]["started_at"]%>
+                        
+                </td>
+                <td>
+                        <%= Math.round((basic_test_detail[i]["finished_at"]-basic_test_detail[i]["started_at"]) / 1000)%>
                         
                 </td>
                 <td>

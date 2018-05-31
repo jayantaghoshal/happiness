@@ -1,0 +1,90 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>VCC test report</title>
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/volvo_logo.png"/>
+    <script src="/js/popper.min.js" ></script>
+    <link rel='stylesheet' href='/css/bootstrap.min.css'>
+    <script src="/js/jquery-3.2.1.js" ></script>
+    <script src='/js/bootstrap.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+  
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+    <link rel='stylesheet' href='/css/user_defined.css'> 
+</head>
+
+<script>
+    function send_bn_GETreq() {
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        this.responseType = 'json';
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var json_response = JSON.parse(this.responseText);
+                console.log(json_response);
+                if(json_response.MP_PARTNUMBER!="" && json_response.MP_PARTNUMBER!=undefined){
+                    document.getElementById("result").innerHTML = " The MP part number for this build is <b>"+json_response.MP_PARTNUMBER+"</b>";
+                }
+                else{
+                    document.getElementById("result").innerHTML = "No result";
+                }
+                
+            }
+        };
+        build_name=document.getElementById('build_name').value;
+        build_number=document.getElementById('build_number').value;
+        xhttp.open("GET", "/lookup_partnumber?build_name="+build_name+"&build_number="+build_number, true);
+        xhttp.send();
+    }
+
+    $(document).ready(function() {
+        $('#partnumber_table').DataTable( {
+            "lengthMenu": [[40, 50, -1], [40, 50, "All"]],
+            "ajax": {
+                "url": "/table_partnumber",
+                "type": "GET"
+            }
+            
+        } );
+    } );
+
+
+</script>
+
+<body class="container">
+    <%- include navbar.ejs %>
+    <div >
+        <form class="form-group">
+            <table>
+                <tr>
+                <td>
+                    <select class="form-control" id="build_name">
+                        <option>Daily</option>
+                        <option>Hourly</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" class="form-control" id="build_number" name="build_number" placeholder="Build number">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="send_bn_GETreq()">
+                            <i class="icon-user icon-white"></i> Search
+                    </button>
+                </td>
+                </tr>
+            </table>       
+        </form>
+    <div id="result"></div>
+    </div>
+    <table id="partnumber_table" class="table table-hover table-striped table-bordered display" style="width:100%">
+            <thead>
+                <tr style="color:white;background-color:#15317E;">
+                    <th>Job Detail</th>
+                    <th>MP Part Number</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            
+    </table>
+</body>
+</html>

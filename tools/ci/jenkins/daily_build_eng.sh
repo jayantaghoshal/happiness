@@ -82,6 +82,7 @@ time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" "${BUI
 
 # Storing part number and build number in redis. It can be used as lookup table.
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".mp_part_number "${MP_PART_NUMBER}" || die "redis-cli set failed"
+redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".date "$(date +'%Y-%m-%dT%H:%M:%S%z')" || die "redis-cli set failed"
 
 # Cleanup
 rm "${OUT_ARCHIVE}"

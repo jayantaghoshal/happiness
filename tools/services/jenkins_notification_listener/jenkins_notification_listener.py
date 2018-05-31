@@ -69,6 +69,7 @@ class VCCCIProxy(object):
         "ihu_hourly_test-apix",
         "ihu_hourly_test-audio",
         "ihu_hourly_test-cem",
+        "ihu_hourly_test-rig",
         "ihu_daily",
         "ihu_daily_build_vcc_eng",
         "ihu_daily_build_vcc_userdebug",
@@ -78,9 +79,12 @@ class VCCCIProxy(object):
         "ihu_daily_test-apix",
         "ihu_daily_test-audio",
         "ihu_daily_test-cem",
+        "ihu_daily_test-rig",
+        "ihu_daily_vts-generic",
         "ihu_daily_vts1-generic",
         "ihu_daily_vts2-generic",
         "ihu_daily_vts3-generic",
+        "ihu_deliver_to_infotainment",
         "ihu_staging",
         "ihu_staging_test-generic",
         "ihu_staging_test-flexray",
@@ -95,6 +99,7 @@ class VCCCIProxy(object):
         "ihu_hourly_test-flexray",
         "ihu_hourly_test-apix",
         "ihu_hourly_test-audio",
+        "ihu_hourly_test-rig",
         "ihu_daily_build_vcc_eng",
         "ihu_daily_build_vcc_userdebug",
         "ihu_daily_build_vcc_user",
@@ -102,6 +107,8 @@ class VCCCIProxy(object):
         "ihu_daily_test-flexray",
         "ihu_daily_test-apix",
         "ihu_daily_test-audio",
+        "ihu_daily_test-rig",
+        "ihu_daily_vts-generic",
         "ihu_daily_vts1-generic",
         "ihu_daily_vts2-generic",
         "ihu_daily_vts3-generic",
@@ -109,7 +116,8 @@ class VCCCIProxy(object):
         "ihu_staging_test-flexray",
         "ihu_staging_test-apix",
         "ihu_staging_test-audio",
-        "ihu_staging_test-cem"
+        "ihu_staging_test-cem",
+        "ihu_deliver_to_infotainment"
     ]
 
     def __init__(self, jenkins):

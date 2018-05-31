@@ -10,6 +10,7 @@ docker run  -p 3001:3001 \
 --dns=10.244.0.20 \
 --volume=/cm/services/log/:/cm/services/log/ \
 --link=icup_android-mongo \
+--link=swf1-redis \
 -e MONGODB_PASSWORD \
 -e MONGODB_USER=jenkins-icup_android \
 -e ICUP_ANDROID_MONGO_PORT_27017_TCP_ADDR \

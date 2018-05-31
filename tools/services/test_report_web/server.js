@@ -6,6 +6,8 @@ const path = require('path');
 var xml = require('xml');
 const errorlog = require('./util/winston_logger').errorlog;
 const successlog = require('./util/winston_logger').successlog;
+var redis = require('redis');
+var redis_client = redis.createClient(6379, process.env.SWF1_REDIS_PORT_6379_TCP_ADDR); //creates a new redis client
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -142,13 +144,14 @@ app.get('/tests/', cors(), (req, res) => {
         "test_dir_name": 1,
         "capabilities": 1,
         "runtime": 1,
+        "started_at": 1,
+        "finished_at": 1,
         "_id": 1
     };
     if (Object.keys(query).length === 0) {
         res.redirect('/');
         return;
     }
-    console.log(query);
 
     db.collection('records').find(query)
         .project(projection)
@@ -236,22 +239,23 @@ app.get('/detailed_view', cors(), (req, res) => {
         let record = promiseResults[0];
         let all_job_names = promiseResults[1];
         return Promise.all(all_job_names.map(job_name =>
-            records.find(
-            {
+            records.find({
                 "job_name": job_name,
                 "module_name": record["module_name"],
                 "test_dir_name": record["test_dir_name"]
             })
-            .project({result: 1,
+            .project({
+                result: 1,
                 runtime: 1,
                 test_job_build_number: 1,
                 started_at: 1,
-                _id: 1})
-            .sort({test_job_build_number: MONGO_SORT_DESCENDING })
+                _id: 1
+            })
+            .sort({ test_job_build_number: MONGO_SORT_DESCENDING })
             .limit(5)
             .toArray()
-            .then(result => ({ "name": job_name, "results": result.reverse()}))
-            ));
+            .then(result => ({ "name": job_name, "results": result.reverse() }))
+        ));
     });
 
 
@@ -326,4 +330,53 @@ app.get('/screenshot', cors(), (req, res) => {
             res.set('Content-Type', 'image/png');
             res.send(screenshot["data"].buffer);
         });
+});
+
+app.get('/partnumber', cors(), (req, res) => {
+    res.render('partnumber_lookup.ejs');
+});
+
+app.get('/lookup_partnumber', cors(), (req, res) => {
+
+    build_name = req.query.build_name;
+    build_number = req.query.build_number;
+    if (build_name == "Hourly") {
+        job_name = "ihu_hourly_build-eng";
+    } else if (build_name == "Daily") {
+        job_name = "ihu_daily_build_vcc_eng";
+    }
+    redis_client.get("icup_android.jenkins." + job_name + "." + build_number + ".mp_part_number", function(err, reply) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ MP_PARTNUMBER: reply }, null, 3));
+    });
+
+});
+
+app.get('/table_partnumber', cors(), (req, res) => {
+    key_value_pair = { "data": [] };
+    key_sets = [];
+
+    redis_client.send_command("keys", ["icup_android.jenkins.*.*.mp_part_number"], function(err, reply) {
+        reply.sort();
+        key_sets = reply;
+
+        function get_values_from_key(keys) {
+            redis_client.mget(keys, function(error, reply_values) {
+                for (var i = 0; i < keys.length; i++) {
+                    var job_name = keys[i].split(".")[2]; // example: ihu_hourly_build
+                    var dir_name = keys[i].split(".")[3] + "_" + reply_values[i]; // example: buildnumber_partnumber(190_33423423AA)
+                    key_value_pair["data"].push([keys[i], reply_values[i], "<a href=https://swf1.artifactory.cm.volvocars.biz/artifactory/ICUP_ANDROID_CI/" + job_name + "/" + dir_name + " target=_blank>VBF Files</a>"])
+                }
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(key_value_pair, null, 3));
+            });
+
+        }
+
+        get_values_from_key(key_sets);
+    });
+
+
+
+
 });
