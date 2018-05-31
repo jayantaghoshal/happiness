@@ -31,7 +31,7 @@ SensorModule::SensorModule(vhal20::impl::IVehicleHalImpl* vehicleHal)
 }
 
 bool SensorModule::GetDrivingStatus(vhal20::VehiclePropValue& driving_status) {
-    driving_status.timestamp = elapsedRealtimeNano();
+    driving_status.timestamp = android::elapsedRealtimeNano();
     driving_status.areaId = static_cast<int32_t>(vhal20::VehicleArea::GLOBAL);
     driving_status.prop = toInt(vhal20::VehicleProperty::DRIVING_STATUS);
     driving_status.value.int32Values.resize(1);
@@ -40,7 +40,7 @@ bool SensorModule::GetDrivingStatus(vhal20::VehiclePropValue& driving_status) {
 }
 
 bool SensorModule::GetGearSelection(vhal20::VehiclePropValue& gear_selection) {
-    gear_selection.timestamp = elapsedRealtimeNano();
+    gear_selection.timestamp = android::elapsedRealtimeNano();
     gear_selection.areaId = static_cast<int32_t>(vhal20::VehicleArea::GLOBAL);
     gear_selection.prop = toInt(vhal20::VehicleProperty::GEAR_SELECTION);
     gear_selection.value.int32Values.resize(1);
@@ -103,7 +103,7 @@ std::unique_ptr<vhal20::VehiclePropValue> SensorModule::getProp(const vhal20::Ve
 }
 
 bool SensorModule::GetIgnitionState(vhal20::VehiclePropValue& prop_value) {
-    prop_value.timestamp = elapsedRealtimeNano();
+    prop_value.timestamp = android::elapsedRealtimeNano();
     prop_value.areaId = 0;
     prop_value.prop = toInt(vhal20::VehicleProperty::IGNITION_STATE);
     prop_value.value.int32Values.resize(1);

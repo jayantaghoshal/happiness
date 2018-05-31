@@ -45,7 +45,8 @@ TEST_F(TurnIndicatorUT, LeftOnSignalReceived_leftTurnIndSoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),  // Same sound for left and right
+                          hidl_string(AudioTable::getSoundComponentName(
+                                  AudioTable::SoundComponent::LeftRight)),  // Same sound for left and right
                           testing::_))
             .Times(1);
 
@@ -68,7 +69,8 @@ TEST_F(TurnIndicatorUT, RightOnSignalReceived_rightTurnIndSoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::LeftRight),  // Same sound for left and right
+                          hidl_string(AudioTable::getSoundComponentName(
+                                  AudioTable::SoundComponent::LeftRight)),  // Same sound for left and right
                           testing::_))
             .Times(1);
 
@@ -84,7 +86,8 @@ TEST_F(TurnIndicatorUT, LeftAndRightOnSignalReceived_hazardSoundPlayed) {
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
-                          static_cast<int32_t>(AudioTable::SoundComponent::Hazard),  // Same sound for left and right
+                          hidl_string(AudioTable::getSoundComponentName(
+                                  AudioTable::SoundComponent::Hazard)),  // Same sound for left and right
                           testing::_))
             .Times(1);
 
@@ -106,8 +109,8 @@ TEST_F(TurnIndicatorUT, LeftOnSignalReceivedLeftRearFaulty_leftTurnIndSoundBroke
     // Setup expectations first
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(AudioTable::SoundType::TurnIndicator)),
-                          static_cast<int32_t>(
-                                  AudioTable::SoundComponent::LeftRightBroken),  // Same sound for left and right
+                          hidl_string(AudioTable::getSoundComponentName(
+                                  AudioTable::SoundComponent::LeftRightBroken)),  // Same sound for left and right
                           testing::_))
             .Times(1);
 

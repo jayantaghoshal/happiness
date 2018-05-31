@@ -77,9 +77,10 @@ void Sound::play() {
                   static_cast<int32_t>(_soundID.type),
                   static_cast<int32_t>(_soundID.component));
             android::hardware::hidl_string soundTypeHidl(AudioTable::getSoundTypeName(_soundID.type));
+            android::hardware::hidl_string soundCompHidl(AudioTable::getSoundComponentName(_soundID.component));
 
-            android::hardware::Return<void> ret = am_service->playSound(
-                    soundTypeHidl, static_cast<int32_t>(_soundID.component), [&](AMStatus s, uint32_t cId) {
+            android::hardware::Return<void> ret =
+                    am_service->playSound(soundTypeHidl, soundCompHidl, [&](AMStatus s, uint32_t cId) {
                         if (s == AMStatus::OK) {
                             connectionID = cId;
                             SoundWrapper::registerConnection(this, connectionID);

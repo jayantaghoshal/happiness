@@ -60,7 +60,8 @@ int main(int /* argc */, char* /* argv */ []) {
     DEDispatcher dataelements{dispatcher};
 
     auto store = std::make_unique<vhal_20::VehiclePropertyStore>();
-    auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get());
+    auto pool = std::make_unique<vhal_20::VehiclePropValuePool>();
+    auto hal = std::make_unique<vhal_20::impl::VehicleHalImpl>(store.get(), pool.get());
 
     VFContext ctx{dispatcher, settings_manager, dataelements, *(hal.get()), vcc::LocalConfigDefault()};
 
@@ -107,7 +108,7 @@ int main(int /* argc */, char* /* argv */ []) {
 
     ALOGI("Registering as service...");
     android::status_t status = service->registerAsService();
-    if (status != OK) {
+    if (status != android::OK) {
         ALOGE("Could not register service, %d", status);
     }
 

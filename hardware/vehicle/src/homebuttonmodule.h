@@ -10,7 +10,7 @@
 #include <queue>
 #include <string>
 #include <thread>
-#include "DesipClient.hpp"
+#include "HisipClient.h"
 
 namespace vendor {
 namespace volvocars {
@@ -23,9 +23,9 @@ class HomeButtonCallback {
 };
 
 /**
- *  @brief Key Manager Desip Client class
+ *  @brief Key Manager Hisip Client class
  */
-class HomeButtonModule : public DesipClient {
+class HomeButtonModule : public HisipClient {
   public:
     ~HomeButtonModule();
     /**
@@ -47,7 +47,7 @@ class HomeButtonModule : public DesipClient {
 
     std::thread reader_thread_;
     /**
-     * The thread that spawns the Desip Client listener. Will populate a message
+     * The thread that spawns the Hisip Client listener. Will populate a message
      * queue shared with the worker thread which will process it.
      */
     void VIPReader();
@@ -61,18 +61,18 @@ class HomeButtonModule : public DesipClient {
      * Set the received message's application ID
      * @param[in] msg The received message
      */
-    virtual void setRxMsgID(ParcelableDesipMessage* msg) override;
+    virtual std::vector<uint8_t> getApplicationId() override;
 
     /**
-     *  @brief Power Modding Desip Client Listener class
+     *  @brief Power Modding Hisip Client Listener class
      */
-    class VIPListener final : public DesipClient::DesipClientListener {
+    class VIPListener final : public HisipClient::HisipClientListener {
       public:
         /**
          * Default constructor for VIP Listener
-         * @param homebuttonModule Instance of the Desip Client class to communicate with.
+         * @param homebuttonModule Instance of the Hisip Client class to communicate with.
          */
-        VIPListener(HomeButtonModule* homebuttonModule);
+        VIPListener(void* hisip_client);
 
         /**
          * Default destructor of the VIP Listener class
@@ -82,19 +82,18 @@ class HomeButtonModule : public DesipClient {
         /**
          * Callback to handle incoming messages from the VIP
          * @param  msg          Message coming from the vip
-         * @param  _aidl_return error code
          * @return              status
          */
-        virtual android::binder::Status deliverMessage(const ParcelableDesipMessage& msg, bool* _aidl_return) override;
+        virtual bool onMessageFromVip(const HisipMessage& msg) override;
 
         /**
          * Get the Application Name
          * @return application name
          */
-        virtual String16 getId() override;
+        virtual std::string getUserId() override;
 
       private:
-        // The instance of the Desip Client to communicate with
+        // The instance of the Hisip Client to communicate with
         HomeButtonModule* home_button_module_;
     };
 };

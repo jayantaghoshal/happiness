@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Volvo Car Corporation
+ * Copyright 2017-2018 Volvo Car Corporation
  * This file is covered by LICENSE file in the root of this project
  */
 
@@ -7,7 +7,7 @@
 
 #include "ModuleBase.h"
 
-#include "DesipClient.hpp"
+#include "HisipClient.h"
 
 #include <condition_variable>
 #include <mutex>
@@ -45,7 +45,7 @@ enum class HomeButtonState { kHomeButtonLongInactive = 0, kHomeButtonLongActive 
 /**
  *  @brief Key Manager Desip Client class
  */
-class KeyManagerModule : public DesipClient,
+class KeyManagerModule : public HisipClient,
                          public vhal20::impl::ModuleBase,
                          public vendor::volvocars::hardware::HomeButtonCallback {
   public:
@@ -104,7 +104,7 @@ class KeyManagerModule : public DesipClient,
      * Set the received message's application ID
      * @param[in] msg The received message
      */
-    virtual void setRxMsgID(ParcelableDesipMessage* msg) override;
+    virtual std::vector<uint8_t> getApplicationId() override;
 
     void processKey(int8_t* data);
     void processKnob(int8_t* data);
@@ -125,13 +125,13 @@ class KeyManagerModule : public DesipClient,
     /**
      *  @brief Power Modding Desip Client Listener class
      */
-    class VIPListener final : public DesipClient::DesipClientListener {
+    class VIPListener final : public HisipClient::HisipClientListener {
       public:
         /**
          * Default constructor for VIP Listener
          * @param desip_client Instance of the Desip Client class to communicate with
          */
-        VIPListener(void* desip_client);
+        VIPListener(void* hisip_client);
 
         /**
          * Default destructor of the VIP Listener class
@@ -141,16 +141,15 @@ class KeyManagerModule : public DesipClient,
         /**
          * Callback to handle incoming messages from the VIP
          * @param  msg          Message coming from the vip
-         * @param  _aidl_return error code
          * @return              status
          */
-        virtual android::binder::Status deliverMessage(const ParcelableDesipMessage& msg, bool* _aidl_return) override;
+        virtual bool onMessageFromVip(const HisipMessage& msg) override;
 
         /**
          * Get the Application Name
          * @return application name
          */
-        virtual String16 getId() override;
+        virtual std::string getUserId() override;
 
       private:
         // The instance of the Desip Client to communicate with

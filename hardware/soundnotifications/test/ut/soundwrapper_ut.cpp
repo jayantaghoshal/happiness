@@ -30,7 +30,7 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByItself) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
-                          static_cast<int32_t>(SoundComponent::LeftRight),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::LeftRight)),
                           testing::_))
             .Times(1);
 
@@ -48,7 +48,7 @@ TEST_F(SoundWrapperUT, playSound_correctSoundPlayed_SoundStopsByStopSound) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
-                          static_cast<int32_t>(SoundComponent::LeftRight),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::LeftRight)),
                           testing::_))
             .Times(1);
 
@@ -77,7 +77,7 @@ TEST_F(SoundWrapperUT, playSoundStopDirectly_correctSoundPlayedAndStates) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
-                          static_cast<int32_t>(SoundComponent::LeftRight),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::LeftRight)),
                           testing::_))
             .Times(1);
 
@@ -97,7 +97,7 @@ TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting) {
     // Idle->Starting->Playing->Stopping->Starting->Starting
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
-                          static_cast<int32_t>(SoundComponent::LeftRightBroken),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::LeftRightBroken)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::TurnIndicator, SoundComponent::LeftRightBroken);
@@ -114,7 +114,7 @@ TEST_F(SoundWrapperUT, playWhenInStopping_newStateStarting) {
     // Play again and we shall come to Playing
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::TurnIndicator)),
-                          static_cast<int32_t>(SoundComponent::LeftRightBroken),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::LeftRightBroken)),
                           testing::_))
             .Times(1);
     SoundWrapper::play(soundToPlay);
@@ -127,7 +127,7 @@ TEST_F(SoundWrapperUT, onPlayFailedFromStarting_alwaysBackToIdle) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::AndroidPhone)),
-                          static_cast<int32_t>(SoundComponent::Left),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Left)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::AndroidPhone, SoundComponent::Left);
@@ -141,7 +141,7 @@ TEST_F(SoundWrapperUT, onPlayFailedFromPlaying_alwaysBackToIdle) {
     // Idle->Starting->Playing->Idle
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::SSDoorOpenVehicleActive)),
-                          static_cast<int32_t>(SoundComponent::Left),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Left)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::SSDoorOpenVehicleActive, SoundComponent::Left);
@@ -154,7 +154,7 @@ TEST_F(SoundWrapperUT, onPlayFailedFromStopping_alwaysBackToIdle) {
     // Idle->Starting->Playing->Idle
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::SSDoorOpenVehicleActive)),
-                          static_cast<int32_t>(SoundComponent::Left),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Left)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::SSDoorOpenVehicleActive, SoundComponent::Left);
@@ -170,7 +170,7 @@ TEST_F(SoundWrapperUT, playSoundFailsInIdle_StayInIdle) {
     // Idle->Idle
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::AndroidPhone)),
-                          static_cast<int32_t>(SoundComponent::Left),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Left)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::AndroidPhone, SoundComponent::Left);
@@ -183,7 +183,7 @@ TEST_F(SoundWrapperUT, stopSoundFailsInStopping_toIdle) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
-                          static_cast<int32_t>(SoundComponent::Right),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Right)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::BeltReminder, SoundComponent::Right);
@@ -205,7 +205,7 @@ TEST_F(SoundWrapperUT, stopSoundFailsInPlaying_toIdle) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
-                          static_cast<int32_t>(SoundComponent::Warn1),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Warn1)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::BeltReminder, SoundComponent::Warn1);
@@ -225,7 +225,7 @@ TEST_F(SoundWrapperUT, playSound_stopSound_withoutOnDisconnected_playAgain) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
-                          static_cast<int32_t>(SoundComponent::Warn1),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Warn1)),
                           testing::_))
             .Times(1);
     auto soundToPlay = SoundWrapper::SoundID(SoundType::BeltReminder, SoundComponent::Warn1);
@@ -242,7 +242,7 @@ TEST_F(SoundWrapperUT, playSound_stopSound_withoutOnDisconnected_playAgain) {
 
     EXPECT_CALL(*am_service,
                 playSound(hidl_string(AudioTable::getSoundTypeName(SoundType::BeltReminder)),
-                          static_cast<int32_t>(SoundComponent::Warn1),
+                          hidl_string(AudioTable::getSoundComponentName(SoundComponent::Warn1)),
                           testing::_))
             .Times(0);
     SoundWrapper::play(soundToPlay);

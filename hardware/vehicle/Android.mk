@@ -64,9 +64,7 @@ LOCAL_SHARED_LIBRARIES := \
     liblog \
     libutils \
     libcutils \
-    libdesipclient \
-    libdesip \
-    libdesipservice \
+    libhisipclient \
     libbinder \
     $(vhal_v2_0) \
     $(vccvhal_v1_0) \

@@ -32,6 +32,7 @@ LOCAL_SHARED_LIBRARIES := \
     libdataelements \
     libhidlbase \
     libhidltransport \
+    libhisipclient \
     libdesip \
     libtraceclient
 

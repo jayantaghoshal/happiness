@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include <DesipClient.hpp>
 #include <mutex>
 #include <queue>
 #include <string>
 #include <thread>
+#include "HisipClient.h"
 #include "carconfig_base.h"
 #include "carconfig_reader.h"
 
@@ -26,7 +26,7 @@ typedef struct {
     int8_t data[35];
 } vip_msg;
 
-class CarConfigVipCom : public DesipClient {
+class CarConfigVipCom : public HisipClient {
   public:
     explicit CarConfigVipCom();
 
@@ -37,14 +37,15 @@ class CarConfigVipCom : public DesipClient {
     void setTransfer(void);
     void checksumCmd(const int8_t payload[35]);
     void dataRequest(const int8_t payload[35]);
-    bool sendDESIPMsg(ParcelableDesipMessage msg);
+    bool sendHISIPMsg(HisipMessage& msg);
     int32_t calculateChecksum(char* data, int32_t calcLength);
     int waitForVipAcknowledge();
     void onMessage(const uint8_t& _fid, const int8_t _payload[35]);
     void VipReader();
 
   private:
-    void setRxMsgID(ParcelableDesipMessage* msg);
+    void setRxMsgID(HisipMessage* msg);
+    virtual std::vector<uint8_t> getApplicationId() override;
 
     std::thread vipReader;
     CarConfigReader rd;
@@ -68,12 +69,12 @@ class CarConfigVipCom : public DesipClient {
     } hisipBytes;
 };
 
-class CC_Desip_Listener : public DesipClient::DesipClientListener {
+class CC_HISIP_Listener : public HisipClient::HisipClientListener {
   public:
-    CC_Desip_Listener(CarConfigVipCom* carConfigVipCom);
-    Status deliverMessage(const ParcelableDesipMessage& msg, bool* _aidl_return);
-
-    String16 getId();
+    CC_HISIP_Listener(void* hisip_client);
+    virtual ~CC_HISIP_Listener() = default;
+    virtual bool onMessageFromVip(const HisipMessage& msg) override;
+    virtual std::string getUserId() override;
 
   private:
     CarConfigVipCom* carConfigVipCom;
