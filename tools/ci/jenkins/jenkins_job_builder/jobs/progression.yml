@@ -41,8 +41,8 @@
             xml: |
                 <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
                 <selectedTarget>influxdb</selectedTarget>
-                <customProjectName>icup_android_manifest_bump</customProjectName>
-                <customPrefix>IhuManifestBump</customPrefix>
+                <customProjectName>icup_android_progression</customProjectName>
+                <customPrefix>IhuProgression</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
         - description-setter:
             regexp-for-failed: "fatal: (.*)"
