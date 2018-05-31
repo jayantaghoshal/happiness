@@ -4,6 +4,7 @@
  */
 
 #include "hvacmodule.h"
+#include <carconfig.h>
 #include <utils/SystemClock.h>
 #include <vhal_v2_0/VehicleUtils.h>
 #include "i_vehicle_hal_impl.h"
@@ -51,34 +52,67 @@ vhal20::VehiclePropConfig boolConfig(VehicleProperty prop, std::vector<int> area
     return c;
 }
 
-vhal20::VehiclePropConfig propconfig_temperature() {
+VehicleAreaZone driverAreaZone() {
+    auto steering = carconfig::getValue<CarConfigParams::CC8_SteeringWheelPositionType>();
+    if (steering == CarConfigParams::CC8_SteeringWheelPositionType::Left_Hand_Drive) {
+        return VehicleAreaZone::ROW_1_LEFT;
+    } else {
+        return VehicleAreaZone::ROW_1_RIGHT;
+    }
+}
+
+VehicleAreaZone passengerAreaZone() {
+    const auto areaId = driverAreaZone();
+    if (areaId == VehicleAreaZone::ROW_1_LEFT) {
+        return VehicleAreaZone::ROW_1_RIGHT;
+    } else {
+        return VehicleAreaZone::ROW_1_LEFT;
+    }
+}
+
+vhal20::VehiclePropConfig propconfig_temperature(FirstRowFactory& logicFactory) {
     vhal20::VehiclePropConfig c;
     c.prop = toInt(VehicleProperty::HVAC_TEMPERATURE_SET);
     c.access = VehiclePropertyAccess::READ_WRITE;
     c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-    c.areaConfigs.resize(2);
-    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
-    c.areaConfigs[0].minFloatValue = 17;  // TODO carconfig?
-    c.areaConfigs[0].maxFloatValue = 27;  // TODO carconfig?
-    c.areaConfigs[1].areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
-    c.areaConfigs[1].minFloatValue = 17;  // TODO carconfig?
-    c.areaConfigs[1].maxFloatValue = 27;  // TODO carconfig?
+    if (logicFactory.passengerTempState_.get() == FirstRowGen::StateType::NOT_PRESENT) {
+        c.areaConfigs.resize(1);
+        c.areaConfigs[0].minFloatValue = 17;
+        c.areaConfigs[0].maxFloatValue = 27;
+        c.areaConfigs[0].areaId = toInt(driverAreaZone());
+    } else {
+        c.areaConfigs.resize(2);
+        c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
+        c.areaConfigs[0].minFloatValue = 17;
+        c.areaConfigs[0].maxFloatValue = 27;
+        c.areaConfigs[1].areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
+        c.areaConfigs[1].minFloatValue = 17;
+        c.areaConfigs[1].maxFloatValue = 27;
+    }
     return c;
 }
 
-vhal20::VehiclePropConfig propconfig_temperaturemode() {
+vhal20::VehiclePropConfig temperaturemodeConfig(vccvhal10::VehicleProperty prop, std::vector<int> areaIds) {
     vhal20::VehiclePropConfig c;
-    c.prop = toInt(vccvhal10::VehicleProperty::HVAC_TEMPERATURE_MODE);
+    c.prop = toInt(prop);
     c.access = VehiclePropertyAccess::READ_WRITE;
     c.changeMode = VehiclePropertyChangeMode::ON_CHANGE;
-    c.areaConfigs.resize(2);
-    c.areaConfigs[0].areaId = toInt(VehicleAreaZone::ROW_1_LEFT);
-    c.areaConfigs[0].minInt32Value = static_cast<int32_t>(vccvhal10::TemperatureMode::Low);
-    c.areaConfigs[0].maxInt32Value = static_cast<int32_t>(vccvhal10::TemperatureMode::Hi);
-    c.areaConfigs[1].areaId = toInt(VehicleAreaZone::ROW_1_RIGHT);
-    c.areaConfigs[1].minInt32Value = static_cast<int32_t>(vccvhal10::TemperatureMode::Low);
-    c.areaConfigs[1].maxInt32Value = static_cast<int32_t>(vccvhal10::TemperatureMode::Hi);
+    c.areaConfigs.resize(areaIds.size());
+    for (size_t i = 0; i < areaIds.size(); i++) {
+        c.areaConfigs[i].areaId = areaIds[i];
+        c.areaConfigs[i].minInt32Value = static_cast<int32_t>(vccvhal10::TemperatureMode::Low);
+        c.areaConfigs[i].maxInt32Value = static_cast<int32_t>(vccvhal10::TemperatureMode::Hi);
+    }
     return c;
+}
+
+vhal20::VehiclePropConfig propconfig_temperaturemode(FirstRowFactory& logicFactory) {
+    if (logicFactory.passengerTempState_.get() == FirstRowGen::StateType::NOT_PRESENT) {
+        return temperaturemodeConfig(vccvhal10::VehicleProperty::HVAC_TEMPERATURE_MODE, {toInt(driverAreaZone())});
+    } else {
+        return temperaturemodeConfig(vccvhal10::VehicleProperty::HVAC_TEMPERATURE_MODE,
+                                     {toInt(VehicleAreaZone::ROW_1_LEFT), toInt(VehicleAreaZone::ROW_1_RIGHT)});
+    }
 }
 
 vhal20::VehiclePropConfig propconfig_autoclimate() {
@@ -149,6 +183,21 @@ vccvhal10::TemperatureMode HiLo_AutosarToVhal(autosar::HmiCmptmtTSpSpcl value) {
     return vccvhal10::TemperatureMode::Normal;
 }
 
+const std::map<FirstRowGen::StateType, vccvhal10::PAStatus> PAStatusMap{
+        {FirstRowGen::StateType::AVAILABLE, vccvhal10::PAStatus::Active},
+        {FirstRowGen::StateType::DISABLED, vccvhal10::PAStatus::Disabled},
+        {FirstRowGen::StateType::SYSTEM_ERROR, vccvhal10::PAStatus::SystemError}};
+
+vccvhal10::PAStatus PAStatusToVhal(FirstRowGen::StateType state) {
+    vccvhal10::PAStatus status = vccvhal10::PAStatus::SystemError;
+    for (auto st = PAStatusMap.begin(); st != PAStatusMap.end(); ++st) {
+        if (st->first == state) {
+            status = st->second;
+        }
+    }
+    return status;
+}
+
 }  // namespace
 
 HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
@@ -157,7 +206,10 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
                        std::shared_ptr<tarmac::eventloop::IDispatcher> dispatcher)
     : logicFactory_{logicFactory},
       commonFactory_{commonFactory},
-      prop_temperature(propconfig_temperature(), dispatcher, vehicleHal),
+      prop_temperature(propconfig_temperature(logicFactory),
+                       PaPropHandlerHelper::notUsedStatusID,
+                       dispatcher,
+                       vehicleHal),
       prop_recirculation(propconfig_recirculation(), dispatcher, vehicleHal),
       prop_autoclimate(propconfig_autoclimate(), dispatcher, vehicleHal),
       prop_defroster(propconfig_defroster(), dispatcher, vehicleHal),
@@ -165,104 +217,107 @@ HvacModule::HvacModule(vhal20::impl::IVehicleHalImpl* vehicleHal,
       prop_ac(propconfig_acon(), dispatcher, vehicleHal),
       prop_fanlevelfront(propconfig_fanlevelfront(), PaPropHandlerHelper::notUsedStatusID, dispatcher, vehicleHal),
       prop_fandir(propconfig_fandirection(), dispatcher, vehicleHal),
-      prop_temperature_mode(propconfig_temperaturemode(), dispatcher, vehicleHal) {
+      prop_temperature_mode(propconfig_temperaturemode(logicFactory),
+                            PaPropHandlerHelper::notUsedStatusID,
+                            dispatcher,
+                            vehicleHal) {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Temperature
+    if ((logicFactory_.driverTempState_.get() != FirstRowGen::StateType::NOT_PRESENT) ||
+        (logicFactory_.passengerTempState_.get() != FirstRowGen::StateType::NOT_PRESENT)) {
+        prop_temperature.registerToVehicleHal();
+        prop_temperature.subscribe_set_prop([&](float temperature, int32_t areaId) {
+            if (areaId == toInt(driverAreaZone())) {
+                ALOGD("Request temp left %f", temperature);
+                logicFactory_.driverTemperatureLogic_.request(temperature);
+            } else if (areaId == toInt(passengerAreaZone())) {
+                ALOGD("Request temp right %f", temperature);
+                logicFactory_.passengerTemperatureLogic_.request(temperature);
+            }
+        });
 
-    prop_temperature.registerToVehicleHal();
-    prop_temperature.subscribe_set_prop([&](float temperature, int32_t areaId) {
-        if (areaId == toInt(VehicleAreaZone::ROW_1_LEFT)) {
-            ALOGD("Request temp left %f", temperature);
-            logicFactory_.driverTemperatureLogic_.request(temperature);
-        } else if (areaId == toInt(VehicleAreaZone::ROW_1_RIGHT)) {
-            ALOGD("Request temp right %f", temperature);
-            logicFactory_.passengerTemperatureLogic_.request(temperature);
-        }
-    });
+        subs_.push_back(logicFactory_.driverConvertedTemp_.subscribeAndCall([this](const auto& value) {
+            FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
+                                                  logicFactory_.driverConvertedTemp_.get(),
+                                                  logicFactory_.driverTemperatureLogic_.range());
+            log_debug() << "fireDriverTemperatureAttributeChanged (value), " << pubVal;
+            prop_temperature.PushProp(value, vccvhal10::PAStatus::Active, toInt(driverAreaZone()));
+        }));
+        subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto& state) {
+            FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
+                                                  logicFactory_.driverConvertedTemp_.get(),
+                                                  logicFactory_.driverTemperatureLogic_.range());
+            log_debug() << "fireDriverTemperatureAttributeChanged (state), " << pubVal;
+            prop_temperature.PushStatus(PAStatusToVhal(state), toInt(driverAreaZone()));
+        }));
 
-    subs_.push_back(logicFactory_.driverConvertedTemp_.subscribeAndCall([this](const auto& value) {
-        FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
-                                              logicFactory_.driverConvertedTemp_.get(),
-                                              logicFactory_.driverTemperatureLogic_.range());
-        log_debug() << "fireDriverTemperatureAttributeChanged (value), " << pubVal;
-        prop_temperature.PushProp(value, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_LEFT));
-    }));
-    subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto&) {
-        FirstRow::TemperatureAttribute pubVal(logicFactory_.driverTempState_.get(),
-                                              logicFactory_.driverConvertedTemp_.get(),
-                                              logicFactory_.driverTemperatureLogic_.range());
-        log_debug() << "fireDriverTemperatureAttributeChanged (state), " << pubVal;
-        // TODO: PA Availability to VHAL
-    }));
+        subs_.push_back(logicFactory_.passengerConvertedTemp_.subscribeAndCall([this](const auto& value) {
+            FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
+                                                  logicFactory_.passengerConvertedTemp_.get(),
+                                                  logicFactory_.passengerTemperatureLogic_.range());
+            log_debug() << "firePassengerTemperatureAttributeChanged (value), " << pubVal;
+            prop_temperature.PushProp(value, vccvhal10::PAStatus::Active, toInt(passengerAreaZone()));
+        }));
 
-    subs_.push_back(logicFactory_.passengerConvertedTemp_.subscribeAndCall([this](const auto& value) {
-        FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
-                                              logicFactory_.passengerConvertedTemp_.get(),
-                                              logicFactory_.passengerTemperatureLogic_.range());
-        log_debug() << "firePassengerTemperatureAttributeChanged (value), " << pubVal;
-        prop_temperature.PushProp(value, VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_RIGHT));
-    }));
-
-    subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto&) {
-        FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
-                                              logicFactory_.passengerConvertedTemp_.get(),
-                                              logicFactory_.passengerTemperatureLogic_.range());
-        log_debug() << "firePassengerTemperatureAttributeChanged (state), " << pubVal;
-        // TODO: PA Availability to VHAL
-    }));
+        subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto& state) {
+            FirstRow::TemperatureAttribute pubVal(logicFactory_.passengerTempState_.get(),
+                                                  logicFactory_.passengerConvertedTemp_.get(),
+                                                  logicFactory_.passengerTemperatureLogic_.range());
+            log_debug() << "firePassengerTemperatureAttributeChanged (state), " << pubVal;
+            prop_temperature.PushStatus(PAStatusToVhal(state), toInt(passengerAreaZone()));
+        }));
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Temperature mode
+    if ((logicFactory_.driverTempState_.get() != FirstRowGen::StateType::NOT_PRESENT) ||
+        (logicFactory_.passengerTempState_.get() != FirstRowGen::StateType::NOT_PRESENT)) {
+        prop_temperature_mode.registerToVehicleHal();
+        prop_temperature_mode.subscribe_set_prop(
+                [&](std::underlying_type<vccvhal10::TemperatureMode>::type temperature_mode, int32_t areaId) {
+                    auto temp_mode = static_cast<vccvhal10::TemperatureMode>(temperature_mode);
+                    auto autosar_temp_mode = HiLo_VhalToAutosar(temp_mode);
+                    ALOGD("Request temp mode = %s (%s)",
+                          vccvhal10::toString(temp_mode).c_str(),
+                          vhal20::toString<vhal20::VehicleAreaZone>(areaId).c_str());
 
-    prop_temperature_mode.registerToVehicleHal();
-    prop_temperature_mode.subscribe_set_prop(
-            [&](std::underlying_type<vccvhal10::TemperatureMode>::type temperature_mode, int32_t areaId) {
-                auto temp_mode = static_cast<vccvhal10::TemperatureMode>(temperature_mode);
-                auto autosar_temp_mode = HiLo_VhalToAutosar(temp_mode);
-                ALOGD("Request temp mode = %s (%s)",
-                      vccvhal10::toString(temp_mode).c_str(),
-                      vhal20::toString<vhal20::VehicleAreaZone>(areaId).c_str());
+                    if (areaId == toInt(driverAreaZone())) {
+                        logicFactory_.driverTemperatureLogic_.request(autosar_temp_mode);
+                    } else if (areaId == toInt(passengerAreaZone())) {
+                        logicFactory_.passengerTemperatureLogic_.request(autosar_temp_mode);
+                    }
+                });
 
-                if (areaId == toInt(VehicleAreaZone::ROW_1_LEFT)) {
-                    logicFactory_.driverTemperatureLogic_.request(autosar_temp_mode);
-                } else if (areaId == toInt(VehicleAreaZone::ROW_1_RIGHT)) {
-                    logicFactory_.passengerTemperatureLogic_.request(autosar_temp_mode);
-                }
-            });
+        subs_.push_back(commonFactory_.getDriverTempHiLoNProperty().subscribeAndCall([this](const auto& value) {
+            ALOGD("fireDriverTemperatureHiLoNormalMode State: %d, Mode: %d",
+                  static_cast<int>(logicFactory_.driverTempState_.get()),
+                  commonFactory_.getDriverTempHiLoNProperty().get());
+            prop_temperature_mode.PushProp(
+                    toInt(HiLo_AutosarToVhal(value)), vccvhal10::PAStatus::Active, toInt(driverAreaZone()));
+        }));
 
-    subs_.push_back(commonFactory_.getDriverTempHiLoNProperty().subscribeAndCall([this](const auto& value) {
-        ALOGD("fireDriverTemperatureHiLoNormalMode State: %d, Mode: %d",
-              static_cast<int>(logicFactory_.driverTempState_.get()),
-              commonFactory_.getDriverTempHiLoNProperty().get());
-        prop_temperature_mode.PushProp(
-                toInt(HiLo_AutosarToVhal(value)), VehiclePropertyStatus::AVAILABLE, toInt(VehicleAreaZone::ROW_1_LEFT));
-    }));
+        subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto& state) {
+            ALOGD("fireDriverTemperatureHiLoNormalMode State: %d, Mode: %d",
+                  static_cast<int>(logicFactory_.driverTempState_.get()),
+                  commonFactory_.getDriverTempHiLoNProperty().get());
+            prop_temperature.PushStatus(PAStatusToVhal(state), toInt(driverAreaZone()));
+        }));
 
-    subs_.push_back(logicFactory_.driverTempState_.subscribeAndCall([this](const auto&) {
-        // TODO Torbjörn - Using the state of the temp property for temp state, is that ok?
-        ALOGD("fireDriverTemperatureHiLoNormalMode State: %d, Mode: %d",
-              static_cast<int>(logicFactory_.driverTempState_.get()),
-              commonFactory_.getDriverTempHiLoNProperty().get());
-        // TODO: PA Availability to VHAL
-    }));
+        subs_.push_back(logicFactory_.passengerTempHiLoN_.subscribeAndCall([this](const auto& value) {
+            ALOGD("firePassengerTemperatureHiLoNormalMode State: %d, Mode: %d",
+                  static_cast<int>(logicFactory_.passengerTempState_.get()),
+                  logicFactory_.passengerTempHiLoN_.get());
+            prop_temperature_mode.PushProp(
+                    toInt(HiLo_AutosarToVhal(value)), vccvhal10::PAStatus::Active, toInt(passengerAreaZone()));
+        }));
 
-    subs_.push_back(logicFactory_.passengerTempHiLoN_.subscribeAndCall([this](const auto& value) {
-        ALOGD("firePassengerTemperatureHiLoNormalMode State: %d, Mode: %d",
-              static_cast<int>(logicFactory_.passengerTempState_.get()),
-              logicFactory_.passengerTempHiLoN_.get());
-        prop_temperature_mode.PushProp(toInt(HiLo_AutosarToVhal(value)),
-                                       VehiclePropertyStatus::AVAILABLE,
-                                       toInt(VehicleAreaZone::ROW_1_RIGHT));
-    }));
-
-    subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto&) {
-        // TODO Torbjörn - Using the state of the temp property for temp state, is that ok?
-        ALOGD("firePassengerTemperatureHiLoNormalMode State: %d, Mode: %d",
-              static_cast<int>(logicFactory_.passengerTempState_.get()),
-              logicFactory_.passengerTempHiLoN_.get());
-        // TODO: PA Availability to VHAL
-    }));
-
+        subs_.push_back(logicFactory_.passengerTempState_.subscribeAndCall([this](const auto& state) {
+            ALOGD("firePassengerTemperatureHiLoNormalMode State: %d, Mode: %d",
+                  static_cast<int>(logicFactory_.passengerTempState_.get()),
+                  logicFactory_.passengerTempHiLoN_.get());
+            prop_temperature.PushStatus(PAStatusToVhal(state), toInt(passengerAreaZone()));
+        }));
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Fan level
 
