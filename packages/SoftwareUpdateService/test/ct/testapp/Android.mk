@@ -6,7 +6,7 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
     $(call all-java-files-under, app/src/main/java) \
-    $(call all-java-files-under, app/src/test/java)
+    $(call all-java-files-under, app/src/androidTest/java)
 
 LOCAL_PACKAGE_NAME := softwareupdateapp
 

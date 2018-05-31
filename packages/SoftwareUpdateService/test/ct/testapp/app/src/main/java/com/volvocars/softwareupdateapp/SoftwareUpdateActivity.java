@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-package com.volvocars.softwareupdatesample;
+package com.volvocars.softwareupdateapp;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -46,7 +46,7 @@ import android.support.v7.widget.Toolbar;
 import android.graphics.Rect;
 
 public class SoftwareUpdateActivity extends AppCompatActivity implements ISoftwareUpdateApp {
-    private static final String LOG_TAG = "SoftwareUpdateActivity";
+    private static final String LOG_TAG = "SoftwareUpdateApp";
     private static final String LOG_PREFIX = "[SoftwareUpdateActivity]";
 
     private SoftwareUpdateManager softwareUpdateManager = null;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.volvocars.softwareupdatesample">
+    package="com.volvocars.softwareupdateapp">
     <application
         android:icon="@drawable/ic_cloud_white_48dp"
         android:label="Software Update">
@@ -20,7 +20,7 @@
         <uses-library android:name="android.test.runner" />
     </application>
     <instrumentation android:name="android.support.test.runner.AndroidJUnitRunner"
-                     android:targetPackage="com.volvocars.softwareupdatesample"
+                     android:targetPackage="com.volvocars.softwareupdateapp"
                      android:label="Tradefed SoftwareUpdateTest">
     </instrumentation>
 </manifest>

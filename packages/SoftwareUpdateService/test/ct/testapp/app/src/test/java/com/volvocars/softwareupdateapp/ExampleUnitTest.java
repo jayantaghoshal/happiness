@@ -3,7 +3,7 @@
  * This file is covered by LICENSE file in the root of this project
  */
 
-package com.volvocars.softwareupdatesample;
+package com.volvocars.softwareupdateapp;
 
 import org.junit.Test;
 
