@@ -113,7 +113,8 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
 def gerrit_cli(commit: str):
     #host = "gotsvl1722.got.volvocars.net"
     host = "gotsvl1415.got.volvocars.net"
-    port = "29426"
+    port = "29421"
+    #port = "29426"
     user = "E9426001"
     #user = os.environ["$JENKINS_USER"]
 
