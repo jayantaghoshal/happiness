@@ -1,7 +1,14 @@
 on property:ro.boot.hardware_type=US
-    symlink /dev/ttyACM1 /dev/ttyFlexray
-on property:ro.boot.hardware_type!=US
-    symlink /dev/ttyACM0 /dev/ttyFlexray
+   symlink /dev/ttyACM1 /dev/ttyFlexray
+
+on property:ro.boot.hardware_type=DAB
+   symlink /dev/ttyACM0 /dev/ttyFlexray
+
+on property:ro.boot.hardware_type=ROW
+   symlink /dev/ttyACM0 /dev/ttyFlexray
+
+on property:ro.boot.hardware_type=JPN
+   symlink /dev/ttyACM0 /dev/ttyFlexray
 
 service vehicle-signals-daemon /vendor/bin/vehicle-signals-daemon /dev/ttyFlexray
     class main
