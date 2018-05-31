@@ -519,21 +519,8 @@
             name: UPSTREAM_JOB
             project-name: ihu_daily_build_vcc_eng
             description: parameter 'UPSTREAM_JOB_RESULT' will be used to validate if the daily build has passed.
-#        - run:
-#            name: DAILY_TEST_GENERIC_JOB
-#            project-name: ihu_daily_test-generic
-#            description: parameter 'DAILY_TEST_GENERIC_JOB_RESULT' will be used to validate if the daily test has passed.
-#        - run:
-#            name: DAILY_TEST_FLEXRAY_JOB
-#            project-name: ihu_daily_test-flexray
-#            description: parameter 'DAILY_TEST_FLEXRAY_JOB_RESULT' will be used to validate if the daily test has passed.
-#        - run:
-#            name: DAILY_TEST_RIG_JOB
-#            project-name: ihu_daily_test-rig
-#            description: parameter 'DAILY_TEST_RIG_JOB_RESULT' will be used to validate if the daily test has passed.
     builders:
         - shell: |
-#            if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ] || [ "$DAILY_TEST_GENERIC_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_FLEXRAY_JOB" != "SUCCESS" ] || [ "$DAILY_TEST_RIG_JOB" != "SUCCESS" ]
             if [ "$UPSTREAM_JOB_RESULT" != "SUCCESS" ]
             then
                 echo "Daily build failed!!!"
