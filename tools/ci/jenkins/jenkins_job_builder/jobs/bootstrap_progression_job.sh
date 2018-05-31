@@ -19,4 +19,4 @@ cd "$WORKSPACE_ROOT"
 bootstrap_docker_run "repo init --reference=/cm/repo-mirror -u ssh://gotsvl1415.got.volvocars.net:29421/manifest -b master" || die "repo init failed"
 bootstrap_docker_run "repo sync --no-clone-bundle --current-branch --force-sync --detach -q -j32 vendor/volvocars" || die "repo sync failed"
 
-./vendor/volvocars/tools/ci/jenkins/ci_docker_run.sh --multiuser "python3 ./vendor/volvocars/tools/ci/shipit/bump.py . update_manifest_for_progression ${GERRIT_PROJECT}"
+./vendor/volvocars/tools/ci/jenkins/ci_docker_run.sh --multiuser "python3 ./vendor/volvocars/tools/ci/shipit/bump.py . update_manifest_for_progression ${GERRIT_PROJECT} ${GERRIT_BRANCH}"

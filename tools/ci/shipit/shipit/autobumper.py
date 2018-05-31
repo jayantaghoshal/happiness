@@ -77,7 +77,7 @@ def repo_init(aosp_root_dir: str, branch: str):
         cwd=os.path.abspath(aosp_root_dir))
 
 
-def progression_manifest(aosp_root_dir: str, repository: str):
+def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
 
     volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
     volvocars_repo = git.Repo(volvocars_repo_path)
@@ -99,8 +99,13 @@ def progression_manifest(aosp_root_dir: str, repository: str):
     commit_title = "Updating " + repository  + " sha in the manifest"
     volvocars_repo.commit(commit_title)
 
+    #PUsh the added commit
+    volvocars_repo.push(["origin", "HEAD:refs/for/" + branch])
+
     # Do a Gerrit update for the manifest and fullfill the requirement to trigger pipeline
     gerrit_cli(commit)
+
+
 
 
 def gerrit_cli(commit: str):
