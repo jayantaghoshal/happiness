@@ -108,16 +108,16 @@ int main(int argc, char* argv[]) {
     printf("Will play notification sound id: %i, name: %s\n", std::get<2>(sound), std::get<3>(sound));
     fflush(stdout);
     android::hardware::hidl_string soundTypeHidl(AudioTable::getSoundTypeName(std::get<0>(sound)));
+    android::hardware::hidl_string soundComponentHidl(AudioTable::getSoundComponentName(std::get<1>(sound)));
 
     for (int count = 0; count < 3; count++) {
-        ret = service_->playSound(
-                soundTypeHidl, static_cast<int32_t>(std::get<1>(sound)), [&](AMStatus s, int64_t cId) {
-                    printf("playSound status: %d connectionID: %ld\n", s, cId);
-                    fflush(stdout);
-                    if (s != AMStatus::OK) {
-                        exitApp = true;
-                    }
-                });
+        ret = service_->playSound(soundTypeHidl, soundComponentHidl, [&](AMStatus s, int64_t cId) {
+            printf("playSound status: %d connectionID: %ld\n", s, cId);
+            fflush(stdout);
+            if (s != AMStatus::OK) {
+                exitApp = true;
+            }
+        });
 
         // wait for connection
         while (!connected.load() && !exitApp.load()) {
