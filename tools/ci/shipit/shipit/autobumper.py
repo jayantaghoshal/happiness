@@ -98,16 +98,18 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
     logger.info("Commit change in manifest")
     commit_title = "Updating " + repository  + " sha in the manifest"
     volvocars_repo.commit(commit_title)
-    #volvocars_repo.run_git(["commit", "--author=E9426001"])
+    logger.info("Commit change in manifest")
+    commit_sha_for_manifest = volvocars_repo.repo_rev_parse(volvocars_repo_path)
 
+    #Push the added commit
+    logger.info("Pushing commit to Gerrit")
+    push_args = ["push", "ssh://gotsvl1415.got.volvocars.net:29421/vendor/volvocars", "HEAD:refs/for/" + branch]
+    print(push_args)
 
-    #PUsh the added commit
-    #git push ssh://sshusername@hostname:29418/projectname HEAD:refs/for/branch
-    volvocars_repo.run_git(["push", "ssh://gotsvl1415.got.volvocars.net:29421/vendor/volvocars", "HEAD:refs/for/" + branch])
-    #volvocars_repo.push(["origin", "HEAD:refs/for/" + branch])
+    volvocars_repo.run_git(push_args)
 
     # Do a Gerrit update for the manifest and fullfill the requirement to trigger pipeline
-    gerrit_cli(commit)
+    gerrit_cli(commit_sha_for_manifest)
 
 
 def gerrit_cli(commit: str):
@@ -119,6 +121,7 @@ def gerrit_cli(commit: str):
     #user = os.environ["$JENKINS_USER"]
 
     args = ["--code-review", " +2", "--verified", "+1", "--label", "Automerge=+1", commit]
+    logger.info("Setting commit " + commit + " in Gerrit to +2 Review, Verified +1 and Automerge +1")
     gerrit_instance = gerrit(host, port, user)
     gerrit_instance.review(args)
 
