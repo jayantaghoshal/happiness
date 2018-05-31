@@ -98,8 +98,8 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
     logger.info("Commit change in manifest")
     commit_title = "Updating " + repository  + " sha in the manifest"
     volvocars_repo.commit(commit_title)
-    logger.info("Commit change in manifest")
-    commit_sha_for_manifest = volvocars_repo.repo_rev_parse(volvocars_repo_path)
+    commit_sha_for_manifest = process_tools.check_output_logged(["git", "rev-parse",
+                            "HEAD"], cwd=volvocars_repo_path).decode('utf-8').strip()
 
     #Push the added commit
     logger.info("Pushing commit to Gerrit")
@@ -113,15 +113,12 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
 
 
 def gerrit_cli(commit: str):
-    #host = "gotsvl1722.got.volvocars.net"
     host = "gotsvl1415.got.volvocars.net"
     port = "29421"
-    #port = "29426"
     user = "E9426001"
-    #user = os.environ["$JENKINS_USER"]
 
     args = ["--code-review", " +2", "--verified", "+1", "--label", "Automerge=+1", commit]
-    logger.info("Setting commit " + commit + " in Gerrit to +2 Review, Verified +1 and Automerge +1")
+    print("Setting commit " + commit + " in Gerrit to +2 Review, Verified +1 and Automerge +1")
     gerrit_instance = gerrit(host, port, user)
     gerrit_instance.review(args)
 
