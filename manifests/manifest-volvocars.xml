@@ -21,7 +21,7 @@
 
   <!-- Volvo Cars partner apps -->
   <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a" />
-  <project name="vendor/google/apps/GAS" path="vendor/volvocars/apps/google/GAS" revision="d2973afef405977468bffa14fb04b8e813b1c42d" />
+  <project name="vendor/google/apps/GAS" path="vendor/volvocars/apps/google/GAS" revision="daec88da288c321d8bca058ac6838bbd99e036b3" />
 
   <!-- External resources -->
   <project name="vendor/volvocars/external/timezonesdb" path="vendor/volvocars/external/timezonesdb" revision="ecd974d519b813162db082c3770f3a118bb60d93" />
