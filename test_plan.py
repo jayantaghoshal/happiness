@@ -58,6 +58,8 @@ test_plan_hourly = test_plan_gate + [
     VTSTest("vendor/volvocars/hardware/vehicle/test/e_lane_keeping_aid_setting",      standard_caps | {cp.flexray_or_carsim}), #Jayanta Ghoshal
     VTSTest("vendor/volvocars/hardware/signals/dataelements/test/ct/sendAndReceiveOneSignal", standard_caps | {cp.flexray},
         tests_to_run=["testFlexrayPingPong"]),  # Torbjorn Sandsgard
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_distribution", standard_caps | {cp.flexray_or_carsim}), #Kirti Goel
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/max_defroster", standard_caps | {cp.flexray_or_carsim}), #Anders Hellman
 ]
 
 test_plan_nightly = test_plan_hourly + [
@@ -88,8 +90,7 @@ test_plan_staging_hourly = [
     VTSTest("vendor/volvocars/hardware/vehicle/test/Vhal_SmokeTest",                standard_caps), #Praveen Kumar Khatri
     VTSTest("vendor/volvocars/hardware/profiles/test/user_profile",                 standard_caps | {cp.cem}), #Uguudei
     VTSTest("vendor/volvocars/hardware/profiles/test/hmi_user",                     standard_caps | {cp.cem}), #Uguudei
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_distribution", standard_caps | {cp.flexray_or_carsim}), #Kirti Goel
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/max_defroster", standard_caps | {cp.flexray_or_carsim}), #Anders Hellman
+    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray_or_carsim}), #Kirti Goel
 ]
 
 #This is for unstable tests that does not need to be run often
@@ -116,7 +117,6 @@ test_plan_staging_daily = [
     VTSTest("vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge", standard_caps  | {cp.audio}), #Samuel Idowu
     VTSTest("vendor/volvocars/hardware/remotectrl/test/it/climatectrl_tests", standard_caps | {cp.flexray} | {cp.audio}), #Abhijeet Shirolikar
     VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/temperature_adjustment", standard_caps | {cp.flexray}), #Justin Saler
-    VTSTest("vendor/volvocars/hardware/vehicle/test/climate_firstrow/ct/air_condition", standard_caps | {cp.flexray_or_carsim}), #Kirti Goel
     TradefedTest("vendor/volvocars/hmi/SystemDialog/app/src/androidTest",standard_caps),
     TradefedTest("vendor/volvocars/apps/Internal/SystemUITest/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/packages/SettingsStorageService/test/ut/services", standard_caps), #Matilda Bengtsson
