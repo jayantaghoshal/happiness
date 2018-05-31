@@ -20,7 +20,7 @@
   <project name="vendor/volvocars/apps/ci_test" path="vendor/volvocars/apps/ci_test" revision="ZUUL_COMMIT_OR_HEAD" />
 
   <!-- Volvo Cars partner apps -->
-  <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="af5c9f07c72b15d04a200ab38c44b7fafcb9ac1a" />
+  <project name="vendor/volvocars/apps/Spotify" path="vendor/volvocars/apps/Spotify" revision="f04c8f1876ce4cbde3d58a4ac6b9dff52caf51a1" />
   <project name="vendor/google/apps/GAS" path="vendor/volvocars/apps/google/GAS" revision="daec88da288c321d8bca058ac6838bbd99e036b3" />
 
   <!-- External resources -->
