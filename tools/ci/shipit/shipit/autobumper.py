@@ -98,18 +98,21 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
     logger.info("Commit change in manifest")
     commit_title = "Updating " + repository  + " sha in the manifest"
     volvocars_repo.commit(commit_title)
+    #volvocars_repo.run_git(["commit", "--author=E9426001"])
+
 
     #PUsh the added commit
-    volvocars_repo.push(["origin", "HEAD:refs/for/" + branch])
+    #git push ssh://sshusername@hostname:29418/projectname HEAD:refs/for/branch
+    volvocars_repo.run_git(["push", "ssh://gotsvl1415.got.volvocars.net:29421", "HEAD:refs/for/", branch])
+    #volvocars_repo.push(["origin", "HEAD:refs/for/" + branch])
 
     # Do a Gerrit update for the manifest and fullfill the requirement to trigger pipeline
     gerrit_cli(commit)
 
 
-
-
 def gerrit_cli(commit: str):
-    host = "gotsvl1722.got.volvocars.net"
+    #host = "gotsvl1722.got.volvocars.net"
+    host = "gotsvl1415.got.volvocars.net"
     port = "29426"
     user = "E9426001"
     #user = os.environ["$JENKINS_USER"]
