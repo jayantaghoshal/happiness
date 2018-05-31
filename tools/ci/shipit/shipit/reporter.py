@@ -23,8 +23,8 @@ SUCCESS_BRANCHES = {
 }
 
 LAST_BRANCHES = {
-    "ihu_hourly_build-eng": "ci/last_run_hourly_build",
-    "ihu_daily_build_vcc_eng": "ci/last_run_nightly_build",
+    #"ihu_hourly_build-eng": "ci/last_run_hourly_build",
+    #"ihu_daily_build_vcc_eng": "ci/last_run_nightly_build",
     "ihu_hourly": "ci/last_run_hourly",
     "ihu_daily": "ci/last_run_daily",
     "ihu_weekly": "ci/last_run_weekly", #Not used
@@ -126,13 +126,14 @@ def _make_committer_list(from_branch: str, to_git_hash: str):
 
 
 def update_manifest_branches(jenkins_job_name, status, git_hash: str="HEAD"):
-    if status == 'pass':
+    if status == 'pass' and jenkins_job_name in SUCCESS_BRANCHES:
         branch = SUCCESS_BRANCHES[jenkins_job_name]
         logger.info("Updating branch: {}".format(branch))
         update_manifest_branch(branch, git_hash)
-    branch = LAST_BRANCHES[jenkins_job_name]
-    logger.info("Updating branch: {}".format(branch))
-    update_manifest_branch(branch, git_hash)
+    if jenkins_job_name in LAST_BRANCHES:
+        branch = LAST_BRANCHES[jenkins_job_name]
+        logger.info("Updating branch: {}".format(branch))
+        update_manifest_branch(branch, git_hash)
 
 
 def update_manifest_branch(branch: str, git_hash: str='HEAD'):
