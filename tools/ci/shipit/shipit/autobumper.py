@@ -106,7 +106,8 @@ def progression_manifest(aosp_root_dir: str, repository: str):
 def gerrit_cli(commit: str):
     host = "gotsvl1722.got.volvocars.net"
     port = "29426"
-    user = os.environ["$USER"]
+    user = "E9426001"
+    #user = os.environ["$JENKINS_USER"]
 
     args = ["--code-review", " +2", "--verified", "+1", "--label", "Automerge=+1", commit]
     gerrit_instance = gerrit(host, port, user)
