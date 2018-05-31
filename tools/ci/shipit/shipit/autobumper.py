@@ -88,7 +88,7 @@ def progression_manifest(aosp_root_dir: str, repository: str):
     for template_manifest in vcc_manifest_files:
         commit = manifest.set_sha_in_template_manifest(aosp_root_dir, template_manifest, repository)
         if commit != "":
-            dest = os.path.join(volvocars_repo.path + "manifests/", os.path.basename(template_manifest))
+            dest = os.path.join(volvocars_repo.path + "/manifests/", os.path.basename(template_manifest))
             logger.info("Staging manifest changes done to: " + template_manifest)
             volvocars_repo.run_git(["diff"])
             volvocars_repo.add([dest])
