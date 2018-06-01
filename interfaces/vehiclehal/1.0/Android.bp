@@ -12,6 +12,9 @@ hidl_interface {
     ],
     types: [
         "PAStatus",
+        "PowerModeEvent",
+        "PowerModeUserFeedback",
+        "TemperatureMode",
         "VehicleProperty",
     ],
     gen_java: true,

@@ -338,7 +338,7 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyType:INT32
       | VehicleArea:ZONE),
 
-      /**
+    /**
      * Request to hide Park Assist system
      * @change_mode VehiclePropertyChangeMode:ON_CHANGE
      * @access VehiclePropertyAccess:READ_WRITE
@@ -360,8 +360,28 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
-    };
 
+    /**
+     * Inform about a soon-to-come power mode
+     * event and allow to provide feedback.
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ_WRITE
+     * @data_enum PowerModeEvent
+     * @data_enum PowerModeUserFeedback
+     *
+     * Read format:
+     *   bit0-15 : PowerModeEvent
+     *   bit16-31: time left in seconds (count down)
+     *
+     * Write format:
+     *   bit0-31 : PowerModeUserFeedback
+     */
+    POWERMODE_USER_INTERACTION = (
+      0x0022
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
+};
 
 enum PAStatus: int32_t {
   NotAvailable = 0,
@@ -374,4 +394,18 @@ enum TemperatureMode: int32_t {
   Low = 0,
   Normal = 1,
   Hi = 2,
+};
+
+enum PowerModeEvent: int32_t {
+  None = 0,
+  OverTemp = 1,
+  LowBattery = 2,
+  InfotainmentTimeout = 3,
+};
+
+enum PowerModeUserFeedback: int32_t {
+  No = 0,
+  Yes = 1,
+  Shutdown = 2,
+  Continue = 3,
 };
