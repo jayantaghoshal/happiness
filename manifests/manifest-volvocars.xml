@@ -8,7 +8,7 @@
 
   <!-- HMI -->
   <project name="vendor/volvocars/hmi/Launcher" path="vendor/volvocars/hmi/Launcher" revision="ZUUL_COMMIT_OR_HEAD" />
-  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="2077406c3c82e202d1a3dbe84bee1a6284e5f81e" />
+  <project name="vendor/volvocars/hmi/ComponentLibrary" path="vendor/volvocars/hmi/ComponentLibrary" revision="f529d6680a9e54f9e8f3bb78a4e111ce72b36021" />
   <project name="vendor/volvocars/hmi/MediaLibrary" path="vendor/volvocars/hmi/MediaLibrary" revision="ZUUL_COMMIT_OR_HEAD" />
   <project name="vendor/volvocars/hmi/SystemDialog" path="vendor/volvocars/hmi/SystemDialog" revision="ZUUL_COMMIT_OR_HEAD" />
 
