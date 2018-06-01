@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 import android.os.HwBinder;
 
 /**
- * Implementation of Foundation service API.
+ * Cloud Connection interface to the cloud daemon
  */
 public class CloudConnection extends ICloudConnectionEventListener.Stub {
     private CloudService service;
@@ -103,10 +103,7 @@ public class CloudConnection extends ICloudConnectionEventListener.Stub {
         service.enteredErrorState(reason);
     }
 
-    // @Override
-    // public void shoulderTap(String tap) {
-    //     // TODO: Place holder for MQTT
-    // }
+
 
     public class DownloadResponseCallback extends ICloudConnectionDownloadResponseCallback.Stub {
         @Override

@@ -1,0 +1,21 @@
+package vendor.volvocars.hardware.cloud@1.0;
+
+
+import ICloudMessageArrivedCallback;
+
+interface ICloudNotifications
+{
+    /**
+     * General rules for topic subscriptions
+     * 1.Do not add a '/' before the root "eg: vehicle_id/* instead of /vehicle_id/* "
+     * 2.Do not subscribe to multilevel wild card "#"
+     */
+    /**
+     * Register a listener that would be called by the cloud daemon when it receives a
+     * mqtt message on the given topic.
+     * @param topic     Mqtt topic retrieved from the feature listener
+     * @param listener  listener called when shoulder tap message received
+     */
+     registerTopicCallback(string topic, ICloudMessageArrivedCallback callback)
+     generates(bool result);
+};

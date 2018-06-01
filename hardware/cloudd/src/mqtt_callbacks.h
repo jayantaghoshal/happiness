@@ -7,9 +7,12 @@
 
 // TODO: delete constants when actual values can be retrieved
 const std::string CLIENT_ID("ota_mq");
-const std::string TOPIC("ota_shoulder");
+
+// The time to wait between subsequent reconnection attempts
+const int T_CONNECT_BACKOFF_TIME = 2;  // Default value is 60 ref:
+                                       // https://c1.confluence.cm.volvocars.biz/pages/viewpage.action?spaceKey=CONNCARSPEC&title=Foundation+Services+MQTT+Specification
+// Time interval between subsequent ping requests
 const int KEEP_ALIVE_INTERVAL = 10;
-const int QOS = 2;
 
 class action_listener : public virtual mqtt::iaction_listener {
   public:
@@ -37,6 +40,7 @@ class MqttCallback : public virtual mqtt::callback, public virtual mqtt::iaction
     action_listener subListener_;
 
   private:
+    std::string topic_;
     // callbacks and virtual methods
 
     void on_failure(const mqtt::token& tok) override;

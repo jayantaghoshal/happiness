@@ -25,15 +25,22 @@ CloudService::CloudService()
       cert_handler_(std::make_shared<CertHandler>(CLIENT_CERT_PEM(), CLIENT_KEY_PEM(), CA_CERT_PEM())),
       entry_point_fetcher_{cert_handler_, cloud_request_handler_} {}
 
-bool CloudService::Initialize() {
+void CloudService::Initialize() {
     android::status_t status = ICloudConnection::registerAsService();
     if (status != android::OK) {
         ALOGW("[Service] Failed to register Http binder service: %d", status);
-        return false;
     } else {
         ALOGV("[Service] Http binder service register ok");
     }
-    return FetchEntryPoint();
+    status = ICloudNotifications::registerAsService();
+    if (status != android::OK) {
+        ALOGW("[Service] Failed to register MqttClient binder service: %d", status);
+        return;
+    } else {
+        ALOGV("[Service] MqttClient binder service register ok");
+    }
+    FetchEntryPoint();
+    return;
 }
 
 bool CloudService::FetchEntryPoint() {
@@ -77,9 +84,6 @@ bool CloudService::FetchEntryPoint() {
         SetConnectionState(ConnectionState::CONNECTED);
 
         // Connect to MQTT if we have cep to MQTT in entry point data
-        if (cep_mqtt_server_ != "") {
-            ConnectToMqttServer();
-        }
 
     });
 
@@ -145,17 +149,90 @@ void CloudService::SetConnectionState(const ConnectionState state) {
     }
 }
 
+void CloudService::split(const std::string& s, char delim, std::back_insert_iterator<std::vector<std::string>> result) {
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        *(result++) = item;
+    }
+}
+
+std::vector<std::string> CloudService::split(const std::string& s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
+Return<bool> CloudService::registerTopicCallback(const hidl_string& topic,
+                                                 const android::sp<ICloudMessageArrivedCallback>& callback) {
+    std::string topic_ = topic;
+    // split the topic string into individual levels string elements for better searching later
+    std::vector<std::string> topic_hierarchy_vector_ = split(topic_, '/');
+    if (callback && !topic_.empty()) {
+        topic_callback_map_.emplace_back(topic_hierarchy_vector_, callback);
+        ALOGD("Callback successfully registered for topic: %s", topic_.c_str());
+        ConnectToMqttServer();
+        return true;
+    } else {
+        ALOGD("Callback failed to register for topic: %s", topic_.c_str());
+        return false;
+    }
+}
+
 void CloudService::ConnectToMqttServer() {
+    topic_list_ = std::make_shared<mqtt::string_collection>();
     client_ = std::make_shared<mqtt::async_client>(cep_mqtt_server_, CLIENT_ID);
     connopts_.set_keep_alive_interval(KEEP_ALIVE_INTERVAL);
     connopts_.set_clean_session(true);
-    connopts_.set_automatic_reconnect(2, 2);
+    connopts_.set_automatic_reconnect(minRetryInterval, maxRetryInterval);
 
-    mqtt_cb_.SetConnectionHandler([&]() { client_->subscribe(TOPIC, QOS, nullptr, mqtt_cb_.subListener_); });
+    mqtt_cb_.SetConnectionHandler([&]() {
+        std::vector<std::pair<std::vector<std::string>, android::sp<ICloudMessageArrivedCallback>>>::iterator
+                topic_iterator;
+        ALOGD("Subscribing to the following topics: ");
+        for (topic_iterator = topic_callback_map_.begin(); topic_iterator != topic_callback_map_.end();
+             topic_iterator++) {
+            // build back the topic string before subscribe to add it to the topic_list_
+            std::string tp;
+            for (std::vector<std::string>::iterator it = topic_iterator->first.begin();
+                 it != topic_iterator->first.end();
+                 it++) {
+                tp = tp + *it + "/";
+            }
+            ALOGD("topic : %s", tp.c_str());
+            QOS.push_back(2);  // TODO: Change QOS to zero after testing is done
+            topic_list_->push_back(tp);
+        }
+        try {
+            client_->subscribe(topic_list_, QOS, nullptr, mqtt_cb_.subListener_);
+        } catch (mqtt::exception e) {
+            ALOGE("Subscribe Exception %s", e.to_string().c_str());
+        }
+    });
 
     mqtt_cb_.SetMessageHandler([&](mqtt::const_message_ptr msg) {
         ALOGD("\ttopic: '%s'", msg->get_topic().c_str());
         ALOGD("\tpayload: '%s", msg->to_string().c_str());
+
+        std::vector<std::string> received_topic_str_ = split(msg->get_topic(), '/');
+
+        for (uint64_t i = 0; i < topic_callback_map_.size(); i++) {
+            bool matched = false;
+            for (std::vector<std::string>::iterator recv_it = received_topic_str_.begin(),
+                                                    stored_it = topic_callback_map_[i].first.begin();
+                 (recv_it != received_topic_str_.end()) && (stored_it != topic_callback_map_[i].first.end());
+                 recv_it++, stored_it++) {
+                if (*recv_it != *stored_it) {
+                    matched = false;
+                    break;
+                } else {
+                    matched = true;
+                }
+            }
+            if (matched == true) topic_callback_map_[i].second->messageArrived(msg->to_string());
+        }
+
     });
     client_->set_callback(mqtt_cb_);
 
@@ -165,7 +242,6 @@ void CloudService::ConnectToMqttServer() {
     try {
         ALOGD("Connect first attempt to the MQTT broker ...");
         client_->connect(connopts_, nullptr, mqtt_cb_);
-        ALOGD("the server is: %s", client_->get_server_uri().c_str());
     } catch (const mqtt::exception& exc) {
         ALOGE("ERROR: %s", exc.what());
         ALOGE("ERROR: Unable to connect to MQTT broker: %s''", cep_mqtt_server_.c_str());

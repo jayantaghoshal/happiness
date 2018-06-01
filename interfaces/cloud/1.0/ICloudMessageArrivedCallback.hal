@@ -1,0 +1,9 @@
+package vendor.volvocars.hardware.cloud@1.0;
+
+interface ICloudMessageArrivedCallback
+{
+    /**
+     * Placeholder for MQTT push notification
+     */
+    oneway messageArrived(string msg);
+};

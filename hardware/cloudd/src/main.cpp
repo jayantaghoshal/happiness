@@ -16,6 +16,7 @@ using namespace Connectivity;
 
 using namespace tarmac::eventloop;
 using namespace android::hardware;
+using namespace android;
 
 // Setup signal handlers
 void SigTermHandler(int fd) {
@@ -89,12 +90,17 @@ bool InitSignals() {
 int main(void) {
     InitSignals();
 
-    // Change to sp once hal is setup
-    std::unique_ptr<CloudService> cloudService = std::unique_ptr<CloudService>(new CloudService());
-    if (cloudService->Initialize()) {
-        configureRpcThreadpool(1, true /*callerWillJoin*/);
-        joinRpcThreadpool();
-    }
+    /**
+     * Configure thread pool should be called before making any HIDL service calls
+     * Ref:
+     * https://android.googlesource.com/platform/system/libhidl/+/master/transport/include/hidl/HidlTransportSupport.h
+     */
+    configureRpcThreadpool(1, true /*callerWillJoin*/);
+
+    sp<CloudService> cloudService = new CloudService();
+    cloudService->Initialize();
+
+    joinRpcThreadpool();
 
     ALOGI("[Main] exiting ...");
 }

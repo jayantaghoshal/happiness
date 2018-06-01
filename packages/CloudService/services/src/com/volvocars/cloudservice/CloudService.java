@@ -28,6 +28,7 @@ public class CloudService extends Service {
     private FoundationServicesApiImpl foundation_services_api = null;
     private SoftwareManagementApiImpl software_management_api = null;
     private CloudConnection cloud_connection = null;
+    private MqttClientService mqtt_client = null;
 
     private class SoftwareManagementFeatureCallbackImpl extends IFoundationServicesApiCallback.Stub {
         @Override
@@ -65,6 +66,9 @@ public class CloudService extends Service {
         if (cloud_connection == null) {
             cloud_connection = new CloudConnection(this);
             cloud_connection.init();
+        }
+        if(mqtt_client == null){
+            mqtt_client = new MqttClientService();
         }
     }
 

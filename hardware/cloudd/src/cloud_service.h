@@ -9,6 +9,8 @@
 #include <vendor/volvocars/hardware/cloud/1.0/ICloudConnection.h>
 #include <vendor/volvocars/hardware/cloud/1.0/ICloudConnectionDownloadResponseCallback.h>
 #include <vendor/volvocars/hardware/cloud/1.0/ICloudConnectionEventListener.h>
+#include <vendor/volvocars/hardware/cloud/1.0/ICloudMessageArrivedCallback.h>
+#include <vendor/volvocars/hardware/cloud/1.0/ICloudNotifications.h>
 #include <list>
 #include "certificate_handler_interface.h"
 #include "cloud_request_handler.h"
@@ -26,6 +28,8 @@ using ::android::hardware::hidl_string;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnection;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnectionEventListener;
 using ::vendor::volvocars::hardware::cloud::V1_0::ICloudConnectionDownloadResponseCallback;
+using ::vendor::volvocars::hardware::cloud::V1_0::ICloudNotifications;
+using ::vendor::volvocars::hardware::cloud::V1_0::ICloudMessageArrivedCallback;
 using ::vendor::volvocars::hardware::cloud::V1_0::Response;
 
 namespace Connectivity {
@@ -33,7 +37,7 @@ namespace Connectivity {
 /*
  * Controller class for the cloud daemon. Implements the HAL interface and owns the URI to CEP
  */
-class CloudService : public ICloudConnection {
+class CloudService : public ICloudConnection, public ICloudNotifications {
   public:
     enum ConnectionState { INIT, CONNECTION, CONNECTED, NOCONNECTION };
 
@@ -44,7 +48,7 @@ class CloudService : public ICloudConnection {
      * Initializes the service. Register HAL services and start fetching the CEP.
      * @return false if failed to register HAL or setting up the fetch request, else true
      */
-    bool Initialize();
+    void Initialize();
 
   private:
     /*
@@ -73,6 +77,11 @@ class CloudService : public ICloudConnection {
                                  uint32_t timeout,
                                  const android::sp<ICloudConnectionDownloadResponseCallback>& callback);
 
+    // Method from the ICloudNotifications
+
+    Return<bool> registerTopicCallback(const hidl_string& topic,
+                                       const android::sp<ICloudMessageArrivedCallback>& callback);
+
     /*
      * Helper method to create a parseable Response out of data received from curl after a successful request.
      * @parm code HTTP status code
@@ -85,7 +94,7 @@ class CloudService : public ICloudConnection {
     void SetConnectionState(const ConnectionState state);
 
     ConnectionState state_;
-    std::vector<android::sp<ICloudConnectionEventListener> > listeners_;
+    std::vector<android::sp<ICloudConnectionEventListener>> listeners_;
 
     ClouddLocalConfig cloudd_local_config_;
     std::shared_ptr<CloudRequestHandler> cloud_request_handler_;
@@ -93,9 +102,13 @@ class CloudService : public ICloudConnection {
     EntryPointFetcher entry_point_fetcher_;
 
     // MQTT client handler
+    static const int minRetryInterval = 3;
+    static const int maxRetryInterval = 3;
+
     mqtt::async_client_ptr client_;
     mqtt::connect_options connopts_;
     MqttCallback mqtt_cb_;
+    mqtt::string_collection_ptr topic_list_;
     void ConnectToMqttServer();
 
     std::shared_ptr<CloudRequest> download_request_;
@@ -104,6 +117,13 @@ class CloudService : public ICloudConnection {
     int cep_port_;
     std::string client_uri_;
     std::string cep_mqtt_server_;
+    std::vector<int> QOS;
+
+    std::vector<std::pair<std::vector<std::string>, android::sp<ICloudMessageArrivedCallback>>> topic_callback_map_;
+
+    // Utility functions
+    void split(const std::string& s, char delim, std::back_insert_iterator<std::vector<std::string>> result);
+    std::vector<std::string> split(const std::string& s, char delim);
 };
 
 }  // namespace Connectivity

@@ -118,7 +118,7 @@ PRODUCT_PACKAGES += \
     Spotify
 
 ##############################################################
-# Vendor priv-apps
+# Vendor priv-apps (OTA and Cloud)
 ##############################################################
 PRODUCT_PACKAGES += \
     CloudService \

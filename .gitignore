@@ -50,6 +50,7 @@ db.json.run
 #External library repositories
 external/paho.mqtt.c/
 external/paho.mqtt.cpp/
+external/pac_legacy/
 
 #Gradle
 .gradle

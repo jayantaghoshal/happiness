@@ -9,6 +9,8 @@ hidl_interface {
         "ICloudConnection.hal",
         "ICloudConnectionDownloadResponseCallback.hal",
         "ICloudConnectionEventListener.hal",
+        "ICloudMessageArrivedCallback.hal",
+        "ICloudNotifications.hal",
     ],
     interfaces: [
         "android.hidl.base@1.0",
