@@ -219,8 +219,8 @@ class ArgumentHandler(object):
         for file in args.files:
             uri = "ICUP_ANDROID_CI/%s/%s/%s" % (args.project, args.job, os.path.basename(file))
             artifactory.deploy_artifact(uri, file)
-            artifactory.set_properties(uri, args.metafile)
-
+            if args.metafile:
+                artifactory.set_properties(uri, args.metafile)
 
     def pull_latest(self, args):
         artifactory = Artifactory()
