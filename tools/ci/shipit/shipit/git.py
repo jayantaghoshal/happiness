@@ -86,6 +86,15 @@ class Repo:
 
         return revision
 
+    @classmethod
+    def get_commit_message(cls, repo_full_path: str):
+        commit_message = process_tools.check_output_logged(["git",
+                                "log",
+                                "-1",
+                                "--pretty=%B"], cwd=repo_full_path)
+
+        return commit_message
+
     def add(self, path_specs: List[str]):
         self._run_git(['add', '--'] + path_specs)
 

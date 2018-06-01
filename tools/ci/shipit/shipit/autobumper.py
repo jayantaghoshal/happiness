@@ -82,12 +82,18 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
     volvocars_repo_path = os.path.join(aosp_root_dir, "vendor/volvocars")
     volvocars_repo = git.Repo(volvocars_repo_path)
     vcc_manifest_files = glob.glob(os.path.join(volvocars_repo.path, "manifests") + "/*.xml")
+
+    repo_path = ""
+    repository_with_commit_path = ""
     commit = ""
     dest = ""
 
     for template_manifest in vcc_manifest_files:
         commit = manifest.set_sha_in_template_manifest(aosp_root_dir, template_manifest, repository)
         if commit != "":
+            #Sometimes the repo name and manifest path differs so the path stated in the manifest is needed
+            repo_path = manifest.get_value_from_manifest_by_git_name(template_manifest, repository, "path")
+            repository_with_commit_path = os.path.join(aosp_root_dir, repo_path)
             dest = os.path.join(volvocars_repo.path + "/manifests/", os.path.basename(template_manifest))
             logger.info("Staging manifest changes done to: " + template_manifest)
             volvocars_repo.run_git(["diff"])
@@ -95,9 +101,15 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
             logger.info("Setting " + repository + " commit to " + commit)
             break
 
+    logger.info("Reading the commit message for change")
+    orginal_commit_message = git.Repo.get_commit_message(repository_with_commit_path).decode('utf-8')
+    logger.info(" *** The commit message states: ")
+    logger.info(orginal_commit_message)
+
     logger.info("Commit change in manifest")
-    commit_title = "Updating " + repository  + " sha in the manifest"
-    volvocars_repo.commit(commit_title)
+    jenkins_update_message = "Updating " + repository  + " sha in the manifest"
+    commit_messsage = orginal_commit_message + "\n" + jenkins_update_message
+    volvocars_repo.commit(commit_messsage)
     commit_sha_for_manifest = process_tools.check_output_logged(["git", "rev-parse",
                             "HEAD"], cwd=volvocars_repo_path).decode('utf-8').strip()
 
@@ -217,7 +229,7 @@ def sync_repo(aosp_root_dir: str, repository: str):
     basename = os.path.basename(repository)
 
     for manifest_file in vcc_manifest_files:
-        logger.info("Manfiest = " + manifest_file)
+        logger.info("Manifest = " + manifest_file)
         revision = manifest.get_value_from_manifest_by_git_name(manifest_file, repository, "revision")
         if not revision :
             continue
