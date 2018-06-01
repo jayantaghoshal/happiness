@@ -88,7 +88,7 @@ artifactory meta-add "$META" IHU_GIT_URL "https://icup_android.gerrit.cm.volvoca
 if [ "${test_type}" == "dryrun" ]; then
    citime scp "${OUT_ARCHIVE}" jenkins@artinfcm.volvocars.net:/home/jenkins/archive/"${JOB_NAME}"/"${ZUUL_COMMIT}"
 else
-   time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" --meta-file "$META" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
+   time artifactory push "${JOB_NAME}" "${BUILD_NUMBER}"_"${MP_PART_NUMBER}" --metafile "$META" "${OUT_ARCHIVE}" || die "Could not push out archive to Artifactory."
 fi
 
 redis-cli set icup_android.jenkins."${JOB_NAME}"."${BUILD_NUMBER}".mp_part_number "${MP_PART_NUMBER}" || die "redis-cli set failed"

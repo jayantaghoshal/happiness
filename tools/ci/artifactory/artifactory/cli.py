@@ -67,7 +67,7 @@ class ArgumentHandler(object):
 
         push_parser.add_argument(
             '--metafile',
-            metavar='META-FILE',
+            metavar='METAFILE',
             type=str,
             default=None,
             help='text file containing meta data in JSON format'
