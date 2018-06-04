@@ -95,6 +95,24 @@ class Repo:
 
         return commit_message
 
+    @classmethod
+    def get_commiters_name(cls, repo_full_path: str):
+        commit_name = process_tools.check_output_logged(["git",
+                                "log",
+                                "-1",
+                                "--pretty=%an"], cwd=repo_full_path)
+
+        return commit_name
+
+    @classmethod
+    def get_commiters_mail(cls, repo_full_path: str):
+        commiters_mail = process_tools.check_output_logged(["git",
+                                "log",
+                                "-1",
+                                "--pretty=%ae"], cwd=repo_full_path)
+
+        return commiters_mail
+
     def add(self, path_specs: List[str]):
         self._run_git(['add', '--'] + path_specs)
 

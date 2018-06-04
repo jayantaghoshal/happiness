@@ -101,6 +101,12 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
             logger.info("Setting " + repository + " commit to " + commit)
             break
 
+    user = git.Repo.get_commiters_name(repository_with_commit_path).decode('utf-8').rstrip()
+    logger.info("The user name is: " + user)
+
+    email = git.Repo.get_commiters_mail(repository_with_commit_path).decode('utf-8').rstrip()
+    logger.info("The users email is: " + email)
+
     logger.info("Reading the commit message for change")
     orginal_commit_message = git.Repo.get_commit_message(repository_with_commit_path).decode('utf-8')
     logger.info(" *** The commit message states: ")
@@ -108,8 +114,11 @@ def progression_manifest(aosp_root_dir: str, repository: str, branch: str):
 
     logger.info("Commit change in manifest")
     jenkins_update_message = "Updating " + repository  + " sha in the manifest"
-    commit_messsage = orginal_commit_message + "\n" + jenkins_update_message
-    volvocars_repo.commit(commit_messsage)
+
+    commit_message = orginal_commit_message + "\n" + jenkins_update_message
+    command_list = ["commit", "--author=\"" + user + " <" + email + ">\"", " -m ", "\"" + commit_message + "\""]
+    volvocars_repo.run_git(command_list)
+
     commit_sha_for_manifest = process_tools.check_output_logged(["git", "rev-parse",
                             "HEAD"], cwd=volvocars_repo_path).decode('utf-8').strip()
 
