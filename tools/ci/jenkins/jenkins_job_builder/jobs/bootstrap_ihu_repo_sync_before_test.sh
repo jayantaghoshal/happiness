@@ -21,6 +21,8 @@ function get_repos {
     vendor/volvocars \
     vendor/volvocars/hmi/apps/tunerbrowserservice \
     vendor/volvocars/hmi/Launcher \
+    vendor/volvocars/hmi/apps/Internal \
+    vendor/volvocars/hmi/SystemDialog \
     aosp/platform/build \
     bsp/device/delphi/volvoihu \
     aosp/platform/packages/services/Car \
