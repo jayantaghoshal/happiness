@@ -30,6 +30,8 @@
   <project name="vendor/volvocars/external/paho.mqtt.c" path="vendor/volvocars/external/paho.mqtt.c" revision="e746236fc4b78409f75c1201d7b9ea0ad8c9e6a1" />
   <project name="vendor/volvocars/external/paho.mqtt.cpp" path="vendor/volvocars/external/paho.mqtt.cpp" revision="a436f5d21dea33e3d28eb0885aff45d859d04b79" />
 
+  <project name ="vendor/volvocars/external/swdl-one-engine" path="vendor/volvocars/external/swdl-one-engine" revision="3bd4f59c2dc2df8fffdd4ea5ff05f85e5ca217f4"/>
+
   <!-- AOSP Overrides -->
   <remove-project name="aosp/platform/system/core" />
   <project name="aosp/platform/system/core" path="system/core" revision="50d7fc01d1d4e1058f65056643e74066669640ba" />
