@@ -5,7 +5,11 @@
 
 # Parameter for selecting dryrun test - controls the need for repo sync, which is needed for an open change in Gerrit.
 # Default is ordinary hourly build.
-test_type="$1"
+if [ -z "${@+x}" ]; then
+    test_type="normal"
+else
+    test_type="$1"
+fi
 
 SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0")")"; pwd)
 set +x
