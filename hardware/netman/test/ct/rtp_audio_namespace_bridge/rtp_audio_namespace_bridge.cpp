@@ -40,7 +40,7 @@ class RtpAudioNamespaceBridge : public ::testing::Test {
 TEST_F(RtpAudioNamespaceBridge, IptablesNatTableIsConfigured) {
     if (checkAutonomousDrive()) {
         const std::string vcc_netns = "/vendor/bin/ip netns exec vcc ";
-        const std::string cmd = vcc_netns + "/vendor/bin/iptables -t mangle -C POSTROUTING -o tcam0_cd -j MASQUERADE";
+        const std::string cmd = vcc_netns + "/vendor/bin/iptables -t nat -C POSTROUTING -o tcam0_cd -j MASQUERADE";
 
         int command_status = std::system(cmd.c_str());
 
@@ -56,8 +56,9 @@ TEST_F(RtpAudioNamespaceBridge, IptablesNatTableIsConfigured) {
  *   * successful pings between default and VCC network namespaces
  */
 TEST_F(RtpAudioNamespaceBridge, PingBetweenNamespaces) {
+    const std::string interface_name = "eth1";
     if (checkAutonomousDrive()) {
-        const std::string cmd = "ping -c 1 -w 3 " + rtp_audio_vlan_ipaddr;
+        const std::string cmd = "ping -I " + interface_name + " -c 1 -w 3 " + rtp_audio_vlan_ipaddr;
         EXPECT_TRUE(validateCommandStatus(system(cmd.c_str())));
     } else {
         ALOGD("Nothing to test. Test not supported.");
