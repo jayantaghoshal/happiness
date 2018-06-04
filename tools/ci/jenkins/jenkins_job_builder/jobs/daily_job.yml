@@ -277,7 +277,7 @@
                 <customPrefix>IhuDaily</customPrefix>
                 </jenkinsci.plugins.influxdb.InfluxDbPublisher>
         - archive:
-            artifacts: 'aosp/vendor/volvocars/*'
+            artifacts: 'aosp/vendor/volvocars/**'
             allow-empty: 'true'
 
 - job:
