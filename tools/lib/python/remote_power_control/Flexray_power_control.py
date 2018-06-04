@@ -3,6 +3,8 @@
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
 
+import CI_power_control
+
 ''' Prerequisite: IPM_MAP_FILE set through jenkins build environment (job specific).'''
 class Flexray_power_control(CI_power_control):
 
