@@ -1,0 +1,36 @@
+/*
+ * Copyright 2017-2018 Volvo Car Corporation
+ * This file is covered by LICENSE file in the root of this project
+ */
+
+cc_defaults {
+    name: "libsomeip_router_defaults",
+    defaults: ["volvocars_cc_defaults_hq"],
+
+    rtti: true,
+}
+
+// Shared library for deployment to system
+cc_library_shared {
+    name: "libsomeip_router_shared",
+    defaults: ["libsomeip_router_defaults"],
+
+    export_include_dirs: [
+        "include",
+    ],
+
+    shared_libs: [
+        "liblog",
+        "libvsomeip_2_10_10",
+        "libvsomeip_cfg_2_10_10",
+        "libvsomeip_sd_2_10_10",
+    ],
+
+    static_libs: [
+        "libboost_1_64_0_vcc",
+    ],
+
+    srcs: [
+        "src/*.cpp",
+    ],
+}
