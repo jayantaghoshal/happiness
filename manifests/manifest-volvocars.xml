@@ -46,7 +46,7 @@
   <project name="aosp/platform/external/iproute2" path="external/iproute2" revision="f4b742bec30463b5c562d471f71552025e42949c" />
 
   <remove-project name="aosp/platform/frameworks/base" />
-  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="80d1cffd8dd4a029034979999d297fc462e1906c" />
+  <project name="aosp/platform/frameworks/base" path="frameworks/base" revision="81a2d0517d6f0534d1e29283b9ff3126d4cc0239" />
 
   <remove-project name="aosp/platform/packages/services/Car" />
   <project name="aosp/platform/packages/services/Car" path="packages/services/Car" revision="0d98a973977bdca0c44c3183b9408add5b1ed4cd" />
@@ -55,7 +55,7 @@
   <project name="aosp/platform/system/bt" path="system/bt" revision="e92feeb2a95d4a9458589b3d51363bed8d514270" />
 
   <remove-project name="aosp/platform/frameworks/opt/net/ethernet" />
-  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="e2df01945be5807aaeb79010d66d38cf696a4ea5" />
+  <project name="aosp/platform/frameworks/opt/net/ethernet" path="frameworks/opt/net/ethernet" revision="43bc3b391d0ce1ff32f98748170732f5c4fdb152" />
 
   <!-- Aptiv Overrides -->
   <remove-project name="bsp/hardware/stmicroelectronics/SensorHAL-IIO_asm330lhh" />
