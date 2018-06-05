@@ -451,15 +451,23 @@
                 sonar.projectName=IHUA_IHU Android - complete source code
                 sonar.projectVersion=1.0
                 sonar.sources=./aosp/vendor/volvocars/
+                sonar.java.binaries=./aosp/vendor/volvocars/
     wrappers:
         - timestamps
         - workspace-cleanup
         - timeout:
-            timeout: 10
+            timeout: 60
             timeout-var: 'BUILD_TIMEOUT'
             abort: true
             type: absolute
     publishers:
+        - raw:
+            xml: |
+                <jenkinsci.plugins.influxdb.InfluxDbPublisher plugin="influxdb@1.14">
+                <selectedTarget>influxdb</selectedTarget>
+                <customProjectName>ihu_analyze_code-sonarqube</customProjectName>
+                <customPrefix>IhuDailySonarQube</customPrefix>
+                </jenkinsci.plugins.influxdb.InfluxDbPublisher>
         - workspace-cleanup:
             clean-if:
               - success: true
