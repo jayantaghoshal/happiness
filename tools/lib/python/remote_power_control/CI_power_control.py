@@ -17,10 +17,10 @@ class CI_power_control:
         except Exception:
             raise RuntimeError('Failed due to the IPM map file')
         test_machine = os.environ['HOST_HOSTNAME'] # Set in run.sh
-        self.ipm_hostname = mapping[ipm_machine]["hostname"]
         self.test_machine = mapping[test_machine]
-        self.ipm_machine = mapping[ipm_machine]
         ipm_machine = self.test_machine["remote-power-switch"]
+        self.ipm_hostname = mapping[ipm_machine]["hostname"]
+        self.ipm_machine = mapping[ipm_machine]
         self.ipm_port = None # Override this
 
     def port_detail(self):
