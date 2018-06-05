@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
@@ -44,7 +45,8 @@ public class RemoteGeneralSettingsService extends Service {
             ".RemoteGeneralSettingsGateway.BIND";
     private static final String REMOTE_GENERAL_SETTINGS_SERVICE_BIND_INTENT =
             ".RemoteGeneralSettingsService.BIND";
-    private static final String INTENTFILTER_FOR_BROADCAST_RECEIVER="generalsettingsservice.broadcastaction.checkoverlaystate";
+    private static final String INTENTFILTER_FOR_BROADCAST_RECEIVER =
+            "generalsettingsservice.broadcastaction.checkoverlaystate";
     private Context context = null;
     private DisplayOverlay mDisplayOverlay = null;
     private static final String key = "com.volvocars.generalsettingsservice.displayinformation";
@@ -118,7 +120,7 @@ public class RemoteGeneralSettingsService extends Service {
             Log.v(TAG, "Displaysettings: " + displaysettings);
             RemoteCtrlPropertyValue mRemoteCtrlPropertyValueForGet = new RemoteCtrlPropertyValue(
                     remoteCtrlPropertyValue.getPropertyId(), remoteCtrlPropertyValue.getAreaId(),
-                    RemoteCtrlHalPropertyStatus.AVAILABLE, displaysettings);
+                    RemoteCtrlHalPropertyStatus.AVAILABLE, mDisplayOverlay.isOverlayEnabled());
 
             mRemoteGeneralSettingsResponseService.sendGetPropertyResponse(
                     requestIdentifier, mRemoteCtrlPropertyValueForGet);
@@ -126,22 +128,23 @@ public class RemoteGeneralSettingsService extends Service {
     };
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        RemoteCtrlPropertyValue mRemoteCtrlPropertyValueForNotification = null;
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            mRemoteCtrlPropertyValueForNotification = new RemoteCtrlPropertyValue(
-                    REMOTECTRLHAL_CSD_ON, VehicleArea.GLOBAL, RemoteCtrlHalPropertyStatus.AVAILABLE,
-                    intent.getExtras().getBoolean("BrightnessValue"));
-
-            try {
-                mRemoteGeneralSettingsResponseService.notifyPropertyChanged(
-                        mRemoteCtrlPropertyValueForNotification);
-            } catch (Exception e) {
-                Log.e(TAG, "RemoteException" + e.toString());
+            /*restricting unauthorized brightness changes*/
+            Log.i(TAG, "IS overlay enabled = " + mDisplayOverlay.isOverlayEnabled()
+                            + " Received brightness = "
+                            + intent.getExtras().getInt("BrightnessValue"));
+            if (mDisplayOverlay.isOverlayEnabled()) {
+                Settings.System.putIntForUser(context.getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS, 0, UserHandle.USER_CURRENT);
+            } else {
+                Settings.System.putIntForUser(context.getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS,
+                        intent.getExtras().getInt("BrightnessValue"), UserHandle.USER_CURRENT);
             }
         }
     };
+
     private ServiceConnection mRemoteGeneralSettingsResponseServiceConnection =
             new ServiceConnection() {
                 @Override
@@ -164,8 +167,8 @@ public class RemoteGeneralSettingsService extends Service {
         try {
             Log.v(TAG, "GeneralSettingsService onCreate");
             context = this;
-            LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
-                    new IntentFilter(INTENTFILTER_FOR_BROADCAST_RECEIVER));
+            LocalBroadcastManager.getInstance(this).registerReceiver(
+                    mBroadcastReceiver, new IntentFilter(INTENTFILTER_FOR_BROADCAST_RECEIVER));
 
             Intent checkDisplayBrightnessServiceIntent =
                     new Intent(this, com.volvocars.remotectrlservice.generalsettingsservice.service
@@ -290,17 +293,17 @@ public class RemoteGeneralSettingsService extends Service {
         this.stopService(checkDisplayBrightnessServiceIntent);
         this.startService(checkDisplayBrightnessServiceIntent);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(INTENTFILTER_FOR_BROADCAST_RECEIVER));
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mBroadcastReceiver, new IntentFilter(INTENTFILTER_FOR_BROADCAST_RECEIVER));
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mDisplayOverlay = new DisplayOverlay(context);
                 mDisplayOverlay.enableOverlay();
-                Log.i(TAG,"TODO(Arjun) 2000ms delay to be fixed with more robust solution");
+                Log.i(TAG, "TODO(Arjun) 2000ms delay to be fixed with more robust solution");
             }
         }, 2000);
-      //TODO(Arjun) 2000ms delay to be fixed with more robust solution
+        // TODO(Arjun) 2000ms delay to be fixed with more robust solution
     }
 }
