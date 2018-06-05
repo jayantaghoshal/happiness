@@ -8,9 +8,15 @@
 # cd ~/icup_android/
 # ./vendor/volvocars/interfaces/update-makefiles.sh
 
+interfacepath="vendor/volvocars/interfaces"
+
 source system/tools/hidl/update-makefiles-helper.sh
 
 do_makefiles_update \
-  "vendor.volvocars.hardware:vendor/volvocars/interfaces" \
+  "vendor.volvocars.hardware:$interfacepath" \
   "android.hidl:system/libhidl/transport" \
   "android.hardware:hardware/interfaces"
+
+# Since do_makefiles_update/hidl-gen creates .bp-files that does not match our
+# formatting requirements we also run the formatter on the created .bp-files
+find "$interfacepath" -name Android.bp -print0 | xargs -0 bpfmt -w
