@@ -56,9 +56,9 @@
 
             A virtual network interface which bridges the default netns and VCC netns.
             Interface is reserved for RTP audio streaming for the convinience API.
-
-        <item>eth1;13,14,15;10.0.0.2/28</item>
         -->
+        <item>eth1;13,14,15;ip=10.0.0.2/28 gateway=10.0.0.1</item>
+
 
     </string-array>
 </resources>
