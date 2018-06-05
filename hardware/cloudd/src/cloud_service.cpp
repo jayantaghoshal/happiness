@@ -200,6 +200,7 @@ void CloudService::ConnectToMqttServer() {
                  it++) {
                 tp = tp + *it + "/";
             }
+            tp.back() = '\0';
             ALOGD("topic : %s", tp.c_str());
             QOS.push_back(2);  // TODO: Change QOS to zero after testing is done
             topic_list_->push_back(tp);

@@ -27,8 +27,9 @@ public class CloudService extends Service {
 
     private FoundationServicesApiImpl foundation_services_api = null;
     private SoftwareManagementApiImpl software_management_api = null;
+    private ExpiryNotificationApiImpl expiry_notification_api = null;
     private CloudConnection cloud_connection = null;
-    private MqttClientService mqtt_client = null;
+    private NotificationServiceImpl notification_service_client = null;
 
     private class SoftwareManagementFeatureCallbackImpl extends IFoundationServicesApiCallback.Stub {
         @Override
@@ -52,6 +53,25 @@ public class CloudService extends Service {
         }
     };
 
+    private class ExpiryNotificationFeatureCallbackImpl extends IFoundationServicesApiCallback.Stub {
+        @Override
+        public void featureAvailableResponse(Feature feature) {
+            Log.v(LOG_TAG, LOG_PREFIX + " Got feature available response for ExpiryNotification");
+
+            if (feature != null) {
+                if (!feature.name.equals("ExpiryNotification")) {
+                    Log.w(LOG_TAG, LOG_PREFIX + " Got wrong feature in callback response ("+ feature.name + ")");
+                    return;
+                }
+
+                Log.v(LOG_TAG, LOG_PREFIX + " Feature: " + feature.toString());
+                expiry_notification_api.init(notification_service_client, feature.uri);
+            } else {
+                Log.e(LOG_TAG, LOG_PREFIX + " ExpiryNotification feature is not available");
+            }
+        }
+    };
+
     @Override
     public void onCreate() {
         Log.v(LOG_TAG, LOG_PREFIX + " onCreate");
@@ -67,8 +87,11 @@ public class CloudService extends Service {
             cloud_connection = new CloudConnection(this);
             cloud_connection.init();
         }
-        if(mqtt_client == null){
-            mqtt_client = new MqttClientService();
+        if(notification_service_client == null){
+            notification_service_client = new NotificationServiceImpl();
+        }
+        if(expiry_notification_api == null){
+            expiry_notification_api = new ExpiryNotificationApiImpl();
         }
     }
 
@@ -119,6 +142,7 @@ public class CloudService extends Service {
 
             Log.v(LOG_TAG, LOG_PREFIX + " Calling fsapi.GetFeatureAvailable(SoftwareManagement)");
             foundation_services_api.isFeatureAvailable("SoftwareManagement", new SoftwareManagementFeatureCallbackImpl());
+            foundation_services_api.isFeatureAvailable("ExpiryNotification", new ExpiryNotificationFeatureCallbackImpl());
         } catch (Exception ex) {
             Log.e(LOG_TAG, LOG_PREFIX + " Unhandled exception:\n" + ex.getMessage());
         }

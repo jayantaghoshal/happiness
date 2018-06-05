@@ -16,6 +16,12 @@
         "enabled": "true",
         "visible": "visible",
         "uri": "/softwaremanagement-1"
+      },
+      {
+        "name": "ExpiryNotification",
+        "enabled": "true",
+        "visible": "false",
+        "uri": "signal-topic.subscribe://expn/dl"
       }
     ]
   },
