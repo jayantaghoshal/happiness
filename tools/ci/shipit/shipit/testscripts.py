@@ -118,7 +118,7 @@ def get_component(test_component):
         logger.error("AndroidTest.xml not found")
         raise Exception("AndroidTest.xml not found")
     try:
-        elem = ET.parse('AndroidTest.xml').getroot().find("test")
+        elem = ET.parse(androidtest_xml_path).getroot().find("test")
         value = elem.get('class').split('.')[-1]
     except Exception as e:
         logger.error("Unable to parse AndroidTest.xml, Error message: " + str(e))
