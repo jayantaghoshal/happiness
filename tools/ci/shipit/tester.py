@@ -53,20 +53,20 @@ class Tester:
 
     def _pre_run(self):
         self.old_tombstones = self._list_tombstones()
-        logging.info("old_tombstones: {}".format(self.old_tombstones))
+        self.logger.info("old_tombstones: {}".format(self.old_tombstones))
 
     def _post_run(self, test_result):
         all_tombstones = self._list_tombstones()
         new_tombstones = list(set(all_tombstones) - set(self.old_tombstones))
         test_result.test_kpis['number_of_new_tombstones'] = len(new_tombstones)
 
-        logging.info("all_tombstones: {}".format(all_tombstones))
-        logging.info("new_tombstones: {}".format(new_tombstones))
+        self.logger.info("all_tombstones: {}".format(all_tombstones))
+        self.logger.info("new_tombstones: {}".format(new_tombstones))
 
-        logging.info("tmp save_files_dir: {}".format(test_result.save_files_dir))
+        self.logger.info("tmp save_files_dir: {}".format(test_result.save_files_dir))
 
         if test_result.save_files_dir:
-            # file_path is empty when there have been a exception
+            # test_result.save_files_dir is empty when there have been a exception
             if os.path.isdir(test_result.save_files_dir):
                 tmp_folder_on_ihu = '/data/tmp_save_files/'
 
@@ -79,7 +79,7 @@ class Tester:
                         pull_ihu_files(os.path.join(tmp_folder_on_ihu, save_file), test_result.save_files_dir, save_file)
                     subprocess.check_call(['adb', 'shell', 'rm', '-rf', tmp_folder_on_ihu])
                 except subprocess.CalledProcessError:
-                    logging.info("Could't find any files to save")
+                    self.logger.info("Could't find any files to save over adb")
         return test_result
 
     def _flash_started(self):
@@ -192,7 +192,11 @@ class Tester:
             sys.exit(1)
 
     def _list_tombstones(self):
-        return subprocess.check_output(['adb', 'shell', 'ls', '/data/tombstones/']).decode("utf-8").split()
+        try:
+            return subprocess.check_output(['adb', 'shell', 'ls', '/data/tombstones/']).decode("utf-8").split()
+        except subprocess.CalledProcessError:
+            self.logger.error("Cannot execute ls over adb")
+            return []
 
 
     def main(self):
