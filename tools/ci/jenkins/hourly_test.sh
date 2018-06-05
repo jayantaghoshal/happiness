@@ -1,4 +1,4 @@
-#!/bin/bash -uex
+#!/bin/bash -ex
 
 # Copyright 2018 Volvo Car Corporation
 # This file is covered by LICENSE file in the root of this project
@@ -42,6 +42,8 @@ lunch ihu_vcc-eng
 set +x
 source "${REPO_ROOT_DIR}/vendor/volvocars/tools/envsetup.sh"
 set -x
+
+set -u
 
 if [ "$test_type" == "dryrun" ]; then
    # Fetch files uploaded to artinfcm (build for an open change in Gerrit)
