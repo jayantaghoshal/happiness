@@ -49,6 +49,7 @@ class Tester:
         self.logger.debug("Module finished: {}, Result: {}".format(str(test), str(test_result)))
         for r in self.reporter_list:
             r.module_finished(test, test_result, testrun_uuid)
+        shutil.rmtree(test_result.save_files_dir, ignore_errors=True)
 
     def _pre_run(self):
         self.old_tombstones = self._list_tombstones()
@@ -67,20 +68,18 @@ class Tester:
         if test_result.save_files_dir:
             # file_path is empty when there have been a exception
             if os.path.isdir(test_result.save_files_dir):
-                tmp_folder = test_result.save_files_dir
                 tmp_folder_on_ihu = '/data/tmp_save_files/'
 
                 for new_tombstone in new_tombstones:
-                    pull_ihu_files(os.path.join('/data/tombstones/', new_tombstone), tmp_folder, 'tombstones')
+                    pull_ihu_files(os.path.join('/data/tombstones/', new_tombstone), test_result.save_files_dir, 'tombstones')
 
                 try:
                     save_files = subprocess.check_output(['adb', 'shell', 'ls', tmp_folder_on_ihu]).decode("utf-8").split()
                     for save_file in save_files:
-                        pull_ihu_files(os.path.join(tmp_folder_on_ihu, save_file), tmp_folder, save_file)
+                        pull_ihu_files(os.path.join(tmp_folder_on_ihu, save_file), test_result.save_files_dir, save_file)
                     subprocess.check_call(['adb', 'shell', 'rm', '-rf', tmp_folder_on_ihu])
                 except subprocess.CalledProcessError:
                     logging.info("Could't find any files to save")
-            shutil.rmtree(tmp_folder, ignore_errors=True)
         return test_result
 
     def _flash_started(self):
