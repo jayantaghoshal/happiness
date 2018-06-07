@@ -445,7 +445,7 @@
             filter: aosp/vendor/volvocars/**
             do-not-fingerprint: true
         - sonar:
-            sonar-name: Sonar
+            sonar-name: SonarQube
             properties: |
                 sonar.projectKey=ihua:androidcomplete
                 sonar.projectName=IHUA_IHU Android - complete source code
