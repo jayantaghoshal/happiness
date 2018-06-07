@@ -122,6 +122,7 @@ test_plan_staging_daily = [
     TradefedTest("vendor/volvocars/hmi/SystemDialog/app/src/androidTest",standard_caps),
     TradefedTest("vendor/volvocars/apps/Internal/SystemUITest/app/src/androidTest", standard_caps),
     TradefedTest("vendor/volvocars/packages/SettingsStorageService/test/ut/services", standard_caps), #Matilda Bengtsson
+    VTSTest("vendor/volvocars/hardware/remotectrl/test/it/generalsettings_tests", standard_caps | {cp.audio}), #Arjun Snehaj Lal
 
     TradefedTest("vendor/volvocars/hardware/connectivitymanagerd/test/it", standard_caps), # Patrik Ingmarsson
 
