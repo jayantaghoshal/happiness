@@ -46,7 +46,7 @@ TEST_F(RtpAudioNamespaceBridge, IptablesNatTableIsConfigured) {
 
         EXPECT_TRUE(validateCommandStatus(command_status));
     } else {
-        ALOGD("Nothing to test. Test not supported.");
+        FAIL() << "Nothing to test. Test not supported.";
     }
 }
 
@@ -61,6 +61,6 @@ TEST_F(RtpAudioNamespaceBridge, PingBetweenNamespaces) {
         const std::string cmd = "ping -I " + interface_name + " -c 1 -w 3 " + rtp_audio_vlan_ipaddr;
         EXPECT_TRUE(validateCommandStatus(system(cmd.c_str())));
     } else {
-        ALOGD("Nothing to test. Test not supported.");
+        FAIL() << "Nothing to test. Test not supported.";
     }
 }

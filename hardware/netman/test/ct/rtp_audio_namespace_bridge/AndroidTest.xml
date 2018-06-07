@@ -18,10 +18,16 @@
         <option name="cleanup" value="true" />
         <option name="push" value="VtsRtpAudioNamespaceBridge->/data/local/tmp/VtsRtpAudioNamespaceBridge" />
     </target_preparer>
+
+     <target_preparer class="com.android.tradefed.targetprep.RunHostCommandTargetPreparer">
+        <option name="host-setup-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge/push_config_file.sh" />
+        <option name="host-teardown-command" value="bash -c ${ANDROID_BUILD_TOP}/vendor/volvocars/hardware/netman/test/ct/rtp_audio_namespace_bridge/remove_config_file.sh" />
+    </target_preparer>
+
     <test class="com.android.tradefed.testtype.GTest" >
         <option name="native-test-device-path" value="/data/local/tmp" />
         <option name="module-name" value="VtsRtpAudioNamespaceBridge" />
         <option name="native-test-flag" value="--no-isolate" />
-        <option name="runtime-hint" value="5000ms" />
+        <option name="runtime-hint" value="20000ms" />
     </test>
 </configuration>
