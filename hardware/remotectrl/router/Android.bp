@@ -7,6 +7,9 @@ cc_binary {
     name: "remotectrl_routerd",
     defaults: ["volvocars_cc_defaults_hq"],
     rtti: true,
+    local_include_dirs: [
+        "include/",
+    ],
 
     srcs: [
         "src/*.cpp",
@@ -17,7 +20,12 @@ cc_binary {
         "libbase",
         "libcutils",
         "libvsomeip_2_10_10",
-        "libsomeip_router_shared",
+        "libvsomeip_cfg_2_10_10",
+        "libvsomeip_sd_2_10_10",
+    ],
+
+    static_libs: [
+        "libboost_1_64_0_vcc",
     ],
 
     init_rc: ["init/remotectrl_routerd.rc"],

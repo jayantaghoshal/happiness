@@ -9,12 +9,12 @@
 #include <vsomeip/vsomeip.hpp>
 
 namespace vcc {
-namespace someip {
+namespace remotectrl {
 namespace router {
 
 class Router final {
   public:
-    Router(const std::string& vsomeip_app_name, const char* environment_value);
+    Router();
     ~Router();
 
     void Start();
@@ -25,5 +25,5 @@ class Router final {
 };
 
 }  // namespace router
-}  // namespace someip
+}  // namespace remotectrl
 }  // namespace vcc
