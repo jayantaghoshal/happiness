@@ -381,6 +381,30 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
       | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for PARKING_ASSISTANCE_ACTIVATION_ON
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    PARKING_ASSISTANCE_ACTIVATION_ON = (
+      0x0021
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:BOOLEAN
+      | VehicleArea:GLOBAL),
+
+    /**
+     * Current PAStatus for PARKING_ASSISTANCE_ACTIVATION_STATUS
+     * @change_mode VehiclePropertyChangeMode:ON_CHANGE
+     * @access VehiclePropertyAccess:READ
+     * @data_enum PAStatus
+     */
+    PARKING_ASSISTANCE_ACTIVATION_STATUS = (
+      0x0021
+      | VehiclePropertyGroup:VENDOR
+      | VehiclePropertyType:INT32
+      | VehicleArea:GLOBAL),
 };
 
 enum PAStatus: int32_t {
