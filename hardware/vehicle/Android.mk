@@ -49,7 +49,7 @@ LOCAL_SRC_FILES := \
      vhal_modules/lane_departure_warning_module.cpp \
      vhal_modules/connected_safety_module.cpp \
      vhal_modules/parking_module.cpp \
-     vhal_modules/parking_assistance_activation_module.cpp \
+     vhal_modules/parking_assist_activation_module.cpp \
      src/vmsmodule.cpp
 
 

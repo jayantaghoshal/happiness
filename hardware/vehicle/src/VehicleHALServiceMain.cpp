@@ -28,7 +28,7 @@
 #include "vhal_modules/parking_module.h"
 #include "vhal_modules/speed_limit_adaptation_module.h"
 #include "vhal_modules/traffic_sign_information_module.h"
-#include "vhal_modules/parking_assistance_activation_module.h"
+#include "vhal_modules/parking_assist_activation_module.h"
 #include "vmsmodule.h"
 
 #include <IDispatcher.h>
@@ -91,7 +91,7 @@ int main(int /* argc */, char* /* argv */ []) {
     ActiveSafetyModule activeSafetyModule{&ctx};
     ELaneKeepingAidModule e_lane_keeping_aid_module{&ctx};
     ParkingModule parking_module{&ctx};
-    ParkingAssistanceActivationModule parking_assistance_activation_module{&ctx};
+    ParkingAssistActivationModule parking_assistance_activation_module{&ctx};
 
     auto vmsModule = std::make_unique<vmsHal>(hal.get());
     // Register modules

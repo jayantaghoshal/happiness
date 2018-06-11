@@ -400,7 +400,7 @@ enum VehicleProperty: android.hardware.automotive.vehicle@2.0::VehicleProperty {
      * @access VehiclePropertyAccess:READ
      * @data_enum PAStatus
      */
-    PARKING_ASSISTANCE_ACTIVATION_STATUS = (
+    PARKING_ASSIST_ACTIVATION_STATUS = (
       0x0021
       | VehiclePropertyGroup:VENDOR
       | VehiclePropertyType:INT32
